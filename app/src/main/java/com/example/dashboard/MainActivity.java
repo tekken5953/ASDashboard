@@ -1,13 +1,11 @@
 package com.example.dashboard;
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
-import android.content.Context;
+import android.bluetooth.BluetoothAdapter;
+import android.bluetooth.BluetoothDevice;
 import android.content.Intent;
 import android.content.res.Configuration;
-import android.content.res.Resources;
-import android.graphics.drawable.Drawable;
-import android.os.Build;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -18,7 +16,6 @@ import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -26,14 +23,20 @@ import androidx.appcompat.content.res.AppCompatResources;
 import androidx.core.content.res.ResourcesCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.material.slider.Slider;
 import com.robinhood.spark.SparkView;
 
-import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
+import java.util.Set;
+
+import mobi.gspd.segmentedbarview.Segment;
+import mobi.gspd.segmentedbarview.SegmentedBarView;
+import mobi.gspd.segmentedbarview.SegmentedBarViewSideStyle;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -60,9 +63,10 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        init();
+        init(); //변수 초기화
 
         currentTimeIndex(); // 현재 시간 적용
+
         Configuration configuration = new Configuration();
 
         if (SharedPreferenceManager.getString(MainActivity.this, "language").equals("en")) {
@@ -75,6 +79,8 @@ public class MainActivity extends AppCompatActivity {
             configuration.setLocale(Locale.KOREA);
             getResources().updateConfiguration(configuration, getResources().getDisplayMetrics());
         }
+
+
 
         // 넘버차트 아이템 추가
         addItem(getResources().getString(R.string.fine_dust), "5888", "ug/㎥", getResources().getString(R.string.good));
@@ -102,7 +108,6 @@ public class MainActivity extends AppCompatActivity {
         category6 = findViewById(R.id.category6);
         sparkView = findViewById(R.id.virusLineChart);   //선그래프
         dayOfNightTv = findViewById(R.id.dayOfNightTv);
-
         aqiContentTv = findViewById(R.id.aqiContentTv);
         aqiTitleTv = findViewById(R.id.aqiTitleTv);
         tempTitleTv = findViewById(R.id.textView6);

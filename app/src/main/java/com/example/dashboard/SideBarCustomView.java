@@ -1,17 +1,13 @@
 package com.example.dashboard;
 
-import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
 import android.content.res.Configuration;
-import android.content.res.Resources;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.util.Locale;
 
@@ -47,7 +43,7 @@ public class SideBarCustomView extends RelativeLayout implements View.OnClickLis
         final TextView englishTv = findViewById(R.id.sideMenuEnglish);
         final ImageView cancelIv = findViewById(R.id.sideMenuCancelIv);
         final TextView title = findViewById(R.id.sideMenuLanguageTitle);
-        Configuration configuration  = new Configuration();
+        Configuration configuration = new Configuration();
         cancelIv.setOnClickListener(this);
         koreanTv.setOnClickListener(this);
         englishTv.setOnClickListener(new OnClickListener() {
@@ -57,7 +53,7 @@ public class SideBarCustomView extends RelativeLayout implements View.OnClickLis
                 englishTv.setTextColor(getResources().getColor(R.color.white));
                 configuration.setLocale(Locale.US);
                 getResources().updateConfiguration(configuration, getResources().getDisplayMetrics());
-                SharedPreferenceManager.setString(getContext(),"language","en");
+                SharedPreferenceManager.setString(getContext(), "language", "en");
             }
         });
 
@@ -68,11 +64,11 @@ public class SideBarCustomView extends RelativeLayout implements View.OnClickLis
                 englishTv.setTextColor(getResources().getColor(R.color.sidemenun_gray));
                 configuration.setLocale(Locale.KOREA);
                 getResources().updateConfiguration(configuration, getResources().getDisplayMetrics());
-                SharedPreferenceManager.setString(getContext(),"language","ko");
+                SharedPreferenceManager.setString(getContext(), "language", "ko");
             }
         });
 
-        if (SharedPreferenceManager.getString(getContext(),"language").equals("en")) {
+        if (SharedPreferenceManager.getString(getContext(), "language").equals("en")) {
             koreanTv.setTextColor(getResources().getColor(R.color.sidemenun_gray));
             englishTv.setTextColor(getResources().getColor(R.color.white));
         } else {
