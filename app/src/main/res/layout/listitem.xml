@@ -56,6 +56,7 @@
         android:fontFamily="@font/pretendardvariable"
         android:text="좋음"
         android:textColor="@color/progressGood"
-        android:textSize="60dp" />
+        android:textSize="60dp"
+        android:textAllCaps="false"/>
 
 </RelativeLayout>

@@ -43,7 +43,7 @@
         android:layout_marginStart="90dp"
         android:layout_marginTop="22.5dp"
         android:fontFamily="@font/pretendardvariable"
-        android:text="@string/korean"
+        android:text="한글"
         android:textColor="@color/white"
         android:textSize="32sp" />
 
@@ -56,7 +56,7 @@
         android:layout_marginTop="22.5dp"
         android:layout_toEndOf="@+id/sideMenuKorean"
         android:fontFamily="@font/pretendardvariable"
-        android:text="@string/english"
+        android:text="English"
         android:textAllCaps="true"
         android:textColor="@color/sidemenun_gray"
         android:textSize="32sp" />

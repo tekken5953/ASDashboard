@@ -63,16 +63,16 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         holder.status.setText(item.getStatus());
 
         //양호도 별 텍스트 컬러 설정
-        if (holder.status.getText().toString().equals("좋음")) {
+        if (holder.status.getText().toString().equals("좋음") ||holder.status.getText().toString().equals("Good")) {
             holder.status.setTextColor(Color.parseColor("#5CC2E4"));
             holder.number.setTextColor(Color.parseColor("#5CC2E4"));
-        } else if (holder.status.getText().toString().equals("나쁨")) {
+        } else if (holder.status.getText().toString().equals("나쁨") || holder.status.getText().toString().equals("Bad")) {
             holder.status.setTextColor(Color.parseColor("#FBC93D"));
             holder.number.setTextColor(Color.parseColor("#FBC93D"));
-        } else if (holder.status.getText().toString().equals("매우나쁨")) {
+        } else if (holder.status.getText().toString().equals("매우나쁨") || holder.status.getText().toString().equals("Very Bad")) {
             holder.status.setTextColor(Color.parseColor("#FB4F4F"));
             holder.number.setTextColor(Color.parseColor("#FB4F4F"));
-        } else if (holder.status.getText().toString().equals("보통")){
+        } else if (holder.status.getText().toString().equals("보통") || holder.status.getText().toString().equals("Normal")){
             holder.status.setTextColor(Color.parseColor("#1ccf7f"));
             holder.number.setTextColor(Color.parseColor("#1ccf7f"));
         } else {

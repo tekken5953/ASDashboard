@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Dashboard</string>
+    <string name="good">Good</string>
+    <string name="normal">Normal</string>
+    <string name="bad">Bad</string>
+    <string name="baddest">Very Bad</string>
+    <string name="aqi">Air Quality Index</string>
+    <string name="aqi_1_hour">Last Hour Air Quality</string>
+    <string name="fine_dust">Fine Dust</string>
+    <string name="Volatile_organic_compounds">Volatile Organic Compounds</string>
+    <string name="co2">Co2</string>
+    <string name="co">Co</string>
+    <string name="virus">Virus Risk Index</string>
+    <string name="language">Languages</string>
+    <string name="korean">Korean</string>
+    <string name="english">English</string>
+    <string name="temp">Temperature</string>
+    <string name="humid">Humidity</string>
+    <string name="error">Error</string>
+    <string name="day">am</string>
+    <string name="night">pm</string>
+</resources>
