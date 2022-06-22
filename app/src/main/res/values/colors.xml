@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="purple_200">#FFBB86FC</color>
+    <color name="purple_500">#FF6200EE</color>
+    <color name="purple_700">#FF3700B3</color>
+    <color name="teal_200">#FF03DAC5</color>
+    <color name="teal_700">#FF018786</color>
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+
+    <color name="layoutOutline">#2E000000</color> // 레이아웃 아웃라인(낮은명암)
+    <color name="textColorMain">#EEEEEE</color> // 메인 텍스트 컬러(흰색)
+    <color name="lineChartLine">#147AD6</color> // 라인차트 라인 컬러
+    <color name="progressText">#6CC0E5</color> // 프로그래스 바 양호도 텍스트 컬러
+    <color name="lineChartXYText">#FFFFFF59</color> // 라인차트 XY축 텍스트 컬러
+    <color name="lineChartCategoryNonSelectText">#697687</color> // 라인차트 카테고리 미선택 텍스트 컬러
+    <color name="progressNotBad">#1ccf7f</color> // 프로그래스 바 양호도 보통 컬러
+    <color name="progressBad">#FBC93D</color> // 프로그래스 바 양호도 나쁨 컬러
+    <color name="progressWorst">#FB4F4F</color> // 프로그래스 바 양호도 매우나쁨 컬러
+    <color name="progressGood">#5CC2E4</color> // 프로그래스 바 양호도 좋음 컬러
+    <color name="statusUnitText">#A0A0A0</color> // 리사이클러뷰 단위 텍스트 컬러(회색)
+    <color name="sidemenu_black">#E6000000</color> // 햄버거메뉴 백그라운드 컬러
+    <color name="sidemenun_gray">#636363</color> // 햄버거메뉴 미체크 항목 컬러
+</resources>

@@ -1,0 +1,18 @@
+<resources>
+    <string name="app_name">Dashboard</string>
+    <string name="good">좋음</string>
+    <string name="normal">보통</string>
+    <string name="bad">나쁨</string>
+    <string name="baddest">매우나쁨</string>
+    <string name="aqi">공기질 통합지수</string>
+    <string name="aqi_1_hour">지난 1시간 공기질 데이터</string>
+    <string name="fine_dust">미세먼지</string>
+    <string name="Volatile_organic_compounds">휘발성 유기화합물</string>
+    <string name="co2">이산화탄소</string>
+    <string name="co">일산화탄소</string>
+    <string name="virus">바이러스 위험지수</string>
+    <string name="language">언어설정</string>
+    <string name="korean">한글</string>
+    <string name="english">english</string>
+
+</resources>
