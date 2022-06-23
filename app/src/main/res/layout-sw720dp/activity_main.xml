@@ -1,0 +1,364 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/bg_1920x1080"
+    tools:context=".MainActivity">
+
+    <FrameLayout
+        android:id="@+id/fl_silde"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone">
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:alpha="0.75"
+            android:background="#202745" />
+
+        <FrameLayout
+            android:id="@+id/view_sildebar"
+            android:layout_width="415dp"
+            android:layout_height="match_parent" />
+
+    </FrameLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/id_main"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ImageView
+            android:id="@+id/hambugerMenuIv"
+            android:layout_width="22dp"
+            android:layout_height="22dp"
+            android:layout_marginStart="60dp"
+            android:gravity="center"
+            android:onClick="onClick"
+            app:layout_constraintBottom_toBottomOf="@+id/currentTimeTv"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/currentTimeTv"
+            app:srcCompat="@drawable/ic_baseline_menu_24" />
+
+        <TextView
+            android:id="@+id/dayOfNightTv"
+            android:layout_width="wrap_content"
+            android:layout_height="19dp"
+            android:layout_marginEnd="5dp"
+            android:fontFamily="@font/pretendardvariable"
+            android:text="오후"
+            android:textAllCaps="true"
+            android:textColor="@color/white"
+            android:textSize="16sp"
+            app:layout_constraintEnd_toStartOf="@+id/currentTimeTv"
+            app:layout_constraintTop_toTopOf="@+id/currentTimeTv" />
+
+        <TextView
+            android:id="@+id/currentTimeTv"
+            android:layout_width="wrap_content"
+            android:layout_height="19dp"
+            android:layout_marginTop="65dp"
+            android:layout_marginEnd="60dp"
+            android:fontFamily="@font/pretendardvariable"
+            android:gravity="center"
+            android:text="4:00"
+            android:textAllCaps="true"
+            android:textColor="@color/textColorMain"
+            android:textSize="16sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/humidTv"
+            android:layout_width="wrap_content"
+            android:layout_height="19dp"
+            android:fontFamily="@font/pretendardvariable"
+            android:gravity="center"
+            android:text="48"
+            android:textColor="@color/textColorMain"
+            android:textSize="16sp"
+            app:layout_constraintBottom_toBottomOf="@+id/textView5"
+            app:layout_constraintEnd_toStartOf="@id/textView5"
+            app:layout_constraintTop_toTopOf="@id/textView5" />
+
+        <TextView
+            android:id="@+id/textView5"
+            android:layout_width="27dp"
+            android:layout_height="19dp"
+            android:layout_marginEnd="58dp"
+            android:fontFamily="@font/pretendardvariable"
+            android:gravity="center"
+            android:text="%"
+            android:textColor="@color/textColorMain"
+            android:textSize="16sp"
+            app:layout_constraintBottom_toBottomOf="@+id/currentTimeTv"
+            app:layout_constraintEnd_toStartOf="@+id/currentTimeTv"
+            app:layout_constraintTop_toTopOf="@+id/currentTimeTv" />
+
+        <TextView
+            android:id="@+id/textView2"
+            android:layout_width="wrap_content"
+            android:layout_height="19dp"
+            android:layout_marginEnd="10dp"
+            android:fontFamily="@font/pretendardvariable"
+            android:gravity="center"
+            android:text="@string/humid"
+            android:textColor="@color/textColorMain"
+            android:textSize="16sp"
+            app:layout_constraintBottom_toBottomOf="@+id/textView5"
+            app:layout_constraintEnd_toStartOf="@+id/humidTv"
+            app:layout_constraintTop_toTopOf="@+id/textView5" />
+
+        <TextView
+            android:id="@+id/textView3"
+            android:layout_width="27dp"
+            android:layout_height="19dp"
+            android:layout_marginEnd="110dp"
+            android:fontFamily="@font/pretendardvariable"
+            android:gravity="center"
+            android:text="℃"
+            android:textColor="@color/textColorMain"
+            android:textSize="16sp"
+            app:layout_constraintBottom_toBottomOf="@+id/currentTimeTv"
+            app:layout_constraintEnd_toStartOf="@+id/textView2"
+            app:layout_constraintTop_toTopOf="@+id/currentTimeTv" />
+
+        <TextView
+            android:id="@+id/tempTv"
+            android:layout_width="wrap_content"
+            android:layout_height="19dp"
+            android:fontFamily="@font/pretendardvariable"
+            android:gravity="center"
+            android:text="20"
+            android:textColor="@color/textColorMain"
+            android:textSize="16sp"
+            app:layout_constraintBottom_toBottomOf="@+id/textView3"
+            app:layout_constraintEnd_toStartOf="@+id/textView3"
+            app:layout_constraintTop_toTopOf="@+id/textView3" />
+
+        <TextView
+            android:id="@+id/textView6"
+            android:layout_width="wrap_content"
+            android:layout_height="19dp"
+            android:layout_marginEnd="10dp"
+            android:fontFamily="@font/pretendardvariable"
+            android:gravity="center"
+            android:text="@string/temp"
+            android:textColor="@color/textColorMain"
+            android:textSize="16sp"
+            app:layout_constraintBottom_toBottomOf="@+id/textView3"
+            app:layout_constraintEnd_toStartOf="@+id/tempTv"
+            app:layout_constraintTop_toTopOf="@+id/textView3" />
+
+        <FrameLayout
+            android:id="@+id/topFrameLayout"
+            android:layout_width="match_parent"
+            android:layout_height="393dp"
+            android:layout_marginStart="60dp"
+            android:layout_marginTop="33dp"
+            android:layout_marginEnd="60dp"
+            android:background="@drawable/topframe_outline"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView6">
+
+            <ProgressBar
+                android:id="@+id/apiCircleChartPb"
+                style="@style/CircularDeterminateProgressBarSmall"
+                android:layout_width="266dp"
+                android:layout_height="266dp"
+                android:layout_marginStart="25dp"
+                android:layout_marginTop="34dp"
+                tools:progress="100" />
+
+            <ProgressBar
+                android:id="@+id/aqiBarChartPb"
+                style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+                android:layout_width="187dp"
+                android:layout_height="14dp"
+                android:layout_gravity="bottom"
+                android:layout_marginStart="69dp"
+                android:layout_marginBottom="47dp"
+                android:max="300"
+                android:progress="300"
+                android:progressDrawable="@drawable/barchart" />
+
+            <TextView
+                android:id="@+id/aqiCurrentArrow"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom"
+                android:layout_marginStart="81dp"
+                android:layout_marginBottom="9dp"
+                android:fontFamily="@font/pretendardvariable"
+                android:text="48"
+                android:textColor="@color/progressText"
+                android:textSize="14sp"
+                app:drawableTopCompat="@drawable/arrow_up" />
+
+            <TextView
+                android:id="@+id/aqiTitleTv"
+                android:layout_width="wrap_content"
+                android:layout_height="16dp"
+                android:layout_marginStart="113dp"
+                android:layout_marginTop="130dp"
+                android:fontFamily="@font/pretendardvariable"
+                android:gravity="center"
+                android:text="@string/aqi"
+                android:textColor="@color/white"
+                android:textSize="14sp" />
+
+            <TextView
+                android:id="@+id/aqiContentTv"
+                android:layout_width="120dp"
+                android:layout_height="41dp"
+                android:layout_marginStart="100dp"
+                android:layout_marginTop="162dp"
+                android:fontFamily="@font/pretendardvariable"
+                android:gravity="center"
+                android:text="@string/good"
+                android:textColor="@color/progressGood"
+                android:textSize="35sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/textView7"
+                android:layout_width="wrap_content"
+                android:layout_height="30dp"
+                android:layout_marginStart="355dp"
+                android:layout_marginTop="38dp"
+                android:fontFamily="@font/pretendardvariable"
+                android:gravity="center_vertical"
+                android:text="@string/aqi_1_hour"
+                android:textColor="@color/textColorMain"
+                android:textSize="18sp" />
+
+            <HorizontalScrollView
+                android:layout_width="match_parent"
+                android:layout_height="30dp"
+                android:layout_gravity="top"
+                android:layout_marginStart="550dp"
+                android:layout_marginTop="38dp"
+                android:layout_marginEnd="48dp"
+                android:gravity="center_vertical"
+                android:overScrollMode="never"
+                android:scrollbars="none">
+
+                <TableRow
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent">
+
+                    <TextView
+                        android:id="@+id/category1"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="55.5dp"
+                        android:background="@drawable/category_text_outline_small"
+                        android:fontFamily="@font/pretendardvariable"
+                        android:gravity="center"
+                        android:onClick="onClick"
+                        android:text="@string/aqi"
+                        android:textColor="@color/white"
+                        android:textSize="14sp" />
+
+                    <TextView
+                        android:id="@+id/category2"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="29dp"
+                        android:fontFamily="@font/pretendardvariable"
+                        android:gravity="center"
+                        android:onClick="onClick"
+                        android:text="@string/fine_dust"
+                        android:textColor="@color/lineChartCategoryNonSelectText"
+                        android:textSize="14sp" />
+
+                    <TextView
+                        android:id="@+id/category3"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="29dp"
+                        android:fontFamily="@font/pretendardvariable"
+                        android:gravity="center"
+                        android:onClick="onClick"
+                        android:text="@string/Volatile_organic_compounds"
+                        android:textColor="@color/lineChartCategoryNonSelectText"
+                        android:textSize="14sp" />
+
+                    <TextView
+                        android:id="@+id/category4"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="29dp"
+                        android:fontFamily="@font/pretendardvariable"
+                        android:gravity="center"
+                        android:onClick="onClick"
+                        android:text="@string/co2"
+                        android:textColor="@color/lineChartCategoryNonSelectText"
+                        android:textSize="14sp" />
+
+                    <TextView
+                        android:id="@+id/category5"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="29dp"
+                        android:fontFamily="@font/pretendardvariable"
+                        android:gravity="center"
+                        android:onClick="onClick"
+                        android:text="@string/co"
+                        android:textColor="@color/lineChartCategoryNonSelectText"
+                        android:textSize="14sp" />
+
+                    <TextView
+                        android:id="@+id/category6"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="29dp"
+                        android:fontFamily="@font/pretendardvariable"
+                        android:gravity="center"
+                        android:onClick="onClick"
+                        android:text="@string/virus"
+                        android:textColor="@color/lineChartCategoryNonSelectText"
+                        android:textSize="14sp" />
+
+                </TableRow>
+
+            </HorizontalScrollView>
+
+            <com.robinhood.spark.SparkView
+                android:id="@+id/virusLineChart"
+                android:layout_width="759dp"
+                android:layout_height="268dp"
+                android:layout_marginStart="354dp"
+                android:layout_marginTop="78dp"
+                android:background="#2E707070" />
+
+        </FrameLayout>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="169dp"
+            android:layout_marginStart="60dp"
+            android:layout_marginTop="15dp"
+            android:layout_marginEnd="60dp"
+            android:orientation="horizontal"
+            android:overScrollMode="never"
+            android:scrollbars="none"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/topFrameLayout"
+            tools:listitem="@layout/listitem" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
+
+
+

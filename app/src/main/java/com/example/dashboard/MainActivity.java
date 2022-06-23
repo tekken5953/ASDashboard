@@ -80,8 +80,6 @@ public class MainActivity extends AppCompatActivity {
             getResources().updateConfiguration(configuration, getResources().getDisplayMetrics());
         }
 
-
-
         // 넘버차트 아이템 추가
         addItem(getResources().getString(R.string.fine_dust), "5888", "ug/㎥", getResources().getString(R.string.good));
         addItem(getResources().getString(R.string.Volatile_organic_compounds), "8.888", "mg/㎥", getResources().getString(R.string.normal));

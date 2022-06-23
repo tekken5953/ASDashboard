@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="sideFrmae">559dp</dimen>
+    <dimen name="topFrameWidth">32dp</dimen>
+    <dimen name="topFrameHeight">29dp</dimen>
+    <dimen name="marginGuideLine">90dp</dimen>
+    <dimen name="margin5dp">5dp</dimen>
+    <dimen name="basicTextSize">24sp</dimen>
+    <dimen name="topFrameMarginTop">71dp</dimen>
+    <dimen name="marginEndHumidSymbol">87dp</dimen>
+    <dimen name="marginEndHumidText">15dp</dimen>
+    <dimen name="marginEndTempSymbol">110dp</dimen>
+    <dimen name="marginEndTempText">20dp</dimen>
+    <dimen name="viewContainer">590dp</dimen>
+    <dimen name="viewContainerTop">33dp</dimen>
+    <dimen name="viewContainerEnd">90dp</dimen>
+    <dimen name="ringWidth">393dp</dimen>
+    <dimen name="ringHeight">397dp</dimen>
+    <dimen name="ringStart">32dp</dimen>
+    <dimen name="ringTop">45dp</dimen>
+    <dimen name="barWidth">282dp</dimen>
+    <dimen name="barHeight">20dp</dimen>
+    <dimen name="barStart">90dp</dimen>
+    <dimen name="barBottom">71.3dp</dimen>
+    <dimen name="arrowStart">112dp</dimen>
+    <dimen name="arrowBottom">15dp</dimen>
+    <dimen name="arrowTextSize">20sp</dimen>
+    <dimen name="aqiTitleWidth">132dp</dimen>
+    <dimen name="aqiTitleHeight">25dp</dimen>
+    <dimen name="aqiTitleStart">169dp</dimen>
+    <dimen name="aqiTitleTop">196dp</dimen>
+    <dimen name="aqiTitleTextSize">21sp</dimen>
+    <dimen name="aqiContentWidth">150dp</dimen>
+    <dimen name="aqiContentHeight">62dp</dimen>
+    <dimen name="aqiContentStart">158dp</dimen>
+    <dimen name="aqiContentTop">244dp</dimen>
+    <dimen name="aqiContentTextSize">53sp</dimen>
+    <dimen name="chartTitleHeight">45dp</dimen>
+    <dimen name="chartTitleStart">530dp</dimen>
+    <dimen name="chartTitleTop">52.5dp</dimen>
+    <dimen name="chartTitleTextSize">28sp</dimen>
+    <dimen name="chartScrollStart">863dp</dimen>
+    <dimen name="chartScrollEnd">71dp</dimen>
+    <dimen name="category1Start">55.5dp</dimen>
+    <dimen name="categoryTextSize">18sp</dimen>
+    <dimen name="categoryStart">43dp</dimen>
+    <dimen name="chartViewWidth">1140dp</dimen>
+    <dimen name="chartViewHeight">400dp</dimen>
+    <dimen name="chartViewStart">530dp</dimen>
+    <dimen name="chartViewTop">119dp</dimen>
+    <dimen name="recyclerHeight">255dp</dimen>
+    <dimen name="recyclerTop">18dp</dimen>
+
+
+
+</resources>

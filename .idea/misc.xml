@@ -3,15 +3,22 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/AndroidStudio/Dashboard/app/src/main/res/drawable-v24/category_text_outline_small.xml" value="0.295" />
         <entry key="..\:/AndroidStudio/Dashboard/app/src/main/res/drawable-v24/ic_baseline_menu_24.xml" value="0.2985" />
         <entry key="..\:/AndroidStudio/Dashboard/app/src/main/res/drawable-v24/virus_circle.xml" value="0.35" />
         <entry key="..\:/AndroidStudio/Dashboard/app/src/main/res/drawable/barchart.xml" value="0.35" />
         <entry key="..\:/AndroidStudio/Dashboard/app/src/main/res/drawable/cancel.xml" value="0.343" />
         <entry key="..\:/AndroidStudio/Dashboard/app/src/main/res/drawable/category_text_outline.xml" value="0.35" />
         <entry key="..\:/AndroidStudio/Dashboard/app/src/main/res/drawable/topframe_outline.xml" value="0.35" />
+        <entry key="..\:/AndroidStudio/Dashboard/app/src/main/res/layout-small/activity_main.xml" value="0.16" />
+        <entry key="..\:/AndroidStudio/Dashboard/app/src/main/res/layout-small/listitem.xml" value="0.21432291666666667" />
+        <entry key="..\:/AndroidStudio/Dashboard/app/src/main/res/layout-sw720dp/activity_main.xml" value="0.42864583333333334" />
+        <entry key="..\:/AndroidStudio/Dashboard/app/src/main/res/layout-sw720dp/listitem.xml" value="0.21432291666666667" />
+        <entry key="..\:/AndroidStudio/Dashboard/app/src/main/res/layout-sw720dp/sidemenu.xml" value="0.2892078681552366" />
         <entry key="..\:/AndroidStudio/Dashboard/app/src/main/res/layout/activity_empty.xml" value="0.14288194444444444" />
-        <entry key="..\:/AndroidStudio/Dashboard/app/src/main/res/layout/activity_main.xml" value="0.33" />
+        <entry key="..\:/AndroidStudio/Dashboard/app/src/main/res/layout/activity_main.xml" value="0.25" />
         <entry key="..\:/AndroidStudio/Dashboard/app/src/main/res/layout/listitem.xml" value="0.14288194444444444" />
+        <entry key="..\:/AndroidStudio/Dashboard/app/src/main/res/layout/listitem_small.xml" value="0.21432291666666667" />
         <entry key="..\:/AndroidStudio/Dashboard/app/src/main/res/layout/sidemenu.xml" value="0.14288194444444444" />
         <entry key="..\:/AndroidStudio/Dashboard/app/src/main/res/menu/side_menu.xml" value="0.14288194444444444" />
       </map>

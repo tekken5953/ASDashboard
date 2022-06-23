@@ -14,8 +14,13 @@
         <!-- Customize your theme here. -->
     </style>
 
-    <style name="CircularDeterminateProgressBar">
+    <style name="CircularDeterminateProgressBarLarge">
         <item name="android:indeterminateOnly">false</item>
-        <item name="android:progressDrawable">@drawable/virus_circle</item>
+        <item name="android:progressDrawable">@drawable/signal_good_1920</item>
+    </style>
+
+    <style name="CircularDeterminateProgressBarSmall">
+        <item name="android:indeterminateOnly">false</item>
+        <item name="android:progressDrawable">@drawable/signal_good1280</item>
     </style>
 </resources>

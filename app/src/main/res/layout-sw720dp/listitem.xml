@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="223dp"
+    android:layout_height="169dp"
+    android:background="@drawable/topframe_outline"
+    android:id="@+id/listItemLayout"
+    android:layout_marginEnd="12dp"
+    android:layout_marginTop="2dp"
+    android:layout_marginBottom="2dp">
+
+    <TextView
+        android:id="@+id/listItemTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="20dp"
+        android:text="미세먼지"
+        android:fontFamily="@font/pretendardvariable"
+        android:textColor="@color/textColorMain"
+        android:textSize="17sp"
+        android:layout_marginTop="24dp"
+        android:layout_marginStart="24dp"/>
+
+    <TextView
+        android:id="@+id/listItemNumber"
+        android:layout_width="wrap_content"
+        android:layout_height="19dp"
+        android:layout_below="@+id/listItemTitle"
+        android:text="5888"
+        android:textSize="16sp"
+        android:fontFamily="@font/pretendardvariable"
+        android:textColor="@color/progressGood"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="4dp"/>
+
+    <TextView
+        android:id="@+id/listItemUnit"
+        android:layout_width="wrap_content"
+        android:layout_height="15dp"
+        android:text="ug/㎥"
+        android:textSize="10sp"
+        android:textColor="@color/statusUnitText"
+        android:fontFamily="@font/poppins_medium"
+        android:layout_below="@+id/listItemTitle"
+        android:layout_toEndOf="@+id/listItemNumber"
+        android:layout_marginTop="6dp"
+        android:layout_marginStart="5dp"/>
+
+    <TextView
+        android:id="@+id/listItemStatus"
+        android:layout_width="wrap_content"
+        android:layout_height="47dp"
+        android:layout_below="@+id/listItemUnit"
+        android:layout_alignParentEnd="true"
+        android:layout_marginTop="17dp"
+        android:layout_marginEnd="28dp"
+        android:fontFamily="@font/pretendardvariable"
+        android:text="좋음"
+        android:textColor="@color/progressGood"
+        android:textSize="40sp"
+        android:textAllCaps="false"/>
+
+</RelativeLayout>
