@@ -20,10 +20,10 @@
     <dimen name="ringTop">45dp</dimen>
     <dimen name="barWidth">280dp</dimen>
     <dimen name="barHeight">20dp</dimen>
-    <dimen name="barStart">80dp</dimen>
+    <dimen name="barStart">54dp</dimen>
     <dimen name="barBottom">71.3dp</dimen>
     <dimen name="arrowStart">112dp</dimen>
-    <dimen name="arrowBottom">15dp</dimen>
+    <dimen name="arrowBottom">8dp</dimen>
     <dimen name="arrowTextSize">20sp</dimen>
     <dimen name="aqiTitleWidth">132dp</dimen>
     <dimen name="aqiTitleHeight">25dp</dimen>
@@ -50,7 +50,5 @@
     <dimen name="chartViewTop">119dp</dimen>
     <dimen name="recyclerHeight">255dp</dimen>
     <dimen name="recyclerTop">18dp</dimen>
-
-
 
 </resources>

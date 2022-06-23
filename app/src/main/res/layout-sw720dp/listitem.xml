@@ -38,11 +38,12 @@
         android:layout_height="15dp"
         android:text="ug/㎥"
         android:textSize="10sp"
+        android:gravity="center"
         android:textColor="@color/statusUnitText"
         android:fontFamily="@font/poppins_medium"
         android:layout_below="@+id/listItemTitle"
         android:layout_toEndOf="@+id/listItemNumber"
-        android:layout_marginTop="6dp"
+        android:layout_marginTop="7dp"
         android:layout_marginStart="5dp"/>
 
     <TextView
