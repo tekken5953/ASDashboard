@@ -4,85 +4,74 @@ import android.Manifest;
 import android.annotation.SuppressLint;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
+import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.graphics.Color;
-import android.graphics.Point;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.text.Layout;
 import android.util.DisplayMetrics;
 import android.util.Log;
-import android.view.Display;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewTreeObserver;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.content.res.AppCompatResources;
-import androidx.core.app.ActivityCompat;
 import androidx.core.content.res.ResourcesCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.android.material.slider.Slider;
 import com.robinhood.spark.SparkView;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.List;
 import java.util.Locale;
 import java.util.Set;
 
-import mobi.gspd.segmentedbarview.Segment;
-import mobi.gspd.segmentedbarview.SegmentedBarView;
-import mobi.gspd.segmentedbarview.SegmentedBarViewSideStyle;
-
-public class MainActivity extends AppCompatActivity {
+public class DashBoardFragment extends AppCompatActivity {
 
     ArrayList<RecyclerViewItem> mList = new ArrayList<>();
     RecyclerViewAdapter adapter;
     RecyclerView recyclerView = null;
 
-    ProgressBar circleChart;
-
     SparkView sparkView;
 
     TextView currentTimeTv, category1, category2, category3, category4, category5, category6, categoryTitle;
-    TextView aqiContentTv, aqiTitleTv, tempTitleTv, humidTitleTv, dayOfNightTv, aqiCurrentArrow;
-    ImageView menu;
+    TextView aqiContentTv, aqiTitleTv, tempTitleTv, humidTitleTv, dayOfNightTv, aqiCurrentArrow, paringDeviceTv;
+    ImageView menu, circleChart;
 
-    int barViewWidth,barViewHeight;
+    int barViewWidth, barViewHeight, arrowWidth;
 
     DisplayMetrics dm = new DisplayMetrics();
 
     SegmentedProgressBar barView;
     ArrayList<SegmentedProgressBar.BarContext> barList = new ArrayList<>();
 
+    LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+
     private ViewGroup mainLayout;   //사이드 나왔을때 클릭방지할 영역
     private ViewGroup viewLayout;   //전체 감싸는 영역
     private ViewGroup sideLayout;   //사이드바만 감싸는 영역
     private Boolean isMenuShow = false;
 
+    BluetoothAdapter bluetoothAdapter;
+
     @SuppressLint("NotifyDataSetChanged")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.fragment_dashboard);
 
         init(); //변수 초기화
 
@@ -90,10 +79,12 @@ public class MainActivity extends AppCompatActivity {
 
         Configuration configuration = new Configuration();
 
-        if (SharedPreferenceManager.getString(MainActivity.this, "language").equals("en")) {
+        bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+
+        if (SharedPreferenceManager.getString(DashBoardFragment.this, "finalLanguage").equals("en")) {
             configuration.setLocale(Locale.US);
             getResources().updateConfiguration(configuration, getResources().getDisplayMetrics());
-        } else if (SharedPreferenceManager.getString(MainActivity.this, "language").equals("ko")) {
+        } else if (SharedPreferenceManager.getString(DashBoardFragment.this, "finalLanguage").equals("ko")) {
             configuration.setLocale(Locale.KOREA);
             getResources().updateConfiguration(configuration, getResources().getDisplayMetrics());
         } else {
@@ -112,27 +103,26 @@ public class MainActivity extends AppCompatActivity {
 
         getWindowManager().getDefaultDisplay().getMetrics(dm); // 기기 해상도를 구하기 위함
 
-        tempTitleTv.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                GetBluetoothDevice();
-            }
-        });
+        CreateSegmentProgressView(); // AQI 바 차트 그리기
 
-        CreateSegmentProgressView();
-
+        //AQI Index 별 이동 메서드
         humidTitleTv.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                moveBarChart(40);
+                moveBarChart(65);
+            }
+        });
+
+        dayOfNightTv.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                moveBarChart(235);
             }
         });
 
     }
 
     public void init() {
-
-        BluetoothPermission();
 
         barView = findViewById(R.id.aqiBarChartPb);
 
@@ -154,14 +144,13 @@ public class MainActivity extends AppCompatActivity {
         tempTitleTv = findViewById(R.id.textView6);
         humidTitleTv = findViewById(R.id.textView2);
         aqiCurrentArrow = findViewById(R.id.aqiCurrentArrow);
+        paringDeviceTv = findViewById(R.id.paringDeviceTv);
 
         menu.setOnClickListener(this::onClick);
         mainLayout = findViewById(R.id.id_main); // 대쉬보드 메인화면
         viewLayout = findViewById(R.id.fl_silde); // 사이드메뉴 전체프레임
         sideLayout = findViewById(R.id.view_sildebar); // 사이드메뉴 컨텐츠뷰
-        addSideView(); //사이드 메뉴 활성화
-
-        circleChart.setProgress(100);
+//        addSideView(); //사이드 메뉴 활성화
 
         adapter = new RecyclerViewAdapter(mList); // 외부어댑터 연동
         recyclerView.setAdapter(adapter); // 어댑터 설정
@@ -179,23 +168,113 @@ public class MainActivity extends AppCompatActivity {
     }
 
     //barChart 가로세로 구하기
+    @SuppressLint("MissingPermission")
     @Override
     public void onWindowFocusChanged(boolean hasFocus) {
         if (hasFocus) {
             barViewWidth = barView.getWidth();
             barViewHeight = barView.getHeight();
+            arrowWidth = aqiCurrentArrow.getWidth();
+
+            aqiTitleTv.setText(getResources().getString(R.string.aqi));
+            aqiContentTv.setText(getResources().getString(R.string.good));
+            tempTitleTv.setText(getResources().getString(R.string.temp));
+            humidTitleTv.setText(getResources().getString(R.string.humid));
+            categoryTitle.setText(getResources().getString(R.string.aqi_1_hour));
+            category1.setText(getResources().getString(R.string.aqi));
+            category2.setText(getResources().getString(R.string.fine_dust));
+            category3.setText(getResources().getString(R.string.Volatile_organic_compounds));
+            category4.setText(getResources().getString(R.string.co2));
+            category5.setText(getResources().getString(R.string.co));
+            category6.setText(getResources().getString(R.string.virus));
+
+            params.setMargins(-arrowWidth / 2, 0, 0, (int) getResources().getDimension(R.dimen.arrowBottom));
+            aqiCurrentArrow.setLayoutParams(params);
+
+            Set<BluetoothDevice> paredDevice = bluetoothAdapter.getBondedDevices();
+            if (!paredDevice.isEmpty()) {
+                for (BluetoothDevice device : paredDevice) {
+                    paringDeviceTv.setText(device.getName());
+                }
+            } else {
+                paringDeviceTv.setText(getString(R.string.not_paring));
+                final AlertDialog.Builder builder = new AlertDialog.Builder(DashBoardFragment.this);
+                final AlertDialog alertDialog = builder.create();
+                builder.setTitle(getString(R.string.causion_title))
+                        .setMessage(getString(R.string.causion_message))
+                        .setPositiveButton(getString(R.string.causion_ok), new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                alertDialog.dismiss();
+                                Intent intent = new Intent(DashBoardFragment.this, SearchDeviceActivity.class);
+                                startActivity(intent);
+                                finish();
+                            }
+                        }).show();
+            }
         }
     }
 
+    //AQI Index 별 차트 이동거리 계산
     public void moveBarChart(int aqiNumber) {
-        FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        params.setMargins((int) getResources().getDimension(R.dimen.barStart) + aqiNumber * barViewWidth / 300 ,
+        params.setMargins((aqiNumber * barViewWidth / 300) - (arrowWidth / 2),
                 0,
                 0,
                 (int) getResources().getDimension(R.dimen.arrowBottom));  // 왼쪽, 위, 오른쪽, 아래 순서입니다.
         aqiCurrentArrow.setLayoutParams(params);
-    }
+        aqiCurrentArrow.setText(aqiNumber + "");
 
+        if (dm.widthPixels > 1900 && dm.heightPixels > 1000) {
+            if (aqiNumber < 51) {
+                circleChart.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.signal_good_1920, null));
+                aqiContentTv.setText(getResources().getString(R.string.good));
+                aqiContentTv.setTextColor(getResources().getColor(R.color.progressGood));
+                aqiContentTv.setTextColor(getResources().getColor(R.color.progressGood));
+            } else if (aqiNumber < 101) {
+                circleChart.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.signal_normal_1920, null));
+                aqiContentTv.setText(getResources().getString(R.string.normal));
+                aqiContentTv.setTextColor(getResources().getColor(R.color.progressNormal));
+                aqiCurrentArrow.setTextColor(getResources().getColor(R.color.progressNormal));
+            } else if (aqiNumber < 251) {
+                circleChart.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.signal_bad1920, null));
+                aqiContentTv.setText(getResources().getString(R.string.bad));
+                aqiContentTv.setTextColor(getResources().getColor(R.color.progressBad));
+                aqiCurrentArrow.setTextColor(getResources().getColor(R.color.progressBad));
+            } else {
+                circleChart.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.signal_verybad_1920, null));
+                aqiContentTv.setText(getResources().getString(R.string.baddest));
+                aqiContentTv.setTextColor(getResources().getColor(R.color.progressWorst));
+                aqiCurrentArrow.setTextColor(getResources().getColor(R.color.progressWorst));
+            }
+        } else {
+            if (aqiNumber < 51) {
+                circleChart.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.signal_good1280, null));
+                aqiContentTv.setText(getResources().getString(R.string.good));
+                aqiContentTv.setTextColor(getResources().getColor(R.color.progressGood));
+                aqiCurrentArrow.setTextColor(getResources().getColor(R.color.progressGood));
+            } else if (aqiNumber < 101) {
+                circleChart.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.signal_normal1280, null));
+                aqiContentTv.setText(getResources().getString(R.string.normal));
+                aqiContentTv.setTextColor(getResources().getColor(R.color.progressNormal));
+                aqiCurrentArrow.setTextColor(getResources().getColor(R.color.progressNormal));
+            } else if (aqiNumber < 251) {
+                circleChart.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.signal_bad1280, null));
+                aqiContentTv.setText(getResources().getString(R.string.bad));
+                aqiContentTv.setTextColor(getResources().getColor(R.color.progressBad));
+                aqiCurrentArrow.setTextColor(getResources().getColor(R.color.progressBad));
+            } else {
+                circleChart.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.signal_verybad1280, null));
+                aqiContentTv.setText(getResources().getString(R.string.baddest));
+                aqiContentTv.setTextColor(getResources().getColor(R.color.progressWorst));
+                aqiCurrentArrow.setTextColor(getResources().getColor(R.color.progressWorst));
+            }
+        }
+
+        Toast.makeText(this, "차트의 총 길이(dp) : " + (int) getResources().getDimension(R.dimen.barWidth)
+                        + "\nAqi 지수(int) : " + aqiNumber + "\n최고수치 300기준 차트이동거리(dp) : "
+                        + aqiNumber * barViewWidth / 300,
+                Toast.LENGTH_SHORT).show();
+    }
 
 
     //현재 시간 불러오기
@@ -225,18 +304,6 @@ public class MainActivity extends AppCompatActivity {
                     simpleDateFormat.format(currentTime);
                     currentTimeTv.setText(simpleDateFormat.format(currentTime));
                 }
-
-                aqiTitleTv.setText(getResources().getString(R.string.aqi));
-                aqiContentTv.setText(getResources().getString(R.string.good));
-                tempTitleTv.setText(getResources().getString(R.string.temp));
-                humidTitleTv.setText(getResources().getString(R.string.humid));
-                categoryTitle.setText(getResources().getString(R.string.aqi_1_hour));
-                category1.setText(getResources().getString(R.string.aqi));
-                category2.setText(getResources().getString(R.string.fine_dust));
-                category3.setText(getResources().getString(R.string.Volatile_organic_compounds));
-                category4.setText(getResources().getString(R.string.co2));
-                category5.setText(getResources().getString(R.string.co));
-                category6.setText(getResources().getString(R.string.virus));
             }
         };
 
@@ -255,94 +322,68 @@ public class MainActivity extends AppCompatActivity {
         thread.start();
     }
 
-    //햄버거 메뉴 추가
-    private void addSideView() {
-        SideBarCustomView sidebar = new SideBarCustomView(MainActivity.this);
-        sideLayout.addView(sidebar);
-
-        viewLayout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-            }
-        });
-
-        sidebar.setEventListener(new SideBarCustomView.EventListener() {
-            @Override
-            public void btnCancel() {
-                closeMenu();
-            }
-        });
-    }
+//    //햄버거 메뉴 추가
+//    private void addSideView() {
+//        SideBarCustomView sidebar = new SideBarCustomView(DashBoardFragment.this);
+//        sideLayout.addView(sidebar);
+//
+//        viewLayout.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//            }
+//        });
+//
+//        sidebar.setEventListener(new SideBarCustomView.EventListener() {
+//            @Override
+//            public void btnCancel() {
+//                closeMenu();
+//            }
+//        });
+//    }
 
     // 햄버거 메뉴 닫기
-    public void closeMenu() {
-        isMenuShow = false;
-        Animation slide = AnimationUtils.loadAnimation(MainActivity.this, R.anim.sidebar_hidden);
-        sideLayout.startAnimation(slide);
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                viewLayout.setVisibility(View.GONE);
-                viewLayout.setEnabled(false);
-                mainLayout.setEnabled(true);
-                mainLayout.bringToFront();
-
-                //어플 재시작
-                Intent intent = getBaseContext().getPackageManager()
-                        .getLaunchIntentForPackage(getBaseContext().getPackageName());
-                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                startActivity(intent);
-                overridePendingTransition(0, 0);
-                finish();
-            }
-        }, 400);
-    }
+//    public void closeMenu() {
+//        isMenuShow = false;
+//        Animation slide = AnimationUtils.loadAnimation(DashBoardFragment.this, R.anim.sidebar_hidden);
+//        sideLayout.startAnimation(slide);
+//        viewLayout.setVisibility(View.GONE);
+//        viewLayout.setEnabled(false);
+//        mainLayout.setEnabled(true);
+//        mainLayout.bringToFront();
+//
+//        new Handler().postDelayed(new Runnable() {
+//            @Override
+//            public void run() {
+//                if (!SharedPreferenceManager.getString(DashBoardFragment.this, "finalLanguage")
+//                        .equals(SharedPreferenceManager.getString(DashBoardFragment.this, "currentLanguage"))) {
+//                    SharedPreferenceManager.setString(DashBoardFragment.this, "finalLanguage",
+//                            SharedPreferenceManager.getString(DashBoardFragment.this, "currentLanguage"));
+//
+//                    Log.e("languageLog", "Close menu\n" + "current : " + SharedPreferenceManager.getString(DashBoardFragment.this, "currentLanguage")
+//                            + " final : " + SharedPreferenceManager.getString(DashBoardFragment.this, "finalLanguage"));
+//
+//                    //어플 재시작
+//                    Intent intent = getBaseContext().getPackageManager()
+//                            .getLaunchIntentForPackage(getBaseContext().getPackageName());
+//                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+//                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+//                    startActivity(intent);
+//                    overridePendingTransition(0, 0);
+//                    finish();
+//                }
+//            }
+//        }, 400);
+//    }
 
     //햄버거 메뉴 보여주기
     public void showMenu() {
         isMenuShow = true;
-        Animation slide = AnimationUtils.loadAnimation(MainActivity.this, R.anim.sidebar_show);
+        Animation slide = AnimationUtils.loadAnimation(DashBoardFragment.this, R.anim.sidebar_show);
         sideLayout.startAnimation(slide);
         viewLayout.setVisibility(View.VISIBLE);
         viewLayout.setEnabled(true);
         mainLayout.setEnabled(false);
         viewLayout.bringToFront();
-    }
-
-    //블루투스 퍼미션
-    private void BluetoothPermission() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-            requestPermissions(
-                    new String[]{
-                            Manifest.permission.BLUETOOTH,
-                            Manifest.permission.BLUETOOTH_SCAN,
-                            Manifest.permission.BLUETOOTH_ADVERTISE,
-                            Manifest.permission.BLUETOOTH_CONNECT
-                    },
-                    1);
-        } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            requestPermissions(
-                    new String[]{
-                            Manifest.permission.BLUETOOTH
-                    },
-                    1);
-        }
-    }
-
-    //블루투스 페어링 기기정보 불러오기
-    public void GetBluetoothDevice() {
-        BluetoothAdapter bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.BLUETOOTH_CONNECT) != PackageManager.PERMISSION_GRANTED) {
-            Set<BluetoothDevice> paredDevice = bluetoothAdapter.getBondedDevices();
-            for (BluetoothDevice device : paredDevice) {
-                Toast.makeText(this, "Name : " + device.getName()
-                        + "\nAddress : " + device.getAddress()
-                        + "\nBonded : " + device.getBondState()
-                        + "\nType : " + device.getType()
-                        + "\nUUID : " + Arrays.toString(device.getUuids()), Toast.LENGTH_LONG).show();
-            }
-        }
     }
 
     public void onClick(View view) {
@@ -352,7 +393,7 @@ public class MainActivity extends AppCompatActivity {
                 if (!isMenuShow) {
                     showMenu();
                 } else {
-                    closeMenu();
+//                    closeMenu();
                 }
                 break;
             case (R.id.category1):
@@ -450,5 +491,13 @@ public class MainActivity extends AppCompatActivity {
                 0.162f));
 
         barView.setContexts(barList);
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        Intent intent = new Intent(DashBoardFragment.this, SearchDeviceActivity.class);
+        startActivity(intent);
+        finish();
     }
 }

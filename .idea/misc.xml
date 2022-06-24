@@ -3,6 +3,8 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/AndroidStudio/.android/platforms/android-32/data/res/layout/simple_list_item_1.xml" value="0.14288194444444444" />
+        <entry key="..\:/AndroidStudio/.android/platforms/android-32/data/res/layout/simple_list_item_2.xml" value="0.14288194444444444" />
         <entry key="..\:/AndroidStudio/Dashboard/app/src/main/res/drawable-v24/category_text_outline_small.xml" value="0.295" />
         <entry key="..\:/AndroidStudio/Dashboard/app/src/main/res/drawable-v24/ic_baseline_menu_24.xml" value="0.2985" />
         <entry key="..\:/AndroidStudio/Dashboard/app/src/main/res/drawable-v24/virus_circle.xml" value="0.35" />
@@ -13,13 +15,19 @@
         <entry key="..\:/AndroidStudio/Dashboard/app/src/main/res/drawable/topframe_outline.xml" value="0.35" />
         <entry key="..\:/AndroidStudio/Dashboard/app/src/main/res/layout-small/activity_main.xml" value="0.16" />
         <entry key="..\:/AndroidStudio/Dashboard/app/src/main/res/layout-small/listitem.xml" value="0.21432291666666667" />
-        <entry key="..\:/AndroidStudio/Dashboard/app/src/main/res/layout-sw720dp/activity_main.xml" value="0.1" />
+        <entry key="..\:/AndroidStudio/Dashboard/app/src/main/res/layout-sw720dp/activity_main.xml" value="0.45107794361525705" />
+        <entry key="..\:/AndroidStudio/Dashboard/app/src/main/res/layout-sw720dp/activity_search_device.xml" value="0.13" />
+        <entry key="..\:/AndroidStudio/Dashboard/app/src/main/res/layout-sw720dp/fragment_dashboard.xml" value="0.1" />
         <entry key="..\:/AndroidStudio/Dashboard/app/src/main/res/layout-sw720dp/listitem.xml" value="0.21432291666666667" />
+        <entry key="..\:/AndroidStudio/Dashboard/app/src/main/res/layout-sw720dp/search_device_listitem.xml" value="0.14253472222222222" />
         <entry key="..\:/AndroidStudio/Dashboard/app/src/main/res/layout-sw720dp/sidemenu.xml" value="0.2892078681552366" />
         <entry key="..\:/AndroidStudio/Dashboard/app/src/main/res/layout/activity_empty.xml" value="0.14288194444444444" />
-        <entry key="..\:/AndroidStudio/Dashboard/app/src/main/res/layout/activity_main.xml" value="0.14166666666666666" />
+        <entry key="..\:/AndroidStudio/Dashboard/app/src/main/res/layout/activity_main.xml" value="0.11" />
+        <entry key="..\:/AndroidStudio/Dashboard/app/src/main/res/layout/activity_search_device.xml" value="0.1" />
+        <entry key="..\:/AndroidStudio/Dashboard/app/src/main/res/layout/fragment_dashboard.xml" value="0.2833333333333333" />
         <entry key="..\:/AndroidStudio/Dashboard/app/src/main/res/layout/listitem.xml" value="0.14288194444444444" />
         <entry key="..\:/AndroidStudio/Dashboard/app/src/main/res/layout/listitem_small.xml" value="0.21432291666666667" />
+        <entry key="..\:/AndroidStudio/Dashboard/app/src/main/res/layout/search_device_listitem.xml" value="0.14288194444444444" />
         <entry key="..\:/AndroidStudio/Dashboard/app/src/main/res/layout/sidemenu.xml" value="0.14288194444444444" />
         <entry key="..\:/AndroidStudio/Dashboard/app/src/main/res/menu/side_menu.xml" value="0.14288194444444444" />
       </map>

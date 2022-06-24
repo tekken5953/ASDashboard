@@ -20,4 +20,8 @@
     <string name="error">Error</string>
     <string name="day">am</string>
     <string name="night">pm</string>
+    <string name="not_paring">No Paring Device</string>
+    <string name="causion_title">Causion</string>
+    <string name="causion_message">Disconnected to Device\nPlease Check out</string>
+    <string name="causion_ok">OK</string>
 </resources>

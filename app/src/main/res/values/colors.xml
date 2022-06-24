@@ -14,10 +14,10 @@
     <color name="progressText">#6CC0E5</color> // 프로그래스 바 양호도 텍스트 컬러
     <color name="lineChartXYText">#FFFFFF59</color> // 라인차트 XY축 텍스트 컬러
     <color name="lineChartCategoryNonSelectText">#697687</color> // 라인차트 카테고리 미선택 텍스트 컬러
-    <color name="progressNotBad">#1ccf7f</color> // 프로그래스 바 양호도 보통 컬러
     <color name="progressBad">#FBC93D</color> // 프로그래스 바 양호도 나쁨 컬러
     <color name="progressWorst">#FB4F4F</color> // 프로그래스 바 양호도 매우나쁨 컬러
     <color name="progressGood">#5CC2E4</color> // 프로그래스 바 양호도 좋음 컬러
+    <color name="progressNormal">#1ccf7f</color> // 프로그래스 바 양호도 보통 컬러
     <color name="statusUnitText">#A0A0A0</color> // 리사이클러뷰 단위 텍스트 컬러(회색)
     <color name="sidemenu_black">#E6000000</color> // 햄버거메뉴 백그라운드 컬러
     <color name="sidemenun_gray">#636363</color> // 햄버거메뉴 미체크 항목 컬러

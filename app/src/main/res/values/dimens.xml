@@ -14,11 +14,11 @@
     <dimen name="viewContainer">590dp</dimen>
     <dimen name="viewContainerTop">33dp</dimen>
     <dimen name="viewContainerEnd">90dp</dimen>
-    <dimen name="ringWidth">393dp</dimen>
-    <dimen name="ringHeight">397dp</dimen>
+    <dimen name="ringWidth">383dp</dimen>
+    <dimen name="ringHeight">387dp</dimen>
     <dimen name="ringStart">32dp</dimen>
     <dimen name="ringTop">45dp</dimen>
-    <dimen name="barWidth">280dp</dimen>
+    <dimen name="barWidth">300dp</dimen>
     <dimen name="barHeight">20dp</dimen>
     <dimen name="barStart">80dp</dimen>
     <dimen name="barBottom">71.3dp</dimen>
@@ -27,13 +27,13 @@
     <dimen name="arrowTextSize">20sp</dimen>
     <dimen name="aqiTitleWidth">132dp</dimen>
     <dimen name="aqiTitleHeight">25dp</dimen>
-    <dimen name="aqiTitleStart">169dp</dimen>
-    <dimen name="aqiTitleTop">196dp</dimen>
+    <dimen name="aqiTitleStart">157dp</dimen>
+    <dimen name="aqiTitleTop">190dp</dimen>
     <dimen name="aqiTitleTextSize">21sp</dimen>
     <dimen name="aqiContentWidth">150dp</dimen>
     <dimen name="aqiContentHeight">62dp</dimen>
-    <dimen name="aqiContentStart">158dp</dimen>
-    <dimen name="aqiContentTop">244dp</dimen>
+    <dimen name="aqiContentStart">150dp</dimen>
+    <dimen name="aqiContentTop">235dp</dimen>
     <dimen name="aqiContentTextSize">53sp</dimen>
     <dimen name="chartTitleHeight">45dp</dimen>
     <dimen name="chartTitleStart">530dp</dimen>
@@ -50,7 +50,5 @@
     <dimen name="chartViewTop">119dp</dimen>
     <dimen name="recyclerHeight">255dp</dimen>
     <dimen name="recyclerTop">18dp</dimen>
-
-
 
 </resources>

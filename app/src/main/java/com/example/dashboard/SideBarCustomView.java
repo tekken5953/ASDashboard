@@ -3,6 +3,7 @@ package com.example.dashboard;
 import android.content.Context;
 import android.content.res.Configuration;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
@@ -44,6 +45,7 @@ public class SideBarCustomView extends RelativeLayout implements View.OnClickLis
         final ImageView cancelIv = findViewById(R.id.sideMenuCancelIv);
         final TextView title = findViewById(R.id.sideMenuLanguageTitle);
         Configuration configuration = new Configuration();
+
         cancelIv.setOnClickListener(this);
         koreanTv.setOnClickListener(this);
         englishTv.setOnClickListener(new OnClickListener() {
@@ -53,7 +55,9 @@ public class SideBarCustomView extends RelativeLayout implements View.OnClickLis
                 englishTv.setTextColor(getResources().getColor(R.color.white));
                 configuration.setLocale(Locale.US);
                 getResources().updateConfiguration(configuration, getResources().getDisplayMetrics());
-                SharedPreferenceManager.setString(getContext(), "language", "en");
+                SharedPreferenceManager.setString(getContext(), "currentLanguage", "en");
+                Log.e("languageLog", "Choice en\n" + "current : " + SharedPreferenceManager.getString(getContext(), "currentLanguage")
+                        + " final : " + SharedPreferenceManager.getString(getContext(), "finalLanguage"));
             }
         });
 
@@ -64,16 +68,24 @@ public class SideBarCustomView extends RelativeLayout implements View.OnClickLis
                 englishTv.setTextColor(getResources().getColor(R.color.sidemenun_gray));
                 configuration.setLocale(Locale.KOREA);
                 getResources().updateConfiguration(configuration, getResources().getDisplayMetrics());
-                SharedPreferenceManager.setString(getContext(), "language", "ko");
+                SharedPreferenceManager.setString(getContext(), "currentLanguage", "ko");
+                Log.e("languageLog", "Choice ko\n" + "current : " + SharedPreferenceManager.getString(getContext(), "currentLanguage")
+                        + " final : " + SharedPreferenceManager.getString(getContext(), "finalLanguage"));
             }
         });
 
-        if (SharedPreferenceManager.getString(getContext(), "language").equals("en")) {
+        if (SharedPreferenceManager.getString(getContext(), "finalLanguage").equals("en")) {
             koreanTv.setTextColor(getResources().getColor(R.color.sidemenun_gray));
             englishTv.setTextColor(getResources().getColor(R.color.white));
+            title.setText("Language");
+            Log.e("languageLog", "View Create en\n" + "current : " + SharedPreferenceManager.getString(getContext(), "currentLanguage")
+                    + " final : " + SharedPreferenceManager.getString(getContext(), "finalLanguage"));
         } else {
             koreanTv.setTextColor(getResources().getColor(R.color.white));
             englishTv.setTextColor(getResources().getColor(R.color.sidemenun_gray));
+            title.setText("언어설정");
+            Log.e("languageLog", "View Create ko\n" + "current : " + SharedPreferenceManager.getString(getContext(), "currentLanguage")
+                    + " final : " + SharedPreferenceManager.getString(getContext(), "finalLanguage"));
         }
     }
 

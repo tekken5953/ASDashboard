@@ -19,4 +19,8 @@
     <string name="error">에러</string>
     <string name="day">오전</string>
     <string name="night">오후</string>
+    <string name="not_paring">연결된 디바이스 없음</string>
+    <string name="causion_title">경고</string>
+    <string name="causion_message">디바이스와의 연결이 끊겼습니다\n다시 확인해 주세요</string>
+    <string name="causion_ok">확인</string>
 </resources>
