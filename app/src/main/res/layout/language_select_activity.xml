@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/bg_1920x1080"
+    tools:context=".LanguageSelectActivity">
+
+    <ImageView
+        android:id="@+id/langTopLangIconIv"
+        android:layout_width="69dp"
+        android:layout_height="69dp"
+        android:layout_marginStart="834dp"
+        android:layout_marginTop="136.52dp"
+        android:src="@drawable/lang_1920_w"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/langTopStepBarIv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="174dp"
+        android:src="@drawable/stepbar_1920"
+        app:layout_constraintEnd_toStartOf="@+id/langTopConnIconIv"
+        app:layout_constraintStart_toEndOf="@+id/langTopLangIconIv"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/langTopConnIconIv"
+        android:layout_width="69dp"
+        android:layout_height="64.5dp"
+        android:layout_marginEnd="820dp"
+        android:src="@drawable/conn_1920_b"
+        app:layout_constraintBottom_toBottomOf="@+id/langTopLangIconIv"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/langTopLangIconIv" />
+
+    <TextView
+        android:id="@+id/langTopLangTitleTv"
+        android:layout_width="wrap_content"
+        android:layout_height="18dp"
+        android:layout_marginTop="13.5dp"
+        android:fontFamily="@font/pretendardvariable"
+        android:text="@string/select_lang"
+        android:textColor="@color/white"
+        android:textSize="14sp"
+        app:layout_constraintEnd_toEndOf="@+id/langTopLangIconIv"
+        app:layout_constraintStart_toStartOf="@+id/langTopLangIconIv"
+        app:layout_constraintTop_toBottomOf="@+id/langTopLangIconIv" />
+
+    <TextView
+        android:id="@+id/langTopConnTitleTv"
+        android:layout_width="wrap_content"
+        android:layout_height="18dp"
+        android:fontFamily="@font/pretendardvariable"
+        android:text="@string/connect_device"
+        android:textColor="@color/statusUnitText"
+        android:textSize="14sp"
+        app:layout_constraintBottom_toBottomOf="@+id/langTopLangTitleTv"
+        app:layout_constraintEnd_toEndOf="@+id/langTopConnIconIv"
+        app:layout_constraintStart_toStartOf="@+id/langTopConnIconIv"
+        app:layout_constraintTop_toTopOf="@+id/langTopLangTitleTv" />
+
+    <TextView
+        android:id="@+id/langPleaseSelectLangMainTv"
+        android:layout_width="wrap_content"
+        android:layout_height="47dp"
+        android:layout_marginTop="54dp"
+        android:fontFamily="@font/pretendardvariable"
+        android:text="@string/please_select_lang_main"
+        android:textAllCaps="false"
+        android:textColor="@color/white"
+        android:textSize="40sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/langTopLangTitleTv" />
+
+    <TextView
+        android:id="@+id/pleaseSelectLangSubTv"
+        android:layout_width="wrap_content"
+        android:layout_height="29dp"
+        android:layout_marginTop="8dp"
+        android:fontFamily="@font/pretendardvariable"
+        android:text="@string/please_select_a_lang_sub"
+        android:textAllCaps="false"
+        android:textColor="@color/white"
+        android:textSize="24sp"
+        app:layout_constraintEnd_toEndOf="@+id/langPleaseSelectLangMainTv"
+        app:layout_constraintStart_toStartOf="@+id/langPleaseSelectLangMainTv"
+        app:layout_constraintTop_toBottomOf="@+id/langPleaseSelectLangMainTv" />
+
+    <ImageView
+        android:id="@+id/langKorIconIv"
+        android:layout_width="182dp"
+        android:layout_height="182dp"
+        android:layout_marginStart="743dp"
+        android:layout_marginTop="100dp"
+        android:src="@drawable/kor_1920"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/pleaseSelectLangSubTv" />
+
+    <ImageView
+        android:id="@+id/langEngIconIv"
+        android:layout_width="182dp"
+        android:layout_height="182dp"
+        android:src="@drawable/eng_1920"
+        app:layout_constraintBottom_toBottomOf="@+id/langKorIconIv"
+        app:layout_constraintEnd_toEndOf="@+id/langPleaseSelectLangMainTv"
+        app:layout_constraintTop_toTopOf="@+id/langKorIconIv" />
+
+    <TextView
+        android:id="@+id/langKorTitleTv"
+        android:layout_width="wrap_content"
+        android:layout_height="29dp"
+        android:layout_marginTop="29dp"
+        android:fontFamily="@font/pretendardvariable"
+        android:gravity="center"
+        android:text="@string/korean_lang"
+        android:textAllCaps="false"
+        android:textColor="@color/statusUnitText"
+        android:textSize="24sp"
+        app:layout_constraintEnd_toEndOf="@+id/langKorIconIv"
+        app:layout_constraintStart_toStartOf="@+id/langKorIconIv"
+        app:layout_constraintTop_toBottomOf="@+id/langKorIconIv" />
+
+    <TextView
+        android:id="@+id/langEngTitleTv"
+        android:layout_width="wrap_content"
+        android:layout_height="29dp"
+        android:fontFamily="@font/pretendardvariable"
+        android:gravity="center"
+        android:text="@string/eng_lang"
+        android:textAllCaps="false"
+        android:textColor="@color/statusUnitText"
+        android:textSize="24sp"
+        app:layout_constraintBottom_toBottomOf="@+id/langKorTitleTv"
+        app:layout_constraintEnd_toEndOf="@+id/langEngIconIv"
+        app:layout_constraintStart_toStartOf="@+id/langEngIconIv"
+        app:layout_constraintTop_toTopOf="@+id/langKorTitleTv" />
+
+    <TextView
+        android:id="@+id/langOkTv"
+        android:layout_width="435dp"
+        android:layout_height="83dp"
+        android:layout_marginTop="85dp"
+        android:background="@drawable/lang_ok_bg"
+        android:fontFamily="@font/pretendardvariable"
+        android:gravity="center"
+        android:text="@string/ok"
+        android:textColor="@color/statusUnitText"
+        android:textSize="24sp"
+        app:layout_constraintEnd_toEndOf="@+id/langEngIconIv"
+        app:layout_constraintStart_toStartOf="@+id/langKorIconIv"
+        app:layout_constraintTop_toBottomOf="@+id/langKorTitleTv" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="89dp"
+    android:background="#00FFFFFF"
+    android:gravity="center_vertical">
+
+    <TextView
+        android:id="@+id/listItemConnDeviceTitleTv"
+        android:layout_width="wrap_content"
+        android:layout_height="24dp"
+        android:textSize="20sp"
+        android:text="Bio Sentinel 100(test)"
+        android:textColor="@color/white"
+        android:textAllCaps="false"
+        android:fontFamily="@font/pretendardvariable"
+        android:layout_alignParentStart="true"
+        android:layout_marginStart="2dp"/>
+
+    <TextView
+        android:id="@+id/listItemConnDeviceConnTv"
+        android:layout_width="wrap_content"
+        android:layout_height="24dp"
+        android:textSize="20sp"
+        android:text="Bio Sentinel 100(test)"
+        android:textColor="@color/white"
+        android:textAllCaps="false"
+        android:fontFamily="@font/pretendardvariable"
+        android:layout_alignParentEnd="true"
+        android:layout_marginEnd="2dp"/>
+
+</RelativeLayout>
