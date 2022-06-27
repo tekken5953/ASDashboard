@@ -1,6 +1,6 @@
-package com.example.dashboard;
+package com.example.dashboard.dashboard;
 
-public class RecyclerViewItem {
+public class DashboardRecyclerItem {
     private String title;
     private String number;
     private String unit;
@@ -38,7 +38,7 @@ public class RecyclerViewItem {
         this.status = status;
     }
 
-    public RecyclerViewItem(String title, String number, String unit, String status) {
+    public DashboardRecyclerItem(String title, String number, String unit, String status) {
         this.title = title;
         this.number = number;
         this.unit = unit;

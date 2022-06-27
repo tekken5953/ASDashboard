@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/bg_1920x1080"
-    tools:context=".DashBoardFragment">
+    tools:context=".dashboard.DashBoardFragment">
 
     <FrameLayout
         android:id="@+id/fl_silde"
@@ -391,13 +391,15 @@
 
             </HorizontalScrollView>
 
-            <com.robinhood.spark.SparkView
+            <com.github.mikephil.charting.charts.LineChart
                 android:id="@+id/virusLineChart"
                 android:layout_width="@dimen/chartViewWidth"
                 android:layout_height="@dimen/chartViewHeight"
+                android:orientation="vertical"
                 android:layout_marginStart="@dimen/chartViewStart"
                 android:layout_marginTop="@dimen/chartViewTop"
-                android:background="#2E707070" />
+                app:chart_bg_color="@color/transparent"
+                app:chart_line_color="@color/transparent" />
 
         </FrameLayout>
 

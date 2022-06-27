@@ -32,4 +32,8 @@
     <string name="ok">확인</string>
     <string name="please_select_device">연결할 디바이스를 선택해주세요</string>
     <string name="connectable_device">사용 가능한 디바이스</string>
+    <string name="complete_select_lang">선택하신 언어로 적용되었습니다</string>
+    <string name="skip_lang_msg">언어를 자동으로 설정하였습니다</string>
+    <string name="connect">연결하기</string>
+    <string name="exit_app">뒤로가기를 한번더 클릭 시 앱이 종료됩니다</string>
 </resources>

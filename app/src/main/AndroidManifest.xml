@@ -21,8 +21,10 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Dashboard"
         tools:targetApi="30">
+
+        <service android:name="org.eclipse.paho.android.service.MqttService" />
         <activity
-            android:name=".SelectBluetoothDeviceFragment"
+            android:name=".connect.ConnectDeviceFragment"
             android:exported="false" />
         <activity
             android:name=".LanguageSelectActivity"
@@ -35,12 +37,9 @@
         </activity>
         <activity
             android:name=".SearchDeviceActivity"
-            android:exported="true"></activity>
-
-        <service android:name="org.eclipse.paho.android.service.MqttService" />
-
+            android:exported="true"/>
         <activity
-            android:name=".DashBoardFragment"
+            android:name=".dashboard.DashBoardFragment"
             android:exported="true" />
 
         <receiver

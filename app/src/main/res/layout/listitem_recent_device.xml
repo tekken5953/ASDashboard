@@ -4,7 +4,8 @@
     android:layout_width="156dp"
     android:layout_height="225dp"
     android:background="#00FFFFFF"
-    android:padding="2dp">
+    android:padding="2dp"
+    android:layout_marginEnd="60dp">
 
     <ImageView
         android:id="@+id/listItemRecentIconIv"

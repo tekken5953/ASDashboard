@@ -21,4 +21,5 @@
     <color name="statusUnitText">#A0A0A0</color> // 리사이클러뷰 단위 텍스트 컬러(회색)
     <color name="sidemenu_black">#E6000000</color> // 햄버거메뉴 백그라운드 컬러
     <color name="sidemenun_gray">#636363</color> // 햄버거메뉴 미체크 항목 컬러
+    <color name="transparent">#00FFFFFF</color>
 </resources>

@@ -7,6 +7,16 @@
     android:background="@drawable/bg_1280x800">
 
     <ImageView
+        android:id="@+id/connTopBackIv"
+        android:layout_width="25dp"
+        android:layout_height="25dp"
+        android:src="@drawable/back"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginTop="60dp"
+        android:layout_marginStart="60dp"/>
+
+    <ImageView
         android:id="@+id/connTopLangIconIv"
         android:layout_width="51.1dp"
         android:layout_height="51.1dp"
@@ -94,7 +104,7 @@
         android:id="@+id/connConnectableDeviceTv"
         android:layout_width="wrap_content"
         android:layout_height="20dp"
-        android:layout_marginTop="90dp"
+        android:layout_marginTop="65dp"
         android:fontFamily="@font/pretendardvariable"
         android:gravity="center"
         android:text="@string/connectable_device"
@@ -116,7 +126,7 @@
 
     <View
         android:id="@+id/connLine1View"
-        android:layout_width="366dp"
+        android:layout_width="0dp"
         android:layout_height="0.5dp"
         android:layout_marginTop="22.5dp"
         android:background="@color/white"
@@ -124,8 +134,8 @@
         app:layout_constraintStart_toStartOf="@+id/connPleaseSelectLangMainTv"
         app:layout_constraintTop_toBottomOf="@+id/connConnectableDevicePb" />
 
-    <ListView
-        android:id="@+id/connConnectableListView"
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/connConnectableList"
         android:layout_width="366dp"
         android:layout_height="0dp"
         android:layout_marginTop="5dp"

@@ -1,6 +1,5 @@
-package com.example.dashboard;
+package com.example.dashboard.dashboard;
 
-import android.Manifest;
 import android.annotation.SuppressLint;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
@@ -8,12 +7,10 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.graphics.Color;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
@@ -30,7 +27,10 @@ import androidx.appcompat.content.res.AppCompatResources;
 import androidx.core.content.res.ResourcesCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.robinhood.spark.SparkView;
+import com.example.dashboard.R;
+import com.example.dashboard.SearchDeviceActivity;
+import com.example.dashboard.SegmentedProgressBar;
+import com.example.dashboard.SharedPreferenceManager;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -41,15 +41,15 @@ import java.util.Set;
 
 public class DashBoardFragment extends AppCompatActivity {
 
-    ArrayList<RecyclerViewItem> mList = new ArrayList<>();
-    RecyclerViewAdapter adapter;
+    ArrayList<DashboardRecyclerItem> mList = new ArrayList<>();
+    DashboardRecyclerAdapter adapter;
     RecyclerView recyclerView = null;
-
-    SparkView sparkView;
 
     TextView currentTimeTv, category1, category2, category3, category4, category5, category6, categoryTitle;
     TextView aqiContentTv, aqiTitleTv, tempTitleTv, humidTitleTv, dayOfNightTv, aqiCurrentArrow, paringDeviceTv;
     ImageView menu, circleChart;
+
+    com.github.mikephil.charting.charts.LineChart lineChart;
 
     int barViewWidth, barViewHeight, arrowWidth;
 
@@ -64,6 +64,7 @@ public class DashBoardFragment extends AppCompatActivity {
     private ViewGroup viewLayout;   //전체 감싸는 영역
     private ViewGroup sideLayout;   //사이드바만 감싸는 영역
     private Boolean isMenuShow = false;
+    Boolean isExitFlag = false;
 
     BluetoothAdapter bluetoothAdapter;
 
@@ -120,6 +121,12 @@ public class DashBoardFragment extends AppCompatActivity {
             }
         });
 
+        // Line Chart 그리기
+        // https://weeklycoding.com/mpandroidchart/
+        // https://junyoung-developer.tistory.com/174 x축을 시간형태로 변경
+        // https://junyoung-developer.tistory.com/173?category=960204 그리기 참고자료
+
+
     }
 
     public void init() {
@@ -137,7 +144,7 @@ public class DashBoardFragment extends AppCompatActivity {
         category4 = findViewById(R.id.category4);
         category5 = findViewById(R.id.category5);
         category6 = findViewById(R.id.category6);
-        sparkView = findViewById(R.id.virusLineChart);   //선그래프
+        lineChart = findViewById(R.id.virusLineChart);   //선그래프
         dayOfNightTv = findViewById(R.id.dayOfNightTv);
         aqiContentTv = findViewById(R.id.aqiContentTv);
         aqiTitleTv = findViewById(R.id.aqiTitleTv);
@@ -152,12 +159,12 @@ public class DashBoardFragment extends AppCompatActivity {
         sideLayout = findViewById(R.id.view_sildebar); // 사이드메뉴 컨텐츠뷰
 //        addSideView(); //사이드 메뉴 활성화
 
-        adapter = new RecyclerViewAdapter(mList); // 외부어댑터 연동
+        adapter = new DashboardRecyclerAdapter(mList); // 외부어댑터 연동
         recyclerView.setAdapter(adapter); // 어댑터 설정
     }
 
     public void addItem(String title, String number, String unit, String status) {
-        RecyclerViewItem item = new RecyclerViewItem(title, number, unit, status);
+        DashboardRecyclerItem item = new DashboardRecyclerItem(title, number, unit, status);
 
         item.setTitle(title);
         item.setNumber(number);
@@ -194,7 +201,8 @@ public class DashBoardFragment extends AppCompatActivity {
             Set<BluetoothDevice> paredDevice = bluetoothAdapter.getBondedDevices();
             if (!paredDevice.isEmpty()) {
                 for (BluetoothDevice device : paredDevice) {
-                    paringDeviceTv.setText(device.getName());
+//                    paringDeviceTv.setText(device.getName());
+                    paringDeviceTv.setText(getIntent().getExtras().getString("device_name"));
                 }
             } else {
                 paringDeviceTv.setText(getString(R.string.not_paring));
@@ -496,8 +504,17 @@ public class DashBoardFragment extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        Intent intent = new Intent(DashBoardFragment.this, SearchDeviceActivity.class);
-        startActivity(intent);
-        finish();
+        if (isExitFlag) {
+            finish();
+        } else {
+            isExitFlag = true;
+            Toast.makeText(this, getString(R.string.exit_app), Toast.LENGTH_SHORT).show();
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    isExitFlag = false;
+                }
+            }, 2000);
+        }
     }
 }

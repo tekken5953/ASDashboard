@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/bg_1920x1080"
-    tools:context=".DashBoardFragment">
+    tools:context=".dashboard.DashBoardFragment">
 
     <FrameLayout
         android:id="@+id/fl_silde"
@@ -318,7 +318,7 @@
                         android:id="@+id/category1"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="55.5dp"
+                        android:layout_marginStart="53dp"
                         android:background="@drawable/category_text_outline_small"
                         android:fontFamily="@font/pretendardvariable"
                         android:gravity="center"
@@ -331,7 +331,7 @@
                         android:id="@+id/category2"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="29dp"
+                        android:layout_marginStart="25dp"
                         android:fontFamily="@font/pretendardvariable"
                         android:gravity="center"
                         android:onClick="onClick"
@@ -391,13 +391,12 @@
 
             </HorizontalScrollView>
 
-            <com.robinhood.spark.SparkView
+            <com.github.mikephil.charting.charts.LineChart
                 android:id="@+id/virusLineChart"
                 android:layout_width="759dp"
                 android:layout_height="268dp"
                 android:layout_marginStart="354dp"
-                android:layout_marginTop="82dp"
-                android:background="#2E707070" />
+                android:layout_marginTop="82dp"/>
 
         </FrameLayout>
 

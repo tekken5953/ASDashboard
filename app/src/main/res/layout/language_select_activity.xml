@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/bg_1920x1080"
+    tools:ignore="ContentDescription"
     tools:context=".LanguageSelectActivity">
 
     <ImageView
@@ -80,13 +81,14 @@
     <TextView
         android:id="@+id/pleaseSelectLangSubTv"
         android:layout_width="wrap_content"
-        android:layout_height="29dp"
+        android:layout_height="30dp"
         android:layout_marginTop="8dp"
         android:fontFamily="@font/pretendardvariable"
         android:text="@string/please_select_a_lang_sub"
         android:textAllCaps="false"
         android:textColor="@color/white"
         android:textSize="24sp"
+        android:gravity="center"
         app:layout_constraintEnd_toEndOf="@+id/langPleaseSelectLangMainTv"
         app:layout_constraintStart_toStartOf="@+id/langPleaseSelectLangMainTv"
         app:layout_constraintTop_toBottomOf="@+id/langPleaseSelectLangMainTv" />
@@ -99,7 +101,7 @@
         android:layout_marginTop="100dp"
         android:src="@drawable/kor_1920"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/pleaseSelectLangSubTv" />
+        app:layout_constraintTop_toBottomOf="@+id/pleaseSelectLangSubTv"/>
 
     <ImageView
         android:id="@+id/langEngIconIv"
@@ -140,12 +142,12 @@
         app:layout_constraintStart_toStartOf="@+id/langEngIconIv"
         app:layout_constraintTop_toTopOf="@+id/langKorTitleTv" />
 
-    <TextView
+    <Button
         android:id="@+id/langOkTv"
         android:layout_width="435dp"
         android:layout_height="83dp"
         android:layout_marginTop="85dp"
-        android:background="@drawable/lang_ok_bg"
+        android:background="@drawable/lang_ok_b"
         android:fontFamily="@font/pretendardvariable"
         android:gravity="center"
         android:text="@string/ok"

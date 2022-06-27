@@ -23,7 +23,7 @@
         android:layout_width="wrap_content"
         android:layout_height="16dp"
         android:textSize="14sp"
-        android:text="Bio Sentinel 100(test)"
+        android:text="@string/connect"
         android:textColor="@color/white"
         android:textAllCaps="false"
         android:fontFamily="@font/pretendardvariable"

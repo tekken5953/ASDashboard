@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/bg_1280x800">
+    android:background="@drawable/bg_1280x800"
+    tools:ignore="ContentDescription">
 
     <ImageView
         android:id="@+id/langTopLangIconIv"
@@ -14,7 +15,7 @@
         android:layout_marginTop="95dp"
         android:src="@drawable/lang_1280_w"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"/>
+        app:layout_constraintTop_toTopOf="parent" />
 
     <ImageView
         android:id="@+id/langTopStepBarIv"
@@ -79,13 +80,14 @@
     <TextView
         android:id="@+id/pleaseSelectLangSubTv"
         android:layout_width="wrap_content"
-        android:layout_height="20dp"
+        android:layout_height="22dp"
         android:layout_marginTop="7dp"
         android:fontFamily="@font/pretendardvariable"
         android:text="@string/please_select_a_lang_sub"
         android:textAllCaps="false"
         android:textColor="@color/white"
         android:textSize="17sp"
+        android:gravity="center"
         app:layout_constraintEnd_toEndOf="@+id/pleaseSelectLangMainTv"
         app:layout_constraintStart_toStartOf="@+id/pleaseSelectLangMainTv"
         app:layout_constraintTop_toBottomOf="@+id/pleaseSelectLangMainTv" />
@@ -97,7 +99,7 @@
         android:layout_marginTop="75dp"
         android:src="@drawable/kor_1280"
         app:layout_constraintStart_toStartOf="@+id/pleaseSelectLangMainTv"
-        app:layout_constraintTop_toBottomOf="@+id/pleaseSelectLangSubTv" />
+        app:layout_constraintTop_toBottomOf="@+id/pleaseSelectLangSubTv"/>
 
     <ImageView
         android:id="@+id/langEngIconIv"
@@ -138,12 +140,12 @@
         app:layout_constraintStart_toStartOf="@+id/langEngIconIv"
         app:layout_constraintTop_toTopOf="@+id/langKorTitleTv" />
 
-    <TextView
+    <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/langOkTv"
         android:layout_width="322dp"
         android:layout_height="62dp"
         android:layout_marginTop="64dp"
-        android:background="@drawable/lang_ok_bg"
+        android:background="@drawable/lang_ok_b"
         android:fontFamily="@font/pretendardvariable"
         android:gravity="center"
         android:text="@string/ok"
