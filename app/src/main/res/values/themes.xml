@@ -12,6 +12,17 @@
         <!-- Status bar color. -->
         <item name="android:statusBarColor" tools:targetApi="l">#333c59</item>
         <!-- Customize your theme here. -->
+
+    </style>
+
+    <style name="CircularDeterminateProgressBarLarge">
+        <item name="android:indeterminateOnly">false</item>
+        <item name="android:progressDrawable">@drawable/signal_good_1920</item>
+    </style>
+
+    <style name="CircularDeterminateProgressBarSmall">
+        <item name="android:indeterminateOnly">false</item>
+        <item name="android:progressDrawable">@drawable/signal_good1280</item>
     </style>
 
 </resources>

@@ -22,7 +22,10 @@
         android:theme="@style/Theme.Dashboard"
         tools:targetApi="30">
         <activity
-            android:name=".SearchDeviceActivity"
+            android:name=".SelectBluetoothDeviceFragment"
+            android:exported="false" />
+        <activity
+            android:name=".LanguageSelectActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -30,18 +33,23 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".SearchDeviceActivity"
+            android:exported="true"></activity>
+
         <service android:name="org.eclipse.paho.android.service.MqttService" />
+
         <activity
             android:name=".DashBoardFragment"
-            android:exported="true"/>
+            android:exported="true" />
 
-        <receiver android:name=".BroadCastReceiver"
+        <receiver
+            android:name=".BroadCastReceiver"
             android:exported="true">
             <intent-filter>
-                <action android:name="android.intent.action.BOOT_COMPLETED"/>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
             </intent-filter>
         </receiver>
-
     </application>
 
 </manifest>

@@ -31,10 +31,26 @@
         <entry key="..\:/AndroidStudio/Dashboard/app/src/main/res/layout/search_device_listitem.xml" value="0.14288194444444444" />
         <entry key="..\:/AndroidStudio/Dashboard/app/src/main/res/layout/sidemenu.xml" value="0.14288194444444444" />
         <entry key="..\:/AndroidStudio/Dashboard/app/src/main/res/menu/side_menu.xml" value="0.14288194444444444" />
+        <entry key="..\:/Users/tekke/AndroidStudioProjects/BsDashboard/app/src/main/res/drawable/lang_ok_bg.xml" value="0.367" />
+        <entry key="..\:/Users/tekke/AndroidStudioProjects/BsDashboard/app/src/main/res/layout-land/language_select_activity.xml" value="0.33" />
+        <entry key="..\:/Users/tekke/AndroidStudioProjects/BsDashboard/app/src/main/res/layout-sw720dp/activity_search_device.xml" value="0.2" />
+        <entry key="..\:/Users/tekke/AndroidStudioProjects/BsDashboard/app/src/main/res/layout-sw720dp/fragment_dashboard.xml" value="0.18307291666666667" />
+        <entry key="..\:/Users/tekke/AndroidStudioProjects/BsDashboard/app/src/main/res/layout-sw720dp/language_select_activity.xml" value="0.16" />
+        <entry key="..\:/Users/tekke/AndroidStudioProjects/BsDashboard/app/src/main/res/layout-sw720dp/listitem_connectable_device.xml" value="0.25" />
+        <entry key="..\:/Users/tekke/AndroidStudioProjects/BsDashboard/app/src/main/res/layout-sw720dp/listitem_recent_device.xml" value="0.75" />
+        <entry key="..\:/Users/tekke/AndroidStudioProjects/BsDashboard/app/src/main/res/layout-sw720dp/select_bluetooth_fragment.xml" value="0.18359375" />
+        <entry key="..\:/Users/tekke/AndroidStudioProjects/BsDashboard/app/src/main/res/layout/activity_search_device.xml" value="0.19375" />
+        <entry key="..\:/Users/tekke/AndroidStudioProjects/BsDashboard/app/src/main/res/layout/dashboard_listitem.xml" value="0.36614583333333334" />
+        <entry key="..\:/Users/tekke/AndroidStudioProjects/BsDashboard/app/src/main/res/layout/fragment_dashboard.xml" value="0.36614583333333334" />
+        <entry key="..\:/Users/tekke/AndroidStudioProjects/BsDashboard/app/src/main/res/layout/language_select_activity.xml" value="0.18307291666666667" />
+        <entry key="..\:/Users/tekke/AndroidStudioProjects/BsDashboard/app/src/main/res/layout/listitem_connectable_device.xml" value="0.12204861111111111" />
+        <entry key="..\:/Users/tekke/AndroidStudioProjects/BsDashboard/app/src/main/res/layout/listitem_recent_device.xml" value="0.18255208333333334" />
+        <entry key="..\:/Users/tekke/AndroidStudioProjects/BsDashboard/app/src/main/res/layout/search_device_listitem.xml" value="0.36614583333333334" />
+        <entry key="..\:/Users/tekke/AndroidStudioProjects/BsDashboard/app/src/main/res/layout/select_bluetooth_fragment.xml" value="0.2" />
       </map>
     </option>
   </component>
-  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" default="true" project-jdk-name="Android Studio default JDK" project-jdk-type="JavaSDK">
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" default="true" project-jdk-name="11" project-jdk-type="JavaSDK">
     <output url="file://$PROJECT_DIR$/build/classes" />
   </component>
   <component name="ProjectType">
