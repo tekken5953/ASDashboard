@@ -183,7 +183,7 @@
                 android:id="@+id/apiCircleChartPb"
                 android:layout_width="256dp"
                 android:layout_height="256dp"
-                android:layout_marginStart="25dp"
+                android:layout_marginStart="28dp"
                 android:layout_marginTop="34dp"
                 android:background="@drawable/signal_good1280" />
 

@@ -26,7 +26,7 @@
 
         <service android:name="org.eclipse.paho.android.service.MqttService" />
         <activity
-            android:name=".connect.ConnectDeviceFragment"
+            android:name=".connect.ConnectDeviceActivity"
             android:exported="false" />
         <activity
             android:name=".LanguageSelectActivity"

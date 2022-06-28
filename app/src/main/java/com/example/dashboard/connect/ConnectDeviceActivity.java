@@ -13,12 +13,15 @@ import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.View;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.res.ResourcesCompat;
+import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.dashboard.LanguageSelectActivity;
@@ -29,7 +32,7 @@ import com.example.dashboard.dashboard.DashBoardFragment;
 import java.util.ArrayList;
 import java.util.Set;
 
-public class ConnectDeviceFragment extends AppCompatActivity {
+public class ConnectDeviceActivity extends AppCompatActivity {
 
     ImageView selectLanguage;
     Context context;
@@ -44,6 +47,11 @@ public class ConnectDeviceFragment extends AppCompatActivity {
     BluetoothAdapter bluetoothAdapter;
 
     DisplayMetrics dm = new DisplayMetrics();
+
+    private final DashBoardFragment dashBoardFragment = new DashBoardFragment();
+    private final FragmentManager fm = getSupportFragmentManager();
+    FrameLayout frameLayout;
+    ConstraintLayout activityLayout;
 
     // 블루투스 브로드캐스트 호출 - 주변기기 검색
     @Override
@@ -61,6 +69,9 @@ public class ConnectDeviceFragment extends AppCompatActivity {
         } else {
             Log.d("Bluetooth", "Not Discovering...");
         }
+
+        //TODO 디바이스 블루투스 연결정보 받아와서 연결되면 자동 리스트 갱신하는 코드
+        //TODO 끊어지면 다이얼로그 출력
     }
 
     @Override
@@ -78,10 +89,10 @@ public class ConnectDeviceFragment extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.connect_bluetooth_fragment);
+        setContentView(R.layout.connect_bluetooth_activity);
 
         selectLanguage = findViewById(R.id.connTopBackIv);
-        context = ConnectDeviceFragment.this;
+        context = ConnectDeviceActivity.this;
         pairedDeviceList = findViewById(R.id.connPairedDeviceRv);
         deviceList = findViewById(R.id.connConnectableList);
         cAdapter = new ConnectRecyclerAdapter(cList);
@@ -89,28 +100,30 @@ public class ConnectDeviceFragment extends AppCompatActivity {
         deviceList.setAdapter(cAdapter);
         pairedDeviceList.setAdapter(pAdapter);
         connConnectableDeviceTv = findViewById(R.id.connConnectableDeviceTv);
+        frameLayout = findViewById(R.id.dashBoardFrameLayout);
+        activityLayout = findViewById(R.id.activityLayout);
 
         bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
 
         getWindowManager().getDefaultDisplay().getMetrics(dm); // 기기 해상도를 구하기 위함
 
+        getSupportFragmentManager().beginTransaction().replace(R.id.dashBoardFrameLayout, dashBoardFragment).commitAllowingStateLoss();
+
         cAdapter.setOnItemClickListener(new ConnectRecyclerAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(View v, int position) {
-                Intent intent = new Intent(context, DashBoardFragment.class);
-                intent.putExtra("device_name", cList.get(position).getDevice_name());
-                startActivity(intent);
-                finish();
+//                Intent intent = new Intent(context, DashBoardFragment.class);
+//                intent.putExtra("device_name", cList.get(position).getDevice_name());
+                frameLayout.setVisibility(View.VISIBLE);
             }
         });
 
         pAdapter.setOnItemClickListener(new PairedDeviceAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(View v, int position) {
-                Intent intent = new Intent(context, DashBoardFragment.class);
-                intent.putExtra("device_name", pList.get(position).getName() + "(" + pList.get(position).getAddress() + ")");
-                startActivity(intent);
-                finish();
+//                Intent intent = new Intent(context, DashBoardFragment.class);
+//                intent.putExtra("device_name", pList.get(position).getName() + "(" + pList.get(position).getAddress() + ")");
+                frameLayout.setVisibility(View.VISIBLE);
             }
         });
 

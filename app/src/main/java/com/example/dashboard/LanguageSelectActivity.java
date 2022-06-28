@@ -8,14 +8,13 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.dashboard.connect.ConnectDeviceFragment;
+import com.example.dashboard.connect.ConnectDeviceActivity;
 
 import java.util.Locale;
 
@@ -54,7 +53,7 @@ public class LanguageSelectActivity extends AppCompatActivity {
             // 현재 사용중인 언어 분류
             changeLocale(FINAL_LANGUAGE);
         } else {
-            Intent intent = new Intent(context, ConnectDeviceFragment.class);
+            Intent intent = new Intent(context, ConnectDeviceActivity.class);
             Toast.makeText(context, getString(R.string.skip_lang_msg), Toast.LENGTH_SHORT).show();
             changeLocale(FINAL_LANGUAGE);
             startActivity(intent);
@@ -92,7 +91,7 @@ public class LanguageSelectActivity extends AppCompatActivity {
                         getResources().updateConfiguration(configuration, getResources().getDisplayMetrics());
                         SharedPreferenceManager.setString(context, "final", SharedPreferenceManager.getString(context, "current"));
                         SharedPreferenceManager.setString(context,"skip_lang", "ok");
-                        Intent intent = new Intent(LanguageSelectActivity.this, ConnectDeviceFragment.class);
+                        Intent intent = new Intent(LanguageSelectActivity.this, ConnectDeviceActivity.class);
                         Toast.makeText(context, getString(R.string.complete_select_lang), Toast.LENGTH_SHORT).show();
                         startActivity(intent);
                         finish();
@@ -102,7 +101,7 @@ public class LanguageSelectActivity extends AppCompatActivity {
                         getResources().updateConfiguration(configuration, getResources().getDisplayMetrics());
                         SharedPreferenceManager.setString(context, "final", SharedPreferenceManager.getString(context, "current"));
                         SharedPreferenceManager.setString(context,"skip_lang", "ok");
-                        Intent intent = new Intent(LanguageSelectActivity.this, ConnectDeviceFragment.class);
+                        Intent intent = new Intent(LanguageSelectActivity.this, ConnectDeviceActivity.class);
                         Toast.makeText(context, getString(R.string.complete_select_lang), Toast.LENGTH_SHORT).show();
                         startActivity(intent);
                         finish();
