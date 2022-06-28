@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
@@ -28,9 +29,17 @@ import androidx.core.content.res.ResourcesCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.dashboard.R;
-import com.example.dashboard.SearchDeviceActivity;
 import com.example.dashboard.SegmentedProgressBar;
 import com.example.dashboard.SharedPreferenceManager;
+import com.example.dashboard.connect.ConnectDeviceFragment;
+import com.github.mikephil.charting.components.Legend;
+import com.github.mikephil.charting.components.XAxis;
+import com.github.mikephil.charting.components.YAxis;
+import com.github.mikephil.charting.data.Entry;
+import com.github.mikephil.charting.data.LineData;
+import com.github.mikephil.charting.data.LineDataSet;
+import com.github.mikephil.charting.formatter.IndexAxisValueFormatter;
+import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -38,6 +47,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 import java.util.Set;
+import java.util.concurrent.TimeUnit;
 
 public class DashBoardFragment extends AppCompatActivity {
 
@@ -48,8 +58,7 @@ public class DashBoardFragment extends AppCompatActivity {
     TextView currentTimeTv, category1, category2, category3, category4, category5, category6, categoryTitle;
     TextView aqiContentTv, aqiTitleTv, tempTitleTv, humidTitleTv, dayOfNightTv, aqiCurrentArrow, paringDeviceTv;
     ImageView menu, circleChart;
-
-    com.github.mikephil.charting.charts.LineChart lineChart;
+    String currentTimeIndex;
 
     int barViewWidth, barViewHeight, arrowWidth;
 
@@ -67,6 +76,15 @@ public class DashBoardFragment extends AppCompatActivity {
     Boolean isExitFlag = false;
 
     BluetoothAdapter bluetoothAdapter;
+
+    Date date = new Date(System.currentTimeMillis());
+
+    //Line Chart Values
+    ArrayList<Entry> chartData = new ArrayList<>();
+    ArrayList<ILineDataSet> lineDataSet = new ArrayList<>();
+    LineData lineData;
+    com.github.mikephil.charting.charts.LineChart lineChart;
+    Legend legend = new Legend();
 
     @SuppressLint("NotifyDataSetChanged")
     @Override
@@ -122,10 +140,11 @@ public class DashBoardFragment extends AppCompatActivity {
         });
 
         // Line Chart 그리기
-        // https://weeklycoding.com/mpandroidchart/
+        // https://weeklycoding.com/mpandroidchart/ 공식 홈페이지
         // https://junyoung-developer.tistory.com/174 x축을 시간형태로 변경
         // https://junyoung-developer.tistory.com/173?category=960204 그리기 참고자료
 
+        initChart(); //그래프 차트 그리기
 
     }
 
@@ -174,6 +193,101 @@ public class DashBoardFragment extends AppCompatActivity {
         mList.add(item);
     }
 
+    //LineChart Draw
+    // 차트 데이터 초기화
+    private void initChartData() {
+        // 차트 그리는 엔트리 부분
+        chartData.add(0, new Entry(180, 0f));
+        chartData.add(1, new Entry(190, 0.7f));
+        chartData.add(2, new Entry(200, 1f));
+        chartData.add(3, new Entry(210, 4f));
+        chartData.add(4, new Entry(220, 2f));
+        chartData.add(5, new Entry(230, 1.2f));
+        chartData.add(6, new Entry(240, 3f));
+
+        LineDataSet set = new LineDataSet(chartData, "test data1");
+        lineDataSet.add(set);
+        lineData = new LineData(lineDataSet);
+
+        set.setFillColor(R.color.lineChartLine); // 차트 색상
+        set.setDrawFilled(true);
+        set.setLineWidth(2F); // 그래프 선 굵기
+        set.setDrawValues(false); // 차트에 값 표시
+        set.setMode(LineDataSet.Mode.CUBIC_BEZIER); // 선 그리는 방식
+        set.setDrawCircleHole(false); // 원 안에 작은 원 표시
+        set.setDrawCircles(false); // 원 표시
+    }
+
+    // 차트 처리
+    private void initChart() {
+        initChartData();
+        // 차트 초기화
+        lineChart.setDrawGridBackground(false);
+        lineChart.setBackgroundColor(Color.TRANSPARENT);
+        lineChart.setDrawBorders(false);
+        lineChart.setAutoScaleMinMaxEnabled(false);
+        lineChart.setDragEnabled(false);
+        lineChart.setTouchEnabled(false);
+        lineChart.setScaleEnabled(false);
+
+        legend.setEnabled(false);
+
+        // X축
+        XAxis xAxis = lineChart.getXAxis();
+        xAxis.setDrawLabels(true); // 라벨 표시 여부
+        xAxis.setAxisMaximum(240); // 60min * 24hours
+        xAxis.setAxisMinimum(180);
+        xAxis.setLabelCount(7, true); // 라벨 갯수
+
+        xAxis.setTextColor(Color.WHITE);
+        xAxis.setPosition(XAxis.XAxisPosition.BOTTOM); // X축 라벨 위치
+        xAxis.setDrawAxisLine(false); // AxisLine 표시
+        xAxis.setDrawGridLines(false); // GridLine 표시
+        xAxis.setValueFormatter(new TimeAxisValueFormat());
+
+        // Y축
+        YAxis yAxis = lineChart.getAxisLeft();
+        yAxis.setAxisMaximum(4.5f);
+        yAxis.setAxisMinimum(-0.5f);
+
+        // Y축 도메인 변경
+        String[] yAxisVal = new String[]{"0", "51", "101", "251", "300"};
+
+        yAxis.setTextColor(R.color.white);
+        yAxis.setValueFormatter(new IndexAxisValueFormatter(yAxisVal));
+        yAxis.setGranularityEnabled(false);
+        yAxis.setDrawLabels(true); // Y축 라벨 위치
+        yAxis.setDrawGridLines(false); // GridLine 표시
+        yAxis.setDrawAxisLine(false); // AxisLine 표시
+
+        // 오른쪽 Y축 값
+        YAxis yRAxisVal = lineChart.getAxisRight();
+        yRAxisVal.setDrawLabels(false);
+        yRAxisVal.setDrawAxisLine(false);
+        yRAxisVal.setDrawGridLines(false);
+
+        lineChart.getDescription().setEnabled(false); // 설명
+        lineChart.setData(lineData); // 데이터 설정
+        lineChart.invalidate(); // 다시 그리기
+    }
+
+    private static class TimeAxisValueFormat extends IndexAxisValueFormatter {
+
+        @Override
+        public String getFormattedValue(float value) {
+            //Float(min) -> Date
+//            Date currentTime = new Date(System.currentTimeMillis());
+//            @SuppressLint("SimpleDateFormat") SimpleDateFormat formatMinutes = new SimpleDateFormat("HH:mm");
+//            Calendar calendar = Calendar.getInstance();
+//            formatMinutes.setCalendar(calendar);
+//            return formatMinutes.format(currentTime);
+            long valueToMinutes = TimeUnit.MINUTES.toMillis((long)value);
+            Date timeMinutes = new Date(valueToMinutes);
+            @SuppressLint("SimpleDateFormat") SimpleDateFormat formatMinutes = new SimpleDateFormat("HH:mm");
+            return formatMinutes.format(timeMinutes);
+        }
+    }
+
     //barChart 가로세로 구하기
     @SuppressLint("MissingPermission")
     @Override
@@ -214,7 +328,7 @@ public class DashBoardFragment extends AppCompatActivity {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 alertDialog.dismiss();
-                                Intent intent = new Intent(DashBoardFragment.this, SearchDeviceActivity.class);
+                                Intent intent = new Intent(DashBoardFragment.this, ConnectDeviceFragment.class);
                                 startActivity(intent);
                                 finish();
                             }
@@ -292,7 +406,7 @@ public class DashBoardFragment extends AppCompatActivity {
             public void handleMessage(@NonNull Message msg) {
                 Date currentTime = new Date(System.currentTimeMillis());
                 Calendar calendar = Calendar.getInstance();
-                String a = null;
+                String a;
                 super.handleMessage(msg);
                 int s = calendar.get(Calendar.HOUR_OF_DAY);
                 //오전일때
@@ -302,6 +416,7 @@ public class DashBoardFragment extends AppCompatActivity {
                     @SuppressLint("SimpleDateFormat") SimpleDateFormat simpleDateFormat = new SimpleDateFormat(s + ":mm");
                     simpleDateFormat.setCalendar(calendar);
                     currentTimeTv.setText(simpleDateFormat.format(currentTime));
+                    currentTimeIndex = simpleDateFormat.format(currentTime);
                 } else {
                     //오후일때
                     s -= 12;
@@ -504,17 +619,8 @@ public class DashBoardFragment extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        if (isExitFlag) {
-            finish();
-        } else {
-            isExitFlag = true;
-            Toast.makeText(this, getString(R.string.exit_app), Toast.LENGTH_SHORT).show();
-            new Handler().postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    isExitFlag = false;
-                }
-            }, 2000);
-        }
+        Intent intent = new Intent(DashBoardFragment.this, ConnectDeviceFragment.class);
+        startActivity(intent);
+        finish();
     }
 }

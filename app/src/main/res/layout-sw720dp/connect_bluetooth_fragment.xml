@@ -8,20 +8,20 @@
 
     <ImageView
         android:id="@+id/connTopBackIv"
-        android:layout_width="25dp"
-        android:layout_height="25dp"
-        android:src="@drawable/back"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
+        android:layout_width="27dp"
+        android:layout_height="27dp"
+        android:layout_marginStart="60dp"
         android:layout_marginTop="60dp"
-        android:layout_marginStart="60dp"/>
+        android:src="@drawable/back"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <ImageView
         android:id="@+id/connTopLangIconIv"
-        android:layout_width="51.1dp"
-        android:layout_height="51.1dp"
+        android:layout_width="45dp"
+        android:layout_height="45dp"
         android:layout_marginStart="548dp"
-        android:layout_marginTop="95dp"
+        android:layout_marginTop="60dp"
         android:src="@drawable/lang_1280_b"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -30,16 +30,16 @@
         android:id="@+id/connTopStepBarIv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="129dp"
         android:src="@drawable/stepbar_1280"
+        app:layout_constraintBottom_toBottomOf="@+id/connTopLangIconIv"
         app:layout_constraintEnd_toStartOf="@+id/connTopConnIconIv"
         app:layout_constraintStart_toEndOf="@+id/connTopLangIconIv"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="@+id/connTopLangIconIv" />
 
     <ImageView
         android:id="@+id/connTopConnIconIv"
-        android:layout_width="51.1dp"
-        android:layout_height="47.5dp"
+        android:layout_width="45dp"
+        android:layout_height="41dp"
         android:layout_marginEnd="536dp"
         android:src="@drawable/conn_1280_w"
         app:layout_constraintBottom_toBottomOf="@+id/connTopLangIconIv"
@@ -76,7 +76,7 @@
         android:id="@+id/connPleaseSelectLangMainTv"
         android:layout_width="wrap_content"
         android:layout_height="34dp"
-        android:layout_marginTop="41dp"
+        android:layout_marginTop="38dp"
         android:fontFamily="@font/pretendardvariable"
         android:text="@string/please_select_device"
         android:textAllCaps="false"
@@ -86,32 +86,19 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/connTopLangTitleTv" />
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/connRecentDeviceRv"
-        android:layout_width="366dp"
-        android:layout_height="167dp"
-        android:layout_marginTop="36dp"
-        android:orientation="horizontal"
-        android:visibility="gone"
-        android:overScrollMode="never"
-        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-        app:layout_constraintEnd_toEndOf="@+id/connPleaseSelectLangMainTv"
-        app:layout_constraintStart_toStartOf="@+id/connPleaseSelectLangMainTv"
-        app:layout_constraintTop_toBottomOf="@+id/connPleaseSelectLangMainTv"
-        tools:listitem="@layout/listitem_recent_device" />
-
     <TextView
         android:id="@+id/connConnectableDeviceTv"
         android:layout_width="wrap_content"
         android:layout_height="20dp"
-        android:layout_marginTop="65dp"
+        android:layout_marginTop="20dp"
         android:fontFamily="@font/pretendardvariable"
         android:gravity="center"
         android:text="@string/connectable_device"
         android:textColor="@color/white"
         android:textSize="17sp"
+        android:visibility="visible"
         app:layout_constraintStart_toStartOf="@+id/connPleaseSelectLangMainTv"
-        app:layout_constraintTop_toBottomOf="@+id/connRecentDeviceRv" />
+        app:layout_constraintTop_toBottomOf="@+id/connPleaseSelectLangMainTv" />
 
     <ProgressBar
         android:id="@+id/connConnectableDevicePb"
@@ -135,8 +122,22 @@
         app:layout_constraintTop_toBottomOf="@+id/connConnectableDevicePb" />
 
     <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/connPairedDeviceRv"
+        android:layout_width="0dp"
+        android:layout_height="152dp"
+        android:layout_marginTop="20dp"
+        android:orientation="horizontal"
+        android:overScrollMode="never"
+        android:visibility="visible"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        app:layout_constraintEnd_toEndOf="@+id/connPleaseSelectLangMainTv"
+        app:layout_constraintStart_toStartOf="@+id/connPleaseSelectLangMainTv"
+        app:layout_constraintTop_toBottomOf="@+id/connLine1View"
+        tools:listitem="@layout/listitem_recent_device" />
+
+    <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/connConnectableList"
-        android:layout_width="366dp"
+        android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginTop="5dp"
         android:orientation="vertical"
@@ -145,7 +146,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="@+id/connPleaseSelectLangMainTv"
         app:layout_constraintStart_toStartOf="@+id/connPleaseSelectLangMainTv"
-        app:layout_constraintTop_toBottomOf="@+id/connLine1View"
+        app:layout_constraintTop_toBottomOf="@+id/connPairedDeviceRv"
         tools:listitem="@layout/listitem_connectable_device" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
