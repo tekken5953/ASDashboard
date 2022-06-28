@@ -33,7 +33,7 @@ public class ConnectDeviceFragment extends AppCompatActivity {
 
     ImageView selectLanguage;
     Context context;
-    RecyclerView deviceList,pairedDeviceList;
+    RecyclerView deviceList, pairedDeviceList;
     ArrayList<ConnectRecyclerItem> cList = new ArrayList<>();
     ArrayList<PairedDeviceItem> pList = new ArrayList<>();
     ConnectRecyclerAdapter cAdapter;
@@ -124,6 +124,7 @@ public class ConnectDeviceFragment extends AppCompatActivity {
             }
         });
     }
+
     //Connectable Device Item
     public void addCItem(String name, String connect) {
         ConnectRecyclerItem item = new ConnectRecyclerItem(name, connect);
@@ -153,10 +154,10 @@ public class ConnectDeviceFragment extends AppCompatActivity {
             for (BluetoothDevice device : pairedDevice) {
                 pairedDeviceList.setVisibility(View.VISIBLE);
                 if (dm.widthPixels > 1900 && dm.heightPixels > 1000) {
-                    addPItem(ResourcesCompat.getDrawable(getResources(),R.drawable.m_1920,null),device.getName(),device.getAddress());
+                    addPItem(ResourcesCompat.getDrawable(getResources(), R.drawable.m_1920, null), device.getName(), device.getAddress());
                     pAdapter.notifyDataSetChanged();
-                }  else {
-                    addPItem(ResourcesCompat.getDrawable(getResources(),R.drawable.m_1280,null),device.getName(),device.getAddress());
+                } else {
+                    addPItem(ResourcesCompat.getDrawable(getResources(), R.drawable.m_1280, null), device.getName(), device.getAddress());
                     pAdapter.notifyDataSetChanged();
                 }
             }
@@ -177,13 +178,13 @@ public class ConnectDeviceFragment extends AppCompatActivity {
                     String deviceName = device.getName();
                     String deviceAddress = device.getAddress();
                     //필터링 없이 하려면 주석 해제 + 밑에 필터링부분 주석처리
-//                    addCItem(deviceName + "(" + deviceAddress + ")", "연결하기");
-//                    cAdapter.notifyDataSetChanged();
+                    addCItem(deviceName + "(" + deviceAddress + ")", "연결하기");
+                    cAdapter.notifyDataSetChanged();
                     // 필터링
-                    if (deviceName != null && deviceName.contains("BioT")) {
-                        addCItem(deviceName + "(" + deviceAddress + ")", "연결하기");
-                        cAdapter.notifyDataSetChanged();
-                    }
+//                    if (deviceName != null && deviceName.contains("BioT")) {
+//                        addCItem(deviceName + "(" + deviceAddress + ")", "연결하기");
+//                        cAdapter.notifyDataSetChanged();
+//                    }
                 }
             }
         }
