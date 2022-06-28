@@ -11,7 +11,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.util.DisplayMetrics;
-import android.view.LayoutInflater;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
@@ -19,13 +19,13 @@ import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.content.res.AppCompatResources;
 import androidx.core.content.res.ResourcesCompat;
-import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.dashboard.R;
@@ -49,7 +49,7 @@ import java.util.Locale;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
-public class DashBoardFragment extends Fragment {
+public class DashBoardFragment extends AppCompatActivity {
 
     ArrayList<DashboardRecyclerItem> mList = new ArrayList<>();
     DashboardRecyclerAdapter adapter;
@@ -73,6 +73,7 @@ public class DashBoardFragment extends Fragment {
     private ViewGroup viewLayout;   //전체 감싸는 영역
     private ViewGroup sideLayout;   //사이드바만 감싸는 영역
     private Boolean isMenuShow = false;
+    Boolean isExitFlag = false;
 
     BluetoothAdapter bluetoothAdapter;
 
@@ -87,59 +88,22 @@ public class DashBoardFragment extends Fragment {
 
     @SuppressLint("NotifyDataSetChanged")
     @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.fragment_dashboard);
 
-        init(); //초기화
-        barViewWidth = barView.getWidth();
-        barViewHeight = barView.getHeight();
-        arrowWidth = aqiCurrentArrow.getWidth();
+        init(); //변수 초기화
 
-        aqiTitleTv.setText(getResources().getString(R.string.aqi));
-        aqiContentTv.setText(getResources().getString(R.string.good));
-        tempTitleTv.setText(getResources().getString(R.string.temp));
-        humidTitleTv.setText(getResources().getString(R.string.humid));
-        categoryTitle.setText(getResources().getString(R.string.aqi_1_hour));
-        category1.setText(getResources().getString(R.string.aqi));
-        category2.setText(getResources().getString(R.string.fine_dust));
-        category3.setText(getResources().getString(R.string.Volatile_organic_compounds));
-        category4.setText(getResources().getString(R.string.co2));
-        category5.setText(getResources().getString(R.string.co));
-        category6.setText(getResources().getString(R.string.virus));
-
-        params.setMargins(-arrowWidth / 2, 0, 0, (int) getResources().getDimension(R.dimen.arrowBottom));
-        aqiCurrentArrow.setLayoutParams(params);
-
-        Set<BluetoothDevice> paredDevice = bluetoothAdapter.getBondedDevices();
-        if (!paredDevice.isEmpty()) {
-            for (BluetoothDevice device : paredDevice) {
-//                    paringDeviceTv.setText(device.getName());
-                paringDeviceTv.setText(requireActivity().getIntent().getExtras().getString("device_name"));
-            }
-        } else {
-            paringDeviceTv.setText(getString(R.string.not_paring));
-            final AlertDialog.Builder builder = new AlertDialog.Builder(requireActivity());
-            final AlertDialog alertDialog = builder.create();
-            builder.setTitle(getString(R.string.causion_title))
-                    .setMessage(getString(R.string.causion_message))
-                    .setPositiveButton(getString(R.string.causion_ok), new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            alertDialog.dismiss();
-                            //TODO 트랜젝션 이동 구현 -> 디바이스 연결 화면으로 이동
-                        }
-                    }).show();
-        }
         currentTimeIndex(); // 현재 시간 적용
 
         Configuration configuration = new Configuration();
 
         bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
 
-        if (SharedPreferenceManager.getString(getContext(), "finalLanguage").equals("en")) {
+        if (SharedPreferenceManager.getString(DashBoardFragment.this, "finalLanguage").equals("en")) {
             configuration.setLocale(Locale.US);
             getResources().updateConfiguration(configuration, getResources().getDisplayMetrics());
-        } else if (SharedPreferenceManager.getString(getContext(), "finalLanguage").equals("ko")) {
+        } else if (SharedPreferenceManager.getString(DashBoardFragment.this, "finalLanguage").equals("ko")) {
             configuration.setLocale(Locale.KOREA);
             getResources().updateConfiguration(configuration, getResources().getDisplayMetrics());
         } else {
@@ -156,7 +120,7 @@ public class DashBoardFragment extends Fragment {
 
         adapter.notifyDataSetChanged(); // 데이터 갱신
 
-        requireActivity().getWindowManager().getDefaultDisplay().getMetrics(dm); // 기기 해상도를 구하기 위함
+        getWindowManager().getDefaultDisplay().getMetrics(dm); // 기기 해상도를 구하기 위함
 
         CreateSegmentProgressView(); // AQI 바 차트 그리기
 
@@ -181,43 +145,37 @@ public class DashBoardFragment extends Fragment {
         // https://junyoung-developer.tistory.com/173?category=960204 그리기 참고자료
 
         initChart(); //그래프 차트 그리기
-    }
 
-    @Nullable
-    @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_dashboard,container,false);
     }
-
 
     public void init() {
 
-        barView = requireActivity().findViewById(R.id.aqiBarChartPb);
+        barView = findViewById(R.id.aqiBarChartPb);
 
-        recyclerView = requireActivity().findViewById(R.id.recyclerView);
-        circleChart = requireActivity().findViewById(R.id.apiCircleChartPb);
-        currentTimeTv = requireActivity().findViewById(R.id.currentTimeTv);
-        menu = requireActivity().findViewById(R.id.hambugerMenuIv);
-        categoryTitle = requireActivity().findViewById(R.id.textView7);
-        category1 = requireActivity().findViewById(R.id.category1);
-        category2 = requireActivity().findViewById(R.id.category2);
-        category3 = requireActivity().findViewById(R.id.category3);
-        category4 = requireActivity().findViewById(R.id.category4);
-        category5 = requireActivity().findViewById(R.id.category5);
-        category6 = requireActivity().findViewById(R.id.category6);
-        lineChart = requireActivity().findViewById(R.id.virusLineChart);   //선그래프
-        dayOfNightTv = requireActivity().findViewById(R.id.dayOfNightTv);
-        aqiContentTv = requireActivity().findViewById(R.id.aqiContentTv);
-        aqiTitleTv = requireActivity().findViewById(R.id.aqiTitleTv);
-        tempTitleTv = requireActivity().findViewById(R.id.textView6);
-        humidTitleTv = requireActivity().findViewById(R.id.textView2);
-        aqiCurrentArrow = requireActivity().findViewById(R.id.aqiCurrentArrow);
-        paringDeviceTv = requireActivity().findViewById(R.id.paringDeviceTv);
+        recyclerView = findViewById(R.id.recyclerView);
+        circleChart = findViewById(R.id.apiCircleChartPb);
+        currentTimeTv = findViewById(R.id.currentTimeTv);
+        menu = findViewById(R.id.hambugerMenuIv);
+        categoryTitle = findViewById(R.id.textView7);
+        category1 = findViewById(R.id.category1);
+        category2 = findViewById(R.id.category2);
+        category3 = findViewById(R.id.category3);
+        category4 = findViewById(R.id.category4);
+        category5 = findViewById(R.id.category5);
+        category6 = findViewById(R.id.category6);
+        lineChart = findViewById(R.id.virusLineChart);   //선그래프
+        dayOfNightTv = findViewById(R.id.dayOfNightTv);
+        aqiContentTv = findViewById(R.id.aqiContentTv);
+        aqiTitleTv = findViewById(R.id.aqiTitleTv);
+        tempTitleTv = findViewById(R.id.textView6);
+        humidTitleTv = findViewById(R.id.textView2);
+        aqiCurrentArrow = findViewById(R.id.aqiCurrentArrow);
+        paringDeviceTv = findViewById(R.id.paringDeviceTv);
 
-//        menu.setOnClickListener(::onClick);
-        mainLayout = requireActivity().findViewById(R.id.id_main); // 대쉬보드 메인화면
-        viewLayout = requireActivity().findViewById(R.id.fl_silde); // 사이드메뉴 전체프레임
-        sideLayout = requireActivity().findViewById(R.id.view_sildebar); // 사이드메뉴 컨텐츠뷰
+        menu.setOnClickListener(this::onClick);
+        mainLayout = findViewById(R.id.id_main); // 대쉬보드 메인화면
+        viewLayout = findViewById(R.id.fl_silde); // 사이드메뉴 전체프레임
+        sideLayout = findViewById(R.id.view_sildebar); // 사이드메뉴 컨텐츠뷰
 //        addSideView(); //사이드 메뉴 활성화
 
         adapter = new DashboardRecyclerAdapter(mList); // 외부어댑터 연동
@@ -239,13 +197,13 @@ public class DashBoardFragment extends Fragment {
     // 차트 데이터 초기화
     private void initChartData() {
         // 차트 그리는 엔트리 부분
-        chartData.add(0, new Entry(180, 0));
-        chartData.add(1, new Entry(190, 20));
-        chartData.add(2, new Entry(200, 250));
-        chartData.add(3, new Entry(210, 95));
-        chartData.add(4, new Entry(220, 210));
-        chartData.add(5, new Entry(230, 123));
-        chartData.add(6, new Entry(240, 40));
+        chartData.add(0, new Entry(180, 0f));
+        chartData.add(1, new Entry(190, 0.7f));
+        chartData.add(2, new Entry(200, 1f));
+        chartData.add(3, new Entry(210, 4f));
+        chartData.add(4, new Entry(220, 2f));
+        chartData.add(5, new Entry(230, 1.2f));
+        chartData.add(6, new Entry(240, 3f));
 
         LineDataSet set = new LineDataSet(chartData, "test data1");
         lineDataSet.add(set);
@@ -289,12 +247,14 @@ public class DashBoardFragment extends Fragment {
 
         // Y축
         YAxis yAxis = lineChart.getAxisLeft();
-        yAxis.setAxisMaximum(300);
-        yAxis.setAxisMinimum(0);
+        yAxis.setAxisMaximum(4.5f);
+        yAxis.setAxisMinimum(-0.5f);
 
         // Y축 도메인 변경
-        yAxis.setTextColor(Color.parseColor("#FFFFFF"));
-        yAxis.setValueFormatter(new IntegerAxisValueFormat());
+        String[] yAxisVal = new String[]{"0", "51", "101", "251", "300"};
+
+        yAxis.setTextColor(R.color.white);
+        yAxis.setValueFormatter(new IndexAxisValueFormatter(yAxisVal));
         yAxis.setGranularityEnabled(false);
         yAxis.setDrawLabels(true); // Y축 라벨 위치
         yAxis.setDrawGridLines(false); // GridLine 표시
@@ -321,18 +281,59 @@ public class DashBoardFragment extends Fragment {
 //            Calendar calendar = Calendar.getInstance();
 //            formatMinutes.setCalendar(calendar);
 //            return formatMinutes.format(currentTime);
-            long valueToMinutes = TimeUnit.MINUTES.toMillis((long) value);
+            long valueToMinutes = TimeUnit.MINUTES.toMillis((long)value);
             Date timeMinutes = new Date(valueToMinutes);
             @SuppressLint("SimpleDateFormat") SimpleDateFormat formatMinutes = new SimpleDateFormat("HH:mm");
             return formatMinutes.format(timeMinutes);
         }
     }
 
-    private static class IntegerAxisValueFormat extends IndexAxisValueFormatter {
-        @Override
-        public String getFormattedValue(float value) {
-            int result = (int) value;
-            return result + "";
+    //barChart 가로세로 구하기
+    @SuppressLint("MissingPermission")
+    @Override
+    public void onWindowFocusChanged(boolean hasFocus) {
+        if (hasFocus) {
+            barViewWidth = barView.getWidth();
+            barViewHeight = barView.getHeight();
+            arrowWidth = aqiCurrentArrow.getWidth();
+
+            aqiTitleTv.setText(getResources().getString(R.string.aqi));
+            aqiContentTv.setText(getResources().getString(R.string.good));
+            tempTitleTv.setText(getResources().getString(R.string.temp));
+            humidTitleTv.setText(getResources().getString(R.string.humid));
+            categoryTitle.setText(getResources().getString(R.string.aqi_1_hour));
+            category1.setText(getResources().getString(R.string.aqi));
+            category2.setText(getResources().getString(R.string.fine_dust));
+            category3.setText(getResources().getString(R.string.Volatile_organic_compounds));
+            category4.setText(getResources().getString(R.string.co2));
+            category5.setText(getResources().getString(R.string.co));
+            category6.setText(getResources().getString(R.string.virus));
+
+            params.setMargins(-arrowWidth / 2, 0, 0, (int) getResources().getDimension(R.dimen.arrowBottom));
+            aqiCurrentArrow.setLayoutParams(params);
+
+            Set<BluetoothDevice> paredDevice = bluetoothAdapter.getBondedDevices();
+            if (!paredDevice.isEmpty()) {
+                for (BluetoothDevice device : paredDevice) {
+//                    paringDeviceTv.setText(device.getName());
+                    paringDeviceTv.setText(getIntent().getExtras().getString("device_name"));
+                }
+            } else {
+                paringDeviceTv.setText(getString(R.string.not_paring));
+                final AlertDialog.Builder builder = new AlertDialog.Builder(DashBoardFragment.this);
+                final AlertDialog alertDialog = builder.create();
+                builder.setTitle(getString(R.string.causion_title))
+                        .setMessage(getString(R.string.causion_message))
+                        .setPositiveButton(getString(R.string.causion_ok), new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                alertDialog.dismiss();
+                                Intent intent = new Intent(DashBoardFragment.this, ConnectDeviceActivity.class);
+                                startActivity(intent);
+                                finish();
+                            }
+                        }).show();
+            }
         }
     }
 
@@ -390,7 +391,13 @@ public class DashBoardFragment extends Fragment {
                 aqiCurrentArrow.setTextColor(getResources().getColor(R.color.progressWorst));
             }
         }
+
+        Toast.makeText(this, "차트의 총 길이(dp) : " + (int) getResources().getDimension(R.dimen.barWidth)
+                        + "\nAqi 지수(int) : " + aqiNumber + "\n최고수치 300기준 차트이동거리(dp) : "
+                        + aqiNumber * barViewWidth / 300,
+                Toast.LENGTH_SHORT).show();
     }
+
 
     //현재 시간 불러오기
     public void currentTimeIndex() {
@@ -494,7 +501,7 @@ public class DashBoardFragment extends Fragment {
     //햄버거 메뉴 보여주기
     public void showMenu() {
         isMenuShow = true;
-        Animation slide = AnimationUtils.loadAnimation(requireActivity(), R.anim.sidebar_show);
+        Animation slide = AnimationUtils.loadAnimation(DashBoardFragment.this, R.anim.sidebar_show);
         sideLayout.startAnimation(slide);
         viewLayout.setVisibility(View.VISIBLE);
         viewLayout.setEnabled(true);
@@ -550,10 +557,10 @@ public class DashBoardFragment extends Fragment {
         tv.setTextColor(ResourcesCompat.getColor(getResources(), R.color.white, null));
         if (dm.widthPixels > 1900 && dm.heightPixels > 1000) {
             tv.setTextSize(18);
-            tv.setBackground(AppCompatResources.getDrawable(requireActivity(), R.drawable.category_text_outline));
+            tv.setBackground(AppCompatResources.getDrawable(this, R.drawable.category_text_outline));
         } else {
             tv.setTextSize(14);
-            tv.setBackground(AppCompatResources.getDrawable(requireActivity(), R.drawable.category_text_outline_small));
+            tv.setBackground(AppCompatResources.getDrawable(this, R.drawable.category_text_outline_small));
         }
     }
 
@@ -607,5 +614,13 @@ public class DashBoardFragment extends Fragment {
                 0.162f));
 
         barView.setContexts(barList);
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        Intent intent = new Intent(DashBoardFragment.this, ConnectDeviceActivity.class);
+        startActivity(intent);
+        finish();
     }
 }

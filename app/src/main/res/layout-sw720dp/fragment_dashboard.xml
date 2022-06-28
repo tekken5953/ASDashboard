@@ -396,8 +396,7 @@
                 android:layout_width="759dp"
                 android:layout_height="268dp"
                 android:layout_marginStart="354dp"
-                android:layout_marginTop="82dp"
-                android:background="@color/transparent" />
+                android:layout_marginTop="82dp"/>
 
         </FrameLayout>
 

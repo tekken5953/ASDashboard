@@ -1,18 +1,19 @@
 package com.example.dashboard;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.content.res.AppCompatResources;
-import androidx.core.content.res.ResourcesCompat;
-
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.content.res.AppCompatResources;
+import androidx.core.content.res.ResourcesCompat;
 
 import com.example.dashboard.connect.ConnectDeviceActivity;
 
@@ -48,14 +49,35 @@ public class LanguageSelectActivity extends AppCompatActivity {
         koreaFlag.setImageAlpha(76);
         englishFlag.setImageAlpha(76);
 
+        Log.d(LANGUAGE_LOG,"final lang : " + FINAL_LANGUAGE + "\nskip : " + SKIP_SELECT_LANGUAGE);
+
+        Configuration configuration = new Configuration();
         // 언어 설정 스킵 YES or NO
         if (SKIP_SELECT_LANGUAGE.equals("no")) {
             // 현재 사용중인 언어 분류
-            changeLocale(FINAL_LANGUAGE);
+            if (FINAL_LANGUAGE != null) {
+                // 한국어 일 때
+                if (FINAL_LANGUAGE.equals("ko")) {
+                    SelectedKoreaFlag();
+                    configuration.setLocale(Locale.KOREA);
+                    getResources().updateConfiguration(configuration, getResources().getDisplayMetrics());
+                }
+                // 영어 일 때
+                else if (FINAL_LANGUAGE.equals("en")) {
+                    SelectedEnglishFlag();
+                    configuration.setLocale(Locale.US);
+                    getResources().updateConfiguration(configuration, getResources().getDisplayMetrics());
+                }
+            }
+            // 현재 선택 된 언어가 없을 때
+            else {
+                SelectedNothing();
+                configuration.setLocale(Locale.KOREA);
+                getResources().updateConfiguration(configuration, getResources().getDisplayMetrics());
+            }
         } else {
             Intent intent = new Intent(context, ConnectDeviceActivity.class);
             Toast.makeText(context, getString(R.string.skip_lang_msg), Toast.LENGTH_SHORT).show();
-            changeLocale(FINAL_LANGUAGE);
             startActivity(intent);
             finish();
         }
@@ -145,29 +167,5 @@ public class LanguageSelectActivity extends AppCompatActivity {
         langOkTv.setEnabled(false);
         langOkTv.setBackground(AppCompatResources.getDrawable(context, R.drawable.lang_ok_b));
         langOkTv.setTextColor(ResourcesCompat.getColor(getResources(), R.color.statusUnitText, null));
-    }
-
-    public void changeLocale(String s) {
-        Configuration configuration = new Configuration();
-        if (s != null) {
-            // 한국어 일 때
-            if (s.equals("ko")) {
-                SelectedKoreaFlag();
-                configuration.setLocale(Locale.KOREA);
-                getResources().updateConfiguration(configuration, getResources().getDisplayMetrics());
-            }
-            // 영어 일 때
-            else if (s.equals("en")) {
-                SelectedEnglishFlag();
-                configuration.setLocale(Locale.US);
-                getResources().updateConfiguration(configuration, getResources().getDisplayMetrics());
-            }
-        }
-        // 현재 선택 된 언어가 없을 때
-        else {
-            SelectedNothing();
-            configuration.setLocale(Locale.KOREA);
-            getResources().updateConfiguration(configuration, getResources().getDisplayMetrics());
-        }
     }
 }

@@ -60,7 +60,6 @@ public class ConnectRecyclerAdapter extends RecyclerView.Adapter<ConnectRecycler
         ConnectRecyclerItem item = mData.get(position);
 
         holder.device_name.setText(item.getDevice_name());
-        holder.connect.setText(item.getConnect());
 
     }
 
