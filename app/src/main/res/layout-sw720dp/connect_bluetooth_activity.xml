@@ -1,23 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mainLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/bg_1280x800"
-    android:id="@+id/mainLayout">
+    android:background="@drawable/bg_1280x800">
 
     <FrameLayout
         android:id="@+id/dashBoardFrameLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:visibility="gone"/>
+        android:visibility="gone" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/activityLayout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:id="@+id/activityLayout">
+        android:layout_height="match_parent">
 
         <ImageView
             android:id="@+id/connTopBackIv"
@@ -120,9 +119,22 @@
             android:layout_height="17dp"
             android:layout_marginStart="19dp"
             android:progressTint="@color/white"
+            android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="@+id/connConnectableDeviceTv"
             app:layout_constraintStart_toEndOf="@+id/connConnectableDeviceTv"
             app:layout_constraintTop_toTopOf="@+id/connConnectableDeviceTv" />
+
+        <ImageView
+            android:id="@+id/connRefreshIv"
+            android:layout_width="17dp"
+            android:layout_height="17dp"
+            android:layout_marginStart="19dp"
+            android:src="@drawable/refresh"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="@+id/connConnectableDeviceTv"
+            app:layout_constraintStart_toEndOf="@+id/connConnectableDeviceTv"
+            app:layout_constraintTop_toTopOf="@+id/connConnectableDeviceTv"
+            app:tint="@color/white" />
 
         <View
             android:id="@+id/connLine1View"
@@ -138,12 +150,12 @@
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:fillViewport="true"
-            android:scrollbars="none"
             android:overScrollMode="never"
+            android:scrollbars="none"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="@+id/connPleaseSelectLangMainTv"
             app:layout_constraintStart_toStartOf="@+id/connPleaseSelectLangMainTv"
-            app:layout_constraintTop_toBottomOf="@+id/connLine1View"
-            app:layout_constraintBottom_toBottomOf="parent">
+            app:layout_constraintTop_toBottomOf="@+id/connLine1View">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -153,13 +165,13 @@
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/connPairedDeviceRv"
                     android:layout_width="match_parent"
-                    android:layout_height="152dp"
+                    android:layout_height="165dp"
                     android:layout_marginTop="20dp"
+                    android:nestedScrollingEnabled="false"
                     android:orientation="horizontal"
                     android:overScrollMode="never"
                     android:visibility="visible"
                     app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                    android:nestedScrollingEnabled="false"
                     tools:listitem="@layout/listitem_recent_device" />
 
                 <androidx.recyclerview.widget.RecyclerView
@@ -167,14 +179,13 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_marginTop="5dp"
+                    android:nestedScrollingEnabled="false"
                     android:orientation="vertical"
                     android:overScrollMode="never"
-                    android:nestedScrollingEnabled="false"
                     app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                     app:layout_constraintTop_toBottomOf="@+id/connPairedDeviceRv"
                     tools:listitem="@layout/listitem_connectable_device" />
             </LinearLayout>
-
 
         </androidx.core.widget.NestedScrollView>
 

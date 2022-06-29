@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="com.example.dashboard">
 
+    <uses-permission android:name="android.permission.BLUETOOTH_CONNECT" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
@@ -36,19 +37,9 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".SearchDeviceActivity"
-            android:exported="true"/>
-        <activity
-            android:name=".dashboard.DashBoardFragment"
+            android:name=".dashboard.DashBoardActivity"
             android:exported="true" />
 
-        <receiver
-            android:name=".BroadCastReceiver"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="android.intent.action.BOOT_COMPLETED" />
-            </intent-filter>
-        </receiver>
     </application>
 
 </manifest>

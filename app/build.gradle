@@ -50,4 +50,7 @@ dependencies {
     //Kotlin
     implementation "androidx.core:core-ktx:+"
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+
+    //ViewmodelProvider
+    implementation "androidx.lifecycle:lifecycle-extensions:2.2.0"
 }

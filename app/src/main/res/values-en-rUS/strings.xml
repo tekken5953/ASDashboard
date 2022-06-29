@@ -22,7 +22,7 @@
     <string name="night">pm</string>
     <string name="not_paring">No Paring Device</string>
     <string name="causion_title">Causion</string>
-    <string name="causion_message">Disconnected to Device\nPlease Check out</string>
+    <string name="causion_message">Disconnected to Bluetooth\nYou Want to ReConnect?</string>
     <string name="causion_ok">OK</string>
     <string name="select_lang">Select Language</string>
     <string name="connect_device">Connect Device</string>
@@ -36,5 +36,5 @@
     <string name="complete_select_lang">Language Setting is Complete</string>
     <string name="skip_lang_msg">Language Set to Automatic </string>
     <string name="connect">Connect</string>
-    <string name="exit_app">If you click back button one more, this app will be end</string>
+    <string name="exit_app">If you click back one more, this app will be end</string>
 </resources>

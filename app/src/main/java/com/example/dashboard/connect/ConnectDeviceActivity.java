@@ -1,6 +1,7 @@
 package com.example.dashboard.connect;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.content.BroadcastReceiver;
@@ -11,9 +12,9 @@ import android.content.pm.PackageManager;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -24,20 +25,22 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.dashboard.LanguageSelectActivity;
 import com.example.dashboard.R;
 import com.example.dashboard.SharedPreferenceManager;
-import com.example.dashboard.dashboard.DashBoardFragment;
+import com.example.dashboard.dashboard.DashBoardActivity;
 
 import java.util.ArrayList;
 import java.util.Set;
 
+@SuppressLint({"MissingPermission", "NotifyDataSetChanged"})
 public class ConnectDeviceActivity extends AppCompatActivity {
 
-    ImageView selectLanguage;
+    ImageView selectLanguage, connRefreshIv;
     Context context;
     RecyclerView deviceList, pairedDeviceList;
     ArrayList<ConnectRecyclerItem> cList = new ArrayList<>();
     ArrayList<PairedDeviceItem> pList = new ArrayList<>();
     ConnectRecyclerAdapter cAdapter;
     PairedDeviceAdapter pAdapter;
+    ProgressBar progressBar;
 
     TextView connConnectableDeviceTv;
 
@@ -51,15 +54,19 @@ public class ConnectDeviceActivity extends AppCompatActivity {
         super.onResume();
         cList.clear();
         pList.clear();
+
         findPairedDevice();
         IntentFilter filter = new IntentFilter();
         filter.addAction(BluetoothDevice.ACTION_FOUND);
         registerReceiver(mReceiver, filter);
+
         if (!bluetoothAdapter.isDiscovering()) {
             bluetoothAdapter.startDiscovery();
-            Log.d("Bluetooth", "Discovering...");
+            progressBar.setVisibility(View.VISIBLE);
+            connRefreshIv.setVisibility(View.GONE);
         } else {
-            Log.d("Bluetooth", "Not Discovering...");
+            progressBar.setVisibility(View.GONE);
+            connRefreshIv.setVisibility(View.VISIBLE);
         }
     }
 
@@ -91,6 +98,8 @@ public class ConnectDeviceActivity extends AppCompatActivity {
         deviceList.setAdapter(cAdapter);
         pairedDeviceList.setAdapter(pAdapter);
         connConnectableDeviceTv = findViewById(R.id.connConnectableDeviceTv);
+        progressBar = findViewById(R.id.connConnectableDevicePb);
+        connRefreshIv = findViewById(R.id.connRefreshIv);
 
         bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
 
@@ -99,7 +108,7 @@ public class ConnectDeviceActivity extends AppCompatActivity {
         cAdapter.setOnItemClickListener(new ConnectRecyclerAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(View v, int position) {
-                Intent intent = new Intent(context, DashBoardFragment.class);
+                Intent intent = new Intent(context, DashBoardActivity.class);
                 intent.putExtra("device_name", cList.get(position).getDevice_name());
                 startActivity(intent);
                 finish();
@@ -109,8 +118,8 @@ public class ConnectDeviceActivity extends AppCompatActivity {
         pAdapter.setOnItemClickListener(new PairedDeviceAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(View v, int position) {
-                Intent intent = new Intent(context, DashBoardFragment.class);
-                intent.putExtra("device_name", pList.get(position).getName() + "(" + pList.get(position).getAddress() + ")");
+                Intent intent = new Intent(context, DashBoardActivity.class);
+                intent.putExtra("device_name", pList.get(position).getName());
                 startActivity(intent);
                 finish();
             }
@@ -178,13 +187,13 @@ public class ConnectDeviceActivity extends AppCompatActivity {
                     String deviceName = device.getName();
                     String deviceAddress = device.getAddress();
                     //필터링 없이 하려면 주석 해제 + 밑에 필터링부분 주석처리
-//                    addCItem(deviceName + "(" + deviceAddress + ")", "연결하기");
-//                    cAdapter.notifyDataSetChanged();
+                    addCItem(deviceName + "(" + deviceAddress + ")");
+                    cAdapter.notifyDataSetChanged();
                     // 필터링
-                    if (deviceName != null && deviceName.contains("BioT")) {
-                        addCItem(deviceName + "(" + deviceAddress + ")");
-                        cAdapter.notifyDataSetChanged();
-                    }
+//                    if (deviceName != null && deviceName.contains("BioT")) {
+//                        addCItem(deviceName + "(" + deviceAddress + ")");
+//                        cAdapter.notifyDataSetChanged();
+//                    }
                 }
             }
         }

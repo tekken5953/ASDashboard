@@ -23,7 +23,7 @@
         <entry key="..\:/AndroidStudio/Dashboard/app/src/main/res/layout-small/listitem.xml" value="0.21432291666666667" />
         <entry key="..\:/AndroidStudio/Dashboard/app/src/main/res/layout-sw720dp/activity_main.xml" value="0.45107794361525705" />
         <entry key="..\:/AndroidStudio/Dashboard/app/src/main/res/layout-sw720dp/activity_search_device.xml" value="0.13" />
-        <entry key="..\:/AndroidStudio/Dashboard/app/src/main/res/layout-sw720dp/connect_bluetooth_activity.xml" value="0.17" />
+        <entry key="..\:/AndroidStudio/Dashboard/app/src/main/res/layout-sw720dp/connect_bluetooth_activity.xml" value="0.18723958333333332" />
         <entry key="..\:/AndroidStudio/Dashboard/app/src/main/res/layout-sw720dp/connect_bluetooth_fragment.xml" value="0.2" />
         <entry key="..\:/AndroidStudio/Dashboard/app/src/main/res/layout-sw720dp/dashboard_listitem.xml" value="0.1" />
         <entry key="..\:/AndroidStudio/Dashboard/app/src/main/res/layout-sw720dp/fragment_dashboard.xml" value="0.16" />
@@ -40,6 +40,8 @@
         <entry key="..\:/AndroidStudio/Dashboard/app/src/main/res/layout/connect_bluetooth_activity.xml" value="0.42864583333333334" />
         <entry key="..\:/AndroidStudio/Dashboard/app/src/main/res/layout/connect_bluetooth_fragment.xml" value="0.42864583333333334" />
         <entry key="..\:/AndroidStudio/Dashboard/app/src/main/res/layout/dashboard_listitem.xml" value="0.42864583333333334" />
+        <entry key="..\:/AndroidStudio/Dashboard/app/src/main/res/layout/fragment_blank.xml" value="0.10755208333333334" />
+        <entry key="..\:/AndroidStudio/Dashboard/app/src/main/res/layout/fragment_blank2.xml" value="0.21432291666666667" />
         <entry key="..\:/AndroidStudio/Dashboard/app/src/main/res/layout/fragment_dashboard.xml" value="0.2833333333333333" />
         <entry key="..\:/AndroidStudio/Dashboard/app/src/main/res/layout/language_select_activity.xml" value="0.14166666666666666" />
         <entry key="..\:/AndroidStudio/Dashboard/app/src/main/res/layout/listitem.xml" value="0.14288194444444444" />

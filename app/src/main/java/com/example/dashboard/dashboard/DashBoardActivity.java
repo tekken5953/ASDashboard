@@ -1,5 +1,7 @@
 package com.example.dashboard.dashboard;
 
+import static com.example.dashboard.BluetoothAPI.makeFrame;
+
 import android.annotation.SuppressLint;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
@@ -7,6 +9,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -22,12 +25,14 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.content.res.AppCompatResources;
 import androidx.core.content.res.ResourcesCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.dashboard.BluetoothThread;
 import com.example.dashboard.R;
 import com.example.dashboard.SegmentedProgressBar;
 import com.example.dashboard.SharedPreferenceManager;
@@ -47,9 +52,22 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 import java.util.Set;
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.TimeUnit;
 
-public class DashBoardFragment extends AppCompatActivity {
+public class DashBoardActivity extends AppCompatActivity {
+
+    public final static String[] sensorValid_id = {
+            "01", "0F", "1A", "1D", "23", "20", "17", "14", "29", "26", "2C", "2F", "32"
+    };
+    public final static String[] sensorValue_id = {
+            // PM                          CO    CO2   O3   TVOC  CH2O   H2    H2S   NH3   CH4  C3H8   NO2
+            "02", "04", "06", "09", "0C", "1B", "1E", "24", "21", "18", "15", "2A", "27", "2D", "30", "33"
+    };
+    public final static String[] sensorState_id = {
+            // PM                          CO    CO2   O3   TVOC  CH2O   H2    H2S   NH3   CH4  C3H8   NO2
+            "03", "05", "07", "0A", "0D", "1C", "1F", "25", "22", "19", "16", "2B", "28", "2E", "31", "34"
+    };
 
     ArrayList<DashboardRecyclerItem> mList = new ArrayList<>();
     DashboardRecyclerAdapter adapter;
@@ -76,6 +94,9 @@ public class DashBoardFragment extends AppCompatActivity {
     Boolean isExitFlag = false;
 
     BluetoothAdapter bluetoothAdapter;
+    BluetoothThread bluetoothThread;
+    private final int REQUEST_ENABLE_BT = 10;
+    BluetoothDevice currentDevice;
 
     Date date = new Date(System.currentTimeMillis());
 
@@ -100,10 +121,10 @@ public class DashBoardFragment extends AppCompatActivity {
 
         bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
 
-        if (SharedPreferenceManager.getString(DashBoardFragment.this, "finalLanguage").equals("en")) {
+        if (SharedPreferenceManager.getString(DashBoardActivity.this, "finalLanguage").equals("en")) {
             configuration.setLocale(Locale.US);
             getResources().updateConfiguration(configuration, getResources().getDisplayMetrics());
-        } else if (SharedPreferenceManager.getString(DashBoardFragment.this, "finalLanguage").equals("ko")) {
+        } else if (SharedPreferenceManager.getString(DashBoardActivity.this, "finalLanguage").equals("ko")) {
             configuration.setLocale(Locale.KOREA);
             getResources().updateConfiguration(configuration, getResources().getDisplayMetrics());
         } else {
@@ -182,112 +203,6 @@ public class DashBoardFragment extends AppCompatActivity {
         recyclerView.setAdapter(adapter); // 어댑터 설정
     }
 
-    public void addItem(String title, String number, String unit, String status) {
-        DashboardRecyclerItem item = new DashboardRecyclerItem(title, number, unit, status);
-
-        item.setTitle(title);
-        item.setNumber(number);
-        item.setUnit(unit);
-        item.setStatus(status);
-
-        mList.add(item);
-    }
-
-    //LineChart Draw
-    // 차트 데이터 초기화
-    private void initChartData() {
-        // 차트 그리는 엔트리 부분
-        chartData.add(0, new Entry(180, 0f));
-        chartData.add(1, new Entry(190, 0.7f));
-        chartData.add(2, new Entry(200, 1f));
-        chartData.add(3, new Entry(210, 4f));
-        chartData.add(4, new Entry(220, 2f));
-        chartData.add(5, new Entry(230, 1.2f));
-        chartData.add(6, new Entry(240, 3f));
-
-        LineDataSet set = new LineDataSet(chartData, "test data1");
-        lineDataSet.add(set);
-        lineData = new LineData(lineDataSet);
-
-        set.setFillColor(R.color.lineChartLine); // 차트 색상
-        set.setDrawFilled(true);
-        set.setLineWidth(2F); // 그래프 선 굵기
-        set.setDrawValues(false); // 차트에 값 표시
-        set.setMode(LineDataSet.Mode.CUBIC_BEZIER); // 선 그리는 방식
-        set.setDrawCircleHole(false); // 원 안에 작은 원 표시
-        set.setDrawCircles(false); // 원 표시
-    }
-
-    // 차트 처리
-    private void initChart() {
-        initChartData();
-        // 차트 초기화
-        lineChart.setDrawGridBackground(false);
-        lineChart.setBackgroundColor(Color.TRANSPARENT);
-        lineChart.setDrawBorders(false);
-        lineChart.setAutoScaleMinMaxEnabled(false);
-        lineChart.setDragEnabled(false);
-        lineChart.setTouchEnabled(false);
-        lineChart.setScaleEnabled(false);
-
-        legend.setEnabled(false);
-
-        // X축
-        XAxis xAxis = lineChart.getXAxis();
-        xAxis.setDrawLabels(true); // 라벨 표시 여부
-        xAxis.setAxisMaximum(240); // 60min * 24hours
-        xAxis.setAxisMinimum(180);
-        xAxis.setLabelCount(7, true); // 라벨 갯수
-
-        xAxis.setTextColor(Color.WHITE);
-        xAxis.setPosition(XAxis.XAxisPosition.BOTTOM); // X축 라벨 위치
-        xAxis.setDrawAxisLine(false); // AxisLine 표시
-        xAxis.setDrawGridLines(false); // GridLine 표시
-        xAxis.setValueFormatter(new TimeAxisValueFormat());
-
-        // Y축
-        YAxis yAxis = lineChart.getAxisLeft();
-        yAxis.setAxisMaximum(4.5f);
-        yAxis.setAxisMinimum(-0.5f);
-
-        // Y축 도메인 변경
-        String[] yAxisVal = new String[]{"0", "51", "101", "251", "300"};
-
-        yAxis.setTextColor(R.color.white);
-        yAxis.setValueFormatter(new IndexAxisValueFormatter(yAxisVal));
-        yAxis.setGranularityEnabled(false);
-        yAxis.setDrawLabels(true); // Y축 라벨 위치
-        yAxis.setDrawGridLines(false); // GridLine 표시
-        yAxis.setDrawAxisLine(false); // AxisLine 표시
-
-        // 오른쪽 Y축 값
-        YAxis yRAxisVal = lineChart.getAxisRight();
-        yRAxisVal.setDrawLabels(false);
-        yRAxisVal.setDrawAxisLine(false);
-        yRAxisVal.setDrawGridLines(false);
-
-        lineChart.getDescription().setEnabled(false); // 설명
-        lineChart.setData(lineData); // 데이터 설정
-        lineChart.invalidate(); // 다시 그리기
-    }
-
-    private static class TimeAxisValueFormat extends IndexAxisValueFormatter {
-
-        @Override
-        public String getFormattedValue(float value) {
-            //Float(min) -> Date
-//            Date currentTime = new Date(System.currentTimeMillis());
-//            @SuppressLint("SimpleDateFormat") SimpleDateFormat formatMinutes = new SimpleDateFormat("HH:mm");
-//            Calendar calendar = Calendar.getInstance();
-//            formatMinutes.setCalendar(calendar);
-//            return formatMinutes.format(currentTime);
-            long valueToMinutes = TimeUnit.MINUTES.toMillis((long)value);
-            Date timeMinutes = new Date(valueToMinutes);
-            @SuppressLint("SimpleDateFormat") SimpleDateFormat formatMinutes = new SimpleDateFormat("HH:mm");
-            return formatMinutes.format(timeMinutes);
-        }
-    }
-
     //barChart 가로세로 구하기
     @SuppressLint("MissingPermission")
     @Override
@@ -312,30 +227,85 @@ public class DashBoardFragment extends AppCompatActivity {
             params.setMargins(-arrowWidth / 2, 0, 0, (int) getResources().getDimension(R.dimen.arrowBottom));
             aqiCurrentArrow.setLayoutParams(params);
 
-            Set<BluetoothDevice> paredDevice = bluetoothAdapter.getBondedDevices();
-            if (!paredDevice.isEmpty()) {
-                for (BluetoothDevice device : paredDevice) {
-//                    paringDeviceTv.setText(device.getName());
-                    paringDeviceTv.setText(getIntent().getExtras().getString("device_name"));
-                }
+            if (bluetoothAdapter == null) {
+                Toast.makeText(this, "해당 기기는 블루투스를 지원하지 않습니다", Toast.LENGTH_SHORT).show();
             } else {
-                paringDeviceTv.setText(getString(R.string.not_paring));
-                final AlertDialog.Builder builder = new AlertDialog.Builder(DashBoardFragment.this);
-                final AlertDialog alertDialog = builder.create();
-                builder.setTitle(getString(R.string.causion_title))
-                        .setMessage(getString(R.string.causion_message))
-                        .setPositiveButton(getString(R.string.causion_ok), new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                alertDialog.dismiss();
-                                Intent intent = new Intent(DashBoardFragment.this, ConnectDeviceActivity.class);
-                                startActivity(intent);
-                                finish();
-                            }
-                        }).show();
+                if (bluetoothAdapter.isEnabled()) {
+                    pairedDeviceConnect();
+//                    requestBluetoothData();
+                } else {
+                    //븥루투스가 꺼져있음
+                    final AlertDialog.Builder builder = new AlertDialog.Builder(DashBoardActivity.this);
+                    final AlertDialog alertDialog = builder.create();
+                    builder.setTitle(getString(R.string.causion_title))
+                            .setMessage(getString(R.string.causion_message))
+                            .setPositiveButton(getString(R.string.causion_ok), new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    alertDialog.dismiss();
+                                    Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
+                                    startActivity(enableBtIntent);
+                                }
+                            }).setNegativeButton("취소", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    Intent intent = new Intent(DashBoardActivity.this, ConnectDeviceActivity.class);
+                                    startActivity(intent);
+                                    finish();
+                                }
+                            }).setCancelable(false).show();
+                }
             }
         }
     }
+
+    @SuppressLint("MissingPermission")
+    private void pairedDeviceConnect() {
+        bluetoothThread = new BluetoothThread(DashBoardActivity.this);
+        Set<BluetoothDevice> paredDevice = bluetoothAdapter.getBondedDevices();
+        if (!paredDevice.isEmpty()) {
+            for (BluetoothDevice device : paredDevice) {
+//                    paringDeviceTv.setText(device.getName());
+                if (getIntent().getExtras().getString("device_name").equals(device.getName())) {
+                    currentDevice = device;
+                    bluetoothThread.setBluetoothDevice(currentDevice);
+                }
+                paringDeviceTv.setText(getIntent().getExtras().getString("device_name"));
+                System.out.println(bluetoothThread.getDeviceName());
+//                bluetoothThread.connectSocket();
+//                if (bluetoothThread.isConnected()) {
+//                    bluetoothThread.writeHex(makeFrame(new byte[]{0x01}, new byte[]{(byte) 0x10, 0x00, 0x00}, bluetoothThread.getSequence())); // 온도값 받아오기
+//                }
+//                if (!bluetoothThread.isRunning()){
+//                    bluetoothThread.start();
+//                }
+            }
+        } else {
+            paringDeviceTv.setText(getString(R.string.not_paring));
+        }
+    }
+
+//    @RequiresApi(api = Build.VERSION_CODES.N)
+//    private void connectBluetoothDevice(BluetoothDevice pairedDevices) {
+//        bluetoothThread.setBluetoothDevice(pairedDevices);
+//
+//        CompletableFuture<Void> completableFuture = CompletableFuture.supplyAsync(() -> {
+//            return bluetoothThread.connectSocket();
+//        }).thenAcceptAsync((b) -> {
+//            if (b) {
+//                if (!bluetoothThread.isRunning()) {
+//                    bluetoothThread.start();
+//
+//                    runOnUiThread(new Runnable() {
+//                        @Override
+//                        public void run() {
+//                            //progressOff();
+//                        }
+//                    });
+//                }
+//            }
+//        });
+//    }
 
     //AQI Index 별 차트 이동거리 계산
     public void moveBarChart(int aqiNumber) {
@@ -501,7 +471,7 @@ public class DashBoardFragment extends AppCompatActivity {
     //햄버거 메뉴 보여주기
     public void showMenu() {
         isMenuShow = true;
-        Animation slide = AnimationUtils.loadAnimation(DashBoardFragment.this, R.anim.sidebar_show);
+        Animation slide = AnimationUtils.loadAnimation(DashBoardActivity.this, R.anim.sidebar_show);
         sideLayout.startAnimation(slide);
         viewLayout.setVisibility(View.VISIBLE);
         viewLayout.setEnabled(true);
@@ -592,6 +562,108 @@ public class DashBoardFragment extends AppCompatActivity {
         }
     }
 
+    //LineChart Draw
+    // 차트 데이터 초기화
+    private void initChartData() {
+        // 차트 그리는 엔트리 부분
+        chartData.add(0, new Entry(180, 20));
+        chartData.add(1, new Entry(190, 150));
+        chartData.add(2, new Entry(200, 70));
+        chartData.add(3, new Entry(210, 280));
+        chartData.add(4, new Entry(220, 40));
+        chartData.add(5, new Entry(230, 120));
+        chartData.add(6, new Entry(240, 60));
+
+        LineDataSet set = new LineDataSet(chartData, null);
+        lineDataSet.add(set);
+        lineData = new LineData(lineDataSet);
+
+        set.setFillColor(Color.parseColor("#147AD6")); // 차트 색상
+        set.setDrawFilled(true);
+        set.setHighlightEnabled(false);
+        set.setLineWidth(2F); // 그래프 선 굵기
+        set.setDrawValues(false); // 차트에 값 표시
+        set.setMode(LineDataSet.Mode.CUBIC_BEZIER); // 선 그리는 방식
+        set.setDrawCircleHole(false); // 원 안에 작은 원 표시
+        set.setDrawCircles(false); // 원 표시
+        set.setColor(Color.parseColor("#147AD6"));
+    }
+
+    // 차트 처리
+    private void initChart() {
+        initChartData();
+        // 차트 초기화
+        lineChart.setDrawGridBackground(false);
+        lineChart.setBackgroundColor(Color.TRANSPARENT);
+        lineChart.setDrawBorders(false);
+        lineChart.setAutoScaleMinMaxEnabled(false);
+        lineChart.setDragEnabled(false);
+        lineChart.setTouchEnabled(false);
+        lineChart.setScaleEnabled(false);
+
+        legend.setEnabled(false);
+
+        // X축
+        XAxis xAxis = lineChart.getXAxis();
+        xAxis.setDrawLabels(true); // 라벨 표시 여부
+        xAxis.setAxisMaximum(240); // 60min * 24hours
+        xAxis.setAxisMinimum(180);
+        xAxis.setLabelCount(7, true); // 라벨 갯수
+
+        xAxis.setTextColor(Color.WHITE);
+        xAxis.setPosition(XAxis.XAxisPosition.BOTTOM); // X축 라벨 위치
+        xAxis.setDrawAxisLine(false); // AxisLine 표시
+        xAxis.setDrawGridLines(false); // GridLine 표시
+        xAxis.setValueFormatter(new TimeAxisValueFormat());
+
+        // Y축
+        YAxis yAxis = lineChart.getAxisLeft();
+        yAxis.setAxisMaximum(300);
+        yAxis.setAxisMinimum((0));
+
+        yAxis.setTextColor(Color.parseColor("#FFFFFF"));
+        yAxis.setValueFormatter(new YAxisValueFormat());
+        yAxis.setGranularityEnabled(false);
+        yAxis.setDrawLabels(true); // Y축 라벨 위치
+        yAxis.setDrawGridLines(false); // GridLine 표시
+        yAxis.setDrawAxisLine(false); // AxisLine 표시
+
+        // 오른쪽 Y축 값
+        YAxis yRAxisVal = lineChart.getAxisRight();
+        yRAxisVal.setDrawLabels(false);
+        yRAxisVal.setDrawAxisLine(false);
+        yRAxisVal.setDrawGridLines(false);
+
+        lineChart.getDescription().setEnabled(false); // 설명
+        lineChart.setData(lineData); // 데이터 설정
+        lineChart.invalidate(); // 다시 그리기
+    }
+
+    private static class YAxisValueFormat extends IndexAxisValueFormatter {
+        @Override
+        public String getFormattedValue(float value) {
+            String newValue = value + "";
+            return newValue.substring(0, newValue.length() - 2);
+        }
+    }
+
+    private static class TimeAxisValueFormat extends IndexAxisValueFormatter {
+
+        @Override
+        public String getFormattedValue(float value) {
+            //Float(min) -> Date
+//            Date currentTime = new Date(System.currentTimeMillis());
+//            @SuppressLint("SimpleDateFormat") SimpleDateFormat formatMinutes = new SimpleDateFormat("HH:mm");
+//            Calendar calendar = Calendar.getInstance();
+//            formatMinutes.setCalendar(calendar);
+//            return formatMinutes.format(currentTime);
+            long valueToMinutes = TimeUnit.MINUTES.toMillis((long) value);
+            Date timeMinutes = new Date(valueToMinutes);
+            @SuppressLint("SimpleDateFormat") SimpleDateFormat formatMinutes = new SimpleDateFormat("HH:mm");
+            return formatMinutes.format(timeMinutes);
+        }
+    }
+
     // AQI 바 차트 그리기
     public void CreateSegmentProgressView() {
 
@@ -616,10 +688,21 @@ public class DashBoardFragment extends AppCompatActivity {
         barView.setContexts(barList);
     }
 
+    public void addItem(String title, String number, String unit, String status) {
+        DashboardRecyclerItem item = new DashboardRecyclerItem(title, number, unit, status);
+
+        item.setTitle(title);
+        item.setNumber(number);
+        item.setUnit(unit);
+        item.setStatus(status);
+
+        mList.add(item);
+    }
+
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        Intent intent = new Intent(DashBoardFragment.this, ConnectDeviceActivity.class);
+        Intent intent = new Intent(DashBoardActivity.this, ConnectDeviceActivity.class);
         startActivity(intent);
         finish();
     }
