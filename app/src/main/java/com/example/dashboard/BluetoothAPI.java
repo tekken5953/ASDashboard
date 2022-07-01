@@ -460,27 +460,32 @@ public class BluetoothAPI {
     }
 
 
-//    public static int getDeviceType(char type) {
-//        int deviceType;
-//        switch (String.valueOf(type)) {
-//            case "SI":
+    public static int getDeviceType(char[] type) {
+        int deviceType;
+        switch (String.valueOf(type)) {
+            case "SI":
 //                deviceType = DeviceFragment.DEVICE_TYPE_S;
-//                break;
-//            case "PI":
+                deviceType = 1;
+                break;
+            case "PI":
 //                deviceType = DeviceFragment.DEVICE_TYPE_S_PLUS;
-//                break;
-//            case "TI":
+                deviceType = 2;
+                break;
+            case "TI":
 //                deviceType = DeviceFragment.DEVICE_TYPE_MINI;
-//                break;
-//            case "MI":
+                deviceType = 3;
+                break;
+            case "MI":
 //                deviceType = DeviceFragment.DEVICE_TYPE_PRO;
-//                break;
-//            default:
+                deviceType = 4;
+                break;
+            default:
 //                deviceType = DeviceFragment.DEVICE_TYPE_ERROR;
-//                break;
-//        }
-//        return deviceType;
-//    }
+                deviceType = 5;
+                break;
+        }
+        return deviceType;
+    }
 //
 //    public static int getDeviceType(char[] type) {
 //        int deviceType;

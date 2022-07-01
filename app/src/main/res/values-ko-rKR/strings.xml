@@ -8,7 +8,7 @@
     <string name="aqi">공기질 통합지수</string>
     <string name="aqi_1_hour">지난 1시간 공기질 데이터</string>
     <string name="fine_dust">미세먼지</string>
-    <string name="Volatile_organic_compounds">휘발성 유기화합물</string>
+    <string name="tvoc">휘발성 유기화합물</string>
     <string name="co2">이산화탄소</string>
     <string name="co">일산화탄소</string>
     <string name="virus">바이러스 위험지수</string>
@@ -31,10 +31,13 @@
     <string name="korean_lang">한국어</string>
     <string name="eng_lang">English</string>
     <string name="ok">확인</string>
+    <string name="cancel">취소</string>
     <string name="please_select_device">연결할 디바이스를 선택해주세요</string>
     <string name="connectable_device">사용 가능한 디바이스</string>
     <string name="complete_select_lang">선택하신 언어로 적용되었습니다</string>
     <string name="skip_lang_msg">언어를 자동으로 설정하였습니다</string>
     <string name="connect">연결하기</string>
     <string name="exit_app">뒤로가기를 한번더 클릭 시 앱이 종료됩니다</string>
+    <string name="disconect_socket">장치가 켜져있는지 확인해주세요</string>
+    <string name="no_paring_device">현재 기기를 디바이스에 페어링 하시겠습니까?</string>
 </resources>

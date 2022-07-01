@@ -8,7 +8,7 @@
     <string name="aqi">Air Quality Index</string>
     <string name="aqi_1_hour">Last Hour Air Quality</string>
     <string name="fine_dust">Fine Dust</string>
-    <string name="Volatile_organic_compounds">Volatile Organic Compounds</string>
+    <string name="tvoc">Volatile Organic Compounds</string>
     <string name="co2">Co2</string>
     <string name="co">Co</string>
     <string name="virus">Virus Risk Index</string>
@@ -31,10 +31,13 @@
     <string name="korean_lang">한국어</string>
     <string name="eng_lang">English</string>
     <string name="ok">Ok</string>
+    <string name="cancel">Cancel</string>
     <string name="please_select_device">Please Select a Device to Connect</string>
     <string name="connectable_device">Device List</string>
     <string name="complete_select_lang">Language Setting is Complete</string>
     <string name="skip_lang_msg">Language Set to Automatic </string>
     <string name="connect">Connect</string>
     <string name="exit_app">If you click back one more, this app will be end</string>
+    <string name="disconect_socket">Please check your Device on</string>
+    <string name="no_paring_device">Do you want to pair the current Phone to the device?</string>
 </resources>

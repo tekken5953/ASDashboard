@@ -12,21 +12,25 @@ import android.content.pm.PackageManager;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.res.ResourcesCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.dashboard.BluetoothThread;
 import com.example.dashboard.LanguageSelectActivity;
 import com.example.dashboard.R;
 import com.example.dashboard.SharedPreferenceManager;
 import com.example.dashboard.dashboard.DashBoardActivity;
 
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Set;
 
@@ -47,6 +51,9 @@ public class ConnectDeviceActivity extends AppCompatActivity {
     BluetoothAdapter bluetoothAdapter;
 
     DisplayMetrics dm = new DisplayMetrics();
+
+    ArrayList<BluetoothDevice> notPairedDeviceList = new ArrayList<>();
+    BluetoothThread thread;
 
     // 블루투스 브로드캐스트 호출 - 주변기기 검색
     @Override
@@ -100,6 +107,7 @@ public class ConnectDeviceActivity extends AppCompatActivity {
         connConnectableDeviceTv = findViewById(R.id.connConnectableDeviceTv);
         progressBar = findViewById(R.id.connConnectableDevicePb);
         connRefreshIv = findViewById(R.id.connRefreshIv);
+        thread = new BluetoothThread(this);
 
         bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
 
@@ -108,10 +116,37 @@ public class ConnectDeviceActivity extends AppCompatActivity {
         cAdapter.setOnItemClickListener(new ConnectRecyclerAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(View v, int position) {
-                Intent intent = new Intent(context, DashBoardActivity.class);
-                intent.putExtra("device_name", cList.get(position).getDevice_name());
-                startActivity(intent);
-                finish();
+                thread.setBluetoothDevice(notPairedDeviceList.get(position));
+                try {
+                    thread.connectSocket();
+
+                    thread.setConnectedSocketEventListener(new BluetoothThread.connectedSocketEventListener() {
+                        @Override
+                        public void onConnectedEvent() {
+                            Toast.makeText(context, "페어링이 완료되었습니다.", Toast.LENGTH_SHORT).show();
+                            if (dm.widthPixels > 1900 && dm.heightPixels > 1000) {
+                                addPItem(ResourcesCompat.getDrawable(getResources(), R.drawable.m_1920, null),
+                                        notPairedDeviceList.get(position).getName(),
+                                        notPairedDeviceList.get(position).getAddress());
+                            } else {
+                                addPItem(ResourcesCompat.getDrawable(getResources(), R.drawable.m_1280, null),
+                                        notPairedDeviceList.get(position).getName(),
+                                        notPairedDeviceList.get(position).getAddress());
+                            }
+                            pAdapter.notifyDataSetChanged();
+                        }
+                    });
+
+                    thread.setDisconnectedSocketEventListener(new BluetoothThread.disConnectedSocketEventListener() {
+                        @Override
+                        public void onDisconnectedEvent() {
+                            Toast.makeText(context, "페어링에 실패했습니다.", Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                } catch (NullPointerException e) {
+                    e.printStackTrace();
+                    Toast.makeText(context, "기기가 작동중인지 확인해주세요", Toast.LENGTH_SHORT).show();
+                }
             }
         });
 
@@ -119,7 +154,10 @@ public class ConnectDeviceActivity extends AppCompatActivity {
             @Override
             public void onItemClick(View v, int position) {
                 Intent intent = new Intent(context, DashBoardActivity.class);
+                intent.putExtra("paired","paired");
                 intent.putExtra("device_name", pList.get(position).getName());
+                intent.putExtra("device_address", pList.get(position).getAddress());
+                intent.putExtra("device_position", position);
                 startActivity(intent);
                 finish();
             }
@@ -186,14 +224,15 @@ public class ConnectDeviceActivity extends AppCompatActivity {
                 if (ActivityCompat.checkSelfPermission(context, Manifest.permission.BLUETOOTH_CONNECT) != PackageManager.PERMISSION_GRANTED) {
                     String deviceName = device.getName();
                     String deviceAddress = device.getAddress();
+                    notPairedDeviceList.add(device);
                     //필터링 없이 하려면 주석 해제 + 밑에 필터링부분 주석처리
-                    addCItem(deviceName + "(" + deviceAddress + ")");
-                    cAdapter.notifyDataSetChanged();
-                    // 필터링
-//                    if (deviceName != null && deviceName.contains("BioT")) {
-//                        addCItem(deviceName + "(" + deviceAddress + ")");
-//                        cAdapter.notifyDataSetChanged();
-//                    }
+//                    addCItem(deviceName + "(" + deviceAddress + ")");
+//                    cAdapter.notifyDataSetChanged();
+//                     필터링
+                    if (deviceName != null && deviceName.contains("BioT")) {
+                        addCItem(deviceName + "(" + deviceAddress + ")");
+                        cAdapter.notifyDataSetChanged();
+                    }
                 }
             }
         }
