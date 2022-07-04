@@ -194,6 +194,7 @@ public class BluetoothThread extends Thread {
             if (errorFlag) closeSocket();
             else errorFlag = true;
             Log.e(TAG, "Exception during send", e);
+
         } catch (NullPointerException e) {
             e.printStackTrace();
             closeSocket();
