@@ -22,4 +22,6 @@
     <color name="sidemenu_black">#E6000000</color> // 햄버거메뉴 백그라운드 컬러
     <color name="sidemenun_gray">#636363</color> // 햄버거메뉴 미체크 항목 컬러
     <color name="transparent">#00FFFFFF</color>
+    <color name="side_menu_line">#707070</color>
+    <color name="side_power_small">#D50000</color>
 </resources>

@@ -30,7 +30,7 @@
 
             <FrameLayout
                 android:id="@+id/view_sildebar"
-                android:layout_width="415dp"
+                android:layout_width="match_parent"
                 android:layout_height="match_parent" />
 
         </FrameLayout>
@@ -40,17 +40,6 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-            <ProgressBar
-                android:id="@+id/contentProgressPb"
-                android:layout_width="70dp"
-                android:layout_height="70dp"
-                style="@android:style/Widget.ProgressBar"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent"
-                android:visibility="gone"/>
-
             <ImageView
                 android:id="@+id/hambugerMenuIv"
                 android:layout_width="25dp"
@@ -59,23 +48,12 @@
                 android:layout_marginTop="3dp"
                 android:gravity="center"
                 android:onClick="onClick"
-                android:visibility="gone"
+                android:visibility="visible"
                 app:layout_constraintBottom_toBottomOf="@+id/currentTimeTv"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="@+id/currentTimeTv"
                 app:srcCompat="@drawable/ic_baseline_menu_24" />
 
-            <TextView
-                android:id="@+id/paringDeviceTv"
-                android:layout_width="wrap_content"
-                android:layout_height="19dp"
-                android:text="현재 연결 된 디바이스명"
-                android:textAllCaps="false"
-                android:textColor="@color/white"
-                android:textSize="16sp"
-                app:layout_constraintStart_toStartOf="@+id/topFrameLayout"
-                app:layout_constraintTop_toTopOf="@+id/currentTimeTv"
-                app:layout_constraintBottom_toBottomOf="@+id/currentTimeTv"/>
 
             <TextView
                 android:id="@+id/dayOfNightTv"
@@ -357,7 +335,7 @@
                             android:onClick="onClick"
                             android:text="@string/fine_dust"
                             android:textColor="@color/lineChartCategoryNonSelectText"
-                            android:textSize="14sp" />
+                            android:textSize="15sp" />
 
                         <TextView
                             android:id="@+id/category3"
@@ -369,7 +347,7 @@
                             android:onClick="onClick"
                             android:text="@string/tvoc"
                             android:textColor="@color/lineChartCategoryNonSelectText"
-                            android:textSize="14sp" />
+                            android:textSize="15sp" />
 
                         <TextView
                             android:id="@+id/category4"
@@ -381,7 +359,7 @@
                             android:onClick="onClick"
                             android:text="@string/co2"
                             android:textColor="@color/lineChartCategoryNonSelectText"
-                            android:textSize="14sp" />
+                            android:textSize="15sp" />
 
                         <TextView
                             android:id="@+id/category5"
@@ -393,7 +371,7 @@
                             android:onClick="onClick"
                             android:text="@string/co"
                             android:textColor="@color/lineChartCategoryNonSelectText"
-                            android:textSize="14sp" />
+                            android:textSize="15sp" />
 
                         <TextView
                             android:id="@+id/category6"
@@ -405,7 +383,7 @@
                             android:onClick="onClick"
                             android:text="@string/virus"
                             android:textColor="@color/lineChartCategoryNonSelectText"
-                            android:textSize="14sp" />
+                            android:textSize="15sp" />
 
                     </TableRow>
 

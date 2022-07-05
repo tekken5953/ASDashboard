@@ -154,6 +154,7 @@ public class BluetoothAPI {
                     // CO2 값      TVOC 값     O3 값       NH3 값      H2S 값
                     // CH4 값      C3H8 값     NO2 값
                     //arrayList.add(getFloatValue(tag_content));
+                    bundle.putShort(id, bytesToShort(tag_content));
                     bundle.putString(id, bytesToStrFloat(tag_content));
                     break;
                 case 0x03:
