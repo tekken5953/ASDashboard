@@ -18,12 +18,12 @@
 
     <style name="CircularDeterminateProgressBarLarge">
         <item name="android:indeterminateOnly">false</item>
-        <item name="android:progressDrawable">@drawable/signal_good_1920</item>
+        <item name="android:progressDrawable">@drawable/signal_good</item>
     </style>
 
     <style name="CircularDeterminateProgressBarSmall">
         <item name="android:indeterminateOnly">false</item>
-        <item name="android:progressDrawable">@drawable/signal_good1280</item>
+        <item name="android:progressDrawable">@drawable/signal_good</item>
     </style>
 
     <style name="CustomAlertDialog">

@@ -24,6 +24,7 @@
         android:fontFamily="@font/pretendardvariable"
         android:gravity="center"
         android:text="@string/settings"
+        android:layout_marginBottom="3dp"
         android:textAllCaps="false"
         android:textColor="@color/white"
         android:textSize="20sp"
@@ -40,7 +41,7 @@
         android:layout_marginTop="99.5dp"
         android:padding="3dp"
         app:tint="@color/side_power_small"
-        android:src="@drawable/power_1280"
+        android:src="@drawable/power_icon"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/sideMenuTitleTv" />
 
@@ -48,6 +49,7 @@
         android:id="@+id/sideMenuPowerOffTv"
         android:layout_width="wrap_content"
         android:layout_height="40dp"
+        android:layout_marginBottom="3dp"
         android:layout_marginStart="17dp"
         android:fontFamily="@font/pretendardvariable"
         android:gravity="center"
@@ -74,7 +76,7 @@
         android:layout_height="38dp"
         android:layout_marginStart="185dp"
         android:padding="3dp"
-        android:src="@drawable/fan_1280"
+        android:src="@drawable/fan_icon"
         app:layout_constraintBottom_toBottomOf="@+id/sideMenuPowerIv"
         app:layout_constraintStart_toEndOf="@+id/sideMenuPowerOffTv"
         app:layout_constraintTop_toTopOf="@+id/sideMenuPowerIv" />
@@ -87,6 +89,7 @@
         android:fontFamily="@font/pretendardvariable"
         android:gravity="center"
         android:text="@string/fan_controll"
+        android:layout_marginBottom="2dp"
         android:textAllCaps="false"
         android:textColor="@color/white"
         android:textSize="30sp"
@@ -110,8 +113,9 @@
         app:layout_constraintTop_toBottomOf="@+id/sideMenuFanControllTv">
 
         <TextView
+            android:id="@+id/sideMenuFan1Tv"
             android:layout_width="wrap_content"
-            android:layout_height="26dp"
+            android:layout_height="40dp"
             android:fontFamily="@font/pretendardvariable"
             android:text="@string/fan_first"
             android:textAllCaps="false"
@@ -120,19 +124,21 @@
             android:textSize="19sp" />
 
         <TextView
+            android:id="@+id/sideMenuFan2Tv"
             android:layout_width="wrap_content"
-            android:layout_height="26dp"
+            android:layout_height="40dp"
             android:gravity="center"
             android:layout_marginStart="45.3dp"
             android:fontFamily="@font/pretendardvariable"
             android:text="@string/fan_second"
             android:textAllCaps="false"
             android:textColor="@color/statusUnitText"
-            android:textSize="19sp" />
+            android:textSize="19sp"/>
 
         <TextView
+            android:id="@+id/sideMenuFan3Tv"
             android:layout_width="wrap_content"
-            android:layout_height="26dp"
+            android:layout_height="40dp"
             android:gravity="center"
             android:layout_marginStart="45.3dp"
             android:fontFamily="@font/pretendardvariable"
@@ -142,8 +148,9 @@
             android:textSize="19sp" />
 
         <TextView
+            android:id="@+id/sideMenuFan4Tv"
             android:layout_width="wrap_content"
-            android:layout_height="26dp"
+            android:layout_height="40dp"
             android:gravity="center"
             android:layout_marginStart="45.3dp"
             android:fontFamily="@font/pretendardvariable"
@@ -167,7 +174,7 @@
         android:layout_width="38dp"
         android:layout_height="38dp"
         android:layout_marginTop="48dp"
-        android:src="@drawable/info_1280"
+        android:src="@drawable/info_icon"
         app:layout_constraintStart_toStartOf="@+id/sideMenuPowerIv"
         app:layout_constraintTop_toBottomOf="@+id/sideMenuLine2"
         app:tint="@color/white" />
@@ -180,6 +187,7 @@
         android:fontFamily="@font/pretendardvariable"
         android:gravity="center"
         android:text="@string/product_info"
+        android:layout_marginBottom="2dp"
         android:textAllCaps="false"
         android:textColor="@color/white"
         android:textSize="30sp"
@@ -217,6 +225,7 @@
                 android:layout_marginStart="55dp"
                 android:fontFamily="@font/pretendardvariable"
                 android:text="@string/bio_sentinel_100"
+                android:gravity="start"
                 android:textColor="@color/statusUnitText"
                 android:textSize="14sp" />
         </TableRow>
@@ -242,6 +251,7 @@
                 android:layout_marginStart="55dp"
                 android:fontFamily="@font/pretendardvariable"
                 android:text="TIA0001565"
+                android:gravity="start"
                 android:textColor="@color/statusUnitText"
                 android:textSize="14sp" />
         </TableRow>
@@ -261,11 +271,13 @@
                 android:textSize="14sp" />
 
             <TextView
+                android:id="@+id/sideMenuSetUpDateTv"
                 android:layout_width="wrap_content"
                 android:layout_height="16dp"
                 android:layout_marginStart="55dp"
                 android:fontFamily="@font/pretendardvariable"
                 android:text="2022-07-05"
+                android:gravity="start"
                 android:textColor="@color/statusUnitText"
                 android:textSize="14sp" />
         </TableRow>
@@ -287,7 +299,7 @@
         android:layout_height="353dp"
         android:layout_marginTop="19.3dp"
         android:layout_marginEnd="92dp"
-        android:src="@drawable/side_m_1280"
+        android:src="@drawable/side_m"
         android:alpha="0.7"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/sideMenuFanControllTv" />
@@ -297,7 +309,7 @@
         android:layout_width="73dp"
         android:layout_height="26dp"
         android:layout_marginTop="110dp"
-        android:src="@drawable/as_logo_1280"
+        android:src="@drawable/as_logo"
         app:layout_constraintStart_toStartOf="@+id/sideMenuCancelIv"
         app:layout_constraintTop_toBottomOf="@+id/sideMenuLine3" />
 

@@ -11,7 +11,7 @@
         android:id="@+id/listItemRecentIconIv"
         android:layout_width="116dp"
         android:layout_height="116dp"
-        android:src="@drawable/bs100_1920" />
+        android:src="@drawable/bs100_connect" />
 
     <TextView
         android:id="@+id/listItemRecentTitleTv"

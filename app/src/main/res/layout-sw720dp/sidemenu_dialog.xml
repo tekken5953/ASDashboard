@@ -10,7 +10,7 @@
         android:layout_height="80dp"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="50dp"
-        android:src="@drawable/big_power_1280" />
+        android:src="@drawable/big_power_icon" />
 
     <TextView
         android:id="@+id/sideDialogContextTv"

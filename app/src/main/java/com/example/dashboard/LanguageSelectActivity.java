@@ -65,7 +65,7 @@ public class LanguageSelectActivity extends AppCompatActivity {
                 // 영어 일 때
                 else if (FINAL_LANGUAGE.equals("en")) {
                     SelectedEnglishFlag();
-                    configuration.setLocale(Locale.US);
+                    configuration.setLocale(Locale.ENGLISH);
                     getResources().updateConfiguration(configuration, getResources().getDisplayMetrics());
                 }
             }
@@ -76,6 +76,12 @@ public class LanguageSelectActivity extends AppCompatActivity {
                 getResources().updateConfiguration(configuration, getResources().getDisplayMetrics());
             }
         } else {
+            if (SharedPreferenceManager.getString(this,"final").equals("ko")){
+                configuration.setLocale(Locale.KOREA);
+            } else {
+                configuration.setLocale(Locale.ENGLISH);
+            }
+            getResources().updateConfiguration(configuration, getResources().getDisplayMetrics());
             Intent intent = new Intent(context, ConnectDeviceActivity.class);
             Toast.makeText(context, getString(R.string.skip_lang_msg), Toast.LENGTH_SHORT).show();
             startActivity(intent);
@@ -109,7 +115,7 @@ public class LanguageSelectActivity extends AppCompatActivity {
                 if (langOkTv.isEnabled()) {
                     if (SharedPreferenceManager.getString(context, "current").equals("en")) {
                         Configuration configuration = new Configuration();
-                        configuration.setLocale(Locale.US);
+                        configuration.setLocale(Locale.ENGLISH);
                         getResources().updateConfiguration(configuration, getResources().getDisplayMetrics());
                         SharedPreferenceManager.setString(context, "final", SharedPreferenceManager.getString(context, "current"));
                         SharedPreferenceManager.setString(context,"skip_lang", "ok");

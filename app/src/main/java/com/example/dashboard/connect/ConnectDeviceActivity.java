@@ -12,7 +12,6 @@ import android.content.pm.PackageManager;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
@@ -30,7 +29,6 @@ import com.example.dashboard.R;
 import com.example.dashboard.SharedPreferenceManager;
 import com.example.dashboard.dashboard.DashBoardActivity;
 
-import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Set;
 
@@ -49,8 +47,6 @@ public class ConnectDeviceActivity extends AppCompatActivity {
     TextView connConnectableDeviceTv;
 
     BluetoothAdapter bluetoothAdapter;
-
-    DisplayMetrics dm = new DisplayMetrics();
 
     ArrayList<BluetoothDevice> notPairedDeviceList = new ArrayList<>();
     BluetoothThread thread;
@@ -111,8 +107,6 @@ public class ConnectDeviceActivity extends AppCompatActivity {
 
         bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
 
-        getWindowManager().getDefaultDisplay().getMetrics(dm); // 기기 해상도를 구하기 위함
-
         cAdapter.setOnItemClickListener(new ConnectRecyclerAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(View v, int position) {
@@ -124,15 +118,11 @@ public class ConnectDeviceActivity extends AppCompatActivity {
                         @Override
                         public void onConnectedEvent() {
                             Toast.makeText(context, "페어링이 완료되었습니다.", Toast.LENGTH_SHORT).show();
-                            if (dm.widthPixels > 1900 && dm.heightPixels > 1000) {
-                                addPItem(ResourcesCompat.getDrawable(getResources(), R.drawable.m_1920, null),
-                                        notPairedDeviceList.get(position).getName(),
-                                        notPairedDeviceList.get(position).getAddress());
-                            } else {
-                                addPItem(ResourcesCompat.getDrawable(getResources(), R.drawable.m_1280, null),
-                                        notPairedDeviceList.get(position).getName(),
-                                        notPairedDeviceList.get(position).getAddress());
-                            }
+
+                            addPItem(ResourcesCompat.getDrawable(getResources(), R.drawable.m_connect, null),
+                                    notPairedDeviceList.get(position).getName(),
+                                    notPairedDeviceList.get(position).getAddress());
+
                             pAdapter.notifyDataSetChanged();
                         }
                     });
@@ -154,7 +144,7 @@ public class ConnectDeviceActivity extends AppCompatActivity {
             @Override
             public void onItemClick(View v, int position) {
                 Intent intent = new Intent(context, DashBoardActivity.class);
-                intent.putExtra("paired","paired");
+                intent.putExtra("paired", "paired");
                 intent.putExtra("device_name", pList.get(position).getName());
                 intent.putExtra("device_address", pList.get(position).getAddress());
                 intent.putExtra("device_position", position);
@@ -200,13 +190,8 @@ public class ConnectDeviceActivity extends AppCompatActivity {
         if (!pairedDevice.isEmpty()) {
             for (BluetoothDevice device : pairedDevice) {
                 pairedDeviceList.setVisibility(View.VISIBLE);
-                if (dm.widthPixels > 1900 && dm.heightPixels > 1000) {
-                    addPItem(ResourcesCompat.getDrawable(getResources(), R.drawable.m_1920, null), device.getName(), device.getAddress());
-                    pAdapter.notifyDataSetChanged();
-                } else {
-                    addPItem(ResourcesCompat.getDrawable(getResources(), R.drawable.m_1280, null), device.getName(), device.getAddress());
-                    pAdapter.notifyDataSetChanged();
-                }
+                addPItem(ResourcesCompat.getDrawable(getResources(), R.drawable.m_connect, null), device.getName(), device.getAddress());
+                pAdapter.notifyDataSetChanged();
             }
         } else {
             pairedDeviceList.setVisibility(View.GONE);

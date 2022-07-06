@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout  xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+
         <variable
             name="viewModel"
             type="com.example.dashboard.BluetoothThread.DataShareViewModel" />
@@ -13,8 +14,20 @@
 
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@drawable/bg_1920x1080"
+        android:background="@drawable/bg_image"
         tools:context=".dashboard.DashBoardActivity">
+
+        <ProgressBar
+            android:id="@+id/loadingPb"
+            android:visibility="visible"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="@style/Widget.AppCompat.ProgressBar"
+            android:progressTint="@color/white"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"/>
 
         <FrameLayout
             android:id="@+id/fl_silde"
@@ -183,7 +196,7 @@
                     android:layout_height="256dp"
                     android:layout_marginStart="28dp"
                     android:layout_marginTop="34dp"
-                    android:background="@drawable/signal_good1280" />
+                    android:background="@drawable/signal_good" />
 
                 <LinearLayout
                     android:layout_width="@dimen/barWidth"
@@ -288,7 +301,7 @@
                 <TextView
                     android:id="@+id/textView7"
                     android:layout_width="wrap_content"
-                    android:layout_height="30dp"
+                    android:layout_height="40dp"
                     android:layout_marginStart="355dp"
                     android:layout_marginTop="38dp"
                     android:fontFamily="@font/pretendardvariable"
@@ -299,14 +312,16 @@
 
                 <HorizontalScrollView
                     android:layout_width="match_parent"
-                    android:layout_height="30dp"
+                    android:layout_height="40dp"
                     android:layout_gravity="top"
                     android:layout_marginStart="540dp"
                     android:layout_marginTop="38dp"
                     android:layout_marginEnd="48dp"
                     android:gravity="center_vertical"
                     android:overScrollMode="never"
-                    android:scrollbars="none">
+                    android:scrollbars="none"
+                    android:paddingBottom="2dp"
+                    android:paddingTop="2dp">
 
                     <TableRow
                         android:layout_width="0dp"
@@ -330,6 +345,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="25dp"
+                            android:background="@drawable/category_nontext_outline_small"
                             android:fontFamily="@font/pretendardvariable"
                             android:gravity="center"
                             android:onClick="onClick"
@@ -342,6 +358,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="29dp"
+                            android:background="@drawable/category_nontext_outline_small"
                             android:fontFamily="@font/pretendardvariable"
                             android:gravity="center"
                             android:onClick="onClick"
@@ -354,6 +371,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="29dp"
+                            android:background="@drawable/category_nontext_outline_small"
                             android:fontFamily="@font/pretendardvariable"
                             android:gravity="center"
                             android:onClick="onClick"
@@ -366,6 +384,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="29dp"
+                            android:background="@drawable/category_nontext_outline_small"
                             android:fontFamily="@font/pretendardvariable"
                             android:gravity="center"
                             android:onClick="onClick"
@@ -378,6 +397,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="29dp"
+                            android:background="@drawable/category_nontext_outline_small"
                             android:fontFamily="@font/pretendardvariable"
                             android:gravity="center"
                             android:onClick="onClick"
@@ -394,7 +414,7 @@
                     android:layout_width="759dp"
                     android:layout_height="268dp"
                     android:layout_marginStart="354dp"
-                    android:layout_marginTop="82dp"/>
+                    android:layout_marginTop="82dp" />
 
             </FrameLayout>
 
@@ -421,10 +441,10 @@
                     <RelativeLayout
                         android:layout_width="223dp"
                         android:layout_height="match_parent"
-                        android:background="@drawable/topframe_outline"
-                        android:layout_marginEnd="12dp"
                         android:layout_marginTop="2dp"
-                        android:layout_marginBottom="2dp">
+                        android:layout_marginEnd="12dp"
+                        android:layout_marginBottom="2dp"
+                        android:background="@drawable/topframe_outline">
 
                         <TextView
                             android:id="@+id/listCardPMTitle"
@@ -446,9 +466,9 @@
                             android:layout_marginTop="4dp"
                             android:fontFamily="@font/pretendardvariable"
                             android:text="null"
-                            android:visibility="gone"
                             android:textColor="@color/progressGood"
-                            android:textSize="16sp" />
+                            android:textSize="16sp"
+                            android:visibility="gone" />
 
                         <TextView
                             android:id="@+id/listCardPMUnit"
@@ -461,9 +481,9 @@
                             android:fontFamily="@font/poppins_medium"
                             android:gravity="center"
                             android:text="ug/㎥"
-                            android:visibility="gone"
                             android:textColor="@color/statusUnitText"
-                            android:textSize="10sp" />
+                            android:textSize="10sp"
+                            android:visibility="gone" />
 
                         <TextView
 
@@ -486,10 +506,10 @@
                     <RelativeLayout
                         android:layout_width="223dp"
                         android:layout_height="169dp"
-                        android:background="@drawable/topframe_outline"
-                        android:layout_marginEnd="12dp"
                         android:layout_marginTop="2dp"
-                        android:layout_marginBottom="2dp">
+                        android:layout_marginEnd="12dp"
+                        android:layout_marginBottom="2dp"
+                        android:background="@drawable/topframe_outline">
 
                         <TextView
                             android:id="@+id/listCardTVOCTitle"
@@ -511,24 +531,24 @@
                             android:layout_marginTop="4dp"
                             android:fontFamily="@font/pretendardvariable"
                             android:text="null"
-                            android:visibility="gone"
                             android:textColor="@color/progressGood"
-                            android:textSize="16sp" />
+                            android:textSize="16sp"
+                            android:visibility="gone" />
 
                         <TextView
                             android:id="@+id/listCardTVOCUnit"
                             android:layout_width="wrap_content"
                             android:layout_height="15dp"
-                            android:text="mg/㎥"
-                            android:textSize="10sp"
-                            android:gravity="center"
-                            android:visibility="gone"
-                            android:textColor="@color/statusUnitText"
-                            android:fontFamily="@font/poppins_medium"
                             android:layout_below="@+id/listCardTVOCTitle"
-                            android:layout_toEndOf="@+id/listCardTVOCIndex"
+                            android:layout_marginStart="5dp"
                             android:layout_marginTop="7dp"
-                            android:layout_marginStart="5dp"/>
+                            android:layout_toEndOf="@+id/listCardTVOCIndex"
+                            android:fontFamily="@font/poppins_medium"
+                            android:gravity="center"
+                            android:text="mg/㎥"
+                            android:textColor="@color/statusUnitText"
+                            android:textSize="10sp"
+                            android:visibility="gone" />
 
                         <TextView
                             android:id="@+id/listCardTVOCGrade"
@@ -546,13 +566,14 @@
                             android:visibility="gone" />
 
                     </RelativeLayout>
+
                     <RelativeLayout
                         android:layout_width="223dp"
                         android:layout_height="169dp"
-                        android:background="@drawable/topframe_outline"
-                        android:layout_marginEnd="12dp"
                         android:layout_marginTop="2dp"
-                        android:layout_marginBottom="2dp">
+                        android:layout_marginEnd="12dp"
+                        android:layout_marginBottom="2dp"
+                        android:background="@drawable/topframe_outline">
 
                         <TextView
                             android:id="@+id/listCardCO2Title"
@@ -570,28 +591,28 @@
                             android:layout_width="wrap_content"
                             android:layout_height="19dp"
                             android:layout_below="@+id/listCardCO2Title"
-                            android:text="null"
-                            android:visibility="gone"
-                            android:textSize="16sp"
-                            android:fontFamily="@font/pretendardvariable"
-                            android:textColor="@color/progressGood"
                             android:layout_marginStart="24dp"
-                            android:layout_marginTop="4dp"/>
+                            android:layout_marginTop="4dp"
+                            android:fontFamily="@font/pretendardvariable"
+                            android:text="null"
+                            android:textColor="@color/progressGood"
+                            android:textSize="16sp"
+                            android:visibility="gone" />
 
                         <TextView
                             android:id="@+id/listCardCO2Unit"
                             android:layout_width="wrap_content"
                             android:layout_height="15dp"
-                            android:text="ppm"
-                            android:textSize="10sp"
-                            android:visibility="gone"
-                            android:gravity="center"
-                            android:textColor="@color/statusUnitText"
-                            android:fontFamily="@font/poppins_medium"
                             android:layout_below="@+id/listCardCO2Title"
-                            android:layout_toEndOf="@+id/listCardCO2Index"
+                            android:layout_marginStart="5dp"
                             android:layout_marginTop="7dp"
-                            android:layout_marginStart="5dp"/>
+                            android:layout_toEndOf="@+id/listCardCO2Index"
+                            android:fontFamily="@font/poppins_medium"
+                            android:gravity="center"
+                            android:text="ppm"
+                            android:textColor="@color/statusUnitText"
+                            android:textSize="10sp"
+                            android:visibility="gone" />
 
                         <TextView
                             android:id="@+id/listCardCO2Grade"
@@ -613,49 +634,49 @@
                     <RelativeLayout
                         android:layout_width="223dp"
                         android:layout_height="169dp"
-                        android:background="@drawable/topframe_outline"
-                        android:layout_marginEnd="12dp"
                         android:layout_marginTop="2dp"
-                        android:layout_marginBottom="2dp">
+                        android:layout_marginEnd="12dp"
+                        android:layout_marginBottom="2dp"
+                        android:background="@drawable/topframe_outline">
 
                         <TextView
                             android:id="@+id/listCardCOTitle"
                             android:layout_width="wrap_content"
                             android:layout_height="20dp"
-                            android:text="@string/co"
-                            android:fontFamily="@font/pretendardvariable"
-                            android:textColor="@color/textColorMain"
-                            android:textSize="17sp"
+                            android:layout_marginStart="24dp"
                             android:layout_marginTop="24dp"
-                            android:layout_marginStart="24dp"/>
+                            android:fontFamily="@font/pretendardvariable"
+                            android:text="@string/co"
+                            android:textColor="@color/textColorMain"
+                            android:textSize="17sp" />
 
                         <TextView
                             android:id="@+id/listCardCOIndex"
                             android:layout_width="wrap_content"
                             android:layout_height="19dp"
                             android:layout_below="@+id/listCardCOTitle"
-                            android:text="null"
-                            android:visibility="gone"
-                            android:textSize="16sp"
-                            android:fontFamily="@font/pretendardvariable"
-                            android:textColor="@color/progressGood"
                             android:layout_marginStart="24dp"
-                            android:layout_marginTop="4dp"/>
+                            android:layout_marginTop="4dp"
+                            android:fontFamily="@font/pretendardvariable"
+                            android:text="null"
+                            android:textColor="@color/progressGood"
+                            android:textSize="16sp"
+                            android:visibility="gone" />
 
                         <TextView
                             android:id="@+id/listCardCOUnit"
                             android:layout_width="wrap_content"
                             android:layout_height="15dp"
-                            android:text="ppm"
-                            android:textSize="10sp"
-                            android:visibility="gone"
-                            android:gravity="center"
-                            android:textColor="@color/statusUnitText"
-                            android:fontFamily="@font/poppins_medium"
                             android:layout_below="@+id/listCardCOTitle"
-                            android:layout_toEndOf="@+id/listCardCOIndex"
+                            android:layout_marginStart="5dp"
                             android:layout_marginTop="7dp"
-                            android:layout_marginStart="5dp"/>
+                            android:layout_toEndOf="@+id/listCardCOIndex"
+                            android:fontFamily="@font/poppins_medium"
+                            android:gravity="center"
+                            android:text="ppm"
+                            android:textColor="@color/statusUnitText"
+                            android:textSize="10sp"
+                            android:visibility="gone" />
 
                         <TextView
                             android:id="@+id/listCardCOGrade"
@@ -677,21 +698,21 @@
                     <RelativeLayout
                         android:layout_width="223dp"
                         android:layout_height="169dp"
-                        android:background="@drawable/topframe_outline"
-                        android:layout_marginEnd="12dp"
                         android:layout_marginTop="2dp"
-                        android:layout_marginBottom="2dp">
+                        android:layout_marginEnd="12dp"
+                        android:layout_marginBottom="2dp"
+                        android:background="@drawable/topframe_outline">
 
                         <TextView
                             android:id="@+id/listCardVIRUSTitle"
                             android:layout_width="wrap_content"
                             android:layout_height="20dp"
-                            android:text="@string/virus"
-                            android:fontFamily="@font/pretendardvariable"
-                            android:textColor="@color/textColorMain"
-                            android:textSize="17sp"
+                            android:layout_marginStart="24dp"
                             android:layout_marginTop="24dp"
-                            android:layout_marginStart="24dp"/>
+                            android:fontFamily="@font/pretendardvariable"
+                            android:text="@string/virus"
+                            android:textColor="@color/textColorMain"
+                            android:textSize="17sp" />
 
                         <TextView
                             android:id="@+id/listCardVIRUSIndex"

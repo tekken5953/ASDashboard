@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/bg_1920x1080"
+    android:background="@drawable/bg_image"
     tools:context=".dashboard.DashBoardActivity">
 
     <FrameLayout
@@ -184,7 +184,7 @@
                 android:layout_height="@dimen/ringHeight"
                 android:layout_marginStart="@dimen/ringStart"
                 android:layout_marginTop="@dimen/ringTop"
-                android:background="@drawable/signal_good_1920" />
+                android:background="@drawable/signal_good" />
 
             <LinearLayout
                 android:id="@+id/aqiBarChartLinearLayout"

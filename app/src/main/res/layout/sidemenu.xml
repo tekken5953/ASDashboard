@@ -40,7 +40,7 @@
         android:layout_marginTop="99.5dp"
         android:padding="3dp"
         app:tint="@color/side_power_small"
-        android:src="@drawable/power_1280"
+        android:src="@drawable/power_icon"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/sideMenuTitleTv" />
 
@@ -74,7 +74,7 @@
         android:layout_height="38dp"
         android:layout_marginStart="185dp"
         android:padding="3dp"
-        android:src="@drawable/fan_1280"
+        android:src="@drawable/fan_icon"
         app:layout_constraintBottom_toBottomOf="@+id/sideMenuPowerIv"
         app:layout_constraintStart_toEndOf="@+id/sideMenuPowerOffTv"
         app:layout_constraintTop_toTopOf="@+id/sideMenuPowerIv" />
@@ -167,7 +167,7 @@
         android:layout_width="38dp"
         android:layout_height="38dp"
         android:layout_marginTop="48dp"
-        android:src="@drawable/info_1280"
+        android:src="@drawable/info_icon"
         app:layout_constraintStart_toStartOf="@+id/sideMenuPowerIv"
         app:layout_constraintTop_toBottomOf="@+id/sideMenuLine2"
         app:tint="@color/white" />
@@ -287,7 +287,7 @@
         android:layout_height="353dp"
         android:layout_marginTop="19.3dp"
         android:layout_marginEnd="92dp"
-        android:src="@drawable/side_m_1280"
+        android:src="@drawable/side_m"
         android:alpha="0.7"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/sideMenuFanControllTv" />
@@ -297,7 +297,7 @@
         android:layout_width="73dp"
         android:layout_height="26dp"
         android:layout_marginTop="110dp"
-        android:src="@drawable/as_logo_1280"
+        android:src="@drawable/as_logo"
         app:layout_constraintStart_toStartOf="@+id/sideMenuCancelIv"
         app:layout_constraintTop_toBottomOf="@+id/sideMenuLine3" />
 

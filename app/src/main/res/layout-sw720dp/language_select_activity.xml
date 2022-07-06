@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/bg_1280x800"
+    android:background="@drawable/bg_image"
     tools:ignore="ContentDescription">
 
     <ImageView
@@ -13,7 +13,7 @@
         android:layout_height="51.1dp"
         android:layout_marginStart="548dp"
         android:layout_marginTop="95dp"
-        android:src="@drawable/lang_1280_w"
+        android:src="@drawable/lang_icon_w"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -22,7 +22,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="129dp"
-        android:src="@drawable/stepbar_1280"
+        android:src="@drawable/stepbar_icon"
         app:layout_constraintEnd_toStartOf="@+id/langTopConnIconIv"
         app:layout_constraintStart_toEndOf="@+id/langTopLangIconIv"
         app:layout_constraintTop_toTopOf="parent" />
@@ -32,7 +32,7 @@
         android:layout_width="51.1dp"
         android:layout_height="47.5dp"
         android:layout_marginEnd="536dp"
-        android:src="@drawable/conn_1280_b"
+        android:src="@drawable/conn_icon_b"
         app:layout_constraintBottom_toBottomOf="@+id/langTopLangIconIv"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@+id/langTopLangIconIv" />
@@ -97,7 +97,7 @@
         android:layout_width="135dp"
         android:layout_height="135dp"
         android:layout_marginTop="75dp"
-        android:src="@drawable/kor_1280"
+        android:src="@drawable/kor_image"
         app:layout_constraintStart_toStartOf="@+id/pleaseSelectLangMainTv"
         app:layout_constraintTop_toBottomOf="@+id/pleaseSelectLangSubTv"/>
 
@@ -105,7 +105,7 @@
         android:id="@+id/langEngIconIv"
         android:layout_width="135dp"
         android:layout_height="135dp"
-        android:src="@drawable/eng_1280"
+        android:src="@drawable/eng_image"
         app:layout_constraintBottom_toBottomOf="@+id/langKorIconIv"
         app:layout_constraintEnd_toEndOf="@+id/pleaseSelectLangMainTv"
         app:layout_constraintTop_toTopOf="@+id/langKorIconIv" />
