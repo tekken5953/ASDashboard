@@ -288,7 +288,7 @@
                 android:textStyle="bold" />
 
             <TextView
-                android:id="@+id/textView7"
+                android:id="@+id/last1hourTv"
                 android:layout_width="wrap_content"
                 android:layout_height="@dimen/chartTitleHeight"
                 android:layout_marginStart="@dimen/chartTitleStart"

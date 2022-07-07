@@ -19,15 +19,15 @@
 
         <ProgressBar
             android:id="@+id/loadingPb"
-            android:visibility="visible"
+            style="@style/Widget.AppCompat.ProgressBar"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            style="@style/Widget.AppCompat.ProgressBar"
             android:progressTint="@color/white"
-            app:layout_constraintStart_toStartOf="parent"
+            android:visibility="visible"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"/>
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <FrameLayout
             android:id="@+id/fl_silde"
@@ -181,7 +181,7 @@
             <FrameLayout
                 android:id="@+id/topFrameLayout"
                 android:layout_width="match_parent"
-                android:layout_height="395dp"
+                android:layout_height="420dp"
                 android:layout_marginStart="60dp"
                 android:layout_marginTop="33dp"
                 android:layout_marginEnd="60dp"
@@ -299,7 +299,7 @@
                     android:textStyle="bold" />
 
                 <TextView
-                    android:id="@+id/textView7"
+                    android:id="@+id/last1hourTv"
                     android:layout_width="wrap_content"
                     android:layout_height="40dp"
                     android:layout_marginStart="355dp"
@@ -312,16 +312,16 @@
 
                 <HorizontalScrollView
                     android:layout_width="match_parent"
-                    android:layout_height="40dp"
+                    android:layout_height="45dp"
                     android:layout_gravity="top"
                     android:layout_marginStart="540dp"
                     android:layout_marginTop="38dp"
                     android:layout_marginEnd="48dp"
-                    android:gravity="center_vertical"
+                    android:gravity="center"
                     android:overScrollMode="never"
-                    android:scrollbars="none"
+                    android:paddingTop="2dp"
                     android:paddingBottom="2dp"
-                    android:paddingTop="2dp">
+                    android:scrollbars="none">
 
                     <TableRow
                         android:layout_width="0dp"
@@ -420,10 +420,10 @@
 
             <HorizontalScrollView
                 android:layout_width="match_parent"
-                android:layout_height="169dp"
+                android:layout_height="175dp"
                 android:layout_marginStart="60dp"
-                android:layout_marginTop="15dp"
                 android:layout_marginEnd="60dp"
+                android:layout_marginBottom="15dp"
                 android:orientation="horizontal"
                 android:overScrollMode="never"
                 android:scrollbars="none"
@@ -726,19 +726,19 @@
                             android:textColor="@color/statusUnitText"
                             android:textSize="16sp" />
 
-                        <!--                    <TextView-->
-                        <!--                        android:id="@+id/listCardVIRUSUnit"-->
-                        <!--                        android:layout_width="wrap_content"-->
-                        <!--                        android:layout_height="15dp"-->
-                        <!--                        android:text="null"-->
-                        <!--                        android:textSize="10sp"-->
-                        <!--                        android:gravity="center"-->
-                        <!--                        android:textColor="@color/statusUnitText"-->
-                        <!--                        android:fontFamily="@font/poppins_medium"-->
-                        <!--                        android:layout_below="@+id/listCardVIRUSTitle"-->
-                        <!--                        android:layout_toEndOf="@+id/listCardVIRUSIndex"-->
-                        <!--                        android:layout_marginTop="7dp"-->
-                        <!--                        android:layout_marginStart="5dp"/>-->
+<!--                                            <TextView-->
+<!--                                                android:id="@+id/listCardVIRUSUnit"-->
+<!--                                                android:layout_width="wrap_content"-->
+<!--                                                android:layout_height="15dp"-->
+<!--                                                android:text="null"-->
+<!--                                                android:textSize="10sp"-->
+<!--                                                android:gravity="center"-->
+<!--                                                android:textColor="@color/statusUnitText"-->
+<!--                                                android:fontFamily="@font/poppins_medium"-->
+<!--                                                android:layout_below="@+id/listCardVIRUSTitle"-->
+<!--                                                android:layout_toEndOf="@+id/listCardVIRUSIndex"-->
+<!--                                                android:layout_marginTop="7dp"-->
+<!--                                                android:layout_marginStart="5dp"/>-->
 
                         <TextView
                             android:id="@+id/listCardVIRUSOCGrade"
@@ -749,7 +749,7 @@
                             android:layout_marginTop="17dp"
                             android:layout_marginEnd="28dp"
                             android:fontFamily="@font/pretendardvariable"
-                            android:text="에러"
+                            android:text="@string/error"
                             android:textAllCaps="false"
                             android:textColor="@color/statusUnitText"
                             android:textSize="40sp" />

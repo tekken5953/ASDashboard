@@ -10,6 +10,7 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -78,6 +79,7 @@ public class ConnectRecyclerAdapter extends RecyclerView.Adapter<ConnectRecycler
                 @Override
                 public void onClick(View v) {
                     int position = getAdapterPosition();
+                    long id = getItemId();
 
                     if (position != RecyclerView.NO_POSITION) {
                         if (mListener != null) {

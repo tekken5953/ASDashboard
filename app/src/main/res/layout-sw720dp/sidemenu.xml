@@ -118,6 +118,7 @@
             android:layout_height="40dp"
             android:fontFamily="@font/pretendardvariable"
             android:text="@string/fan_first"
+            android:background="@drawable/side_menu_nofan_tv_bg"
             android:textAllCaps="false"
             android:gravity="center"
             android:textColor="@color/statusUnitText"
@@ -128,9 +129,10 @@
             android:layout_width="wrap_content"
             android:layout_height="40dp"
             android:gravity="center"
-            android:layout_marginStart="45.3dp"
+            android:layout_marginStart="42dp"
             android:fontFamily="@font/pretendardvariable"
             android:text="@string/fan_second"
+            android:background="@drawable/side_menu_nofan_tv_bg"
             android:textAllCaps="false"
             android:textColor="@color/statusUnitText"
             android:textSize="19sp"/>
@@ -140,9 +142,10 @@
             android:layout_width="wrap_content"
             android:layout_height="40dp"
             android:gravity="center"
-            android:layout_marginStart="45.3dp"
+            android:layout_marginStart="42dp"
             android:fontFamily="@font/pretendardvariable"
             android:text="@string/fan_third"
+            android:background="@drawable/side_menu_nofan_tv_bg"
             android:textAllCaps="false"
             android:textColor="@color/statusUnitText"
             android:textSize="19sp" />
@@ -152,9 +155,10 @@
             android:layout_width="wrap_content"
             android:layout_height="40dp"
             android:gravity="center"
-            android:layout_marginStart="45.3dp"
+            android:layout_marginStart="42dp"
             android:fontFamily="@font/pretendardvariable"
             android:text="@string/fan_fourth"
+            android:background="@drawable/side_menu_nofan_tv_bg"
             android:textAllCaps="false"
             android:textColor="@color/statusUnitText"
             android:textSize="19sp" />
@@ -212,22 +216,22 @@
 
             <TextView
                 android:layout_width="wrap_content"
-                android:layout_height="16dp"
+                android:layout_height="wrap_content"
                 android:fontFamily="@font/pretendardvariable"
                 android:text="@string/product_type"
                 android:textColor="@color/statusUnitText"
-                android:textSize="14sp" />
+                android:textSize="16sp" />
 
             <TextView
                 android:id="@+id/SideMenuProductTv"
                 android:layout_width="wrap_content"
-                android:layout_height="16dp"
+                android:layout_height="wrap_content"
                 android:layout_marginStart="55dp"
                 android:fontFamily="@font/pretendardvariable"
                 android:text="@string/bio_sentinel_100"
                 android:gravity="start"
                 android:textColor="@color/statusUnitText"
-                android:textSize="14sp" />
+                android:textSize="16sp" />
         </TableRow>
 
         <TableRow
@@ -238,22 +242,22 @@
 
             <TextView
                 android:layout_width="wrap_content"
-                android:layout_height="16dp"
+                android:layout_height="wrap_content"
                 android:fontFamily="@font/pretendardvariable"
                 android:text="@string/serial_num"
                 android:textColor="@color/statusUnitText"
-                android:textSize="14sp" />
+                android:textSize="16sp" />
 
             <TextView
                 android:id="@+id/sideMenuSerialNumTv"
                 android:layout_width="wrap_content"
-                android:layout_height="16dp"
+                android:layout_height="wrap_content"
                 android:layout_marginStart="55dp"
                 android:fontFamily="@font/pretendardvariable"
                 android:text="TIA0001565"
                 android:gravity="start"
                 android:textColor="@color/statusUnitText"
-                android:textSize="14sp" />
+                android:textSize="16sp" />
         </TableRow>
 
         <TableRow
@@ -264,22 +268,22 @@
 
             <TextView
                 android:layout_width="wrap_content"
-                android:layout_height="16dp"
+                android:layout_height="wrap_content"
                 android:fontFamily="@font/pretendardvariable"
                 android:text="@string/setup_date"
                 android:textColor="@color/statusUnitText"
-                android:textSize="14sp" />
+                android:textSize="16sp" />
 
             <TextView
                 android:id="@+id/sideMenuSetUpDateTv"
                 android:layout_width="wrap_content"
-                android:layout_height="16dp"
+                android:layout_height="wrap_content"
                 android:layout_marginStart="55dp"
                 android:fontFamily="@font/pretendardvariable"
                 android:text="2022-07-05"
                 android:gravity="start"
                 android:textColor="@color/statusUnitText"
-                android:textSize="14sp" />
+                android:textSize="16sp" />
         </TableRow>
     </TableLayout>
 
@@ -300,7 +304,7 @@
         android:layout_marginTop="19.3dp"
         android:layout_marginEnd="92dp"
         android:src="@drawable/side_m"
-        android:alpha="0.7"
+        android:alpha="0.85"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/sideMenuFanControllTv" />
 
