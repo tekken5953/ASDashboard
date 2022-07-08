@@ -86,7 +86,7 @@
         android:layout_marginStart="17dp"
         android:fontFamily="@font/pretendardvariable"
         android:gravity="center"
-        android:text="@string/fan_controll"
+        android:text="@string/fan_control"
         android:textAllCaps="false"
         android:textColor="@color/white"
         android:textSize="30sp"

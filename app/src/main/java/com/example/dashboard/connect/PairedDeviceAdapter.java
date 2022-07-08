@@ -14,6 +14,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.core.content.res.ResourcesCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.dashboard.R;
@@ -36,9 +37,8 @@ public class PairedDeviceAdapter extends RecyclerView.Adapter<PairedDeviceAdapte
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
         View view = inflater.inflate(R.layout.listitem_recent_device, parent, false);
-        ViewHolder vh = new ViewHolder(view);
 
-        return vh;
+        return new ViewHolder(view);
     }
 
     private OnItemClickListener mListener = null;

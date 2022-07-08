@@ -4,10 +4,9 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
-
         <variable
             name="viewModel"
-            type="com.example.dashboard.BluetoothThread.DataShareViewModel" />
+            type="com.example.dashboard.bluetooth.BluetoothThread.DataShareViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -65,7 +64,7 @@
                 app:layout_constraintBottom_toBottomOf="@+id/currentTimeTv"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="@+id/currentTimeTv"
-                app:srcCompat="@drawable/ic_baseline_menu_24" />
+                app:srcCompat="@drawable/menu_icon" />
 
 
             <TextView
@@ -105,12 +104,12 @@
                 android:text="null"
                 android:textColor="@color/textColorMain"
                 android:textSize="16sp"
-                app:layout_constraintBottom_toBottomOf="@+id/textView5"
-                app:layout_constraintEnd_toStartOf="@id/textView5"
-                app:layout_constraintTop_toTopOf="@id/textView5" />
+                app:layout_constraintBottom_toBottomOf="@+id/humidUnitTv"
+                app:layout_constraintEnd_toStartOf="@id/humidUnitTv"
+                app:layout_constraintTop_toTopOf="@id/humidUnitTv" />
 
             <TextView
-                android:id="@+id/textView5"
+                android:id="@+id/humidUnitTv"
                 android:layout_width="27dp"
                 android:layout_height="19dp"
                 android:layout_marginEnd="58dp"
@@ -133,12 +132,12 @@
                 android:text="@string/humid"
                 android:textColor="@color/textColorMain"
                 android:textSize="16sp"
-                app:layout_constraintBottom_toBottomOf="@+id/textView5"
+                app:layout_constraintBottom_toBottomOf="@+id/humidUnitTv"
                 app:layout_constraintEnd_toStartOf="@+id/humidTv"
-                app:layout_constraintTop_toTopOf="@+id/textView5" />
+                app:layout_constraintTop_toTopOf="@+id/humidUnitTv" />
 
             <TextView
-                android:id="@+id/textView3"
+                android:id="@+id/tempUnitTv"
                 android:layout_width="27dp"
                 android:layout_height="19dp"
                 android:layout_marginEnd="73dp"
@@ -160,9 +159,9 @@
                 android:text="null"
                 android:textColor="@color/textColorMain"
                 android:textSize="16sp"
-                app:layout_constraintBottom_toBottomOf="@+id/textView3"
-                app:layout_constraintEnd_toStartOf="@+id/textView3"
-                app:layout_constraintTop_toTopOf="@+id/textView3" />
+                app:layout_constraintBottom_toBottomOf="@+id/tempUnitTv"
+                app:layout_constraintEnd_toStartOf="@+id/tempUnitTv"
+                app:layout_constraintTop_toTopOf="@+id/tempUnitTv" />
 
             <TextView
                 android:id="@+id/textView6"
@@ -174,9 +173,9 @@
                 android:text="@string/temp"
                 android:textColor="@color/textColorMain"
                 android:textSize="16sp"
-                app:layout_constraintBottom_toBottomOf="@+id/textView3"
+                app:layout_constraintBottom_toBottomOf="@+id/tempUnitTv"
                 app:layout_constraintEnd_toStartOf="@+id/tempTv"
-                app:layout_constraintTop_toTopOf="@+id/textView3" />
+                app:layout_constraintTop_toTopOf="@+id/tempUnitTv" />
 
             <FrameLayout
                 android:id="@+id/topFrameLayout"
@@ -199,10 +198,11 @@
                     android:background="@drawable/signal_good" />
 
                 <LinearLayout
-                    android:layout_width="@dimen/barWidth"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="62dp"
+                    android:layout_marginStart="52dp"
                     android:layout_marginTop="310dp"
+                    android:paddingStart="10dp"
                     android:orientation="vertical">
 
                     <TableRow
@@ -253,11 +253,10 @@
                             android:textSize="12sp" />
                     </TableRow>
 
-                    <com.example.dashboard.SegmentedProgressBar
+                    <com.example.dashboard.ui.SegmentedProgressBar
                         android:id="@+id/aqiBarChartPb"
                         android:layout_width="@dimen/barWidth"
-                        android:layout_height="@dimen/barHeight"
-                        android:paddingStart="1dp" />
+                        android:layout_height="@dimen/barHeight" />
 
                     <TextView
                         android:id="@+id/aqiCurrentArrow"
@@ -266,7 +265,7 @@
                         android:drawablePadding="-7dp"
                         android:fontFamily="@font/pretendardvariable"
                         android:gravity="center"
-                        android:paddingStart="1dp"
+
                         android:text="0"
                         android:textColor="@color/progressText"
                         android:textSize="14sp"
@@ -332,7 +331,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="53dp"
-                            android:background="@drawable/category_text_outline_small"
+                            android:background="@drawable/category_text_outline"
                             android:fontFamily="@font/pretendardvariable"
                             android:gravity="center"
                             android:onClick="onClick"
@@ -345,7 +344,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="25dp"
-                            android:background="@drawable/category_nontext_outline_small"
+                            android:background="@drawable/category_nontext_outline"
                             android:fontFamily="@font/pretendardvariable"
                             android:gravity="center"
                             android:onClick="onClick"
@@ -358,7 +357,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="29dp"
-                            android:background="@drawable/category_nontext_outline_small"
+                            android:background="@drawable/category_nontext_outline"
                             android:fontFamily="@font/pretendardvariable"
                             android:gravity="center"
                             android:onClick="onClick"
@@ -371,7 +370,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="29dp"
-                            android:background="@drawable/category_nontext_outline_small"
+                            android:background="@drawable/category_nontext_outline"
                             android:fontFamily="@font/pretendardvariable"
                             android:gravity="center"
                             android:onClick="onClick"
@@ -384,7 +383,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="29dp"
-                            android:background="@drawable/category_nontext_outline_small"
+                            android:background="@drawable/category_nontext_outline"
                             android:fontFamily="@font/pretendardvariable"
                             android:gravity="center"
                             android:onClick="onClick"
@@ -397,7 +396,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="29dp"
-                            android:background="@drawable/category_nontext_outline_small"
+                            android:background="@drawable/category_nontext_outline"
                             android:fontFamily="@font/pretendardvariable"
                             android:gravity="center"
                             android:onClick="onClick"

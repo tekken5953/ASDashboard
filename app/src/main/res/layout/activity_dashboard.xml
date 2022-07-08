@@ -41,7 +41,7 @@
             app:layout_constraintBottom_toBottomOf="@+id/currentTimeTv"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="@+id/currentTimeTv"
-            app:srcCompat="@drawable/ic_baseline_menu_24"
+            app:srcCompat="@drawable/menu_icon"
             android:visibility="gone"/>
 
         <TextView
@@ -93,12 +93,12 @@
             android:text="48"
             android:textColor="@color/textColorMain"
             android:textSize="@dimen/basicTextSize"
-            app:layout_constraintBottom_toBottomOf="@+id/textView5"
-            app:layout_constraintEnd_toStartOf="@id/textView5"
-            app:layout_constraintTop_toTopOf="@id/textView5" />
+            app:layout_constraintBottom_toBottomOf="@+id/humidUnitTv"
+            app:layout_constraintEnd_toStartOf="@id/humidUnitTv"
+            app:layout_constraintTop_toTopOf="@id/humidUnitTv" />
 
         <TextView
-            android:id="@+id/textView5"
+            android:id="@+id/humidUnitTv"
             android:layout_width="wrap_content"
             android:layout_height="@dimen/topFrameHeight"
             android:layout_marginEnd="@dimen/marginEndHumidSymbol"
@@ -121,12 +121,12 @@
             android:text="@string/humid"
             android:textColor="@color/textColorMain"
             android:textSize="@dimen/basicTextSize"
-            app:layout_constraintBottom_toBottomOf="@+id/textView5"
+            app:layout_constraintBottom_toBottomOf="@+id/humidUnitTv"
             app:layout_constraintEnd_toStartOf="@+id/humidTv"
-            app:layout_constraintTop_toTopOf="@+id/textView5" />
+            app:layout_constraintTop_toTopOf="@+id/humidUnitTv" />
 
         <TextView
-            android:id="@+id/textView3"
+            android:id="@+id/tempUnitTv"
             android:layout_width="wrap_content"
             android:layout_height="@dimen/topFrameHeight"
             android:layout_marginEnd="@dimen/marginEndTempSymbol"
@@ -148,9 +148,9 @@
             android:text="20"
             android:textColor="@color/textColorMain"
             android:textSize="@dimen/basicTextSize"
-            app:layout_constraintBottom_toBottomOf="@+id/textView3"
-            app:layout_constraintEnd_toStartOf="@+id/textView3"
-            app:layout_constraintTop_toTopOf="@+id/textView3" />
+            app:layout_constraintBottom_toBottomOf="@+id/tempUnitTv"
+            app:layout_constraintEnd_toStartOf="@+id/tempUnitTv"
+            app:layout_constraintTop_toTopOf="@+id/tempUnitTv" />
 
         <TextView
             android:id="@+id/textView6"
@@ -162,9 +162,9 @@
             android:text="@string/temp"
             android:textColor="@color/textColorMain"
             android:textSize="@dimen/basicTextSize"
-            app:layout_constraintBottom_toBottomOf="@+id/textView3"
+            app:layout_constraintBottom_toBottomOf="@+id/tempUnitTv"
             app:layout_constraintEnd_toStartOf="@+id/tempTv"
-            app:layout_constraintTop_toTopOf="@+id/textView3" />
+            app:layout_constraintTop_toTopOf="@+id/tempUnitTv" />
 
         <FrameLayout
             android:id="@+id/topFrameLayout"
@@ -242,7 +242,7 @@
                         android:textSize="16sp" />
                 </TableRow>
 
-                <com.example.dashboard.SegmentedProgressBar
+                <com.example.dashboard.ui.SegmentedProgressBar
                     android:id="@+id/aqiBarChartPb"
                     android:layout_width="@dimen/barWidth"
                     android:layout_height="@dimen/barHeight"

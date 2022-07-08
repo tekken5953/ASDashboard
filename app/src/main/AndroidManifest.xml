@@ -12,7 +12,6 @@
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
 
-
     <application
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
@@ -22,14 +21,13 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Dashboard"
-        tools:targetApi="30">
+        tools:targetApi="s">
 
-        <service android:name="org.eclipse.paho.android.service.MqttService" />
         <activity
             android:name=".connect.ConnectDeviceActivity"
             android:exported="false" />
         <activity
-            android:name=".LanguageSelectActivity"
+            android:name=".language.LanguageSelectActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

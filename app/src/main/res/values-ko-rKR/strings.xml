@@ -43,7 +43,7 @@
     <string name="no_data_text">그래프를 그리는 중입니다</string>
     <string name="settings">설정</string>
     <string name="power_off">전원 끄기</string>
-    <string name="fan_controll">풍량 조절</string>
+    <string name="fan_control">풍량 조절</string>
     <string name="fan_first">1단</string>
     <string name="fan_second">2단</string>
     <string name="fan_third">3단</string>
@@ -54,7 +54,7 @@
     <string name="serial_num">시리얼 번호</string>
     <string name="setup_date">설치 날짜</string>
     <string name="company_name">에어시그널(주)</string>
-    <string name="information">고객센터 031-756-1251</string>
+    <string name="information">고객센터 031–756–1251</string>
     <string name="web_site">http://www.airsignal.kr</string>
     <string name="ask_turn_off">전원을 끄시겠습니까?</string>
 </resources>

@@ -151,12 +151,15 @@
             android:layout_height="0.5dp"
             android:layout_marginTop="22.5dp"
             android:background="@color/white"
-            app:layout_constraintEnd_toEndOf="@+id/connPleaseSelectLangMainTv"
-            app:layout_constraintStart_toStartOf="@+id/connPleaseSelectLangMainTv"
+            android:layout_marginStart="20dp"
+            android:layout_marginEnd="20dp"
+            app:layout_constraintEnd_toEndOf="@+id/nestedScrollView"
+            app:layout_constraintStart_toStartOf="@+id/nestedScrollView"
             app:layout_constraintTop_toBottomOf="@+id/connConnectableDevicePb" />
 
         <androidx.core.widget.NestedScrollView
-            android:layout_width="0dp"
+            android:id="@+id/nestedScrollView"
+            android:layout_width="420dp"
             android:layout_height="0dp"
             android:fillViewport="true"
             android:overScrollMode="never"
@@ -181,7 +184,8 @@
                     android:overScrollMode="never"
                     android:visibility="visible"
                     app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                    tools:listitem="@layout/listitem_recent_device" />
+                    tools:listitem="@layout/listitem_recent_device"
+                    />
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/connConnectableList"
@@ -193,7 +197,10 @@
                     android:overScrollMode="never"
                     app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                     app:layout_constraintTop_toBottomOf="@+id/connPairedDeviceRv"
-                    tools:listitem="@layout/listitem_connectable_device" />
+                    tools:listitem="@layout/listitem_connectable_device"
+                    android:paddingStart="20dp"
+                    android:paddingEnd="20dp"/>
+
             </LinearLayout>
 
         </androidx.core.widget.NestedScrollView>

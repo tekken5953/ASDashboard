@@ -1,5 +1,6 @@
-package com.example.dashboard;
+package com.example.dashboard.bluetooth;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothSocket;
@@ -75,7 +76,7 @@ public class BluetoothThread extends Thread {
             byte[] readBuffer = new byte[1024];
             byte[] packetBytes;
             int readBufferPosition = 0;
-            int bytesAvailable = 0;
+            int bytesAvailable;
 
             while (isConnected()) {
                 try {
@@ -91,7 +92,7 @@ public class BluetoothThread extends Thread {
                         // 버퍼 초기화
                         readBufferPosition = 0;
                         readBuffer = new byte[1024];
-                        packetBytes = null;
+//                        packetBytes = null;
 
                         e.printStackTrace();
 
@@ -123,7 +124,7 @@ public class BluetoothThread extends Thread {
                             // 버퍼 초기화
                             readBufferPosition = 0;
                             readBuffer = new byte[1024];
-                            packetBytes = null;
+//                            packetBytes = null;
                         }
                     }
 
@@ -136,6 +137,7 @@ public class BluetoothThread extends Thread {
         }
     }
 
+    @SuppressLint("MissingPermission")
     public boolean connectSocket() {
         //mBluetoothAdapter.cancelDiscovery();
         try {
@@ -194,7 +196,7 @@ public class BluetoothThread extends Thread {
             else errorFlag = true;
             Log.e(TAG, "Exception during send", e);
 
-        } catch (NullPointerException e) {
+        } catch (Exception e) {
             e.printStackTrace();
             closeSocket();
         }

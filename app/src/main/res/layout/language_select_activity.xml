@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:background="@drawable/bg_image"
     tools:ignore="ContentDescription"
-    tools:context=".LanguageSelectActivity">
+    tools:context=".language.LanguageSelectActivity">
 
     <ImageView
         android:id="@+id/langTopLangIconIv"

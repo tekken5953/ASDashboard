@@ -1,4 +1,4 @@
-package com.example.dashboard;
+package com.example.dashboard.language;
 
 import android.content.Context;
 import android.content.Intent;
@@ -15,6 +15,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.content.res.AppCompatResources;
 import androidx.core.content.res.ResourcesCompat;
 
+import com.example.dashboard.R;
+import com.example.dashboard.SharedPreferenceManager;
 import com.example.dashboard.connect.ConnectDeviceActivity;
 
 import java.util.Locale;

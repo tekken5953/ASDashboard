@@ -1,11 +1,16 @@
-package com.example.dashboard;
+package com.example.dashboard.ui;
 
 import android.annotation.SuppressLint;
+import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.Intent;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.RelativeLayout;
+import android.widget.Toast;
+
+import com.example.dashboard.R;
 
 
 public class SideBarCustomView extends RelativeLayout implements View.OnClickListener {
@@ -43,7 +48,7 @@ public class SideBarCustomView extends RelativeLayout implements View.OnClickLis
         super(context, attrs);
     }
 
-    private void init() {
+    public void init() {
         LayoutInflater.from(getContext()).inflate(R.layout.sidemenu, this, true);
 
         findViewById(R.id.sideMenuCancelIv).setOnClickListener(this);
@@ -53,6 +58,7 @@ public class SideBarCustomView extends RelativeLayout implements View.OnClickLis
         findViewById(R.id.sideMenuFan2Tv).setOnClickListener(this);
         findViewById(R.id.sideMenuFan3Tv).setOnClickListener(this);
         findViewById(R.id.sideMenuFan4Tv).setOnClickListener(this);
+
     }
 
     @SuppressLint("NonConstantResourceId")
