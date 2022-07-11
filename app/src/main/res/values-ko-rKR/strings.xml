@@ -20,19 +20,23 @@
     <string name="error">에러</string>
     <string name="day">오전</string>
     <string name="night">오후</string>
+    <string name="connected_device">기존 연결된 기기</string>
     <string name="not_paring">연결된 디바이스 없음</string>
-    <string name="causion_title">경고</string>
-    <string name="causion_message">블루투스 연결이 끊겼습니다.\n다시 연결하시겠습니까?</string>
-    <string name="causion_ok">확인</string>
-    <string name="select_lang">언어 선택</string>
-    <string name="connect_device">디바이스 연결</string>
+    <string name="caution_title">경고</string>
+    <string name="caution_back">뒤로가기</string>
+    <string name="caution_message">블루투스 연결이 끊겼습니다.\n장치가 작동중인지 확인해주세요</string>
+    <string name="reconnect_bt_msg">블루투스 연결이 끊어졌습니다.\n다시 블루투스에 연결하시겠습니까?</string>
+    <string name="reconnect_bt_ok">연결</string>
+    <string name="caution_ok">확인</string>
+    <string name="select_lang">01 언어 선택</string>
+    <string name="connect_device">02 제품 선택</string>
     <string name="please_select_lang_main">사용할 언어를 선택해주세요</string>
     <string name="please_select_a_lang_sub">Please select a language</string>
     <string name="korean_lang">한국어</string>
     <string name="eng_lang">English</string>
     <string name="ok">확인</string>
     <string name="cancel">취소</string>
-    <string name="please_select_device">연결할 디바이스를 선택해주세요</string>
+    <string name="please_select_device">사용하실 제품을 연결해주세요</string>
     <string name="connectable_device">사용 가능한 디바이스</string>
     <string name="complete_select_lang">선택하신 언어로 적용되었습니다</string>
     <string name="skip_lang_msg">언어를 자동으로 설정하였습니다</string>
@@ -57,4 +61,5 @@
     <string name="information">고객센터 031–756–1251</string>
     <string name="web_site">http://www.airsignal.kr</string>
     <string name="ask_turn_off">전원을 끄시겠습니까?</string>
+    <string name="already_connected">이미 연결된 디바이스 입니다</string>
 </resources>

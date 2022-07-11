@@ -62,6 +62,8 @@ public class PairedDeviceAdapter extends RecyclerView.Adapter<PairedDeviceAdapte
         holder.paired_name.setText(item.getName());
         holder.paired_address.setText(item.getAddress());
 
+        holder.itemView.setAlpha(0.5f);
+
     }
 
     // getItemCount() - 전체 데이터 갯수 리턴.

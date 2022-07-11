@@ -7,134 +7,145 @@
     android:background="@drawable/bg_image"
     tools:ignore="ContentDescription">
 
-    <ImageView
-        android:id="@+id/langTopLangIconIv"
-        android:layout_width="51.1dp"
-        android:layout_height="51.1dp"
-        android:layout_marginStart="548dp"
-        android:layout_marginTop="95dp"
-        android:src="@drawable/lang_icon_w"
+    <RelativeLayout
+        android:id="@+id/langLeftLayout"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_marginStart="119dp"
+        android:background="#15FFFFFF"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+            android:id="@+id/langTopLangIconIv"
+            android:layout_width="54dp"
+            android:layout_height="56dp"
+            android:layout_marginStart="48dp"
+            android:layout_marginTop="300dp"
+            android:src="@drawable/lang_icon_w" />
+
+        <TextView
+            android:id="@+id/langTopLangTitleTv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="17dp"
+            android:layout_marginTop="298dp"
+            android:layout_marginEnd="57dp"
+            android:layout_toEndOf="@+id/langTopLangIconIv"
+            android:fontFamily="@font/pretendardvariable"
+            android:text="@string/select_lang"
+            android:textAllCaps="false"
+            android:textColor="@color/white"
+            android:textSize="23sp" />
+
+        <TextView
+            android:id="@+id/langTopLangContentTv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/langTopLangTitleTv"
+            android:layout_marginStart="17dp"
+            android:layout_marginTop="7dp"
+            android:layout_marginEnd="57dp"
+            android:layout_toEndOf="@+id/langTopLangIconIv"
+            android:fontFamily="@font/pretendardvariable"
+            android:text="@string/please_select_lang_main"
+            android:textAllCaps="false"
+            android:textColor="@color/statusUnitText"
+            android:textSize="14sp" />
+
+        <ImageView
+            android:id="@+id/langTopConnIconIv"
+            android:layout_width="54dp"
+            android:layout_height="56dp"
+            android:layout_below="@+id/langTopLangIconIv"
+            android:layout_marginStart="48dp"
+            android:layout_marginTop="71dp"
+            android:src="@drawable/conn_icon_b" />
+
+        <TextView
+            android:id="@+id/langTopConnTitleTv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/langTopLangContentTv"
+            android:layout_marginStart="17dp"
+            android:layout_marginTop="71dp"
+            android:layout_marginEnd="57dp"
+            android:layout_toEndOf="@+id/langTopConnIconIv"
+            android:fontFamily="@font/pretendardvariable"
+            android:text="@string/connect_device"
+            android:textAllCaps="false"
+            android:textColor="@color/statusUnitText"
+            android:textSize="23sp" />
+
+        <TextView
+            android:id="@+id/langTopConnContentTv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/langTopConnTitleTv"
+            android:layout_marginStart="17dp"
+            android:layout_marginTop="7dp"
+            android:layout_marginEnd="57dp"
+            android:layout_toEndOf="@+id/langTopLangIconIv"
+            android:fontFamily="@font/pretendardvariable"
+            android:text="@string/please_select_device"
+            android:textAllCaps="false"
+            android:textColor="@color/statusUnitText"
+            android:textSize="14sp" />
+
+    </RelativeLayout>
+
+    <View
+        android:layout_width="3dp"
+        android:layout_height="100dp"
+        android:layout_marginTop="280dp"
+        android:background="@color/white"
+        app:layout_constraintStart_toEndOf="@+id/langLeftLayout"
         app:layout_constraintTop_toTopOf="parent" />
-
-    <ImageView
-        android:id="@+id/langTopStepBarIv"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="129dp"
-        android:src="@drawable/stepbar_icon"
-        app:layout_constraintEnd_toStartOf="@+id/langTopConnIconIv"
-        app:layout_constraintStart_toEndOf="@+id/langTopLangIconIv"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <ImageView
-        android:id="@+id/langTopConnIconIv"
-        android:layout_width="51.1dp"
-        android:layout_height="47.5dp"
-        android:layout_marginEnd="536dp"
-        android:src="@drawable/conn_icon_b"
-        app:layout_constraintBottom_toBottomOf="@+id/langTopLangIconIv"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/langTopLangIconIv" />
-
-    <TextView
-        android:id="@+id/langTopLangTitleTv"
-        android:layout_width="wrap_content"
-        android:layout_height="13dp"
-        android:layout_marginTop="9.7dp"
-        android:fontFamily="@font/pretendardvariable"
-        android:text="@string/select_lang"
-        android:textColor="@color/white"
-        android:textSize="11sp"
-        app:layout_constraintEnd_toEndOf="@+id/langTopLangIconIv"
-        app:layout_constraintStart_toStartOf="@+id/langTopLangIconIv"
-        app:layout_constraintTop_toBottomOf="@+id/langTopLangIconIv" />
-
-    <TextView
-        android:id="@+id/langTopConnTitleTv"
-        android:layout_width="wrap_content"
-        android:layout_height="13dp"
-        android:fontFamily="@font/pretendardvariable"
-        android:text="@string/connect_device"
-        android:textColor="@color/statusUnitText"
-        android:textSize="11sp"
-        app:layout_constraintBottom_toBottomOf="@+id/langTopLangTitleTv"
-        app:layout_constraintEnd_toEndOf="@+id/langTopConnIconIv"
-        app:layout_constraintStart_toStartOf="@+id/langTopConnIconIv"
-        app:layout_constraintTop_toTopOf="@+id/langTopLangTitleTv" />
-
-    <TextView
-        android:id="@+id/pleaseSelectLangMainTv"
-        android:layout_width="wrap_content"
-        android:layout_height="34dp"
-        android:layout_marginTop="41dp"
-        android:fontFamily="@font/pretendardvariable"
-        android:text="@string/please_select_lang_main"
-        android:textAllCaps="false"
-        android:textColor="@color/white"
-        android:textSize="29sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/langTopLangTitleTv" />
-
-    <TextView
-        android:id="@+id/pleaseSelectLangSubTv"
-        android:layout_width="wrap_content"
-        android:layout_height="22dp"
-        android:layout_marginTop="7dp"
-        android:fontFamily="@font/pretendardvariable"
-        android:text="@string/please_select_a_lang_sub"
-        android:textAllCaps="false"
-        android:textColor="@color/white"
-        android:textSize="17sp"
-        android:gravity="center"
-        app:layout_constraintEnd_toEndOf="@+id/pleaseSelectLangMainTv"
-        app:layout_constraintStart_toStartOf="@+id/pleaseSelectLangMainTv"
-        app:layout_constraintTop_toBottomOf="@+id/pleaseSelectLangMainTv" />
 
     <ImageView
         android:id="@+id/langKorIconIv"
         android:layout_width="135dp"
         android:layout_height="135dp"
-        android:layout_marginTop="75dp"
+        android:layout_marginStart="242dp"
+        android:layout_marginTop="304dp"
         android:src="@drawable/kor_image"
-        app:layout_constraintStart_toStartOf="@+id/pleaseSelectLangMainTv"
-        app:layout_constraintTop_toBottomOf="@+id/pleaseSelectLangSubTv"/>
+        app:layout_constraintStart_toEndOf="@+id/langLeftLayout"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/langKorTitleTv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:fontFamily="@font/pretendardvariable"
+        android:text="@string/korean_lang"
+        android:textAllCaps="false"
+        android:textColor="@color/white"
+        android:textSize="24sp"
+        app:layout_constraintEnd_toEndOf="@+id/langKorIconIv"
+        app:layout_constraintStart_toStartOf="@+id/langKorIconIv"
+        app:layout_constraintTop_toBottomOf="@+id/langKorIconIv" />
 
     <ImageView
         android:id="@+id/langEngIconIv"
         android:layout_width="135dp"
         android:layout_height="135dp"
+        android:layout_marginStart="69dp"
         android:src="@drawable/eng_image"
         app:layout_constraintBottom_toBottomOf="@+id/langKorIconIv"
-        app:layout_constraintEnd_toEndOf="@+id/pleaseSelectLangMainTv"
+        app:layout_constraintStart_toEndOf="@+id/langKorIconIv"
         app:layout_constraintTop_toTopOf="@+id/langKorIconIv" />
-
-    <TextView
-        android:id="@+id/langKorTitleTv"
-        android:layout_width="wrap_content"
-        android:layout_height="20dp"
-        android:layout_marginTop="22dp"
-        android:fontFamily="@font/pretendardvariable"
-        android:gravity="center"
-        android:text="@string/korean_lang"
-        android:textAllCaps="false"
-        android:textColor="@color/statusUnitText"
-        android:textSize="17sp"
-        app:layout_constraintEnd_toEndOf="@+id/langKorIconIv"
-        app:layout_constraintStart_toStartOf="@+id/langKorIconIv"
-        app:layout_constraintTop_toBottomOf="@+id/langKorIconIv" />
 
     <TextView
         android:id="@+id/langEngTitleTv"
         android:layout_width="wrap_content"
-        android:layout_height="20dp"
+        android:layout_height="wrap_content"
         android:fontFamily="@font/pretendardvariable"
-        android:gravity="center"
         android:text="@string/eng_lang"
         android:textAllCaps="false"
-        android:textColor="@color/statusUnitText"
-        android:textSize="17sp"
+        android:textColor="@color/white"
+        android:textSize="24sp"
         app:layout_constraintBottom_toBottomOf="@+id/langKorTitleTv"
         app:layout_constraintEnd_toEndOf="@+id/langEngIconIv"
         app:layout_constraintStart_toStartOf="@+id/langEngIconIv"
@@ -143,17 +154,16 @@
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/langOkTv"
         android:layout_width="322dp"
-        android:layout_height="62dp"
-        android:layout_marginTop="64dp"
+        android:layout_height="61dp"
+        android:layout_marginTop="140dp"
         android:background="@drawable/lang_ok_b"
         android:fontFamily="@font/pretendardvariable"
         android:gravity="center"
         android:text="@string/ok"
         android:textColor="@color/statusUnitText"
-        android:textSize="18sp"
+        android:textSize="24sp"
         app:layout_constraintEnd_toEndOf="@+id/langEngIconIv"
         app:layout_constraintStart_toStartOf="@+id/langKorIconIv"
         app:layout_constraintTop_toBottomOf="@+id/langKorTitleTv" />
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>

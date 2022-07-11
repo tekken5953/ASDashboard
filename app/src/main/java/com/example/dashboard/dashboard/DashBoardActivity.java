@@ -53,11 +53,18 @@ import com.example.dashboard.R;
 import com.example.dashboard.SharedPreferenceManager;
 import com.example.dashboard.bluetooth.BluetoothAPI;
 import com.example.dashboard.bluetooth.BluetoothThread;
+import com.example.dashboard.connect.ConnectDeviceActivity;
 import com.example.dashboard.databinding.ActivityDashboardBinding;
 import com.example.dashboard.language.LanguageSelectActivity;
-import com.example.dashboard.ui.DrawGraphClass;
 import com.example.dashboard.ui.SegmentedProgressBar;
 import com.example.dashboard.ui.SideBarCustomView;
+import com.github.mikephil.charting.components.Legend;
+import com.github.mikephil.charting.components.XAxis;
+import com.github.mikephil.charting.components.YAxis;
+import com.github.mikephil.charting.data.Entry;
+import com.github.mikephil.charting.data.LineData;
+import com.github.mikephil.charting.data.LineDataSet;
+import com.github.mikephil.charting.formatter.IndexAxisValueFormatter;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -78,7 +85,7 @@ public class DashBoardActivity extends AppCompatActivity {
 
     String FAN_CONTROL_COMPLETE = "com.example.dashboard";
 
-    int barViewWidth, barViewHeight, arrowWidth, VIEW_REQUEST_INTERVAL = 3, DRAW_CHART_INTERVAL = 1000 * 3, co2_final;
+    int barViewWidth, barViewHeight, arrowWidth, VIEW_REQUEST_INTERVAL = 3, DRAW_CHART_INTERVAL = 1000 * 3;
 
     ArrayList<SegmentedProgressBar.BarContext> barList = new ArrayList<>();
 
@@ -123,8 +130,15 @@ public class DashBoardActivity extends AppCompatActivity {
         if (bluetoothThread.isRunning()) {
             bluetoothThread.interrupt();
         }
-        if (mReceiver != null)
+        if (mReceiver.isInitialStickyBroadcast())
             unregisterReceiver(mReceiver);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        HideNavigationBarClass hideNavigationBarClass = new HideNavigationBarClass();
+        hideNavigationBarClass.hide(DashBoardActivity.this); // 하단 바 없애기
     }
 
     @SuppressLint("NotifyDataSetChanged")
@@ -180,6 +194,27 @@ public class DashBoardActivity extends AppCompatActivity {
                 });
             }
         }, 4500);
+
+        Handler handler = new Handler(Looper.getMainLooper());
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        try {
+                            if (aqi_short != null) {
+                                drawGraphClass.drawFirstEntry(300, (float) aqi_short);
+                                ChartTimerTask(300, (float) aqi_short);
+                            }
+                            Thread.sleep(1000);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                });
+            }
+        }, 3500);
     }
 
     public void init() {
@@ -244,36 +279,33 @@ public class DashBoardActivity extends AppCompatActivity {
                 try {
                     pairedDeviceConnect();
                 } catch (Exception e) {
-                    Handler handler = new Handler(Looper.getMainLooper());
-                    handler.postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-                            Toast.makeText(context, "장치가 작동중인지 확인하여주세요!", Toast.LENGTH_SHORT).show();
-                        }
-                    }, 0);
-
-                    outerClass.backToConnectDevice(context);
+                    e.printStackTrace();
                 }
 
             } else {
-                //븥루투스가 꺼져있음
-                final AlertDialog.Builder builder = new AlertDialog.Builder(context);
-                final AlertDialog alertDialog = builder.create();
-                builder.setTitle(getString(R.string.causion_title))
-                        .setMessage(getString(R.string.causion_message))
-                        .setPositiveButton(getString(R.string.causion_ok), new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                alertDialog.dismiss();
-                                Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
-                                startActivity(enableBtIntent);
-                            }
-                        }).setNegativeButton("취소", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                outerClass.backToConnectDevice(context);
-                            }
-                        }).setCancelable(false).show();
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        //븥루투스가 꺼져있음
+                        final AlertDialog.Builder builder = new AlertDialog.Builder(context);
+                        final AlertDialog alertDialog = builder.create();
+                        builder.setTitle(getString(R.string.caution_title))
+                                .setMessage(getString(R.string.reconnect_bt_msg))
+                                .setPositiveButton(getString(R.string.reconnect_bt_ok), new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        alertDialog.dismiss();
+                                        Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
+                                        startActivity(enableBtIntent);
+                                    }
+                                }).setNegativeButton(getString(R.string.caution_back), new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        outerClass.backToConnectDevice(context);
+                                    }
+                                }).setCancelable(false).show();
+                    }
+                });
             }
         }
     }
@@ -415,7 +447,7 @@ public class DashBoardActivity extends AppCompatActivity {
 
         if (body.containsKey("0A")) {
             pm_grade = body.getByte("0A") + "";
-            if (pm_float >= 0f && pm_float <= 100f) {
+            if (pm_float != null && pm_float >= 0f && pm_float <= 100f) {
                 binding.listCardPMGrade.setText(pm_grade);
                 CardItemTextColor(pm_grade, binding.listCardPMUnit, binding.listCardPMGrade, binding.listCardPMIndex);
             }
@@ -423,7 +455,7 @@ public class DashBoardActivity extends AppCompatActivity {
 
         if (body.containsKey("22")) {
             tvoc_grade = body.getByte("22") + "";
-            if (tvoc_float >= 0f && tvoc_float <= 3f) {
+            if (tvoc_float != null && tvoc_float >= 0f && tvoc_float <= 3f) {
                 binding.listCardTVOCGrade.setText(tvoc_grade);
                 CardItemTextColor(tvoc_grade, binding.listCardTVOCUnit, binding.listCardTVOCGrade, binding.listCardTVOCIndex);
             }
@@ -431,7 +463,7 @@ public class DashBoardActivity extends AppCompatActivity {
 
         if (body.containsKey("1C")) {
             co_grade = body.getByte("1C") + "";
-            if (co_float >= 0f && co_float <= 15f) {
+            if (co_float != null && co_float >= 0f && co_float <= 15f) {
                 binding.listCardCOGrade.setText(outerClass.translateData(co_grade, context));
                 CardItemTextColor(co_grade, binding.listCardCOUnit, binding.listCardCOGrade, binding.listCardCOIndex);
             }
@@ -439,7 +471,7 @@ public class DashBoardActivity extends AppCompatActivity {
 
         if (body.containsKey("1F")) {
             co2_grade = body.getByte("1F") + "";
-            if (co2_float >= 0f && co_float <= 2000f) {
+            if (co2_float != null && co2_float >= 0f && co_float <= 2000f) {
                 binding.listCardCO2Grade.setText(outerClass.translateData(co2_grade, context));
                 CardItemTextColor(co2_grade, binding.listCardCO2Unit, binding.listCardCO2Grade, binding.listCardCO2Index);
             }
@@ -624,34 +656,33 @@ public class DashBoardActivity extends AppCompatActivity {
             arrowWidth = binding.aqiCurrentArrow.getWidth();
 
             HideNavigationBarClass hideNavigationBarClass = new HideNavigationBarClass();
-            hideNavigationBarClass.hide(DashBoardActivity.this); // 하단 바 없애기
+            hideNavigationBarClass.hide(context); // 하단 바 없애기
 
             //barChart 가로세로 구하기
 
             params.setMargins(-arrowWidth / 2, 0, 0, (int) getResources().getDimension(R.dimen.arrowBottom));
             binding.aqiCurrentArrow.setLayoutParams(params);
 
-            Handler handler = new Handler(Looper.getMainLooper());
-            handler.postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            try {
-
-                                if (aqi_short != null) {
-                                    ChartTimerTask(300, (float) aqi_short);
-                                }
-
-                                Thread.sleep(1000);
-                            } catch (InterruptedException e) {
-                                e.printStackTrace();
+            if (!bluetoothAdapter.isEnabled()) {
+                //븥루투스가 꺼져있음
+                final AlertDialog.Builder builder = new AlertDialog.Builder(context);
+                final AlertDialog alertDialog = builder.create();
+                builder.setTitle(getString(R.string.caution_title))
+                        .setMessage(getString(R.string.reconnect_bt_msg))
+                        .setPositiveButton(getString(R.string.reconnect_bt_ok), new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                alertDialog.dismiss();
+                                Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
+                                startActivity(enableBtIntent);
                             }
-                        }
-                    });
-                }
-            }, 3000);
+                        }).setNegativeButton(getString(R.string.caution_back), new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                outerClass.backToConnectDevice(context);
+                            }
+                        }).setCancelable(false).show();
+            }
         }
     }
 
@@ -698,27 +729,83 @@ public class DashBoardActivity extends AppCompatActivity {
             bluetoothThread.setDisconnectedSocketEventListener(new BluetoothThread.disConnectedSocketEventListener() {
                 @Override
                 public void onDisconnectedEvent() {
-                    Handler handler = new Handler(Looper.getMainLooper());
-                    handler.postDelayed(new Runnable() {
+                    Log.d("bluetoothThread", "Bluetooth Socket is Disconnected");
+
+                    if (data_scheduler != null) {
+                        data_scheduler.purge();
+                        data_scheduler = null;
+                    }
+
+                    if (mReceiver.isInitialStickyBroadcast()) {
+                        unregisterReceiver(mReceiver);
+                    }
+
+                    bluetoothThread.setRunning(false);
+
+                    runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-
-                            Log.d("bluetoothThread", "Bluetooth Socket is Disconnected");
-
-                            runOnUiThread(new Runnable() {
+                            final AlertDialog.Builder builder = new AlertDialog.Builder(context);
+                            builder.create();
+                            builder.setTitle(getString(R.string.caution_title));
+                            builder.setMessage(getString(R.string.caution_message));
+                            builder.setPositiveButton(getString(R.string.caution_ok), new DialogInterface.OnClickListener() {
                                 @Override
-                                public void run() {
-                                    Toast.makeText(context, "장치와의 연결이 불안정합니다\n확인 후 재시작하여주십시오", Toast.LENGTH_SHORT).show();
+                                public void onClick(DialogInterface dialog, int which) {
+                                    dialog.dismiss();
 
-                                    if (bluetoothThread.isRunning()) {
-                                        bluetoothThread.interrupt();
+                                    bluetoothThread.connectSocket();
+
+                                    if (bluetoothThread != null && bluetoothThread.isConnected()) {
+
+                                        if (!bluetoothThread.isRunning() && bluetoothThread != null) {
+                                            bluetoothThread.start();
+                                            Log.d("bluetoothThread", "BluetoothThread is Run");
+                                        }
+
+                                        Toast.makeText(context, "다시 연결되었습니다", Toast.LENGTH_SHORT).show();
+                                        dialog.dismiss();
+                                        data_scheduler = new Timer();
+                                        regParentListener(VIEW_REQUEST_INTERVAL, data_scheduler);
+                                        runOnUiThread(new Runnable() {
+                                            @Override
+                                            public void run() {
+                                                Handler handler = new Handler(Looper.getMainLooper());
+                                                handler.postDelayed(new Runnable() {
+                                                    @Override
+                                                    public void run() {
+                                                        runOnUiThread(new Runnable() {
+                                                            @Override
+                                                            public void run() {
+                                                                try {
+                                                                    if (aqi_short != null) {
+                                                                        drawGraphClass.drawFirstEntry(300, (float) aqi_short);
+                                                                        ChartTimerTask(300, (float) aqi_short);
+                                                                    }
+                                                                    Thread.sleep(1000);
+                                                                } catch (InterruptedException e) {
+                                                                    e.printStackTrace();
+                                                                }
+                                                            }
+                                                        });
+                                                    }
+                                                }, 3500);
+                                            }
+                                        });
                                     }
-
-                                    unregisterReceiver(mReceiver);
                                 }
                             });
+                            builder.setNegativeButton("뒤로가기", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    dialog.dismiss();
+                                    outerClass.backToConnectDevice(context);
+                                }
+                            });
+                            if (!context.isDestroyed())
+                                builder.show();
                         }
-                    }, 1000);
+                    });
                 }
             });
 
@@ -728,7 +815,6 @@ public class DashBoardActivity extends AppCompatActivity {
                 bluetoothThread.start();
                 Log.d("bluetoothThread", "BluetoothThread is Run");
             }
-
             regParentListener(VIEW_REQUEST_INTERVAL, data_scheduler);
         }
     }
@@ -745,23 +831,22 @@ public class DashBoardActivity extends AppCompatActivity {
     }
 
     private void loopReceiveData(int interval, Timer scheduler) {
-        Timer loopScheduler = scheduler;
-        TimerTask data_timerTask = new TimerTask() {
-            @Override
-            public void run() {
-                try {
-                    if (bluetoothThread.isConnected())
+
+        if (bluetoothThread.isConnected()) {
+            TimerTask data_timerTask = new TimerTask() {
+                @Override
+                public void run() {
+                    try {
                         bluetoothThread.writeHex(makeFrame(new byte[]{0x03}, new byte[]{(byte) 0xFF, 0x00, 0x00}, bluetoothThread.getSequence()));
-                    else
-                        loopScheduler.cancel();
-                } catch (NullPointerException | IllegalStateException e) {
-                    e.printStackTrace();
-                    outerClass.backToConnectDevice(context);
+                    } catch (NullPointerException | IllegalStateException e) {
+                        e.printStackTrace();
+                        outerClass.backToConnectDevice(context);
+                    }
                 }
-            }
-        };
-        scheduler = new Timer();
-        scheduler.scheduleAtFixedRate(data_timerTask, 4000, interval * 1000L);
+            };
+            scheduler = new Timer();
+            scheduler.scheduleAtFixedRate(data_timerTask, 4000, interval * 1000L);
+        }
     }
 
     private void ChartTimerTask(int yMax, float yData) {
@@ -772,7 +857,7 @@ public class DashBoardActivity extends AppCompatActivity {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        drawGraphClass.feedMultiple(yMax, yData, binding.virusLineChart, context);
+                        drawGraphClass.feedMultiple(yMax, yData);
                     }
                 });
             }
@@ -887,7 +972,7 @@ public class DashBoardActivity extends AppCompatActivity {
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                if (bluetoothThread.isConnected()) {
+                if (bluetoothThread.isConnected() && bluetoothThread != null) {
                     dialog_setupDate.setText(setUpDateStr);
                     dialog_serialNumber.setText(serialNumber);
                     dialog_productName.setText(modelName);
@@ -914,8 +999,6 @@ public class DashBoardActivity extends AppCompatActivity {
                         dialog_fan4.setTextColor(Color.parseColor("#5CC2E4"));
                     }
 
-                } else {
-                    Toast.makeText(context, "블루투스 연결상태를 확인해주세요", Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -1095,50 +1178,186 @@ public class DashBoardActivity extends AppCompatActivity {
     // 그래프차트 카테고리 클릭 이벤트(선택)
     public void CategoryChoice(TextView tv) {
         try {
-            if (bluetoothThread.isConnected()) {
-                tv.setTextColor(ResourcesCompat.getColor(getResources(), R.color.white, null));
-                if (dm.widthPixels > 1900 && dm.heightPixels > 1000) {
-                    tv.setTextSize(18);
-                    tv.setBackground(AppCompatResources.getDrawable(this, R.drawable.category_text_outline));
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    if (bluetoothThread.isConnected()) {
+                        tv.setTextColor(ResourcesCompat.getColor(getResources(), R.color.white, null));
+                        if (dm.widthPixels > 1900 && dm.heightPixels > 1000) {
+                            tv.setTextSize(18);
 
-                } else {
-                    tv.setTextSize(14);
-                    tv.setBackground(AppCompatResources.getDrawable(this, R.drawable.category_text_outline));
+                        } else {
+                            tv.setTextSize(14);
+                        }
+                        tv.setBackground(AppCompatResources.getDrawable(context, R.drawable.category_text_outline));
+                        if (tv.getText().toString().equals(getString(R.string.aqi))) {
+                            drawGraphClass.reDrawChart();
+                            drawGraphClass.drawFirstEntry(300, aqi_short);
+                            ChartTimerTask(300, aqi_short);
+                        } else if (tv.getText().toString().equals(getString(R.string.fine_dust))) {
+                            drawGraphClass.reDrawChart();
+                            drawGraphClass.drawFirstEntry(75, pm_float);
+                            ChartTimerTask(75, pm_float);
+                        } else if (tv.getText().toString().equals(getString(R.string.co))) {
+                            drawGraphClass.reDrawChart();
+                            drawGraphClass.drawFirstEntry(11, co_float);
+                            ChartTimerTask(11, co_float);
+                        } else if (tv.getText().toString().equals(getString(R.string.co2))) {
+                            drawGraphClass.reDrawChart();
+                            drawGraphClass.drawFirstEntry(co2_float.intValue() + 500, co2_float);
+                            ChartTimerTask(co2_float.intValue() + 500, co2_float);
+                        } else if (tv.getText().toString().equals(getString(R.string.tvoc))) {
+                            drawGraphClass.reDrawChart();
+                            drawGraphClass.drawFirstEntry(1, tvoc_float);
+                            ChartTimerTask(1, tvoc_float);
+                        } else if (tv.getText().toString().equals(getString(R.string.virus))) {
+                            drawGraphClass.reDrawChart();
+                            drawGraphClass.drawFirstEntry(300, (short) 123);
+                            ChartTimerTask(300, (short) 123);
+                        }
+                    }
                 }
-                if (tv.getText().toString().equals(getString(R.string.aqi))) {
-                    Toast.makeText(this, getString(R.string.aqi), Toast.LENGTH_SHORT).show();
-                    drawGraphClass.reDrawChart(binding.virusLineChart, context);
-                    drawGraphClass.drawFirstEntry(300, aqi_short, binding.virusLineChart, context);
-                    ChartTimerTask(300, aqi_short);
-                } else if (tv.getText().toString().equals(getString(R.string.fine_dust))) {
-                    Toast.makeText(this, getString(R.string.fine_dust), Toast.LENGTH_SHORT).show();
-                    drawGraphClass.reDrawChart(binding.virusLineChart, context);
-                    drawGraphClass.drawFirstEntry(75, pm_float, binding.virusLineChart, context);
-                    ChartTimerTask(75, pm_float);
-                } else if (tv.getText().toString().equals(getString(R.string.co))) {
-                    Toast.makeText(this, getString(R.string.co), Toast.LENGTH_SHORT).show();
-                    drawGraphClass.reDrawChart(binding.virusLineChart, context);
-                    drawGraphClass.drawFirstEntry(11, co_float, binding.virusLineChart, context);
-                    ChartTimerTask(11, co_float);
-                } else if (tv.getText().toString().equals(getString(R.string.co2))) {
-                    Toast.makeText(this, getString(R.string.co2), Toast.LENGTH_SHORT).show();
-                    drawGraphClass.reDrawChart(binding.virusLineChart, context);
-                    drawGraphClass.drawFirstEntry(co2_float.intValue() + 500, co2_float, binding.virusLineChart, context);
-                    ChartTimerTask(co2_float.intValue() + 500, co2_float);
-                } else if (tv.getText().toString().equals(getString(R.string.tvoc))) {
-                    Toast.makeText(this, getString(R.string.tvoc), Toast.LENGTH_SHORT).show();
-                    drawGraphClass.reDrawChart(binding.virusLineChart, context);
-                    drawGraphClass.drawFirstEntry(1, tvoc_float, binding.virusLineChart, context);
-                    ChartTimerTask(1, tvoc_float);
-                } else if (tv.getText().toString().equals(getString(R.string.virus))) {
-                    Toast.makeText(this, getString(R.string.virus), Toast.LENGTH_SHORT).show();
-                    drawGraphClass.reDrawChart(binding.virusLineChart, context);
-                    drawGraphClass.drawFirstEntry(300, (short) 123, binding.virusLineChart, context);
-                    ChartTimerTask(300, (short) 123);
-                }
-            }
+            });
         } catch (NullPointerException e) {
             e.printStackTrace();
+        }
+    }
+
+    public class DrawGraphClass extends Thread {
+        // https://medium.com/hongbeomi-dev/mpandroidchart-%EB%9D%BC%EC%9D%B4%EB%B8%8C%EB%9F%AC%EB%A6%AC%EB%A5%BC-%ED%99%9C%EC%9A%A9%ED%95%9C-chart-%EC%82%AC%EC%9A%A9%ED%95%98%EA%B8%B0-kotlin-93c18ae7568e
+
+        LineData lineData = new LineData();
+        Legend legend = new Legend();
+        LineDataSet lineDataSet;
+
+
+        void setChart(int setYMax) {
+            // X축
+            XAxis xAxis = binding.virusLineChart.getXAxis();
+            xAxis.setDrawLabels(false); // 라벨 표시 여부
+            xAxis.setTextColor(Color.WHITE);
+            xAxis.setPosition(XAxis.XAxisPosition.BOTTOM); // X축 라벨 위치
+            xAxis.setDrawAxisLine(false); // AxisLine 표시
+            xAxis.setDrawGridLines(false); // GridLine 표시
+            xAxis.setGranularityEnabled(false); // x축 간격을 제한하는 세분화 기능
+            xAxis.setGranularity(1);
+            binding.virusLineChart.setAutoScaleMinMaxEnabled(true); // Max = Count
+            xAxis.setLabelCount(6); // 라벨 갯수
+
+            binding.virusLineChart.moveViewToX(lineData.getEntryCount()); // 계속 X축을 데이터의 오른쪽 끝으로 옮기기
+            binding.virusLineChart.setVisibleXRangeMaximum(7); // X축 최대 표현 개수
+            binding.virusLineChart.setPinchZoom(false); // 확대 설정
+            binding.virusLineChart.setDoubleTapToZoomEnabled(false); // 더블탭 설정
+            binding.virusLineChart.getDescription().setEnabled(false); // 차트 값 설명 유효화
+            binding.virusLineChart.setBackgroundColor(Color.TRANSPARENT); // 차트 배경색 설정
+            binding.virusLineChart.setExtraOffsets(5f, 5f, 5f, 5f); // 차트 Padding 설정
+            binding.virusLineChart.setNoDataText(getString(R.string.no_data_text));
+            binding.virusLineChart.getAxisRight().setEnabled(false); // 라인차트 오른쪽 데이터 비활성화
+
+            // Y축
+            YAxis yAxis = binding.virusLineChart.getAxisLeft();
+            yAxis.setAxisMaximum(setYMax); // Y축 값 최대값 설정
+            yAxis.setAxisMinimum((0)); // Y축 값 최솟값 설정
+            yAxis.setTextColor(Color.parseColor("#FFFFFF")); // y축 글자 색상
+            yAxis.setValueFormatter(new YAxisValueFormat()); // y축 데이터 포맷
+            yAxis.setGranularityEnabled(false); // y축 간격을 제한하는 세분화 기능
+            yAxis.setDrawLabels(true); // Y축 라벨 위치
+            yAxis.setDrawGridLines(false); // GridLine 표시
+            yAxis.setDrawAxisLine(false); // AxisLine 표시
+
+            legend.setTextColor(Color.WHITE);
+            legend.setEnabled(false); // 범례 비활성화
+            legend.setTextSize(11);
+
+            binding.virusLineChart.setData(lineData); // 라인차트 데이터 설정
+        }
+
+        // 차트에 쓰일 목록 UI Thread 에서 가져오기
+        public void feedMultiple(int SetYMax, float yData) {
+            Thread thread = new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            setChart(SetYMax);
+                            addEntry(yData);
+                        }
+                    });
+                }
+            });
+            thread.start();
+        }
+
+        // 엔트리 추가하기
+        void addEntry(float yData) {
+            // 라인 차트
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    if (lineData != null) {
+                        lineData = binding.virusLineChart.getData();
+                        createSet();
+                        lineData.addDataSet(lineDataSet);
+                        lineData.addEntry(new Entry(lineData.getEntryCount(), yData), 0); // 데이터 엔트리 추가
+                        lineData.notifyDataChanged(); // 데이터 변경 알림
+                        binding.virusLineChart.notifyDataSetChanged(); // 라인차트 변경 알림
+                    }
+                }
+            });
+        }
+
+        void createSet() {
+            lineDataSet = new LineDataSet(null, null); // 범례, yVals 설정
+            lineDataSet.setAxisDependency(YAxis.AxisDependency.LEFT); // Y값 데이터를 왼쪽으로
+            lineDataSet.setFillColor(Color.parseColor("#147AD6")); // 차트 채우기 색상
+            lineDataSet.setDrawFilled(true); // 차트 채우기 설정
+            lineDataSet.setHighlightEnabled(false); // 하이라이트 설정
+            lineDataSet.setLineWidth(2F); // 그래프 선 굵기
+            lineDataSet.setValueTextColor(Color.WHITE);
+            lineDataSet.setMode(LineDataSet.Mode.CUBIC_BEZIER); // 선 그리는 방식
+            lineDataSet.setDrawCircleHole(false); // 원 안에 작은 원 표시
+            lineDataSet.setDrawCircles(false); // 원 표시
+            lineDataSet.setDrawValues(true);
+            lineDataSet.setValueTextSize(11);
+            lineDataSet.setColor(ResourcesCompat.getColor(getResources(), R.color.lineChartLine, null)); // 색상 지정
+        }
+
+        //Y축 엔트리 포멧
+        private class YAxisValueFormat extends IndexAxisValueFormatter {
+            @Override
+            public String getFormattedValue(float value) {
+                String newValue = value + "";
+                return newValue.substring(0, newValue.length() - 2);
+            }
+        }
+
+        public void reDrawChart() {
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    if (chart_scheduler != null) {
+                        chart_scheduler.cancel();
+                    }
+                    lineData.clearValues();
+                    lineData.notifyDataChanged();
+                    binding.virusLineChart.clear();
+                    binding.virusLineChart.notifyDataSetChanged();
+                    binding.virusLineChart.removeAllViews();
+                }
+            });
+        }
+
+        public void drawFirstEntry(int setYMax, float yData) {
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    if (yData != 0) {
+                        feedMultiple(setYMax, yData);
+                        feedMultiple(setYMax, yData);
+                    }
+                }
+            });
         }
     }
 

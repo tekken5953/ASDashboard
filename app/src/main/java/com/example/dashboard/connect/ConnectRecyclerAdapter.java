@@ -11,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -59,6 +60,8 @@ public class ConnectRecyclerAdapter extends RecyclerView.Adapter<ConnectRecycler
         ConnectRecyclerItem item = mData.get(position);
 
         holder.device_name.setText(item.getDevice_name());
+        holder.device_img.setImageDrawable(item.getDevice_img());
+        holder.device_address.setText(item.getDevice_address());
 
     }
 
@@ -70,7 +73,8 @@ public class ConnectRecyclerAdapter extends RecyclerView.Adapter<ConnectRecycler
 
     // 아이템 뷰를 저장하는 뷰홀더 클래스.
     public class ViewHolder extends RecyclerView.ViewHolder {
-        TextView device_name, connect;
+        ImageView device_img;
+        TextView device_name, device_address, connect;
 
         ViewHolder(final View itemView) {
             super(itemView);
@@ -90,7 +94,9 @@ public class ConnectRecyclerAdapter extends RecyclerView.Adapter<ConnectRecycler
             });
 
             // 뷰 객체에 대한 참조. (hold strong reference)
+            device_img = itemView.findViewById(R.id.listItemConnDeviceImageIv);
             device_name = itemView.findViewById(R.id.listItemConnDeviceTitleTv);
+            device_address = itemView.findViewById(R.id.listItemConnDeviceAddressTv);
             connect = itemView.findViewById(R.id.listItemConnDeviceConnTv);
 
         }

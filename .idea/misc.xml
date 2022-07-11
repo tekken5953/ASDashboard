@@ -6,6 +6,7 @@
         <entry key="..\:/AndroidStudio/.android/platforms/android-32/data/res/layout/simple_list_item_1.xml" value="0.14288194444444444" />
         <entry key="..\:/AndroidStudio/.android/platforms/android-32/data/res/layout/simple_list_item_2.xml" value="0.14288194444444444" />
         <entry key="..\:/AndroidStudio/Dashboard/app/src/main/res/drawable-sw720dp/category_nontext_outline.xml" value="0.414" />
+        <entry key="..\:/AndroidStudio/Dashboard/app/src/main/res/drawable-sw720dp/connectable_rv_bg.xml" value="0.384" />
         <entry key="..\:/AndroidStudio/Dashboard/app/src/main/res/drawable-sw720dp/lang_selected_eng.xml" value="0.295" />
         <entry key="..\:/AndroidStudio/Dashboard/app/src/main/res/drawable-sw720dp/lang_selected_korea.xml" value="0.295" />
         <entry key="..\:/AndroidStudio/Dashboard/app/src/main/res/drawable-v24/category_text_outline_small.xml" value="0.295" />
@@ -18,7 +19,9 @@
         <entry key="..\:/AndroidStudio/Dashboard/app/src/main/res/drawable/category_nontext_outline.xml" value="0.414" />
         <entry key="..\:/AndroidStudio/Dashboard/app/src/main/res/drawable/category_nontext_outline_small.xml" value="0.414" />
         <entry key="..\:/AndroidStudio/Dashboard/app/src/main/res/drawable/category_text_outline.xml" value="0.35" />
+        <entry key="..\:/AndroidStudio/Dashboard/app/src/main/res/drawable/connectable_rv_bg.xml" value="0.384" />
         <entry key="..\:/AndroidStudio/Dashboard/app/src/main/res/drawable/ic_launcher_background.xml" value="0.384" />
+        <entry key="..\:/AndroidStudio/Dashboard/app/src/main/res/drawable/lang_ok_b.xml" value="0.384" />
         <entry key="..\:/AndroidStudio/Dashboard/app/src/main/res/drawable/lang_ok_bg.xml" value="0.295" />
         <entry key="..\:/AndroidStudio/Dashboard/app/src/main/res/drawable/lang_ok_w.xml" value="0.295" />
         <entry key="..\:/AndroidStudio/Dashboard/app/src/main/res/drawable/lang_selected_eng.xml" value="0.295" />
@@ -28,17 +31,18 @@
         <entry key="..\:/AndroidStudio/Dashboard/app/src/main/res/drawable/side_m_bg.xml" value="0.3855" />
         <entry key="..\:/AndroidStudio/Dashboard/app/src/main/res/drawable/side_menu_fan_tv_bg.xml" value="0.414" />
         <entry key="..\:/AndroidStudio/Dashboard/app/src/main/res/drawable/side_menu_nofan_tv_bg.xml" value="0.414" />
+        <entry key="..\:/AndroidStudio/Dashboard/app/src/main/res/drawable/test.xml" value="0.384" />
         <entry key="..\:/AndroidStudio/Dashboard/app/src/main/res/drawable/topframe_outline.xml" value="0.35" />
         <entry key="..\:/AndroidStudio/Dashboard/app/src/main/res/layout-small/activity_main.xml" value="0.16" />
         <entry key="..\:/AndroidStudio/Dashboard/app/src/main/res/layout-small/listitem.xml" value="0.21432291666666667" />
-        <entry key="..\:/AndroidStudio/Dashboard/app/src/main/res/layout-sw720dp/activity_dashboard.xml" value="0.2" />
+        <entry key="..\:/AndroidStudio/Dashboard/app/src/main/res/layout-sw720dp/activity_dashboard.xml" value="0.18802083333333333" />
         <entry key="..\:/AndroidStudio/Dashboard/app/src/main/res/layout-sw720dp/activity_main.xml" value="0.45107794361525705" />
         <entry key="..\:/AndroidStudio/Dashboard/app/src/main/res/layout-sw720dp/activity_search_device.xml" value="0.13" />
-        <entry key="..\:/AndroidStudio/Dashboard/app/src/main/res/layout-sw720dp/connect_bluetooth_activity.xml" value="0.18723958333333332" />
+        <entry key="..\:/AndroidStudio/Dashboard/app/src/main/res/layout-sw720dp/connect_bluetooth_activity.xml" value="0.2" />
         <entry key="..\:/AndroidStudio/Dashboard/app/src/main/res/layout-sw720dp/connect_bluetooth_fragment.xml" value="0.2" />
         <entry key="..\:/AndroidStudio/Dashboard/app/src/main/res/layout-sw720dp/dashboard_listitem.xml" value="0.1" />
         <entry key="..\:/AndroidStudio/Dashboard/app/src/main/res/layout-sw720dp/fragment_dashboard.xml" value="0.16" />
-        <entry key="..\:/AndroidStudio/Dashboard/app/src/main/res/layout-sw720dp/language_select_activity.xml" value="0.14166666666666666" />
+        <entry key="..\:/AndroidStudio/Dashboard/app/src/main/res/layout-sw720dp/language_select_activity.xml" value="0.2" />
         <entry key="..\:/AndroidStudio/Dashboard/app/src/main/res/layout-sw720dp/listitem.xml" value="0.21432291666666667" />
         <entry key="..\:/AndroidStudio/Dashboard/app/src/main/res/layout-sw720dp/listitem_connectable_device.xml" value="0.21432291666666667" />
         <entry key="..\:/AndroidStudio/Dashboard/app/src/main/res/layout-sw720dp/listitem_recent_device.xml" value="0.21432291666666667" />

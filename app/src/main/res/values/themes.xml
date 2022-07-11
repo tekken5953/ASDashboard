@@ -42,5 +42,9 @@
 
         <item name="android:windowFullscreen">true</item>
     </style>
+    
+    <style name="Theme.AppCompat.ButtonRippleColor">
+        <item name="colorControlHighlight">#73FFFFFF</item>
+    </style>
 
 </resources>

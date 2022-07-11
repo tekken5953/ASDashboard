@@ -45,6 +45,7 @@ public class LanguageSelectActivity extends AppCompatActivity {
         langKorTitleTv = findViewById(R.id.langKorTitleTv);
         langEngTitleTv = findViewById(R.id.langEngTitleTv);
         context = LanguageSelectActivity.this;
+
         FINAL_LANGUAGE = SharedPreferenceManager.getString(context, "final");
         SKIP_SELECT_LANGUAGE = SharedPreferenceManager.getString(context, "skip_lang");
 
@@ -54,6 +55,7 @@ public class LanguageSelectActivity extends AppCompatActivity {
         Log.d(LANGUAGE_LOG, "final lang : " + FINAL_LANGUAGE + "\nskip : " + SKIP_SELECT_LANGUAGE);
 
         Configuration configuration = new Configuration();
+
         // 언어 설정 스킵 YES or NO
         if (SKIP_SELECT_LANGUAGE.equals("no")) {
             // 현재 사용중인 언어 분류
@@ -71,13 +73,7 @@ public class LanguageSelectActivity extends AppCompatActivity {
                     getResources().updateConfiguration(configuration, getResources().getDisplayMetrics());
                 }
             }
-            // 현재 선택 된 언어가 없을 때
-            else {
-                SelectedNothing();
-                configuration.setLocale(Locale.KOREA);
-                getResources().updateConfiguration(configuration, getResources().getDisplayMetrics());
-            }
-        } else {
+        } else if (SKIP_SELECT_LANGUAGE.equals("ok")) {
             if (SharedPreferenceManager.getString(this, "final").equals("ko")) {
                 configuration.setLocale(Locale.KOREA);
             } else {
@@ -88,6 +84,11 @@ public class LanguageSelectActivity extends AppCompatActivity {
             Toast.makeText(context, getString(R.string.skip_lang_msg), Toast.LENGTH_SHORT).show();
             startActivity(intent);
             finish();
+        } else {
+            // 현재 선택 된 언어가 없을 때
+            SelectedNothing();
+            configuration.setLocale(Locale.KOREA);
+            getResources().updateConfiguration(configuration, getResources().getDisplayMetrics());
         }
     }
 

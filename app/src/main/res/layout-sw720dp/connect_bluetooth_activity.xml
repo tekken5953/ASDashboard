@@ -7,204 +7,197 @@
     android:layout_height="match_parent"
     android:background="@drawable/bg_image">
 
-    <FrameLayout
-        android:id="@+id/dashBoardFrameLayout"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:visibility="gone" />
-
     <ProgressBar
         android:id="@+id/loadingParingPb"
         style="@style/Widget.AppCompat.ProgressBar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
         android:progressTint="@color/white"
-        android:visibility="visible"
-        android:layout_centerInParent="true" />
+        android:visibility="gone" />
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/activityLayout"
+    <RelativeLayout
+        android:id="@+id/connMainLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-
         <ImageView
             android:id="@+id/connTopBackIv"
-            android:layout_width="27dp"
-            android:layout_height="27dp"
-            android:layout_marginStart="60dp"
-            android:layout_marginTop="60dp"
+            android:layout_width="28dp"
+            android:layout_height="28dp"
+            android:layout_marginStart="40dp"
+            android:layout_marginTop="40dp"
             android:src="@drawable/back"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <ImageView
-            android:id="@+id/connTopLangIconIv"
-            android:layout_width="45dp"
-            android:layout_height="45dp"
-            android:layout_marginStart="548dp"
-            android:layout_marginTop="60dp"
-            android:src="@drawable/lang_icon_b"
+        <RelativeLayout
+            android:id="@+id/connLeftLayout"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginStart="119dp"
+            android:background="#15FFFFFF"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent">
 
-        <ImageView
-            android:id="@+id/connTopStepBarIv"
+            <ImageView
+                android:id="@+id/connTopLangIconIv"
+                android:layout_width="54dp"
+                android:layout_height="56dp"
+                android:layout_marginStart="48dp"
+                android:layout_marginTop="300dp"
+                android:src="@drawable/lang_icon_b" />
+
+            <TextView
+                android:id="@+id/connTopLangTitleTv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="17dp"
+                android:layout_marginTop="298dp"
+                android:layout_marginEnd="57dp"
+                android:layout_toEndOf="@+id/connTopLangIconIv"
+                android:fontFamily="@font/pretendardvariable"
+                android:text="@string/select_lang"
+                android:textAllCaps="false"
+                android:textColor="@color/statusUnitText"
+                android:textSize="23sp" />
+
+            <TextView
+                android:id="@+id/connTopLangContentTv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/connTopLangTitleTv"
+                android:layout_marginStart="17dp"
+                android:layout_marginTop="7dp"
+                android:layout_marginEnd="57dp"
+                android:layout_toEndOf="@+id/connTopLangIconIv"
+                android:fontFamily="@font/pretendardvariable"
+                android:text="@string/please_select_lang_main"
+                android:textAllCaps="false"
+                android:textColor="@color/statusUnitText"
+                android:textSize="14sp" />
+
+            <ImageView
+                android:id="@+id/connTopConnIconIv"
+                android:layout_width="54dp"
+                android:layout_height="56dp"
+                android:layout_below="@+id/connTopLangIconIv"
+                android:layout_marginStart="48dp"
+                android:layout_marginTop="71dp"
+                android:src="@drawable/conn_icon_w" />
+
+            <TextView
+                android:id="@+id/connTopConnTitleTv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/connTopLangContentTv"
+                android:layout_marginStart="17dp"
+                android:layout_marginTop="71dp"
+                android:layout_marginEnd="57dp"
+                android:layout_toEndOf="@+id/connTopConnIconIv"
+                android:fontFamily="@font/pretendardvariable"
+                android:text="@string/connect_device"
+                android:textAllCaps="false"
+                android:textColor="@color/white"
+                android:textSize="23sp" />
+
+            <TextView
+                android:id="@+id/connTopConnContentTv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/connTopConnTitleTv"
+                android:layout_marginStart="17dp"
+                android:layout_marginTop="7dp"
+                android:layout_marginEnd="57dp"
+                android:layout_toEndOf="@+id/connTopLangIconIv"
+                android:fontFamily="@font/pretendardvariable"
+                android:text="@string/please_select_device"
+                android:textAllCaps="false"
+                android:textColor="@color/statusUnitText"
+                android:textSize="14sp" />
+
+        </RelativeLayout>
+
+        <TextView
+            android:id="@+id/connConnectedDeviceTv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/stepbar_icon"
-            app:layout_constraintBottom_toBottomOf="@+id/connTopLangIconIv"
-            app:layout_constraintEnd_toStartOf="@+id/connTopConnIconIv"
-            app:layout_constraintStart_toEndOf="@+id/connTopLangIconIv"
-            app:layout_constraintTop_toTopOf="@+id/connTopLangIconIv" />
-
-        <ImageView
-            android:id="@+id/connTopConnIconIv"
-            android:layout_width="45dp"
-            android:layout_height="41dp"
-            android:layout_marginEnd="536dp"
-            android:src="@drawable/conn_icon_w"
-            app:layout_constraintBottom_toBottomOf="@+id/connTopLangIconIv"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/connTopLangIconIv" />
-
-        <TextView
-            android:id="@+id/connTopLangTitleTv"
-            android:layout_width="wrap_content"
-            android:layout_height="13dp"
-            android:layout_marginTop="9.7dp"
+            android:layout_marginStart="68dp"
+            android:layout_marginTop="102dp"
+            android:layout_toEndOf="@+id/connLeftLayout"
             android:fontFamily="@font/pretendardvariable"
-            android:text="@string/select_lang"
-            android:textColor="@color/statusUnitText"
-            android:textSize="11sp"
-            app:layout_constraintEnd_toEndOf="@+id/connTopLangIconIv"
-            app:layout_constraintStart_toStartOf="@+id/connTopLangIconIv"
-            app:layout_constraintTop_toBottomOf="@+id/connTopLangIconIv" />
-
-        <TextView
-            android:id="@+id/connTopConnTitleTv"
-            android:layout_width="wrap_content"
-            android:layout_height="13dp"
-            android:fontFamily="@font/pretendardvariable"
-            android:text="@string/connect_device"
-            android:textColor="@color/white"
-            android:textSize="11sp"
-            app:layout_constraintBottom_toBottomOf="@+id/connTopLangTitleTv"
-            app:layout_constraintEnd_toEndOf="@+id/connTopConnIconIv"
-            app:layout_constraintStart_toStartOf="@+id/connTopConnIconIv"
-            app:layout_constraintTop_toTopOf="@+id/connTopLangTitleTv" />
-
-        <TextView
-            android:id="@+id/connPleaseSelectLangMainTv"
-            android:layout_width="wrap_content"
-            android:layout_height="34dp"
-            android:layout_marginTop="38dp"
-            android:fontFamily="@font/pretendardvariable"
-            android:text="@string/please_select_device"
+            android:text="@string/connected_device"
             android:textAllCaps="false"
             android:textColor="@color/white"
-            android:textSize="29sp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/connTopLangTitleTv" />
+            android:textSize="24sp" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/connPairedDeviceRv"
+            android:layout_width="wrap_content"
+            android:layout_height="405dp"
+            android:layout_below="@+id/connConnectedDeviceTv"
+            android:layout_marginStart="45dp"
+            android:layout_marginTop="30dp"
+            android:layout_toEndOf="@+id/connLeftLayout"
+            android:orientation="vertical"
+            android:overScrollMode="never"
+            android:visibility="visible"
+            app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+            app:spanCount="2"
+            tools:listitem="@layout/listitem_recent_device" />
 
         <TextView
             android:id="@+id/connConnectableDeviceTv"
             android:layout_width="wrap_content"
-            android:layout_height="20dp"
-            android:layout_marginTop="35dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="102dp"
+            android:layout_alignParentEnd="true"
+            android:layout_marginEnd="190dp"
             android:fontFamily="@font/pretendardvariable"
-            android:gravity="center"
             android:text="@string/connectable_device"
+            android:textAllCaps="false"
             android:textColor="@color/white"
-            android:textSize="17sp"
-            android:visibility="visible"
-            app:layout_constraintStart_toStartOf="@+id/connPleaseSelectLangMainTv"
-            app:layout_constraintTop_toBottomOf="@+id/connPleaseSelectLangMainTv" />
-
-        <ProgressBar
-            android:id="@+id/connConnectableDevicePb"
-            style="@android:style/Widget.ProgressBar.Small"
-            android:layout_width="17dp"
-            android:layout_height="17dp"
-            android:layout_marginStart="19dp"
-            android:progressTint="@color/white"
-            android:visibility="gone"
-            app:layout_constraintBottom_toBottomOf="@+id/connConnectableDeviceTv"
-            app:layout_constraintStart_toEndOf="@+id/connConnectableDeviceTv"
-            app:layout_constraintTop_toTopOf="@+id/connConnectableDeviceTv" />
+            android:textSize="24sp" />
 
         <ImageView
             android:id="@+id/connRefreshIv"
-            android:layout_width="17dp"
-            android:layout_height="17dp"
-            android:layout_marginStart="19dp"
+            android:layout_width="23dp"
+            android:layout_height="23dp"
             android:src="@drawable/refresh"
-            android:visibility="gone"
-            app:layout_constraintBottom_toBottomOf="@+id/connConnectableDeviceTv"
-            app:layout_constraintStart_toEndOf="@+id/connConnectableDeviceTv"
-            app:layout_constraintTop_toTopOf="@+id/connConnectableDeviceTv"
-            app:tint="@color/white" />
+            android:layout_toEndOf="@+id/connConnectableDeviceTv"
+            android:layout_marginTop="106dp"
+            android:layout_marginStart="10dp"/>
 
-        <View
-            android:id="@+id/connLine1View"
-            android:layout_width="0dp"
-            android:layout_height="0.5dp"
-            android:layout_marginTop="22.5dp"
-            android:background="@color/white"
-            android:layout_marginStart="20dp"
-            android:layout_marginEnd="20dp"
-            app:layout_constraintEnd_toEndOf="@+id/nestedScrollView"
-            app:layout_constraintStart_toStartOf="@+id/nestedScrollView"
-            app:layout_constraintTop_toBottomOf="@+id/connConnectableDevicePb" />
-
-        <androidx.core.widget.NestedScrollView
-            android:id="@+id/nestedScrollView"
-            android:layout_width="420dp"
-            android:layout_height="0dp"
-            android:fillViewport="true"
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/connConnectableList"
+            android:layout_width="wrap_content"
+            android:layout_height="405dp"
+            android:layout_below="@+id/connConnectableDeviceTv"
+           android:layout_marginEnd="99dp"
+            android:layout_marginTop="32dp"
+            android:layout_alignParentEnd="true"
+            android:orientation="vertical"
             android:overScrollMode="never"
-            android:scrollbars="none"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="@+id/connPleaseSelectLangMainTv"
-            app:layout_constraintStart_toStartOf="@+id/connPleaseSelectLangMainTv"
-            app:layout_constraintTop_toBottomOf="@+id/connLine1View">
+            android:padding="5dp"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            tools:listitem="@layout/listitem_connectable_device" />
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="vertical">
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/connOkTv"
+            android:layout_width="322dp"
+            android:layout_height="61dp"
+            android:layout_below="@+id/connConnectableList"
+            android:layout_marginStart="240dp"
+            android:layout_marginTop="90dp"
+            android:layout_toEndOf="@+id/connLeftLayout"
+            android:background="@drawable/lang_ok_b"
+            android:fontFamily="@font/pretendardvariable"
+            android:gravity="center"
+            android:text="@string/ok"
+            android:textColor="@color/white"
+            android:textSize="24sp" />
+    </RelativeLayout>
 
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/connPairedDeviceRv"
-                    android:layout_width="match_parent"
-                    android:layout_height="165dp"
-                    android:layout_marginTop="20dp"
-                    android:nestedScrollingEnabled="false"
-                    android:orientation="horizontal"
-                    android:overScrollMode="never"
-                    android:visibility="visible"
-                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                    tools:listitem="@layout/listitem_recent_device"
-                    />
 
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/connConnectableList"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_marginTop="5dp"
-                    android:nestedScrollingEnabled="false"
-                    android:orientation="vertical"
-                    android:overScrollMode="never"
-                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                    app:layout_constraintTop_toBottomOf="@+id/connPairedDeviceRv"
-                    tools:listitem="@layout/listitem_connectable_device"
-                    android:paddingStart="20dp"
-                    android:paddingEnd="20dp"/>
-
-            </LinearLayout>
-
-        </androidx.core.widget.NestedScrollView>
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </RelativeLayout>

@@ -6,9 +6,11 @@ import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
@@ -18,12 +20,15 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.appcompat.widget.AppCompatButton;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.res.ResourcesCompat;
 import androidx.recyclerview.widget.RecyclerView;
@@ -43,14 +48,16 @@ import java.util.Set;
 @SuppressLint({"MissingPermission", "NotifyDataSetChanged"})
 public class ConnectDeviceActivity extends AppCompatActivity {
 
-    ImageView selectLanguage, connRefreshIv;
+    int SELECTED_POSITION = -1;
+
+    ImageView selectLanguage, refresh;
     Context context;
     RecyclerView deviceList, pairedDeviceList;
     ArrayList<ConnectRecyclerItem> cList = new ArrayList<>();
     ArrayList<PairedDeviceItem> pList = new ArrayList<>();
     ConnectRecyclerAdapter cAdapter;
     PairedDeviceAdapter pAdapter;
-    ProgressBar progressBar, loadingPb;
+    ProgressBar loadingPb;
 
     TextView connConnectableDeviceTv;
 
@@ -59,11 +66,13 @@ public class ConnectDeviceActivity extends AppCompatActivity {
     ArrayList<BluetoothDevice> bondedList = new ArrayList<>();
     BluetoothThread bluetoothThread;
 
-    String[] deviceNameStr;
-    ConstraintLayout activityLayout;
+    String[] deviceNameStrLeft, deviceNameStrRight;
+    RelativeLayout activityLayout;
     int noPairingPosition = 0;
 
     IntentFilter filter = new IntentFilter();
+
+    AppCompatButton ok_btn;
 
     // 블루투스 브로드캐스트 호출 - 주변기기 검색
     @Override
@@ -76,7 +85,8 @@ public class ConnectDeviceActivity extends AppCompatActivity {
                 Log.d("LifeCycle", "On Resume");
                 cList.clear();
                 pList.clear();
-                findPairedDevice();
+
+                startCheckBluetooth();
 
                 filter.addAction(BluetoothDevice.ACTION_FOUND);
                 filter.addAction(BluetoothDevice.ACTION_BOND_STATE_CHANGED);
@@ -84,11 +94,6 @@ public class ConnectDeviceActivity extends AppCompatActivity {
 
                 if (!bluetoothAdapter.isDiscovering()) {
                     bluetoothAdapter.startDiscovery();
-                    progressBar.setVisibility(View.VISIBLE);
-                    connRefreshIv.setVisibility(View.GONE);
-                } else {
-                    progressBar.setVisibility(View.GONE);
-                    connRefreshIv.setVisibility(View.VISIBLE);
                 }
             }
         });
@@ -109,9 +114,16 @@ public class ConnectDeviceActivity extends AppCompatActivity {
     @Override
     public void onWindowFocusChanged(boolean hasFocus) {
         super.onWindowFocusChanged(hasFocus);
-        HideNavigationBarClass hideNavigationBarClass = new HideNavigationBarClass();
-        hideNavigationBarClass.hide(ConnectDeviceActivity.this); // 하단 바 없애기
-        Log.d("LifeCycle", "On WindowFocusChanged");
+        if (hasFocus) {
+            HideNavigationBarClass hideNavigationBarClass = new HideNavigationBarClass();
+            hideNavigationBarClass.hide(ConnectDeviceActivity.this); // 하단 바 없애기
+            Log.d("LifeCycle", "On WindowFocusChanged");
+            if (!bluetoothAdapter.isDiscovering()) {
+                refresh.setVisibility(View.VISIBLE);
+            } else {
+                refresh.setVisibility(View.GONE);
+            }
+        }
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
@@ -130,14 +142,18 @@ public class ConnectDeviceActivity extends AppCompatActivity {
         deviceList.setAdapter(cAdapter);
         pairedDeviceList.setAdapter(pAdapter);
         connConnectableDeviceTv = findViewById(R.id.connConnectableDeviceTv);
-        progressBar = findViewById(R.id.connConnectableDevicePb);
-        connRefreshIv = findViewById(R.id.connRefreshIv);
         bluetoothThread = new BluetoothThread(this);
         loadingPb = findViewById(R.id.loadingParingPb);
         loadingPb.setVisibility(View.GONE);
-        activityLayout = findViewById(R.id.activityLayout);
+        activityLayout = findViewById(R.id.connMainLayout);
+        ok_btn = findViewById(R.id.connOkTv);
+        ok_btn.setEnabled(false);
+        ok_btn.setBackgroundDrawable(ResourcesCompat.getDrawable(getResources(), R.drawable.lang_ok_b, null));
+        refresh = findViewById(R.id.connRefreshIv);
+        refresh.setVisibility(View.GONE);
 
         bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+
 
         cAdapter.setOnItemClickListener(new ConnectRecyclerAdapter.OnItemClickListener() {
             @Override
@@ -145,6 +161,7 @@ public class ConnectDeviceActivity extends AppCompatActivity {
                 //https://ghj1001020.tistory.com/291
                 loadingPb.setVisibility(View.VISIBLE);
                 activityLayout.setAlpha(0.3f);
+
                 Handler handler = new Handler(Looper.getMainLooper());
                 handler.postDelayed(new Runnable() {
                     @Override
@@ -160,37 +177,53 @@ public class ConnectDeviceActivity extends AppCompatActivity {
                             activityLayout.setAlpha(1f);
                         } catch (InvocationTargetException | NoSuchMethodException | IllegalAccessException e) {
                             e.printStackTrace();
-                            Toast.makeText(context, "이미 연결된 디바이스 입니다", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(context, getString(R.string.already_connected), Toast.LENGTH_SHORT).show();
                         }
                     }
                 }, 2000);
             }
         });
 
+        ok_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (ok_btn.isEnabled()) {
+                    loadingPb.setVisibility(View.VISIBLE);
+                    activityLayout.setAlpha(0.3f);
+                    Intent intent = new Intent(context, DashBoardActivity.class);
+                    intent.putExtra("device_position", SELECTED_POSITION);
+                    overridePendingTransition(0,0);
+                    startActivity(intent);
+                    finish();
+                }
+            }
+        });
+
         pAdapter.setOnItemClickListener(new PairedDeviceAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(View v, int position) {
-                loadingPb.setVisibility(View.VISIBLE);
-                activityLayout.setAlpha(0.3f);
 
-                Handler handler = new Handler(Looper.getMainLooper());
-                handler.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        Intent intent = new Intent(context, DashBoardActivity.class);
-                        intent.putExtra("device_position", position);
-
-                        runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                loadingPb.setVisibility(View.GONE);
-                                activityLayout.setAlpha(1f);
-                            }
-                        });
-                        startActivity(intent);
-                        finish();
+                if (SELECTED_POSITION == -1) {
+                    v.setAlpha(1f);
+                    SELECTED_POSITION = position;
+                    ok_btn.setEnabled(true);
+                    ok_btn.setBackgroundDrawable(ResourcesCompat.getDrawable(getResources(), R.drawable.lang_ok_w, null));
+                } else if (SELECTED_POSITION == position) {
+                    v.setAlpha(0.5f);
+                    SELECTED_POSITION = -1;
+                    ok_btn.setEnabled(false);
+                    ok_btn.setBackgroundDrawable(ResourcesCompat.getDrawable(getResources(), R.drawable.lang_ok_b, null));
+                    ok_btn.setTextColor(Color.WHITE);
+                } else {
+                    for (int i = 0; i < pairedDeviceList.getAdapter().getItemCount(); i++) {
+                        View otherView = pairedDeviceList.getLayoutManager().findViewByPosition(i);
+                        if (otherView != v) {
+                            otherView.setAlpha(0.5f);
+                        }
                     }
-                }, 2000);
+                    v.setAlpha(1f);
+                    SELECTED_POSITION = position;
+                }
             }
         });
 
@@ -204,7 +237,7 @@ public class ConnectDeviceActivity extends AppCompatActivity {
             }
         });
 
-        connRefreshIv.setOnClickListener(new View.OnClickListener() {
+        refresh.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 onResume();
@@ -213,10 +246,12 @@ public class ConnectDeviceActivity extends AppCompatActivity {
     }
 
     //Connectable Device Item
-    public void addCItem(String name) {
-        ConnectRecyclerItem item = new ConnectRecyclerItem(name);
+    public void addCItem(Drawable img, String name, String address) {
+        ConnectRecyclerItem item = new ConnectRecyclerItem(img, name, address);
 
+        item.setDevice_img(img);
         item.setDevice_name(name);
+        item.setDevice_address(address);
 
         cList.add(item);
     }
@@ -240,10 +275,10 @@ public class ConnectDeviceActivity extends AppCompatActivity {
                 pairedDeviceList.setVisibility(View.VISIBLE);
                 bondedList.add(device);
                 if (device.getName().contains(" ")) {
-                    deviceNameStr = device.getName().split(" ");
+                    deviceNameStrLeft = device.getName().split(" ");
                     addPItem(ResourcesCompat.getDrawable(getResources(), R.drawable.m_connect, null),
-                            deviceNameStr[0],
-                            deviceNameStr[1]);
+                            deviceNameStrLeft[0],
+                            deviceNameStrLeft[1]);
                 } else {
                     addPItem(ResourcesCompat.getDrawable(getResources(), R.drawable.m_connect, null), device.getName(), null);
                 }
@@ -264,15 +299,27 @@ public class ConnectDeviceActivity extends AppCompatActivity {
                 BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
                 if (ActivityCompat.checkSelfPermission(context, Manifest.permission.BLUETOOTH_CONNECT) != PackageManager.PERMISSION_GRANTED) {
                     String deviceName = device.getName();
+//                    deviceNameStrRight = deviceName.split(" ");
                     //필터링 없이 하려면 주석 해제 + 밑에 필터링부분 주석처리
 //                    notPairedDeviceList.add(device);
-//                    addCItem(deviceName + "(" + deviceAddress + ")");
+//                    addCItem(ResourcesCompat.getDrawable(getResources(), R.drawable.side_100, null),
+//                                deviceNameStr[0],
+//                                deviceNameStr[1]);
 //                    cAdapter.notifyDataSetChanged();
-//                     필터링
 
+//                     필터링
                     if ((deviceName != null && deviceName.contains("BioT")) || (deviceName != null && deviceName.contains("BS"))) {
                         noBondedList.add(device);
-                        addCItem(deviceName);
+                        if (deviceName.contains(" ")) {
+                            deviceNameStrRight = deviceName.split(" ");
+                            addCItem(ResourcesCompat.getDrawable(getResources(), R.drawable.side_100, null),
+                                    deviceNameStrRight[0],
+                                    deviceNameStrRight[1]);
+                        } else {
+                            addCItem(ResourcesCompat.getDrawable(getResources(), R.drawable.side_100, null),
+                                    deviceName,
+                                    "(No Serial Number)");
+                        }
                         cAdapter.notifyDataSetChanged();
                     }
                 }
@@ -306,4 +353,44 @@ public class ConnectDeviceActivity extends AppCompatActivity {
             }
         }
     };
+
+    @SuppressLint("MissingPermission")
+    public void startCheckBluetooth() {
+        if (bluetoothAdapter == null) {
+            Toast.makeText(this, "해당 기기는 블루투스를 지원하지 않습니다", Toast.LENGTH_SHORT).show();
+        } else {
+            if (bluetoothAdapter.isEnabled()) {
+                try {
+                    findPairedDevice();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+            } else {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        //븥루투스가 꺼져있음
+                        final AlertDialog.Builder builder = new AlertDialog.Builder(context);
+                        final AlertDialog alertDialog = builder.create();
+                        builder.setTitle(getString(R.string.caution_title))
+                                .setMessage(getString(R.string.reconnect_bt_msg))
+                                .setPositiveButton(getString(R.string.reconnect_bt_ok), new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        alertDialog.dismiss();
+                                        Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
+                                        startActivity(enableBtIntent);
+                                    }
+                                }).setNegativeButton(getString(R.string.cancel), new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        android.os.Process.killProcess(android.os.Process.myPid());
+                                    }
+                                }).setCancelable(false).show();
+                    }
+                });
+            }
+        }
+    }
 }
