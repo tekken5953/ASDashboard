@@ -29,9 +29,7 @@ import androidx.core.content.res.ResourcesCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.dashboard.R;
-import com.example.dashboard.SegmentedProgressBar;
 import com.example.dashboard.SharedPreferenceManager;
-import com.example.dashboard.connect.ConnectDeviceFragment;
 import com.github.mikephil.charting.components.Legend;
 import com.github.mikephil.charting.components.XAxis;
 import com.github.mikephil.charting.components.YAxis;
@@ -64,8 +62,6 @@ public class DashBoardFragment extends AppCompatActivity {
 
     DisplayMetrics dm = new DisplayMetrics();
 
-    SegmentedProgressBar barView;
-    ArrayList<SegmentedProgressBar.BarContext> barList = new ArrayList<>();
 
     LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
 
@@ -150,7 +146,6 @@ public class DashBoardFragment extends AppCompatActivity {
 
     public void init() {
 
-        barView = findViewById(R.id.aqiBarChartPb);
 
         recyclerView = findViewById(R.id.recyclerView);
         circleChart = findViewById(R.id.apiCircleChartPb);
@@ -293,8 +288,6 @@ public class DashBoardFragment extends AppCompatActivity {
     @Override
     public void onWindowFocusChanged(boolean hasFocus) {
         if (hasFocus) {
-            barViewWidth = barView.getWidth();
-            barViewHeight = barView.getHeight();
             arrowWidth = aqiCurrentArrow.getWidth();
 
             aqiTitleTv.setText(getResources().getString(R.string.aqi));
