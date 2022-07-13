@@ -1,18 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="116dp"
-    android:layout_height="150dp"
+    android:layout_width="140dp"
+    android:layout_height="wrap_content"
     android:background="#00FFFFFF"
     android:padding="1dp"
-    android:layout_marginEnd="25dp">
+    android:layout_marginEnd="10dp"
+    android:layout_marginTop="10dp">
 
     <ImageView
         android:id="@+id/listItemRecentIconIv"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
-        android:src="@drawable/bs100_1920"
-        android:layout_centerHorizontal="true"/>
+        android:layout_width="90dp"
+        android:layout_height="90dp"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="15dp"
+        android:src="@drawable/side_m" />
 
     <TextView
         android:id="@+id/listItemRecentTitleTv"
@@ -20,7 +22,7 @@
         android:layout_height="14dp"
         android:layout_below="@+id/listItemRecentIconIv"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="9dp"
+        android:layout_marginTop="13dp"
         android:fontFamily="@font/pretendardvariable"
         android:gravity="center"
         android:text="BS-100"
@@ -35,9 +37,10 @@
         android:layout_below="@+id/listItemRecentTitleTv"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="5dp"
+        android:layout_marginBottom="7dp"
         android:fontFamily="@font/pretendardvariable"
-        android:text="(1505)"
         android:gravity="center"
+        android:text="(1505)"
         android:textAllCaps="false"
         android:textColor="@color/statusUnitText"
         android:textSize="12sp" />

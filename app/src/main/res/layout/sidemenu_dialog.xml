@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/black">
+
+    <TextView
+        android:id="@+id/sideDialogTitleTv"
+        android:layout_width="wrap_content"
+        android:layout_height="22dp"
+        android:layout_marginStart="67dp"
+        android:layout_marginTop="51dp"
+        android:fontFamily="@font/pretendardvariable"
+        android:text="전원 끄기"
+        android:textAllCaps="false"
+        android:textColor="@color/white"
+        android:textSize="20sp" />
+
+    <ImageView
+        android:id="@+id/sideDialogIconIv"
+        android:layout_width="79dp"
+        android:layout_height="77dp"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="244dp"
+        android:src="@drawable/big_power_icon" />
+
+    <TextView
+        android:id="@+id/sideDialogContextTv"
+        android:layout_width="wrap_content"
+        android:layout_height="35dp"
+        android:layout_below="@+id/sideDialogIconIv"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="27dp"
+        android:fontFamily="@font/pretendardvariable"
+        android:text="전원을 끄시겠습니까?"
+        android:textAllCaps="false"
+        android:textColor="@color/white"
+        android:textSize="30sp" />
+
+    <TableRow
+        android:layout_width="wrap_content"
+        android:layout_height="80dp"
+        android:layout_below="@+id/sideDialogContextTv"
+        android:layout_centerHorizontal="true"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:layout_marginTop="106dp">
+
+        <TextView
+            android:id="@+id/sidedialogOkTv"
+            android:layout_width="wrap_content"
+            android:layout_height="68dp"
+            android:fontFamily="@font/pretendardvariable"
+            android:gravity="center"
+            android:text="@string/ok"
+            android:textAllCaps="false"
+            android:textColor="@color/white"
+            android:background="@drawable/side_dialog_btn_bg"
+            android:textSize="20sp" />
+
+        <TextView
+            android:id="@+id/sidedialogCancelTv"
+            android:layout_width="wrap_content"
+            android:layout_height="68dp"
+            android:fontFamily="@font/pretendardvariable"
+            android:gravity="center"
+            android:text="@string/cancel"
+            android:textAllCaps="false"
+            android:textColor="@color/white"
+            android:textSize="20sp"
+            android:background="@drawable/side_dialog_btn_bg"
+            android:layout_marginStart="15dp"/>
+
+    </TableRow>
+
+
+</RelativeLayout>

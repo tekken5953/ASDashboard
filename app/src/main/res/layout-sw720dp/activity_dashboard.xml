@@ -1,0 +1,763 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="viewModel"
+            type="com.example.dashboard.bluetooth.BluetoothThread.DataShareViewModel" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/bg_image"
+        tools:context=".dashboard.DashBoardActivity">
+
+        <ProgressBar
+            android:id="@+id/loadingPb"
+            style="@style/Widget.AppCompat.ProgressBar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:progressTint="@color/white"
+            android:visibility="visible"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <FrameLayout
+            android:id="@+id/fl_silde"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="gone">
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:alpha="0.75"
+                android:background="#202745" />
+
+            <FrameLayout
+                android:id="@+id/view_sildebar"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+
+        </FrameLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/id_main"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <ImageView
+                android:id="@+id/hambugerMenuIv"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:padding="3dp"
+                android:layout_marginStart="60dp"
+                android:layout_marginTop="3dp"
+                android:gravity="center"
+                android:background="@drawable/ripple_round"
+                android:onClick="onClick"
+                android:visibility="visible"
+                app:layout_constraintBottom_toBottomOf="@+id/currentTimeTv"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/currentTimeTv"
+                app:srcCompat="@drawable/menu_icon" />
+
+
+            <TextView
+                android:id="@+id/dayOfNightTv"
+                android:layout_width="wrap_content"
+                android:layout_height="19dp"
+                android:layout_marginEnd="5dp"
+                android:fontFamily="@font/pretendardvariable"
+                android:text="오후"
+                android:textAllCaps="true"
+                android:textColor="@color/white"
+                android:textSize="16sp"
+                app:layout_constraintEnd_toStartOf="@+id/currentTimeTv"
+                app:layout_constraintTop_toTopOf="@+id/currentTimeTv" />
+
+            <TextView
+                android:id="@+id/currentTimeTv"
+                android:layout_width="wrap_content"
+                android:layout_height="19dp"
+                android:layout_marginTop="60dp"
+                android:layout_marginEnd="60dp"
+                android:fontFamily="@font/pretendardvariable"
+                android:gravity="center"
+                android:text="null"
+                android:textAllCaps="false"
+                android:textColor="@color/textColorMain"
+                android:textSize="16sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/humidTv"
+                android:layout_width="wrap_content"
+                android:layout_height="19dp"
+                android:fontFamily="@font/pretendardvariable"
+                android:gravity="center"
+                android:text="null"
+                android:textColor="@color/textColorMain"
+                android:textSize="16sp"
+                app:layout_constraintBottom_toBottomOf="@+id/humidUnitTv"
+                app:layout_constraintEnd_toStartOf="@id/humidUnitTv"
+                app:layout_constraintTop_toTopOf="@id/humidUnitTv" />
+
+            <TextView
+                android:id="@+id/humidUnitTv"
+                android:layout_width="27dp"
+                android:layout_height="19dp"
+                android:layout_marginEnd="58dp"
+                android:fontFamily="@font/pretendardvariable"
+                android:gravity="center"
+                android:text="%"
+                android:textColor="@color/textColorMain"
+                android:textSize="16sp"
+                app:layout_constraintBottom_toBottomOf="@+id/currentTimeTv"
+                app:layout_constraintEnd_toStartOf="@+id/currentTimeTv"
+                app:layout_constraintTop_toTopOf="@+id/currentTimeTv" />
+
+            <TextView
+                android:id="@+id/humidIndexTv"
+                android:layout_width="wrap_content"
+                android:layout_height="19dp"
+                android:layout_marginEnd="10dp"
+                android:fontFamily="@font/pretendardvariable"
+                android:gravity="center"
+                android:text="@string/humid"
+                android:textColor="@color/textColorMain"
+                android:textSize="16sp"
+                app:layout_constraintBottom_toBottomOf="@+id/humidUnitTv"
+                app:layout_constraintEnd_toStartOf="@+id/humidTv"
+                app:layout_constraintTop_toTopOf="@+id/humidUnitTv" />
+
+            <TextView
+                android:id="@+id/tempUnitTv"
+                android:layout_width="27dp"
+                android:layout_height="19dp"
+                android:layout_marginEnd="73dp"
+                android:fontFamily="@font/pretendardvariable"
+                android:gravity="center"
+                android:text="℃"
+                android:textColor="@color/textColorMain"
+                android:textSize="16sp"
+                app:layout_constraintBottom_toBottomOf="@+id/currentTimeTv"
+                app:layout_constraintEnd_toStartOf="@+id/humidIndexTv"
+                app:layout_constraintTop_toTopOf="@+id/currentTimeTv" />
+
+            <TextView
+                android:id="@+id/tempTv"
+                android:layout_width="wrap_content"
+                android:layout_height="19dp"
+                android:fontFamily="@font/pretendardvariable"
+                android:gravity="center"
+                android:text="null"
+                android:textColor="@color/textColorMain"
+                android:textSize="16sp"
+                app:layout_constraintBottom_toBottomOf="@+id/tempUnitTv"
+                app:layout_constraintEnd_toStartOf="@+id/tempUnitTv"
+                app:layout_constraintTop_toTopOf="@+id/tempUnitTv" />
+
+            <TextView
+                android:id="@+id/textView6"
+                android:layout_width="wrap_content"
+                android:layout_height="19dp"
+                android:layout_marginEnd="10dp"
+                android:fontFamily="@font/pretendardvariable"
+                android:gravity="center"
+                android:text="@string/temp"
+                android:textColor="@color/textColorMain"
+                android:textSize="16sp"
+                app:layout_constraintBottom_toBottomOf="@+id/tempUnitTv"
+                app:layout_constraintEnd_toStartOf="@+id/tempTv"
+                app:layout_constraintTop_toTopOf="@+id/tempUnitTv" />
+
+            <FrameLayout
+                android:id="@+id/topFrameLayout"
+                android:layout_width="match_parent"
+                android:layout_height="420dp"
+                android:layout_marginStart="60dp"
+                android:layout_marginTop="33dp"
+                android:layout_marginEnd="60dp"
+                android:background="@drawable/topframe_outline"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textView6">
+
+                <ImageView
+                    android:id="@+id/apiCircleChartPb"
+                    android:layout_width="256dp"
+                    android:layout_height="256dp"
+                    android:layout_marginStart="28dp"
+                    android:layout_marginTop="34dp"
+                    android:background="@drawable/signal_good" />
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="52dp"
+                    android:layout_marginTop="310dp"
+                    android:orientation="vertical"
+                    android:paddingStart="10dp">
+
+                    <TableRow
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_marginBottom="3dp"
+                        android:layout_weight="1"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="13dp"
+                            android:layout_weight="0.17"
+                            android:fontFamily="@font/pretendardvariable"
+                            android:gravity="start"
+                            android:text="0"
+                            android:textColor="@color/white"
+                            android:textSize="12sp" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="13dp"
+                            android:layout_weight="0.17"
+                            android:fontFamily="@font/pretendardvariable"
+                            android:gravity="start"
+                            android:text="51"
+                            android:textColor="@color/white"
+                            android:textSize="12sp" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="13dp"
+                            android:layout_weight="0.5"
+                            android:fontFamily="@font/pretendardvariable"
+                            android:gravity="start"
+                            android:text="101"
+                            android:textColor="@color/white"
+                            android:textSize="12sp" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="13dp"
+                            android:layout_weight="0.16"
+                            android:fontFamily="@font/pretendardvariable"
+                            android:gravity="start"
+                            android:text="251"
+                            android:textColor="@color/white"
+                            android:textSize="12sp" />
+                    </TableRow>
+
+                    <com.example.dashboard.ui.SegmentedProgressBar
+                        android:id="@+id/aqiBarChartPb"
+                        android:layout_width="200dp"
+                        android:layout_height="15dp" />
+
+                    <TextView
+                        android:id="@+id/aqiCurrentArrow"
+                        android:layout_width="16dp"
+                        android:layout_height="30dp"
+                        android:drawablePadding="-7dp"
+                        android:fontFamily="@font/pretendardvariable"
+                        android:gravity="center"
+                        android:text="0"
+                        android:textColor="@color/progressText"
+                        android:textSize="14sp"
+                        app:drawableTopCompat="@drawable/arrow_up" />
+                </LinearLayout>
+
+                <TextView
+                    android:id="@+id/aqiTitleTv"
+                    android:layout_width="120dp"
+                    android:layout_height="16dp"
+                    android:layout_marginStart="95dp"
+                    android:layout_marginTop="125dp"
+                    android:fontFamily="@font/pretendardvariable"
+                    android:gravity="center"
+                    android:text="@string/aqi"
+                    android:textColor="@color/white"
+                    android:textSize="14sp" />
+
+                <TextView
+                    android:id="@+id/aqiContentTv"
+                    android:layout_width="120dp"
+                    android:layout_height="41dp"
+                    android:layout_marginStart="95dp"
+                    android:layout_marginTop="156dp"
+                    android:fontFamily="@font/pretendardvariable"
+                    android:gravity="center"
+                    android:text="@string/good"
+                    android:textColor="@color/progressGood"
+                    android:textSize="35sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/last1hourTv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="40dp"
+                    android:layout_marginStart="355dp"
+                    android:layout_marginTop="38dp"
+                    android:fontFamily="@font/pretendardvariable"
+                    android:gravity="center_vertical"
+                    android:text="@string/aqi_1_hour"
+                    android:textColor="@color/textColorMain"
+                    android:textSize="18sp" />
+
+                <HorizontalScrollView
+                    android:layout_width="match_parent"
+                    android:layout_height="45dp"
+                    android:layout_gravity="top"
+                    android:layout_marginStart="540dp"
+                    android:layout_marginTop="38dp"
+                    android:layout_marginEnd="48dp"
+                    android:gravity="center"
+                    android:overScrollMode="never"
+                    android:paddingTop="2dp"
+                    android:paddingBottom="2dp"
+                    android:scrollbars="none">
+
+                    <TableRow
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent">
+
+                        <TextView
+                            android:id="@+id/category1"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="53dp"
+                            android:background="@drawable/category_text_outline"
+                            android:fontFamily="@font/pretendardvariable"
+                            android:gravity="center"
+                            android:onClick="onClick"
+                            android:text="@string/aqi"
+                            android:textColor="@color/white"
+                            android:textSize="14sp" />
+
+                        <TextView
+                            android:id="@+id/category2"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="25dp"
+                            android:background="@drawable/category_nontext_outline"
+                            android:fontFamily="@font/pretendardvariable"
+                            android:gravity="center"
+                            android:onClick="onClick"
+                            android:text="@string/fine_dust"
+                            android:textColor="@color/lineChartCategoryNonSelectText"
+                            android:textSize="15sp" />
+
+                        <TextView
+                            android:id="@+id/category3"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="29dp"
+                            android:background="@drawable/category_nontext_outline"
+                            android:fontFamily="@font/pretendardvariable"
+                            android:gravity="center"
+                            android:onClick="onClick"
+                            android:text="@string/tvoc"
+                            android:textColor="@color/lineChartCategoryNonSelectText"
+                            android:textSize="15sp" />
+
+                        <TextView
+                            android:id="@+id/category4"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="29dp"
+                            android:background="@drawable/category_nontext_outline"
+                            android:fontFamily="@font/pretendardvariable"
+                            android:gravity="center"
+                            android:onClick="onClick"
+                            android:text="@string/co2"
+                            android:textColor="@color/lineChartCategoryNonSelectText"
+                            android:textSize="15sp" />
+
+                        <TextView
+                            android:id="@+id/category5"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="29dp"
+                            android:background="@drawable/category_nontext_outline"
+                            android:fontFamily="@font/pretendardvariable"
+                            android:gravity="center"
+                            android:onClick="onClick"
+                            android:text="@string/co"
+                            android:textColor="@color/lineChartCategoryNonSelectText"
+                            android:textSize="15sp" />
+
+                        <TextView
+                            android:id="@+id/category6"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="29dp"
+                            android:background="@drawable/category_nontext_outline"
+                            android:fontFamily="@font/pretendardvariable"
+                            android:gravity="center"
+                            android:onClick="onClick"
+                            android:text="@string/virus"
+                            android:textColor="@color/lineChartCategoryNonSelectText"
+                            android:textSize="15sp" />
+
+                    </TableRow>
+
+                </HorizontalScrollView>
+
+                <com.github.mikephil.charting.charts.LineChart
+                    android:id="@+id/virusLineChart"
+                    android:layout_width="759dp"
+                    android:layout_height="268dp"
+                    android:layout_marginStart="354dp"
+                    android:layout_marginTop="82dp" />
+
+            </FrameLayout>
+
+            <HorizontalScrollView
+                android:layout_width="match_parent"
+                android:layout_height="175dp"
+                android:layout_marginStart="60dp"
+                android:layout_marginEnd="60dp"
+                android:layout_marginBottom="15dp"
+                android:orientation="horizontal"
+                android:overScrollMode="never"
+                android:scrollbars="none"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/topFrameLayout">
+
+                <LinearLayout
+                    android:id="@+id/cardLinearLayout"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal">
+
+                    <RelativeLayout
+                        android:layout_width="223dp"
+                        android:layout_height="match_parent"
+                        android:layout_marginTop="2dp"
+                        android:layout_marginEnd="12dp"
+                        android:layout_marginBottom="2dp"
+                        android:background="@drawable/topframe_outline">
+
+                        <TextView
+                            android:id="@+id/listCardPMTitle"
+                            android:layout_width="wrap_content"
+                            android:layout_height="20dp"
+                            android:layout_marginStart="24dp"
+                            android:layout_marginTop="24dp"
+                            android:fontFamily="@font/pretendardvariable"
+                            android:text="@string/fine_dust"
+                            android:textColor="@color/textColorMain"
+                            android:textSize="17sp" />
+
+                        <TextView
+                            android:id="@+id/listCardPMIndex"
+                            android:layout_width="wrap_content"
+                            android:layout_height="19dp"
+                            android:layout_below="@+id/listCardPMTitle"
+                            android:layout_marginStart="24dp"
+                            android:layout_marginTop="4dp"
+                            android:fontFamily="@font/pretendardvariable"
+                            android:text="null"
+                            android:textColor="@color/progressGood"
+                            android:textSize="16sp"
+                            android:visibility="gone" />
+
+                        <TextView
+                            android:id="@+id/listCardPMUnit"
+                            android:layout_width="wrap_content"
+                            android:layout_height="15dp"
+                            android:layout_below="@+id/listCardPMTitle"
+                            android:layout_marginStart="5dp"
+                            android:layout_marginTop="7dp"
+                            android:layout_toEndOf="@+id/listCardPMIndex"
+                            android:fontFamily="@font/poppins_medium"
+                            android:gravity="center"
+                            android:text="ug/㎥"
+                            android:textColor="@color/statusUnitText"
+                            android:textSize="10sp"
+                            android:visibility="gone" />
+
+                        <TextView
+
+                            android:id="@+id/listCardPMGrade"
+                            android:layout_width="wrap_content"
+                            android:layout_height="47dp"
+                            android:layout_below="@+id/listCardPMUnit"
+                            android:layout_alignParentEnd="true"
+                            android:layout_marginTop="17dp"
+                            android:layout_marginEnd="28dp"
+                            android:fontFamily="@font/pretendardvariable"
+                            android:text="에러"
+                            android:textAllCaps="false"
+                            android:textColor="@color/statusUnitText"
+                            android:textSize="40sp"
+                            android:visibility="gone" />
+
+                    </RelativeLayout>
+
+                    <RelativeLayout
+                        android:layout_width="223dp"
+                        android:layout_height="169dp"
+                        android:layout_marginTop="2dp"
+                        android:layout_marginEnd="12dp"
+                        android:layout_marginBottom="2dp"
+                        android:background="@drawable/topframe_outline">
+
+                        <TextView
+                            android:id="@+id/listCardTVOCTitle"
+                            android:layout_width="wrap_content"
+                            android:layout_height="20dp"
+                            android:layout_marginStart="24dp"
+                            android:layout_marginTop="24dp"
+                            android:fontFamily="@font/pretendardvariable"
+                            android:text="@string/tvoc"
+                            android:textColor="@color/textColorMain"
+                            android:textSize="17sp" />
+
+                        <TextView
+                            android:id="@+id/listCardTVOCIndex"
+                            android:layout_width="wrap_content"
+                            android:layout_height="19dp"
+                            android:layout_below="@+id/listCardTVOCTitle"
+                            android:layout_marginStart="24dp"
+                            android:layout_marginTop="4dp"
+                            android:fontFamily="@font/pretendardvariable"
+                            android:text="null"
+                            android:textColor="@color/progressGood"
+                            android:textSize="16sp"
+                            android:visibility="gone" />
+
+                        <TextView
+                            android:id="@+id/listCardTVOCUnit"
+                            android:layout_width="wrap_content"
+                            android:layout_height="15dp"
+                            android:layout_below="@+id/listCardTVOCTitle"
+                            android:layout_marginStart="5dp"
+                            android:layout_marginTop="7dp"
+                            android:layout_toEndOf="@+id/listCardTVOCIndex"
+                            android:fontFamily="@font/poppins_medium"
+                            android:gravity="center"
+                            android:text="mg/㎥"
+                            android:textColor="@color/statusUnitText"
+                            android:textSize="10sp"
+                            android:visibility="gone" />
+
+                        <TextView
+                            android:id="@+id/listCardTVOCGrade"
+                            android:layout_width="wrap_content"
+                            android:layout_height="47dp"
+                            android:layout_below="@+id/listCardTVOCUnit"
+                            android:layout_alignParentEnd="true"
+                            android:layout_marginTop="17dp"
+                            android:layout_marginEnd="28dp"
+                            android:fontFamily="@font/pretendardvariable"
+                            android:text="에러"
+                            android:textAllCaps="false"
+                            android:textColor="@color/statusUnitText"
+                            android:textSize="40sp"
+                            android:visibility="gone" />
+
+                    </RelativeLayout>
+
+                    <RelativeLayout
+                        android:layout_width="223dp"
+                        android:layout_height="169dp"
+                        android:layout_marginTop="2dp"
+                        android:layout_marginEnd="12dp"
+                        android:layout_marginBottom="2dp"
+                        android:background="@drawable/topframe_outline">
+
+                        <TextView
+                            android:id="@+id/listCardCO2Title"
+                            android:layout_width="wrap_content"
+                            android:layout_height="20dp"
+                            android:layout_marginStart="24dp"
+                            android:layout_marginTop="24dp"
+                            android:fontFamily="@font/pretendardvariable"
+                            android:text="@string/co2"
+                            android:textColor="@color/textColorMain"
+                            android:textSize="17sp" />
+
+                        <TextView
+                            android:id="@+id/listCardCO2Index"
+                            android:layout_width="wrap_content"
+                            android:layout_height="19dp"
+                            android:layout_below="@+id/listCardCO2Title"
+                            android:layout_marginStart="24dp"
+                            android:layout_marginTop="4dp"
+                            android:fontFamily="@font/pretendardvariable"
+                            android:text="null"
+                            android:textColor="@color/progressGood"
+                            android:textSize="16sp"
+                            android:visibility="gone" />
+
+                        <TextView
+                            android:id="@+id/listCardCO2Unit"
+                            android:layout_width="wrap_content"
+                            android:layout_height="15dp"
+                            android:layout_below="@+id/listCardCO2Title"
+                            android:layout_marginStart="5dp"
+                            android:layout_marginTop="7dp"
+                            android:layout_toEndOf="@+id/listCardCO2Index"
+                            android:fontFamily="@font/poppins_medium"
+                            android:gravity="center"
+                            android:text="ppm"
+                            android:textColor="@color/statusUnitText"
+                            android:textSize="10sp"
+                            android:visibility="gone" />
+
+                        <TextView
+                            android:id="@+id/listCardCO2Grade"
+                            android:layout_width="wrap_content"
+                            android:layout_height="47dp"
+                            android:layout_below="@+id/listCardCO2Unit"
+                            android:layout_alignParentEnd="true"
+                            android:layout_marginTop="17dp"
+                            android:layout_marginEnd="28dp"
+                            android:fontFamily="@font/pretendardvariable"
+                            android:text="에러"
+                            android:textAllCaps="false"
+                            android:textColor="@color/statusUnitText"
+                            android:textSize="40sp"
+                            android:visibility="gone" />
+
+                    </RelativeLayout>
+
+                    <RelativeLayout
+                        android:layout_width="223dp"
+                        android:layout_height="169dp"
+                        android:layout_marginTop="2dp"
+                        android:layout_marginEnd="12dp"
+                        android:layout_marginBottom="2dp"
+                        android:background="@drawable/topframe_outline">
+
+                        <TextView
+                            android:id="@+id/listCardCOTitle"
+                            android:layout_width="wrap_content"
+                            android:layout_height="20dp"
+                            android:layout_marginStart="24dp"
+                            android:layout_marginTop="24dp"
+                            android:fontFamily="@font/pretendardvariable"
+                            android:text="@string/co"
+                            android:textColor="@color/textColorMain"
+                            android:textSize="17sp" />
+
+                        <TextView
+                            android:id="@+id/listCardCOIndex"
+                            android:layout_width="wrap_content"
+                            android:layout_height="19dp"
+                            android:layout_below="@+id/listCardCOTitle"
+                            android:layout_marginStart="24dp"
+                            android:layout_marginTop="4dp"
+                            android:fontFamily="@font/pretendardvariable"
+                            android:text="null"
+                            android:textColor="@color/progressGood"
+                            android:textSize="16sp"
+                            android:visibility="gone" />
+
+                        <TextView
+                            android:id="@+id/listCardCOUnit"
+                            android:layout_width="wrap_content"
+                            android:layout_height="15dp"
+                            android:layout_below="@+id/listCardCOTitle"
+                            android:layout_marginStart="5dp"
+                            android:layout_marginTop="7dp"
+                            android:layout_toEndOf="@+id/listCardCOIndex"
+                            android:fontFamily="@font/poppins_medium"
+                            android:gravity="center"
+                            android:text="ppm"
+                            android:textColor="@color/statusUnitText"
+                            android:textSize="10sp"
+                            android:visibility="gone" />
+
+                        <TextView
+                            android:id="@+id/listCardCOGrade"
+                            android:layout_width="wrap_content"
+                            android:layout_height="47dp"
+                            android:layout_below="@+id/listCardCOUnit"
+                            android:layout_alignParentEnd="true"
+                            android:layout_marginTop="17dp"
+                            android:layout_marginEnd="28dp"
+                            android:fontFamily="@font/pretendardvariable"
+                            android:text="에러"
+                            android:textAllCaps="false"
+                            android:textColor="@color/statusUnitText"
+                            android:textSize="40sp"
+                            android:visibility="gone" />
+
+                    </RelativeLayout>
+
+                    <RelativeLayout
+                        android:layout_width="223dp"
+                        android:layout_height="169dp"
+                        android:layout_marginTop="2dp"
+                        android:layout_marginEnd="12dp"
+                        android:layout_marginBottom="2dp"
+                        android:background="@drawable/topframe_outline">
+
+                        <TextView
+                            android:id="@+id/listCardVIRUSTitle"
+                            android:layout_width="wrap_content"
+                            android:layout_height="20dp"
+                            android:layout_marginStart="24dp"
+                            android:layout_marginTop="24dp"
+                            android:fontFamily="@font/pretendardvariable"
+                            android:text="@string/virus"
+                            android:textColor="@color/textColorMain"
+                            android:textSize="17sp" />
+
+                        <TextView
+                            android:id="@+id/listCardVIRUSIndex"
+                            android:layout_width="wrap_content"
+                            android:layout_height="19dp"
+                            android:layout_below="@+id/listCardVIRUSTitle"
+                            android:layout_marginStart="24dp"
+                            android:layout_marginTop="4dp"
+                            android:fontFamily="@font/pretendardvariable"
+                            android:text="123"
+                            android:textColor="@color/statusUnitText"
+                            android:textSize="16sp" />
+
+                        <!--                                            <TextView-->
+                        <!--                                                android:id="@+id/listCardVIRUSUnit"-->
+                        <!--                                                android:layout_width="wrap_content"-->
+                        <!--                                                android:layout_height="15dp"-->
+                        <!--                                                android:text="null"-->
+                        <!--                                                android:textSize="10sp"-->
+                        <!--                                                android:gravity="center"-->
+                        <!--                                                android:textColor="@color/statusUnitText"-->
+                        <!--                                                android:fontFamily="@font/poppins_medium"-->
+                        <!--                                                android:layout_below="@+id/listCardVIRUSTitle"-->
+                        <!--                                                android:layout_toEndOf="@+id/listCardVIRUSIndex"-->
+                        <!--                                                android:layout_marginTop="7dp"-->
+                        <!--                                                android:layout_marginStart="5dp"/>-->
+
+                        <TextView
+                            android:id="@+id/listCardVIRUSOCGrade"
+                            android:layout_width="wrap_content"
+                            android:layout_height="47dp"
+                            android:layout_below="@+id/listCardVIRUSIndex"
+                            android:layout_alignParentEnd="true"
+                            android:layout_marginTop="17dp"
+                            android:layout_marginEnd="28dp"
+                            android:fontFamily="@font/pretendardvariable"
+                            android:text="@string/error"
+                            android:textAllCaps="false"
+                            android:textColor="@color/statusUnitText"
+                            android:textSize="40sp" />
+                    </RelativeLayout>
+                </LinearLayout>
+            </HorizontalScrollView>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>
+

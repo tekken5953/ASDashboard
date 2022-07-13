@@ -3,15 +3,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="com.example.dashboard">
 
-    <uses-permission android:name="android.permission.BLUETOOTH"
-        android:maxSdkVersion="30" />
-    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN"
-        android:maxSdkVersion="30" />
-    <uses-permission android:name="android.permission.BLUETOOTH_SCAN" />
-    <uses-permission android:name="android.permission.BLUETOOTH_ADVERTISE" />
     <uses-permission android:name="android.permission.BLUETOOTH_CONNECT" />
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
+    <uses-permission android:name="android.permission.BLUETOOTH" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
 
     <application
         android:allowBackup="true"
@@ -22,14 +21,13 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Dashboard"
-        tools:targetApi="30">
+        tools:targetApi="s">
 
-        <service android:name="org.eclipse.paho.android.service.MqttService" />
         <activity
-            android:name=".connect.ConnectDeviceFragment"
+            android:name=".connect.ConnectDeviceActivity"
             android:exported="false" />
         <activity
-            android:name=".LanguageSelectActivity"
+            android:name=".language.LanguageSelectActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -38,7 +36,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".dashboard.DashBoardFragment"
+            android:name=".dashboard.DashBoardActivity"
             android:exported="true" />
 
     </application>

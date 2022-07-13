@@ -4,8 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/bg_1920x1080"
-    tools:context=".connect.ConnectDeviceFragment">
+    android:background="@drawable/bg_image"
+    tools:context=".connect.ConnectDeviceActivity">
 
     <ImageView
         android:id="@+id/connTopBackIv"
@@ -23,7 +23,7 @@
         android:layout_height="69dp"
         android:layout_marginStart="834dp"
         android:layout_marginTop="136.52dp"
-        android:src="@drawable/lang_1920_b"
+        android:src="@drawable/lang_icon_b"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -32,7 +32,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="174dp"
-        android:src="@drawable/stepbar_1920"
+        android:src="@drawable/stepbar_icon"
         app:layout_constraintEnd_toStartOf="@+id/connTopConnIconIv"
         app:layout_constraintStart_toEndOf="@+id/connTopLangIconIv"
         app:layout_constraintTop_toTopOf="parent" />
@@ -42,7 +42,7 @@
         android:layout_width="69dp"
         android:layout_height="64.5dp"
         android:layout_marginEnd="820dp"
-        android:src="@drawable/conn_1920_w"
+        android:src="@drawable/conn_icon_w"
         app:layout_constraintBottom_toBottomOf="@+id/connTopLangIconIv"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@+id/connTopLangIconIv" />
@@ -91,7 +91,7 @@
         app:layout_constraintTop_toBottomOf="@+id/connTopLangTitleTv" />
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/connPairedDeviceRv"
+        android:id="@+id/connRecentDeviceRv"
         android:layout_width="504dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="48dp"
@@ -115,7 +115,7 @@
         android:textColor="@color/white"
         android:textSize="24sp"
         app:layout_constraintStart_toStartOf="@+id/connPleaseSelectLangMainTv"
-        app:layout_constraintTop_toBottomOf="@+id/connPairedDeviceRv" />
+        app:layout_constraintTop_toBottomOf="@+id/connRecentDeviceRv" />
 
     <ProgressBar
         android:id="@+id/connConnectableDevicePb"

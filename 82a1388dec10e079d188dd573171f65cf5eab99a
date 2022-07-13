@@ -1,0 +1,81 @@
+[33mcommit 82a1388dec10e079d188dd573171f65cf5eab99a[m[33m ([m[1;36mHEAD -> [m[1;32mmaster[m[33m, [m[1;31morigin/master[m[33m)[m
+Author: tekken5953 <tekken5953@naver.com>
+Date:   Tue Jun 28 15:48:32 2022 +0900
+
+    1. 대쉬보드 그래프 초안 완성(값 수정 필요)
+    2. 장치연결 화면 GUI 수정
+    3. 언어 설정 코드 변경
+
+[33mcommit 80eefebdd6e58d40a4cf1942e2b390afa50d3b48[m
+Author: tekken5953 <tekken5953@naver.com>
+Date:   Mon Jun 27 17:57:06 2022 +0900
+
+    WIP
+
+[33mcommit 2720aa3843146edd99e4b27b64b0560ccb6f068a[m
+Merge: ed0c6f7 a44fc6d
+Author: tekken5953 <tekken5953@naver.com>
+Date:   Mon Jun 27 09:23:53 2022 +0900
+
+    Merge branch 'master' of https://github.com/tekken5953/BSDashboard
+
+[33mcommit ed0c6f731dec7ec6d14fc1cb5eb5dab0065ce49d[m
+Author: tekken5953 <tekken5953@naver.com>
+Date:   Mon Jun 27 09:23:44 2022 +0900
+
+    asd
+
+[33mcommit a44fc6d7a40302d7e55abb06cfbd3523f04cde1b[m[33m ([m[1;31mmaster/master[m[33m)[m
+Author: tekke <tekken5953@naver.com>
+Date:   Sun Jun 26 04:38:31 2022 +0800
+
+    2022 06 25
+    1. 언어선택화면 구현
+    2. 디바이스 연결화면 구현
+    
+    TODO
+    1.리사이클러뷰 & 리스트뷰 기능구현
+    2.버튼 및 이미지 클릭유지 시 색상변경 구현
+    3.Capacity 변경 알아보기
+
+[33mcommit 5f95cd9cf6213048469b3c943adf0f510bc9fa90[m
+Author: tekken5953 <tekken5953@naver.com>
+Date:   Fri Jun 24 18:00:09 2022 +0900
+
+    WIP
+
+[33mcommit e3f0e5b138b589e9e8129c2e94e76bd1878c683f[m
+Author: tekken5953 <tekken5953@naver.com>
+Date:   Thu Jun 23 18:05:15 2022 +0900
+
+    WIP
+
+[33mcommit ecf76a5ddd95ad83b4da04366aec818ce7c14d05[m
+Author: tekken5953 <tekken5953@naver.com>
+Date:   Thu Jun 23 11:36:42 2022 +0900
+
+    해상도 (1280x800 & 1920x1080) 별 레이아웃 분리
+
+[33mcommit 02f254e4f6a4f900d3ea274463a34d54fae0e0d5[m
+Author: tekken5953 <tekken5953@naver.com>
+Date:   Wed Jun 22 17:56:02 2022 +0900
+
+    WIP
+
+[33mcommit b43ff945175915af9973c2392039dfcd4869fa73[m
+Author: tekken5953 <tekken5953@naver.com>
+Date:   Wed Jun 22 15:54:31 2022 +0900
+
+    first commit
+
+[33mcommit 9129b0efa4f065dd439b4a7a1a5e4d892e4c3f9e[m
+Author: tekken5953 <tekken5953@naver.com>
+Date:   Wed Jun 22 15:49:08 2022 +0900
+
+    WIP
+
+[33mcommit f4c932a31f8362ed1cdaf965bb7a70102b6cf001[m
+Author: tekken5953 <tekken5953@naver.com>
+Date:   Wed Jun 22 12:10:57 2022 +0900
+
+    First Commit

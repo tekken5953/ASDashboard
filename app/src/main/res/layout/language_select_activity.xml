@@ -4,9 +4,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/bg_1920x1080"
+    android:background="@drawable/bg_image"
     tools:ignore="ContentDescription"
-    tools:context=".LanguageSelectActivity">
+    tools:context=".language.LanguageSelectActivity">
 
     <ImageView
         android:id="@+id/langTopLangIconIv"
@@ -14,7 +14,7 @@
         android:layout_height="69dp"
         android:layout_marginStart="834dp"
         android:layout_marginTop="136.52dp"
-        android:src="@drawable/lang_1920_w"
+        android:src="@drawable/lang_icon_w"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -23,7 +23,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="174dp"
-        android:src="@drawable/stepbar_1920"
+        android:src="@drawable/stepbar_icon"
         app:layout_constraintEnd_toStartOf="@+id/langTopConnIconIv"
         app:layout_constraintStart_toEndOf="@+id/langTopLangIconIv"
         app:layout_constraintTop_toTopOf="parent" />
@@ -33,7 +33,7 @@
         android:layout_width="69dp"
         android:layout_height="64.5dp"
         android:layout_marginEnd="820dp"
-        android:src="@drawable/conn_1920_b"
+        android:src="@drawable/conn_icon_b"
         app:layout_constraintBottom_toBottomOf="@+id/langTopLangIconIv"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@+id/langTopLangIconIv" />
@@ -99,7 +99,7 @@
         android:layout_height="182dp"
         android:layout_marginStart="743dp"
         android:layout_marginTop="100dp"
-        android:src="@drawable/kor_1920"
+        android:src="@drawable/kor_image"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/pleaseSelectLangSubTv"/>
 
@@ -107,7 +107,7 @@
         android:id="@+id/langEngIconIv"
         android:layout_width="182dp"
         android:layout_height="182dp"
-        android:src="@drawable/eng_1920"
+        android:src="@drawable/eng_image"
         app:layout_constraintBottom_toBottomOf="@+id/langKorIconIv"
         app:layout_constraintEnd_toEndOf="@+id/langPleaseSelectLangMainTv"
         app:layout_constraintTop_toTopOf="@+id/langKorIconIv" />

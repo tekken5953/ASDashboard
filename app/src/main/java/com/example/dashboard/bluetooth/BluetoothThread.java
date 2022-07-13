@@ -1,14 +1,16 @@
-package com.example.dashboard;
+package com.example.dashboard.bluetooth;
 
+import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothSocket;
 import android.content.Context;
 import android.util.Log;
 
-import androidx.fragment.app.Fragment;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.lifecycle.ViewModelStoreOwner;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -54,14 +56,14 @@ public class BluetoothThread extends Thread {
     private boolean errorFlag;
 
     // 옵저버
-    private DataShareViewModel viewModel;
+    private final DataShareViewModel viewModel;
 
-    public BluetoothThread(Fragment fragment) {
+    public BluetoothThread(Activity activity) {
         super();
         sequence = 0;
         errorFlag = false;
 
-        viewModel = new ViewModelProvider(fragment).get(DataShareViewModel.class);
+        viewModel = new ViewModelProvider((ViewModelStoreOwner) activity).get(DataShareViewModel.class);
 
         System.out.println("Thread Created");
     }
@@ -74,7 +76,7 @@ public class BluetoothThread extends Thread {
             byte[] readBuffer = new byte[1024];
             byte[] packetBytes;
             int readBufferPosition = 0;
-            int bytesAvailable = 0;
+            int bytesAvailable;
 
             while (isConnected()) {
                 try {
@@ -90,7 +92,7 @@ public class BluetoothThread extends Thread {
                         // 버퍼 초기화
                         readBufferPosition = 0;
                         readBuffer = new byte[1024];
-                        packetBytes = null;
+//                        packetBytes = null;
 
                         e.printStackTrace();
 
@@ -122,7 +124,7 @@ public class BluetoothThread extends Thread {
                             // 버퍼 초기화
                             readBufferPosition = 0;
                             readBuffer = new byte[1024];
-                            packetBytes = null;
+//                            packetBytes = null;
                         }
                     }
 
@@ -135,6 +137,7 @@ public class BluetoothThread extends Thread {
         }
     }
 
+    @SuppressLint("MissingPermission")
     public boolean connectSocket() {
         //mBluetoothAdapter.cancelDiscovery();
         try {
@@ -192,7 +195,8 @@ public class BluetoothThread extends Thread {
             if (errorFlag) closeSocket();
             else errorFlag = true;
             Log.e(TAG, "Exception during send", e);
-        } catch (NullPointerException e) {
+
+        } catch (Exception e) {
             e.printStackTrace();
             closeSocket();
         }

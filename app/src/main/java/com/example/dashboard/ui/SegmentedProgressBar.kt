@@ -1,4 +1,4 @@
-package com.example.dashboard
+package com.example.dashboard.ui
 
 import android.annotation.SuppressLint
 import android.content.Context

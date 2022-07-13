@@ -1,5 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-    <dimen name="barWidth">200dp</dimen>
-    <dimen name="barHeight">15dp</dimen>
-</resources>

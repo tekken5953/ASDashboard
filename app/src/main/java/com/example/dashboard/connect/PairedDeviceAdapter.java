@@ -14,6 +14,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.core.content.res.ResourcesCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.dashboard.R;
@@ -36,15 +37,19 @@ public class PairedDeviceAdapter extends RecyclerView.Adapter<PairedDeviceAdapte
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
         View view = inflater.inflate(R.layout.listitem_recent_device, parent, false);
-        ViewHolder vh = new ViewHolder(view);
 
-        return vh;
+        return new ViewHolder(view);
     }
 
     private OnItemClickListener mListener = null;
 
     public interface OnItemClickListener {
         void onItemClick(View v, int position);
+    }
+
+    @Override
+    public int getItemViewType(int position) {
+        return position;
     }
 
     // OnItemClickListener 리스너 객체 참조를 어댑터에 전달하는 메서드
@@ -61,6 +66,8 @@ public class PairedDeviceAdapter extends RecyclerView.Adapter<PairedDeviceAdapte
         holder.paired_icon.setImageDrawable(item.getIcon());
         holder.paired_name.setText(item.getName());
         holder.paired_address.setText(item.getAddress());
+
+        holder.itemView.setAlpha(0.5f);
 
     }
 

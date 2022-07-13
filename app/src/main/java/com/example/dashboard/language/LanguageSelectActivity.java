@@ -1,8 +1,4 @@
-package com.example.dashboard;
-
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.content.res.AppCompatResources;
-import androidx.core.content.res.ResourcesCompat;
+package com.example.dashboard.language;
 
 import android.content.Context;
 import android.content.Intent;
@@ -15,7 +11,14 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.dashboard.connect.ConnectDeviceFragment;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.content.res.AppCompatResources;
+import androidx.core.content.res.ResourcesCompat;
+
+import com.example.dashboard.OuterClass;
+import com.example.dashboard.R;
+import com.example.dashboard.SharedPreferenceManager;
+import com.example.dashboard.connect.ConnectDeviceActivity;
 
 import java.util.Locale;
 
@@ -26,11 +29,18 @@ public class LanguageSelectActivity extends AppCompatActivity {
     String FINAL_LANGUAGE = null;
     String SKIP_SELECT_LANGUAGE = null;
     private final String LANGUAGE_LOG = "language_log";
+    OuterClass outerClass = new OuterClass();
 
     Button langOkTv;
     ImageView koreaFlag, englishFlag;
     TextView langKorTitleTv, langEngTitleTv;
     Context context;
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        outerClass.FullScreenMode(LanguageSelectActivity.this);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,28 +53,57 @@ public class LanguageSelectActivity extends AppCompatActivity {
         langKorTitleTv = findViewById(R.id.langKorTitleTv);
         langEngTitleTv = findViewById(R.id.langEngTitleTv);
         context = LanguageSelectActivity.this;
+
         FINAL_LANGUAGE = SharedPreferenceManager.getString(context, "final");
         SKIP_SELECT_LANGUAGE = SharedPreferenceManager.getString(context, "skip_lang");
 
         koreaFlag.setImageAlpha(76);
         englishFlag.setImageAlpha(76);
 
+        Log.d(LANGUAGE_LOG, "final lang : " + FINAL_LANGUAGE + "\nskip : " + SKIP_SELECT_LANGUAGE);
+
+        Configuration configuration = new Configuration();
+
         // 언어 설정 스킵 YES or NO
         if (SKIP_SELECT_LANGUAGE.equals("no")) {
             // 현재 사용중인 언어 분류
-            changeLocale(FINAL_LANGUAGE);
-        } else {
-            Intent intent = new Intent(context, ConnectDeviceFragment.class);
+            if (FINAL_LANGUAGE != null) {
+                // 한국어 일 때
+                if (FINAL_LANGUAGE.equals("ko")) {
+                    SelectedKoreaFlag();
+                    configuration.setLocale(Locale.KOREA);
+                    getResources().updateConfiguration(configuration, getResources().getDisplayMetrics());
+                }
+                // 영어 일 때
+                else if (FINAL_LANGUAGE.equals("en")) {
+                    SelectedEnglishFlag();
+                    configuration.setLocale(Locale.ENGLISH);
+                    getResources().updateConfiguration(configuration, getResources().getDisplayMetrics());
+                }
+            }
+        } else if (SKIP_SELECT_LANGUAGE.equals("ok")) {
+            if (SharedPreferenceManager.getString(this, "final").equals("ko")) {
+                configuration.setLocale(Locale.KOREA);
+            } else {
+                configuration.setLocale(Locale.ENGLISH);
+            }
+            getResources().updateConfiguration(configuration, getResources().getDisplayMetrics());
+            Intent intent = new Intent(context, ConnectDeviceActivity.class);
             Toast.makeText(context, getString(R.string.skip_lang_msg), Toast.LENGTH_SHORT).show();
-            changeLocale(FINAL_LANGUAGE);
             startActivity(intent);
             finish();
+        } else {
+            // 현재 선택 된 언어가 없을 때
+            SelectedNothing();
+            configuration.setLocale(Locale.KOREA);
+            getResources().updateConfiguration(configuration, getResources().getDisplayMetrics());
         }
     }
 
     @Override
     public void onWindowFocusChanged(boolean hasFocus) {
         super.onWindowFocusChanged(hasFocus);
+        outerClass.FullScreenMode(LanguageSelectActivity.this);
 
         koreaFlag.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -88,11 +127,11 @@ public class LanguageSelectActivity extends AppCompatActivity {
                 if (langOkTv.isEnabled()) {
                     if (SharedPreferenceManager.getString(context, "current").equals("en")) {
                         Configuration configuration = new Configuration();
-                        configuration.setLocale(Locale.US);
+                        configuration.setLocale(Locale.ENGLISH);
                         getResources().updateConfiguration(configuration, getResources().getDisplayMetrics());
                         SharedPreferenceManager.setString(context, "final", SharedPreferenceManager.getString(context, "current"));
-                        SharedPreferenceManager.setString(context,"skip_lang", "ok");
-                        Intent intent = new Intent(LanguageSelectActivity.this, ConnectDeviceFragment.class);
+                        SharedPreferenceManager.setString(context, "skip_lang", "ok");
+                        Intent intent = new Intent(LanguageSelectActivity.this, ConnectDeviceActivity.class);
                         Toast.makeText(context, getString(R.string.complete_select_lang), Toast.LENGTH_SHORT).show();
                         startActivity(intent);
                         finish();
@@ -101,8 +140,8 @@ public class LanguageSelectActivity extends AppCompatActivity {
                         configuration.setLocale(Locale.KOREA);
                         getResources().updateConfiguration(configuration, getResources().getDisplayMetrics());
                         SharedPreferenceManager.setString(context, "final", SharedPreferenceManager.getString(context, "current"));
-                        SharedPreferenceManager.setString(context,"skip_lang", "ok");
-                        Intent intent = new Intent(LanguageSelectActivity.this, ConnectDeviceFragment.class);
+                        SharedPreferenceManager.setString(context, "skip_lang", "ok");
+                        Intent intent = new Intent(LanguageSelectActivity.this, ConnectDeviceActivity.class);
                         Toast.makeText(context, getString(R.string.complete_select_lang), Toast.LENGTH_SHORT).show();
                         startActivity(intent);
                         finish();
@@ -146,29 +185,5 @@ public class LanguageSelectActivity extends AppCompatActivity {
         langOkTv.setEnabled(false);
         langOkTv.setBackground(AppCompatResources.getDrawable(context, R.drawable.lang_ok_b));
         langOkTv.setTextColor(ResourcesCompat.getColor(getResources(), R.color.statusUnitText, null));
-    }
-
-    public void changeLocale(String s) {
-        Configuration configuration = new Configuration();
-        if (s != null) {
-            // 한국어 일 때
-            if (s.equals("ko")) {
-                SelectedKoreaFlag();
-                configuration.setLocale(Locale.KOREA);
-                getResources().updateConfiguration(configuration, getResources().getDisplayMetrics());
-            }
-            // 영어 일 때
-            else if (s.equals("en")) {
-                SelectedEnglishFlag();
-                configuration.setLocale(Locale.US);
-                getResources().updateConfiguration(configuration, getResources().getDisplayMetrics());
-            }
-        }
-        // 현재 선택 된 언어가 없을 때
-        else {
-            SelectedNothing();
-            configuration.setLocale(Locale.KOREA);
-            getResources().updateConfiguration(configuration, getResources().getDisplayMetrics());
-        }
     }
 }

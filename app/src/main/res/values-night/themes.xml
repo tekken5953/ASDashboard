@@ -1,4 +1,4 @@
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
     <!-- Base application theme. -->
     <style name="Theme.Dashboard" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <!-- Primary brand color. -->
@@ -6,21 +6,40 @@
         <item name="colorPrimaryVariant">@color/purple_700</item>
         <item name="colorOnPrimary">@color/black</item>
         <!-- Secondary brand color. -->
-        <item name="colorSecondary">@color/teal_200</item>
+        <item name="colorSecondary">#6CC0E5</item>
         <item name="colorSecondaryVariant">@color/teal_200</item>
         <item name="colorOnSecondary">@color/black</item>
         <!-- Status bar color. -->
-        <item name="android:statusBarColor" tools:targetApi="l">#333c59</item>
-        <!-- Customize your theme here. -->
+        <item name="android:statusBarColor">#333c59</item>
+
+        <!-- FULL SCREEN -->
+        <item name="android:windowFullscreen">true</item>
     </style>
 
     <style name="CircularDeterminateProgressBarLarge">
         <item name="android:indeterminateOnly">false</item>
-        <item name="android:progressDrawable">@drawable/signal_good_1920</item>
+        <item name="android:progressDrawable">@drawable/signal_good</item>
     </style>
 
     <style name="CircularDeterminateProgressBarSmall">
         <item name="android:indeterminateOnly">false</item>
-        <item name="android:progressDrawable">@drawable/signal_good1280</item>
+        <item name="android:progressDrawable">@drawable/signal_good</item>
+    </style>
+
+    <style name="CustomAlertDialog">
+        <!-- 꽉 채운 화면에 배경 없이 (custom view 영역만 보일 것이다.) -->
+        <item name="android:windowBackground">@color/black</item>
+        <item name="android:windowMinWidthMajor">100%</item>
+        <item name="android:windowMinWidthMinor">100%</item>
+
+        <!-- Dim 처리 -->
+        <item name="android:backgroundDimEnabled">true</item>
+        <item name="android:colorBackground">@color/black</item>
+        <item name="android:windowCloseOnTouchOutside">true</item>
+
+        <!-- Dialog 가 센터에 나오도록 하자. -->
+        <item name="android:windowIsFloating">true</item>
+
+        <item name="android:windowFullscreen">true</item>
     </style>
 </resources>

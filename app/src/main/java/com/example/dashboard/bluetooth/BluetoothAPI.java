@@ -1,4 +1,4 @@
-package com.example.dashboard;
+package com.example.dashboard.bluetooth;
 
 import android.app.Activity;
 import android.graphics.Point;
@@ -154,6 +154,7 @@ public class BluetoothAPI {
                     // CO2 값      TVOC 값     O3 값       NH3 값      H2S 값
                     // CH4 값      C3H8 값     NO2 값
                     //arrayList.add(getFloatValue(tag_content));
+                    bundle.putShort(id, bytesToShort(tag_content));
                     bundle.putString(id, bytesToStrFloat(tag_content));
                     break;
                 case 0x03:
@@ -460,27 +461,32 @@ public class BluetoothAPI {
     }
 
 
-//    public static int getDeviceType(char type) {
-//        int deviceType;
-//        switch (String.valueOf(type)) {
-//            case "SI":
+    public static int getDeviceType(char[] type) {
+        int deviceType;
+        switch (String.valueOf(type)) {
+            case "SI":
 //                deviceType = DeviceFragment.DEVICE_TYPE_S;
-//                break;
-//            case "PI":
+                deviceType = 1;
+                break;
+            case "PI":
 //                deviceType = DeviceFragment.DEVICE_TYPE_S_PLUS;
-//                break;
-//            case "TI":
+                deviceType = 2;
+                break;
+            case "TI":
 //                deviceType = DeviceFragment.DEVICE_TYPE_MINI;
-//                break;
-//            case "MI":
+                deviceType = 3;
+                break;
+            case "MI":
 //                deviceType = DeviceFragment.DEVICE_TYPE_PRO;
-//                break;
-//            default:
+                deviceType = 4;
+                break;
+            default:
 //                deviceType = DeviceFragment.DEVICE_TYPE_ERROR;
-//                break;
-//        }
-//        return deviceType;
-//    }
+                deviceType = 5;
+                break;
+        }
+        return deviceType;
+    }
 //
 //    public static int getDeviceType(char[] type) {
 //        int deviceType;
