@@ -83,7 +83,7 @@ public class DashBoardActivity extends AppCompatActivity {
 
     String FAN_CONTROL_COMPLETE = "com.example.dashboard";
 
-    int barViewWidth, barViewHeight, arrowWidth, VIEW_REQUEST_INTERVAL = 3, DRAW_CHART_INTERVAL = 5;
+    int barViewWidth, barViewHeight, arrowWidth, VIEW_REQUEST_INTERVAL = 3, DRAW_CHART_INTERVAL = 60;
 
     ArrayList<SegmentedProgressBar.BarContext> barList = new ArrayList<>();
 
@@ -105,6 +105,8 @@ public class DashBoardActivity extends AppCompatActivity {
     int setup_date;
     String serialNumber = null, currentTimeIndex, deviceType, modelName, setUpDateStr;
 
+    long CHART_MADE_TIME = 0;
+
     Timer data_scheduler, chart_scheduler;
 
     String temp_str = null, humid_str = null, pm_str = null, co_str = null, co2_str = null, tvoc_str = null;
@@ -112,6 +114,7 @@ public class DashBoardActivity extends AppCompatActivity {
     Short aqi_short;
     Float pm_float, co_float, co2_float, tvoc_float;
     byte fan_control_byte, current_fan_byte, power_control_byte;
+    ArrayList<String> xLabelList = new ArrayList<>();
 
     //    BroadcastReceiver mReceiver;
     SideBarCustomView sidebar;
@@ -167,6 +170,8 @@ public class DashBoardActivity extends AppCompatActivity {
             configuration.setLocale(Locale.KOREA);
             getResources().updateConfiguration(configuration, getResources().getDisplayMetrics());
         }
+
+        CHART_MADE_TIME = System.currentTimeMillis();
 
         CreateSegmentProgressView(); // AQI 바 차트 그리기
 
@@ -247,7 +252,6 @@ public class DashBoardActivity extends AppCompatActivity {
 
         startCheckBluetooth();
 
-
         Handler handler = new Handler(Looper.getMainLooper());
         handler.postDelayed(new Runnable() {
             @Override
@@ -258,7 +262,7 @@ public class DashBoardActivity extends AppCompatActivity {
                         try {
                             Thread.sleep(1000);
                             if (aqi_short != null) {
-                                drawGraphClass.drawFirstEntry(300, (int) aqi_short);
+                                drawGraphClass.drawFirstEntry(300, "aqi");
                                 ChartTimerTask(300, "aqi");
                             }
                         } catch (InterruptedException e) {
@@ -1158,29 +1162,31 @@ public class DashBoardActivity extends AppCompatActivity {
                             tv.setTextSize(14);
                         }
                         tv.setBackground(AppCompatResources.getDrawable(context, R.drawable.category_text_outline));
+                        xLabelList.clear();
+                        CHART_MADE_TIME = System.currentTimeMillis();
                         if (tv.getText().toString().equals(getString(R.string.aqi))) {
                             drawGraphClass.reDrawChart();
-                            drawGraphClass.drawFirstEntry(300, aqi_short);
+                            drawGraphClass.drawFirstEntry(300, "aqi");
                             ChartTimerTask(300, "aqi");
                         } else if (tv.getText().toString().equals(getString(R.string.fine_dust))) {
                             drawGraphClass.reDrawChart();
-                            drawGraphClass.drawFirstEntry(75, pm_float);
+                            drawGraphClass.drawFirstEntry(75, "pm");
                             ChartTimerTask(75, "pm");
                         } else if (tv.getText().toString().equals(getString(R.string.co))) {
                             drawGraphClass.reDrawChart();
-                            drawGraphClass.drawFirstEntry(11, co_float);
+                            drawGraphClass.drawFirstEntry(11, "co");
                             ChartTimerTask(11, "co");
                         } else if (tv.getText().toString().equals(getString(R.string.co2))) {
                             drawGraphClass.reDrawChart();
-                            drawGraphClass.drawFirstEntry(co2_float.intValue() + 500, co2_float);
+                            drawGraphClass.drawFirstEntry(1, "tvoc");
                             ChartTimerTask(co2_float.intValue() + 500, "co2");
                         } else if (tv.getText().toString().equals(getString(R.string.tvoc))) {
                             drawGraphClass.reDrawChart();
-                            drawGraphClass.drawFirstEntry(1, tvoc_float);
+                            drawGraphClass.drawFirstEntry(1, "tvoc");
                             ChartTimerTask(1, "tvoc");
                         } else if (tv.getText().toString().equals(getString(R.string.virus))) {
                             drawGraphClass.reDrawChart();
-                            drawGraphClass.drawFirstEntry(300, (short) 123);
+                            drawGraphClass.drawFirstEntry(300, "virus");
                             ChartTimerTask(300, "virus");
                         }
                     }
@@ -1202,12 +1208,13 @@ public class DashBoardActivity extends AppCompatActivity {
         void setChart(int setYMax) {
             // X축
             XAxis xAxis = binding.virusLineChart.getXAxis();
-            xAxis.setDrawLabels(false); // 라벨 표시 여부
+            xAxis.setDrawLabels(true); // 라벨 표시 여부
             xAxis.setTextColor(Color.WHITE);
             xAxis.setPosition(XAxis.XAxisPosition.BOTTOM); // X축 라벨 위치
             xAxis.setDrawAxisLine(false); // AxisLine 표시
             xAxis.setDrawGridLines(false); // GridLine 표시
             xAxis.setGranularityEnabled(false); // x축 간격을 제한하는 세분화 기능
+            xAxis.setValueFormatter(new XAxisValueFormat());
             xAxis.setGranularity(1);
             binding.virusLineChart.setAutoScaleMinMaxEnabled(true); // Max = Count
             xAxis.setLabelCount(6); // 라벨 갯수
@@ -1267,6 +1274,7 @@ public class DashBoardActivity extends AppCompatActivity {
                         lineData = binding.virusLineChart.getData();
                         createSet();
                         lineData.addDataSet(lineDataSet);
+                        Log.d("chartTimeDivider", lineData.getEntryCount() + "");
                         lineData.addEntry(new Entry(lineData.getEntryCount(), yData), 0); // 데이터 엔트리 추가
                         lineData.notifyDataChanged(); // 데이터 변경 알림
                         binding.virusLineChart.notifyDataSetChanged(); // 라인차트 변경 알림
@@ -1301,6 +1309,14 @@ public class DashBoardActivity extends AppCompatActivity {
             }
         }
 
+        //X축 엔트리 포멧
+        private class XAxisValueFormat extends IndexAxisValueFormatter {
+            @Override
+            public String getFormattedValue(float value) {
+                return chartTimeDivider(xLabelList, (int) value);
+            }
+        }
+
         public void reDrawChart() {
             runOnUiThread(new Runnable() {
                 @Override
@@ -1317,16 +1333,48 @@ public class DashBoardActivity extends AppCompatActivity {
             });
         }
 
-        public void drawFirstEntry(int setYMax, float yData) {
+        public void drawFirstEntry(int setYMax, String s) {
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    if (yData != 0) {
-                        feedMultiple(setYMax, yData);
-                        feedMultiple(setYMax, yData);
+                    if (s != null) {
+                        switch (s) {
+                            case "aqi":
+                                drawGraphClass.feedMultiple(setYMax, aqi_short);
+                                break;
+                            case "pm":
+                                drawGraphClass.feedMultiple(setYMax, pm_float.intValue());
+                                break;
+                            case "tvoc":
+                                drawGraphClass.feedMultiple(setYMax, tvoc_float);
+                                break;
+                            case "co2":
+                                drawGraphClass.feedMultiple(setYMax, co2_float);
+                                break;
+                            case "co":
+                                drawGraphClass.feedMultiple(setYMax, co_float.intValue());
+                                break;
+                            case "virus":
+                                drawGraphClass.feedMultiple(setYMax, 123);
+                                break;
+                        }
                     }
                 }
             });
+        }
+
+        private String chartTimeDivider(ArrayList<String> arrayList, int count) {
+            @SuppressLint("SimpleDateFormat") SimpleDateFormat simpleDateFormat = new SimpleDateFormat("hh:mm");
+            long lArray;
+            if (count == 0) {
+                lArray = CHART_MADE_TIME - (10 * 60 * 1000);
+            } else if (count == 1) {
+                lArray = CHART_MADE_TIME;
+            } else {
+                lArray = CHART_MADE_TIME + ((long) (count - 1) * 10 * 60 * 1000);
+            }
+            arrayList.add(count + 1, simpleDateFormat.format(lArray));
+            return arrayList.get(count + 1);
         }
     }
 
