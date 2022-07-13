@@ -58,7 +58,7 @@ public class DashBoardFragment extends AppCompatActivity {
     TextView currentTimeTv, category1, category2, category3, category4, category5, category6, categoryTitle;
     TextView aqiContentTv, aqiTitleTv, tempTitleTv, humidTitleTv, dayOfNightTv, aqiCurrentArrow, paringDeviceTv;
     ImageView menu, circleChart;
-    String currentTimeIndex;
+    String currentTimeIndex,chart_time;
 
     int barViewWidth, barViewHeight, arrowWidth;
 
