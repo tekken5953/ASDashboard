@@ -173,6 +173,7 @@
                 android:background="@drawable/ripple_round"
                 android:padding="3dp"
                 android:src="@drawable/refresh"
+                android:descendantFocusability="blocksDescendants"
                 app:layout_constraintBottom_toBottomOf="@+id/connConnectableDeviceTv"
                 app:layout_constraintStart_toEndOf="@+id/connConnectableDeviceTv"
                 app:layout_constraintTop_toTopOf="@+id/connConnectableDeviceTv" />
@@ -184,6 +185,7 @@
                 android:orientation="vertical"
                 android:overScrollMode="never"
                 android:padding="5dp"
+                android:descendantFocusability="blocksDescendants"
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                 app:layout_constraintBottom_toBottomOf="@+id/connPairedDeviceRv"
                 app:layout_constraintStart_toStartOf="@+id/connConnectableDeviceTv"

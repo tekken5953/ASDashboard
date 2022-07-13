@@ -231,6 +231,7 @@ public class ConnectDeviceActivity extends AppCompatActivity {
             public void onClick(View v) {
                 binding.connRefreshIv.setVisibility(View.GONE);
                 cList.clear();
+                pList.clear();
                 startCheckBluetooth();
                 IntentFilter intentFilter = new IntentFilter();
                 intentFilter.addAction(BluetoothDevice.ACTION_FOUND);
@@ -303,7 +304,8 @@ public class ConnectDeviceActivity extends AppCompatActivity {
 //                    cAdapter.notifyDataSetChanged();
 
 //                     필터링
-                    if ((deviceName != null && deviceName.contains("BioT")) || (deviceName != null && deviceName.contains("BS"))) {
+                    if (deviceName != null && deviceName.contains("BS_")) {
+
                         noBondedList.add(device);
                         if (deviceName.contains(" ")) {
                             deviceNameStrRight = deviceName.split(" ");
