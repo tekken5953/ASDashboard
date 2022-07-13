@@ -15,6 +15,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.content.res.AppCompatResources;
 import androidx.core.content.res.ResourcesCompat;
 
+import com.example.dashboard.OuterClass;
 import com.example.dashboard.R;
 import com.example.dashboard.SharedPreferenceManager;
 import com.example.dashboard.connect.ConnectDeviceActivity;
@@ -28,11 +29,18 @@ public class LanguageSelectActivity extends AppCompatActivity {
     String FINAL_LANGUAGE = null;
     String SKIP_SELECT_LANGUAGE = null;
     private final String LANGUAGE_LOG = "language_log";
+    OuterClass outerClass = new OuterClass();
 
     Button langOkTv;
     ImageView koreaFlag, englishFlag;
     TextView langKorTitleTv, langEngTitleTv;
     Context context;
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        outerClass.FullScreenMode(LanguageSelectActivity.this);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -95,6 +103,7 @@ public class LanguageSelectActivity extends AppCompatActivity {
     @Override
     public void onWindowFocusChanged(boolean hasFocus) {
         super.onWindowFocusChanged(hasFocus);
+        outerClass.FullScreenMode(LanguageSelectActivity.this);
 
         koreaFlag.setOnClickListener(new View.OnClickListener() {
             @Override

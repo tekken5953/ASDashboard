@@ -55,11 +55,13 @@
 
             <ImageView
                 android:id="@+id/hambugerMenuIv"
-                android:layout_width="25dp"
-                android:layout_height="25dp"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:padding="3dp"
                 android:layout_marginStart="60dp"
                 android:layout_marginTop="3dp"
                 android:gravity="center"
+                android:background="@drawable/ripple_round"
                 android:onClick="onClick"
                 android:visibility="visible"
                 app:layout_constraintBottom_toBottomOf="@+id/currentTimeTv"

@@ -8,11 +8,13 @@
 
     <ImageView
         android:id="@+id/sideMenuCancelIv"
-        android:layout_width="27dp"
-        android:layout_height="24dp"
+        android:layout_width="33dp"
+        android:layout_height="33dp"
+        android:padding="3dp"
         android:layout_marginStart="67dp"
         android:layout_marginTop="65dp"
         android:src="@drawable/cancel"
+        android:background="@drawable/ripple_round"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -115,7 +117,7 @@
         <TextView
             android:id="@+id/sideMenuFan1Tv"
             android:layout_width="wrap_content"
-            android:layout_height="40dp"
+            android:layout_height="43dp"
             android:fontFamily="@font/pretendardvariable"
             android:text="@string/fan_first"
             android:background="@drawable/side_menu_nofan_tv_bg"
@@ -127,7 +129,7 @@
         <TextView
             android:id="@+id/sideMenuFan2Tv"
             android:layout_width="wrap_content"
-            android:layout_height="40dp"
+            android:layout_height="43dp"
             android:gravity="center"
             android:layout_marginStart="35dp"
             android:fontFamily="@font/pretendardvariable"
@@ -140,7 +142,7 @@
         <TextView
             android:id="@+id/sideMenuFan3Tv"
             android:layout_width="wrap_content"
-            android:layout_height="40dp"
+            android:layout_height="43dp"
             android:gravity="center"
             android:layout_marginStart="35dp"
             android:fontFamily="@font/pretendardvariable"
@@ -153,7 +155,7 @@
         <TextView
             android:id="@+id/sideMenuFan4Tv"
             android:layout_width="wrap_content"
-            android:layout_height="40dp"
+            android:layout_height="43dp"
             android:gravity="center"
             android:layout_marginStart="35dp"
             android:fontFamily="@font/pretendardvariable"

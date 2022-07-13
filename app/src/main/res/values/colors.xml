@@ -24,4 +24,5 @@
     <color name="transparent">#00FFFFFF</color> // 투명
     <color name="side_menu_line">#707070</color> // 사이드메뉴 구분선
     <color name="side_power_small">#D50000</color> // 사이드메뉴 파워 아이콘 틴트
+    <color name="ripple_color">#B3FFFFFF</color>
 </resources>

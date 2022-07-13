@@ -14,7 +14,7 @@
         android:layout_height="90dp"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="15dp"
-        android:src="@drawable/bs100_connect"/>
+        android:src="@drawable/side_m" />
 
     <TextView
         android:id="@+id/listItemRecentTitleTv"

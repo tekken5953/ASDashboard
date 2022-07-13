@@ -65,6 +65,11 @@ public class ConnectRecyclerAdapter extends RecyclerView.Adapter<ConnectRecycler
 
     }
 
+    @Override
+    public int getItemViewType(int position) {
+        return position;
+    }
+
     // getItemCount() - 전체 데이터 갯수 리턴.
     @Override
     public int getItemCount() {

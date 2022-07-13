@@ -41,7 +41,10 @@
     <string name="complete_select_lang">Language Setting is Complete</string>
     <string name="skip_lang_msg">Language Set to Automatic </string>
     <string name="connect">Connect</string>
-    <string name="exit_app">If you click back one more, this app will be end</string>
+    <string name="exit_app_title">Exit</string>
+    <string name="exit_app_message">Do you want to Exit this App?</string>
+    <string name="exit_app_yes">Yes</string>
+    <string name="exit_app_no">No</string>
     <string name="disconect_socket">Please check your Device on</string>
     <string name="no_paring_device">Do you want to pair the current Phone to the device?</string>
     <string name="no_data_text">Drawing Graph…</string>

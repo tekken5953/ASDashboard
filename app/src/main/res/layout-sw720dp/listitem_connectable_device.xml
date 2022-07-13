@@ -26,7 +26,7 @@
         android:text="Bio Sentinel 100(test)"
         android:textAllCaps="false"
         android:textColor="@color/white"
-        android:textSize="13sp" />
+        android:textSize="14sp" />
 
     <TextView
         android:id="@+id/listItemConnDeviceAddressTv"
@@ -40,7 +40,7 @@
         android:text="TIA0001505"
         android:textAllCaps="false"
         android:textColor="@color/statusUnitText"
-        android:textSize="12sp" />
+        android:textSize="13sp" />
 
     <TextView
         android:id="@+id/listItemConnDeviceConnTv"
@@ -53,6 +53,6 @@
         android:text="@string/connect"
         android:textAllCaps="false"
         android:textColor="@color/white"
-        android:textSize="11sp" />
+        android:textSize="12sp" />
 
 </RelativeLayout>

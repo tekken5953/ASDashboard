@@ -47,13 +47,11 @@ import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
-import com.example.dashboard.HideNavigationBarClass;
 import com.example.dashboard.OuterClass;
 import com.example.dashboard.R;
 import com.example.dashboard.SharedPreferenceManager;
 import com.example.dashboard.bluetooth.BluetoothAPI;
 import com.example.dashboard.bluetooth.BluetoothThread;
-import com.example.dashboard.connect.ConnectDeviceActivity;
 import com.example.dashboard.databinding.ActivityDashboardBinding;
 import com.example.dashboard.language.LanguageSelectActivity;
 import com.example.dashboard.ui.SegmentedProgressBar;
@@ -85,7 +83,7 @@ public class DashBoardActivity extends AppCompatActivity {
 
     String FAN_CONTROL_COMPLETE = "com.example.dashboard";
 
-    int barViewWidth, barViewHeight, arrowWidth, VIEW_REQUEST_INTERVAL = 3, DRAW_CHART_INTERVAL = 1000 * 3;
+    int barViewWidth, barViewHeight, arrowWidth, VIEW_REQUEST_INTERVAL = 3, DRAW_CHART_INTERVAL = 5;
 
     ArrayList<SegmentedProgressBar.BarContext> barList = new ArrayList<>();
 
@@ -132,13 +130,14 @@ public class DashBoardActivity extends AppCompatActivity {
         }
         if (mReceiver.isInitialStickyBroadcast())
             unregisterReceiver(mReceiver);
+
+        drawGraphClass.reDrawChart();
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        HideNavigationBarClass hideNavigationBarClass = new HideNavigationBarClass();
-        hideNavigationBarClass.hide(DashBoardActivity.this); // 하단 바 없애기
+        outerClass.FullScreenMode(context); // 하단 바 없애기
     }
 
     @SuppressLint("NotifyDataSetChanged")
@@ -194,27 +193,6 @@ public class DashBoardActivity extends AppCompatActivity {
                 });
             }
         }, 4500);
-
-        Handler handler = new Handler(Looper.getMainLooper());
-        handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        try {
-                            if (aqi_short != null) {
-                                drawGraphClass.drawFirstEntry(300, (float) aqi_short);
-                                ChartTimerTask(300, (float) aqi_short);
-                            }
-                            Thread.sleep(1000);
-                        } catch (InterruptedException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                });
-            }
-        }, 3500);
     }
 
     public void init() {
@@ -268,6 +246,28 @@ public class DashBoardActivity extends AppCompatActivity {
         viewModel.getReceiveData().observe(this, data);
 
         startCheckBluetooth();
+
+
+        Handler handler = new Handler(Looper.getMainLooper());
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        try {
+                            Thread.sleep(1000);
+                            if (aqi_short != null) {
+                                drawGraphClass.drawFirstEntry(300, (int) aqi_short);
+                                ChartTimerTask(300, "aqi");
+                            }
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                });
+            }
+        }, 3500);
     }
 
     @SuppressLint("MissingPermission")
@@ -338,7 +338,7 @@ public class DashBoardActivity extends AppCompatActivity {
                                 )
                         );
                     }
-                }, 1500);
+                }, 1000);
 
 
             } else {
@@ -655,8 +655,7 @@ public class DashBoardActivity extends AppCompatActivity {
             barViewHeight = binding.aqiBarChartPb.getHeight();
             arrowWidth = binding.aqiCurrentArrow.getWidth();
 
-            HideNavigationBarClass hideNavigationBarClass = new HideNavigationBarClass();
-            hideNavigationBarClass.hide(context); // 하단 바 없애기
+            outerClass.FullScreenMode(context);// 하단 바 없애기
 
             //barChart 가로세로 구하기
 
@@ -699,6 +698,10 @@ public class DashBoardActivity extends AppCompatActivity {
             bluetoothThread.setConnectedSocketEventListener(new BluetoothThread.connectedSocketEventListener() {
                 @Override
                 public void onConnectedEvent() {
+                    modelName = bluetoothThread.getDeviceName();
+                    Log.d("bluetoothThread", "Bluetooth Socket is Connected");
+                    Log.d("bluetoothThread", "setDevice by : " + bluetoothThread.getDeviceName());
+
                     Handler handler = new Handler(Looper.getMainLooper());
                     handler.postDelayed(new Runnable() {
                         @Override
@@ -716,13 +719,8 @@ public class DashBoardActivity extends AppCompatActivity {
                                     },
                                     bluetoothThread.getSequence()
                             ));
-
-                            Log.d("bluetoothThread", "Bluetooth Socket is Connected");
-                            Log.d("bluetoothThread", "setDevice by : " + bluetoothThread.getDeviceName());
-
-                            modelName = bluetoothThread.getDeviceName();
                         }
-                    }, 1000);
+                    }, 500);
                 }
             });
 
@@ -740,8 +738,6 @@ public class DashBoardActivity extends AppCompatActivity {
                         unregisterReceiver(mReceiver);
                     }
 
-                    bluetoothThread.setRunning(false);
-
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
@@ -750,52 +746,6 @@ public class DashBoardActivity extends AppCompatActivity {
                             builder.setTitle(getString(R.string.caution_title));
                             builder.setMessage(getString(R.string.caution_message));
                             builder.setPositiveButton(getString(R.string.caution_ok), new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    dialog.dismiss();
-
-                                    bluetoothThread.connectSocket();
-
-                                    if (bluetoothThread != null && bluetoothThread.isConnected()) {
-
-                                        if (!bluetoothThread.isRunning() && bluetoothThread != null) {
-                                            bluetoothThread.start();
-                                            Log.d("bluetoothThread", "BluetoothThread is Run");
-                                        }
-
-                                        Toast.makeText(context, "다시 연결되었습니다", Toast.LENGTH_SHORT).show();
-                                        dialog.dismiss();
-                                        data_scheduler = new Timer();
-                                        regParentListener(VIEW_REQUEST_INTERVAL, data_scheduler);
-                                        runOnUiThread(new Runnable() {
-                                            @Override
-                                            public void run() {
-                                                Handler handler = new Handler(Looper.getMainLooper());
-                                                handler.postDelayed(new Runnable() {
-                                                    @Override
-                                                    public void run() {
-                                                        runOnUiThread(new Runnable() {
-                                                            @Override
-                                                            public void run() {
-                                                                try {
-                                                                    if (aqi_short != null) {
-                                                                        drawGraphClass.drawFirstEntry(300, (float) aqi_short);
-                                                                        ChartTimerTask(300, (float) aqi_short);
-                                                                    }
-                                                                    Thread.sleep(1000);
-                                                                } catch (InterruptedException e) {
-                                                                    e.printStackTrace();
-                                                                }
-                                                            }
-                                                        });
-                                                    }
-                                                }, 3500);
-                                            }
-                                        });
-                                    }
-                                }
-                            });
-                            builder.setNegativeButton("뒤로가기", new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
                                     dialog.dismiss();
@@ -849,23 +799,41 @@ public class DashBoardActivity extends AppCompatActivity {
         }
     }
 
-    private void ChartTimerTask(int yMax, float yData) {
+    private void ChartTimerTask(int yMax, String s) {
 
         TimerTask timerTask = new TimerTask() {
             @Override
             public void run() {
+
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        drawGraphClass.feedMultiple(yMax, yData);
+                        switch (s) {
+                            case "aqi":
+                                drawGraphClass.feedMultiple(yMax, aqi_short);
+                                break;
+                            case "pm":
+                                drawGraphClass.feedMultiple(yMax, pm_float.intValue());
+                                break;
+                            case "tvoc":
+                                drawGraphClass.feedMultiple(yMax, tvoc_float);
+                                break;
+                            case "co2":
+                                drawGraphClass.feedMultiple(yMax, co2_float);
+                                break;
+                            case "co":
+                                drawGraphClass.feedMultiple(yMax, co_float.intValue());
+                                break;
+                            case "virus":
+                                drawGraphClass.feedMultiple(yMax, 123);
+                                break;
+                        }
                     }
                 });
             }
         };
-
         chart_scheduler = new Timer();
-
-        chart_scheduler.schedule(timerTask, 0, DRAW_CHART_INTERVAL);
+        chart_scheduler.schedule(timerTask, 0, 1000 * (long) DRAW_CHART_INTERVAL);
 
     }
 
@@ -1193,27 +1161,27 @@ public class DashBoardActivity extends AppCompatActivity {
                         if (tv.getText().toString().equals(getString(R.string.aqi))) {
                             drawGraphClass.reDrawChart();
                             drawGraphClass.drawFirstEntry(300, aqi_short);
-                            ChartTimerTask(300, aqi_short);
+                            ChartTimerTask(300, "aqi");
                         } else if (tv.getText().toString().equals(getString(R.string.fine_dust))) {
                             drawGraphClass.reDrawChart();
                             drawGraphClass.drawFirstEntry(75, pm_float);
-                            ChartTimerTask(75, pm_float);
+                            ChartTimerTask(75, "pm");
                         } else if (tv.getText().toString().equals(getString(R.string.co))) {
                             drawGraphClass.reDrawChart();
                             drawGraphClass.drawFirstEntry(11, co_float);
-                            ChartTimerTask(11, co_float);
+                            ChartTimerTask(11, "co");
                         } else if (tv.getText().toString().equals(getString(R.string.co2))) {
                             drawGraphClass.reDrawChart();
                             drawGraphClass.drawFirstEntry(co2_float.intValue() + 500, co2_float);
-                            ChartTimerTask(co2_float.intValue() + 500, co2_float);
+                            ChartTimerTask(co2_float.intValue() + 500, "co2");
                         } else if (tv.getText().toString().equals(getString(R.string.tvoc))) {
                             drawGraphClass.reDrawChart();
                             drawGraphClass.drawFirstEntry(1, tvoc_float);
-                            ChartTimerTask(1, tvoc_float);
+                            ChartTimerTask(1, "tvoc");
                         } else if (tv.getText().toString().equals(getString(R.string.virus))) {
                             drawGraphClass.reDrawChart();
                             drawGraphClass.drawFirstEntry(300, (short) 123);
-                            ChartTimerTask(300, (short) 123);
+                            ChartTimerTask(300, "virus");
                         }
                     }
                 }
@@ -1245,7 +1213,7 @@ public class DashBoardActivity extends AppCompatActivity {
             xAxis.setLabelCount(6); // 라벨 갯수
 
             binding.virusLineChart.moveViewToX(lineData.getEntryCount()); // 계속 X축을 데이터의 오른쪽 끝으로 옮기기
-            binding.virusLineChart.setVisibleXRangeMaximum(7); // X축 최대 표현 개수
+            binding.virusLineChart.setVisibleXRangeMaximum(5); // X축 최대 표현 개수
             binding.virusLineChart.setPinchZoom(false); // 확대 설정
             binding.virusLineChart.setDoubleTapToZoomEnabled(false); // 더블탭 설정
             binding.virusLineChart.getDescription().setEnabled(false); // 차트 값 설명 유효화
@@ -1308,6 +1276,7 @@ public class DashBoardActivity extends AppCompatActivity {
         }
 
         void createSet() {
+
             lineDataSet = new LineDataSet(null, null); // 범례, yVals 설정
             lineDataSet.setAxisDependency(YAxis.AxisDependency.LEFT); // Y값 데이터를 왼쪽으로
             lineDataSet.setFillColor(Color.parseColor("#147AD6")); // 차트 채우기 색상
@@ -1449,15 +1418,31 @@ public class DashBoardActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        super.onBackPressed();
-        if (bluetoothThread.isConnected()) {
-            bluetoothThread.closeSocket();
-        }
+        //  앱 종료 메시지 창 띄우기
+        final AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        builder.setTitle(getString(R.string.exit_app_title));
+        builder.setMessage(getString(R.string.exit_app_message));
+        builder.setPositiveButton(getString(R.string.exit_app_yes), new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                if (bluetoothThread.isConnected()) {
+                    bluetoothThread.closeSocket();
+                }
 
-        if (bluetoothThread.isRunning()) {
-            bluetoothThread.interrupt();
-        }
+                if (bluetoothThread.isRunning()) {
+                    bluetoothThread.interrupt();
+                }
+                dialog.dismiss();
+                DashBoardActivity.super.onBackPressed();
+            }
+        });
+        builder.setNegativeButton(getString(R.string.exit_app_no), new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
 
-        android.os.Process.killProcess(android.os.Process.myPid());
+            }
+        });
+        builder.show();
     }
 }

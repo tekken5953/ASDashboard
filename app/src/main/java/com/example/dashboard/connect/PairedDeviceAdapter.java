@@ -47,6 +47,11 @@ public class PairedDeviceAdapter extends RecyclerView.Adapter<PairedDeviceAdapte
         void onItemClick(View v, int position);
     }
 
+    @Override
+    public int getItemViewType(int position) {
+        return position;
+    }
+
     // OnItemClickListener 리스너 객체 참조를 어댑터에 전달하는 메서드
     public void setOnItemClickListener(OnItemClickListener listener) {
         this.mListener = listener;
