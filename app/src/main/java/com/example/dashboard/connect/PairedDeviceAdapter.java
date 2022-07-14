@@ -14,7 +14,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.core.content.res.ResourcesCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.dashboard.R;
@@ -22,7 +21,7 @@ import com.example.dashboard.R;
 import java.util.ArrayList;
 
 public class PairedDeviceAdapter extends RecyclerView.Adapter<PairedDeviceAdapter.ViewHolder> {
-    private ArrayList<PairedDeviceItem> mData;
+    private final ArrayList<PairedDeviceItem> mData;
 
     // 생성자에서 데이터 리스트 객체를 전달받음.
     PairedDeviceAdapter(ArrayList<PairedDeviceItem> list) {
@@ -43,19 +42,25 @@ public class PairedDeviceAdapter extends RecyclerView.Adapter<PairedDeviceAdapte
 
     private OnItemClickListener mListener = null;
 
+    private OnItemLongClickListener longClickListener = null;
+
     public interface OnItemClickListener {
         void onItemClick(View v, int position);
     }
 
-    @Override
-    public int getItemViewType(int position) {
-        return position;
+    public interface OnItemLongClickListener {
+        void onItemLongClick(View v, int position);
     }
 
     // OnItemClickListener 리스너 객체 참조를 어댑터에 전달하는 메서드
     public void setOnItemClickListener(OnItemClickListener listener) {
         this.mListener = listener;
     }
+
+    public void setOnItemLongClickListener(OnItemLongClickListener listener) {
+        this.longClickListener = listener;
+    }
+
 
     // onBindViewHolder() - position에 해당하는 데이터를 뷰홀더의 아이템뷰에 표시.
     @Override
@@ -95,6 +100,20 @@ public class PairedDeviceAdapter extends RecyclerView.Adapter<PairedDeviceAdapte
                             mListener.onItemClick(v, position);
                         }
                     }
+                }
+            });
+
+            itemView.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View v) {
+                    int position = getAdapterPosition();
+
+                    if (position != RecyclerView.NO_POSITION) {
+                        if (longClickListener != null) {
+                            longClickListener.onItemLongClick(v, position);
+                        }
+                    }
+                    return false;
                 }
             });
 

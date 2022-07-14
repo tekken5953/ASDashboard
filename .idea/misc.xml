@@ -26,6 +26,7 @@
         <entry key="..\:/AndroidStudio/Dashboard/app/src/main/res/drawable/lang_ok_w.xml" value="0.295" />
         <entry key="..\:/AndroidStudio/Dashboard/app/src/main/res/drawable/lang_selected_eng.xml" value="0.295" />
         <entry key="..\:/AndroidStudio/Dashboard/app/src/main/res/drawable/lang_selected_text.xml" value="0.295" />
+        <entry key="..\:/AndroidStudio/Dashboard/app/src/main/res/drawable/p_adapter_ripple.xml" value="0.3835" />
         <entry key="..\:/AndroidStudio/Dashboard/app/src/main/res/drawable/paired_rv_ripple.xml" value="0.384" />
         <entry key="..\:/AndroidStudio/Dashboard/app/src/main/res/drawable/ripple_round.xml" value="0.384" />
         <entry key="..\:/AndroidStudio/Dashboard/app/src/main/res/drawable/side_dialog_btn_bg.xml" value="0.426" />
@@ -37,7 +38,7 @@
         <entry key="..\:/AndroidStudio/Dashboard/app/src/main/res/drawable/topframe_outline.xml" value="0.35" />
         <entry key="..\:/AndroidStudio/Dashboard/app/src/main/res/layout-small/activity_main.xml" value="0.16" />
         <entry key="..\:/AndroidStudio/Dashboard/app/src/main/res/layout-small/listitem.xml" value="0.21432291666666667" />
-        <entry key="..\:/AndroidStudio/Dashboard/app/src/main/res/layout-sw720dp/activity_dashboard.xml" value="0.18802083333333333" />
+        <entry key="..\:/AndroidStudio/Dashboard/app/src/main/res/layout-sw720dp/activity_dashboard.xml" value="0.33" />
         <entry key="..\:/AndroidStudio/Dashboard/app/src/main/res/layout-sw720dp/activity_main.xml" value="0.45107794361525705" />
         <entry key="..\:/AndroidStudio/Dashboard/app/src/main/res/layout-sw720dp/activity_search_device.xml" value="0.13" />
         <entry key="..\:/AndroidStudio/Dashboard/app/src/main/res/layout-sw720dp/connect_bluetooth_activity.xml" value="0.2" />
