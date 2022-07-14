@@ -336,7 +336,7 @@ public class ConnectDeviceActivity extends AppCompatActivity {
                         @Override
                         public void run() {
                             String deviceName = device.getName();
-                            if (deviceName != null && (deviceName.contains("BS") || deviceName.contains("BioT"))) {
+                            if (deviceName != null && (deviceName.contains("BS_"))) {
                                 if (deviceName.contains(" ")) {
                                     deviceNameStrRight = deviceName.split(" ");
                                     for (int i = 0; i < pList.size(); i++) {

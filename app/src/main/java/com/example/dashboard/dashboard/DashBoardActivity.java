@@ -261,10 +261,11 @@ public class DashBoardActivity extends AppCompatActivity {
                     public void run() {
                         try {
                             Thread.sleep(1000);
-                            if (aqi_short != null) {
-                                drawGraphClass.drawFirstEntry(300, "aqi");
-                                ChartTimerTask(300, "aqi");
+                            if (aqi_short == null) {
+                                drawGraphClass.reDrawChart();
                             }
+                            drawGraphClass.drawFirstEntry(300, "aqi");
+                            ChartTimerTask(300, "aqi");
                         } catch (InterruptedException e) {
                             e.printStackTrace();
                         }
@@ -1186,12 +1187,12 @@ public class DashBoardActivity extends AppCompatActivity {
                             ChartTimerTask(11, "co");
                         } else if (tv.getText().toString().equals(getString(R.string.co2))) {
                             drawGraphClass.reDrawChart();
-                            drawGraphClass.drawFirstEntry(1, "tvoc");
+                            drawGraphClass.drawFirstEntry(co2_float.intValue() + 500, "co2");
                             ChartTimerTask(co2_float.intValue() + 500, "co2");
                         } else if (tv.getText().toString().equals(getString(R.string.tvoc))) {
                             drawGraphClass.reDrawChart();
-                            drawGraphClass.drawFirstEntry(1, "tvoc");
-                            ChartTimerTask(1, "tvoc");
+                            drawGraphClass.drawFirstEntry(2, "tvoc");
+                            ChartTimerTask(2, "tvoc");
                         } else if (tv.getText().toString().equals(getString(R.string.virus))) {
                             drawGraphClass.reDrawChart();
                             drawGraphClass.drawFirstEntry(300, "virus");
@@ -1245,6 +1246,7 @@ public class DashBoardActivity extends AppCompatActivity {
             yAxis.setValueFormatter(new YAxisValueFormat()); // y축 데이터 포맷
             yAxis.setGranularityEnabled(false); // y축 간격을 제한하는 세분화 기능
             yAxis.setDrawLabels(true); // Y축 라벨 위치
+            yAxis.setLabelCount(2);
             yAxis.setDrawGridLines(false); // GridLine 표시
             yAxis.setDrawAxisLine(false); // AxisLine 표시
 
@@ -1313,7 +1315,13 @@ public class DashBoardActivity extends AppCompatActivity {
             @Override
             public String getFormattedValue(float value) {
                 String newValue = value + "";
-                return newValue.substring(0, newValue.length() - 2);
+
+                if (newValue.contains("\\.")) {
+                    String[] s = newValue.split("\\.");
+                    return s[0];
+                } else {
+                    return newValue.substring(0, newValue.length() - 2);
+                }
             }
         }
 
