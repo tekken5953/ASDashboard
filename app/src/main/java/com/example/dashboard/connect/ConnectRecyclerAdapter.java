@@ -10,7 +10,6 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -37,9 +36,8 @@ public class ConnectRecyclerAdapter extends RecyclerView.Adapter<ConnectRecycler
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
         View view = inflater.inflate(R.layout.listitem_connectable_device, parent, false);
-        ViewHolder vh = new ViewHolder(view);
 
-        return vh;
+        return new ViewHolder(view);
     }
 
     private OnItemClickListener mListener = null;
@@ -63,11 +61,6 @@ public class ConnectRecyclerAdapter extends RecyclerView.Adapter<ConnectRecycler
         holder.device_img.setImageDrawable(item.getDevice_img());
         holder.device_address.setText(item.getDevice_address());
 
-    }
-
-    @Override
-    public int getItemViewType(int position) {
-        return position;
     }
 
     // getItemCount() - 전체 데이터 갯수 리턴.

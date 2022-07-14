@@ -69,36 +69,30 @@ public class ConnectDeviceActivity extends AppCompatActivity {
         super.onResume();
         outerClass.FullScreenMode(context);
 
-        Handler handler = new Handler(Looper.getMainLooper());
-        handler.postDelayed(new Runnable() {
+        if (!bluetoothAdapter.isDiscovering()) {
+            bluetoothAdapter.startDiscovery();
+        }
+
+        runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        Log.d("LifeCycle", "On Resume");
-                        cList.clear();
-                        pList.clear();
+                Log.d("LifeCycle", "On Resume");
+                cList.clear();
 
-                        startCheckBluetooth();
+                startCheckBluetooth();
 
-                        filter.addAction(BluetoothDevice.ACTION_FOUND);
-                        filter.addAction(BluetoothDevice.ACTION_BOND_STATE_CHANGED);
-                        registerReceiver(mReceiver, filter);
-
-                        if (!bluetoothAdapter.isDiscovering()) {
-                            bluetoothAdapter.startDiscovery();
-                        }
-                    }
-                });
+                findPairedDevice();
+                filter.addAction(BluetoothDevice.ACTION_FOUND);
+                filter.addAction(BluetoothDevice.ACTION_BOND_STATE_CHANGED);
+                registerReceiver(mReceiver, filter);
             }
-        }, 1500);
+        });
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        Log.d("LifeCycle", "On Pause");
+        Log.d("LifeCycle", "On Destroy");
         if (bluetoothAdapter.isDiscovering()) {
             unregisterReceiver(mReceiver);
             bluetoothAdapter.cancelDiscovery();
@@ -110,6 +104,7 @@ public class ConnectDeviceActivity extends AppCompatActivity {
     @Override
     protected void onPause() {
         super.onPause();
+        Log.d("LifeCycle", "On Pause");
         binding.connRefreshIv.setVisibility(View.VISIBLE);
     }
 
@@ -119,7 +114,7 @@ public class ConnectDeviceActivity extends AppCompatActivity {
         if (hasFocus) {
             outerClass.FullScreenMode(context); // 하단 바 없애기
             Log.d("LifeCycle", "On WindowFocusChanged");
-
+            findPairedDevice();
         }
     }
 
@@ -146,7 +141,6 @@ public class ConnectDeviceActivity extends AppCompatActivity {
 
         bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
 
-
         cAdapter.setOnItemClickListener(new ConnectRecyclerAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(View v, int position) {
@@ -158,21 +152,26 @@ public class ConnectDeviceActivity extends AppCompatActivity {
                 handler.postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                        try {
-                            //선택한 디바이스 페어링 요청
-                            Log.d("paringDevice", "position : " + position + " name : " + noBondedList.get(position).getName());
-                            noPairingPosition = position;
-                            BluetoothDevice device = noBondedList.get(position);
-                            Method method = device.getClass().getMethod("createBond", (Class[]) null);
-                            method.invoke(device, (Object[]) null);
-                            binding.loadingParingPb.setVisibility(View.GONE);
-                            binding.connMainLayout.setAlpha(1f);
-                        } catch (InvocationTargetException | NoSuchMethodException | IllegalAccessException e) {
-                            e.printStackTrace();
-                            Toast.makeText(context, getString(R.string.already_connected), Toast.LENGTH_SHORT).show();
-                        }
+                        binding.loadingParingPb.setVisibility(View.GONE);
+                        binding.connMainLayout.setAlpha(1f);
                     }
-                }, 2000);
+                }, 1500);
+                if (position < cAdapter.getItemCount()) {
+                    try {
+                        //선택한 디바이스 페어링 요청
+                        Log.d("paringDevice", "position : " + position + " name : " + noBondedList.get(position).getName());
+                        noPairingPosition = position;
+                        BluetoothDevice device = noBondedList.get(position);
+                        Method method = device.getClass().getMethod("createBond", (Class[]) null);
+                        method.invoke(device, (Object[]) null);
+                    } catch (InvocationTargetException | NoSuchMethodException | IllegalAccessException e) {
+                        e.printStackTrace();
+                        Toast.makeText(context, getString(R.string.already_connected), Toast.LENGTH_SHORT).show();
+                    }
+                } else {
+                    Toast.makeText(context, "다시 진행해 주세요", Toast.LENGTH_SHORT).show();
+                    onResume();
+                }
             }
         });
 
@@ -194,7 +193,6 @@ public class ConnectDeviceActivity extends AppCompatActivity {
         pAdapter.setOnItemClickListener(new PairedDeviceAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(View v, int position) {
-
                 if (SELECTED_POSITION == -1) {
                     v.setAlpha(1f);
                     SELECTED_POSITION = position;
@@ -230,15 +228,44 @@ public class ConnectDeviceActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 binding.connRefreshIv.setVisibility(View.GONE);
-                cList.clear();
-                pList.clear();
-                startCheckBluetooth();
-                IntentFilter intentFilter = new IntentFilter();
-                intentFilter.addAction(BluetoothDevice.ACTION_FOUND);
-                registerReceiver(mReceiver, intentFilter);
+                onResume();
+            }
+        });
 
-                if (!bluetoothAdapter.isDiscovering()) {
-                    bluetoothAdapter.startDiscovery();
+        pAdapter.setOnItemLongClickListener(new PairedDeviceAdapter.OnItemLongClickListener() {
+            @Override
+            public void onItemLongClick(View v, int position) {
+                Set<BluetoothDevice> pairedDevices = bluetoothAdapter.getBondedDevices();
+                for (BluetoothDevice bt : pairedDevices) {
+                    if (bt.getName().contains(pList.get(position).getName())) {
+
+                        final AlertDialog.Builder builder = new AlertDialog.Builder(context);
+                        builder.setTitle("페어링 해제");
+                        builder.setMessage("페어링을 해제하시겠습니까?");
+                        builder.setPositiveButton("해제", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                try {
+                                    dialog.dismiss();
+                                    deviceNameStrLeft = bt.getName().split(" ");
+                                    Method m = bt.getClass().getMethod("removeBond", (Class[]) null);
+                                    m.invoke(bt, (Object[]) null);
+                                    pList.remove(position);
+                                    pAdapter.notifyDataSetChanged();
+                                    onResume();
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                        });
+                        builder.setNegativeButton("취소", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+                            }
+                        });
+                        builder.show();
+                    }
                 }
             }
         });
@@ -268,10 +295,11 @@ public class ConnectDeviceActivity extends AppCompatActivity {
 
     // 페어링 된 디바이스 불러오기
     public void findPairedDevice() {
+        pList.clear();
+        bondedList.clear();
         Set<BluetoothDevice> pairedDevice = bluetoothAdapter.getBondedDevices();
         if (!pairedDevice.isEmpty()) {
             for (BluetoothDevice device : pairedDevice) {
-                binding.connPairedDeviceRv.setVisibility(View.VISIBLE);
                 bondedList.add(device);
                 if (device.getName().contains(" ")) {
                     deviceNameStrLeft = device.getName().split(" ");
@@ -294,31 +322,47 @@ public class ConnectDeviceActivity extends AppCompatActivity {
             if (BluetoothDevice.ACTION_FOUND.equals(action)) {
                 BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
                 if (ActivityCompat.checkSelfPermission(context, Manifest.permission.BLUETOOTH_CONNECT) != PackageManager.PERMISSION_GRANTED) {
-                    String deviceName = device.getName();
 //                    deviceNameStrRight = deviceName.split(" ");
-                    //필터링 없이 하려면 주석 해제 + 밑에 필터링부분 주석처리
+                    // 필터링 없이 하려면 주석 해제 + 밑에 필터링부분 주석처리
 //                    notPairedDeviceList.add(device);
 //                    addCItem(filteringImage(deviceNameStr[0],
 //                                deviceNameStr[0],
 //                                deviceNameStr[1]);
 //                    cAdapter.notifyDataSetChanged();
 
-//                     필터링
-                    if (deviceName != null && deviceName.contains("BS_")) {
-
-                        noBondedList.add(device);
-                        if (deviceName.contains(" ")) {
-                            deviceNameStrRight = deviceName.split(" ");
-                            addCItem(filteringImage(deviceNameStrRight[0]),
-                                    deviceNameStrRight[0],
-                                    deviceNameStrRight[1]);
-                        } else {
-                            addCItem(filteringImage(deviceName),
-                                    deviceName,
-                                    "(No Serial Number)");
+//                  필터링
+                    Handler handler = new Handler(Looper.getMainLooper());
+                    handler.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            String deviceName = device.getName();
+                            if (deviceName != null && (deviceName.contains("BS") || deviceName.contains("BioT"))) {
+                                if (deviceName.contains(" ")) {
+                                    deviceNameStrRight = deviceName.split(" ");
+                                    for (int i = 0; i < pList.size(); i++) {
+                                        Log.d("LifeCycle", deviceNameStrRight[0] + deviceNameStrRight[1] + " : " + pList.get(i).getAddress());
+                                        if (!deviceNameStrRight[1].equals(pList.get(i).getAddress())) {
+                                            if (i == pList.size() - 1) {
+                                                noBondedList.add(device);
+                                                addCItem(filteringImage(deviceNameStrRight[0]),
+                                                        deviceNameStrRight[0],
+                                                        deviceNameStrRight[1]);
+                                                cAdapter.notifyDataSetChanged();
+                                            }
+                                        } else {
+                                            break;
+                                        }
+                                    }
+                                } else {
+                                    noBondedList.add(device);
+                                    addCItem(filteringImage(deviceName),
+                                            deviceName,
+                                            "(No Serial Number)");
+                                    cAdapter.notifyDataSetChanged();
+                                }
+                            }
                         }
-                        cAdapter.notifyDataSetChanged();
-                    }
+                    }, 1000);
                 }
             }
 
@@ -327,24 +371,21 @@ public class ConnectDeviceActivity extends AppCompatActivity {
 
                 binding.loadingParingPb.setVisibility(View.VISIBLE);
                 binding.connMainLayout.setAlpha(0.3f);
-                Handler handler = new Handler(Looper.getMainLooper());
-                handler.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        binding.loadingParingPb.setVisibility(View.GONE);
-                        binding.connMainLayout.setAlpha(1f);
-                        try {
-                            addPItem(filteringImage(noBondedList.get(noPairingPosition).getName()), noBondedList.get(noPairingPosition).getName(), null);
+
+                try {
+                    binding.connPairedDeviceRv.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            binding.loadingParingPb.setVisibility(View.GONE);
+                            binding.connMainLayout.setAlpha(1f);
                             pAdapter.notifyDataSetChanged();
-                        } catch (IndexOutOfBoundsException e) {
-                            finish(); //인텐트 종료
-                            overridePendingTransition(0, 0);//인텐트 효과 없애기
-                            Intent refresh = getIntent(); //인텐트
-                            startActivity(refresh); //액티비티 열기
-                            overridePendingTransition(0, 0);//인텐트 효과 없애기
+                            onResume();
                         }
-                    }
-                }, 2000);
+                    }, 1000);
+                } catch (IndexOutOfBoundsException e) {
+                    e.printStackTrace();
+                    onResume();
+                }
             }
         }
     };

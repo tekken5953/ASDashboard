@@ -83,7 +83,7 @@ public class DashBoardActivity extends AppCompatActivity {
 
     String FAN_CONTROL_COMPLETE = "com.example.dashboard";
 
-    int barViewWidth, barViewHeight, arrowWidth, VIEW_REQUEST_INTERVAL = 3, DRAW_CHART_INTERVAL = 60;
+    int barViewWidth, barViewHeight, arrowWidth, VIEW_REQUEST_INTERVAL = 3, DRAW_CHART_INTERVAL = 60 * 10;
 
     ArrayList<SegmentedProgressBar.BarContext> barList = new ArrayList<>();
 
@@ -844,10 +844,18 @@ public class DashBoardActivity extends AppCompatActivity {
     //AQI Index 별 차트 이동거리 계산
     public void moveBarChart(int aqiNumber) {
 
-        params.setMargins((aqiNumber * barViewWidth / 300) - (arrowWidth / 2),
-                0,
-                0,
-                (int) getResources().getDimension(R.dimen.arrowBottom));  // 왼쪽, 위, 오른쪽, 아래 순서
+        if (aqiNumber != 0) {
+            params.setMargins((aqiNumber * barViewWidth / 300) - (arrowWidth / 2),
+                    0,
+                    0,
+                    (int) getResources().getDimension(R.dimen.arrowBottom));  // 왼쪽, 위, 오른쪽, 아래 순서
+        } else {
+            params.setMargins(0,
+                    0,
+                    0,
+                    (int) getResources().getDimension(R.dimen.arrowBottom));  // 왼쪽, 위, 오른쪽, 아래 순서
+        }
+
 
         binding.aqiCurrentArrow.setLayoutParams(params);
         binding.aqiCurrentArrow.setText(aqiNumber + "");
