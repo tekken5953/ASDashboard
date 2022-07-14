@@ -263,9 +263,12 @@ public class DashBoardActivity extends AppCompatActivity {
                             Thread.sleep(1000);
                             if (aqi_short == null) {
                                 drawGraphClass.reDrawChart();
+                                drawGraphClass.drawFirstEntry(300, "aqi");
+                                ChartTimerTask(300, "aqi");
+                            } else {
+                                drawGraphClass.drawFirstEntry(300, "aqi");
+                                ChartTimerTask(300, "aqi");
                             }
-                            drawGraphClass.drawFirstEntry(300, "aqi");
-                            ChartTimerTask(300, "aqi");
                         } catch (InterruptedException e) {
                             e.printStackTrace();
                         }
@@ -956,14 +959,22 @@ public class DashBoardActivity extends AppCompatActivity {
                 if (bluetoothThread.isConnected() && bluetoothThread != null) {
                     dialog_setupDate.setText(setUpDateStr);
                     dialog_serialNumber.setText(serialNumber);
-                    dialog_productName.setText(modelName);
 
-                    if (modelName.startsWith("BS-M")) {
+                    if (modelName.contains(" ")) {
+                        String[] s = modelName.split(" ");
+                        dialog_productName.setText(s[0]);
+                    } else {
+                        dialog_productName.setText(modelName);
+                    }
+
+                    if (modelName.startsWith("BS_M")) {
                         dialog_product_img.setImageDrawable(ResourcesCompat.getDrawable(getResources(), R.drawable.side_m, null));
                         dialog_product_img.setAlpha(0.85f);
-                    } else if (modelName.startsWith("BS-100")) {
+                    } else if (modelName.startsWith("BS_100")) {
                         dialog_product_img.setImageDrawable(ResourcesCompat.getDrawable(getResources(), R.drawable.side_100, null));
                         dialog_product_img.setAlpha(0.85f);
+                    } else {
+                        dialog_product_img.setImageDrawable(null);
                     }
 
                     if (current_fan_byte == 0x01) {

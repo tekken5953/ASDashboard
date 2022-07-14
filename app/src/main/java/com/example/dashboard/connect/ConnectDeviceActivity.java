@@ -251,8 +251,9 @@ public class ConnectDeviceActivity extends AppCompatActivity {
                                     Method m = bt.getClass().getMethod("removeBond", (Class[]) null);
                                     m.invoke(bt, (Object[]) null);
                                     pList.remove(position);
-                                    pAdapter.notifyDataSetChanged();
-                                    onResume();
+                                    pAdapter.notifyItemRemoved(position);
+                                    addCItem(filteringImage(deviceNameStrLeft[0]), deviceNameStrLeft[0], deviceNameStrLeft[1]);
+                                    cAdapter.notifyItemInserted(cAdapter.getItemCount() - 1);
                                 } catch (Exception e) {
                                     e.printStackTrace();
                                 }

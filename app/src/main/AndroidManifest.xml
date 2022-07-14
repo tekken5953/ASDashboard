@@ -22,13 +22,10 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Dashboard"
         tools:targetApi="s">
-
         <activity
-            android:name=".connect.ConnectDeviceActivity"
-            android:exported="false" />
-        <activity
-            android:name=".language.LanguageSelectActivity"
-            android:exported="true">
+            android:name=".SplashActivity"
+            android:theme="@style/SplashTheme"
+            android:exported="true" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -36,9 +33,13 @@
             </intent-filter>
         </activity>
         <activity
+            android:name=".connect.ConnectDeviceActivity"
+            android:exported="false" />
+        <activity
+            android:name=".language.LanguageSelectActivity"
+            android:exported="false"/>
+        <activity
             android:name=".dashboard.DashBoardActivity"
-            android:exported="true" />
-
+            android:exported="false" />
     </application>
-
 </manifest>
