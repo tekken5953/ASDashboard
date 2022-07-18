@@ -22,7 +22,7 @@
     <string name="night">오후</string>
     <string name="not_paring">연결된 디바이스 없음</string>
     <string name="caution_title">경고</string>
-    <string name="caution_message">블루투스 연결이 끊겼습니다.\n장치가 작동중인지 확인해주세요ㅊ</string>
+    <string name="caution_message">장치와의 연결을 다시 확인해주세요</string>
     <string name="reconnect_bt_msg">블루투스 연결이 끊어졌습니다.\n다시 블루투스에 연결하시겠습니까?</string>
     <string name="reconnect_bt_ok">연결</string>
     <string name="caution_ok">확인</string>
@@ -64,4 +64,5 @@
     <string name="information">고객센터 031–756–1251</string>
     <string name="web_site">http://www.airsignal.kr</string>
     <string name="ask_turn_off">전원을 끄시겠습니까?</string>
+    <string name="already_connected">이미 연결된 디바이스 입니다</string>
 </resources>

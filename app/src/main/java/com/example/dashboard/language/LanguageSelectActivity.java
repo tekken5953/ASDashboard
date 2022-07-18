@@ -1,9 +1,12 @@
 package com.example.dashboard.language;
 
+import android.Manifest;
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.graphics.Point;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Display;
@@ -14,6 +17,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.content.res.AppCompatResources;
 import androidx.constraintlayout.widget.ConstraintLayout;
@@ -38,8 +42,7 @@ public class LanguageSelectActivity extends AppCompatActivity {
     Button langOkTv;
     ImageView koreaFlag, englishFlag;
     TextView langKorTitleTv, langEngTitleTv;
-    Context context;
-    ConstraintLayout toplayout;
+    Activity context = LanguageSelectActivity.this;
 
     @Override
     protected void onResume() {
@@ -49,14 +52,13 @@ public class LanguageSelectActivity extends AppCompatActivity {
 
 
 
+    @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.language_select_activity);
 
-
-
-
+        checkBTPermissions();
 
         langOkTv = findViewById(R.id.langOkTv);
         koreaFlag = findViewById(R.id.langKorIconIv);
@@ -202,5 +204,19 @@ public class LanguageSelectActivity extends AppCompatActivity {
         langOkTv.setEnabled(false);
         langOkTv.setBackground(AppCompatResources.getDrawable(context, R.drawable.lang_ok_b));
         langOkTv.setTextColor(ResourcesCompat.getColor(getResources(), R.color.statusUnitText, null));
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.M)
+    private void checkBTPermissions() {
+        // ref) https://it-recording.tistory.com/15
+        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP) {
+            int permissionCheck = context.checkSelfPermission("Manifest.permission.ACCESS_FINE_LOCATION");
+            permissionCheck += context.checkSelfPermission("Manifest.permission.ACCESS_FINE_LOCATION");
+            if (permissionCheck != 0) {
+                context.requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION}, 1001);
+            } else {
+                Log.d("checkPermission", "No need to check permissions. SDK version < LoLLIPOP");
+            }
+        }
     }
 }

@@ -7,11 +7,11 @@
     <string name="baddest">Very Bad</string>
     <string name="aqi">Air Quality Index</string>
     <string name="aqi_1_hour">Last Hour Air Quality</string>
-    <string name="fine_dust">Fine Dust</string>
-    <string name="tvoc">Volatile Organic Compounds</string>
+    <string name="fine_dust">PM2.5</string>
+    <string name="tvoc">TVOC</string>
     <string name="co2">Co2</string>
     <string name="co">Co</string>
-    <string name="virus">Virus Risk Index</string>
+    <string name="virus">Virus Index</string>
     <string name="language">Languages</string>
     <string name="korean">Korean</string>
     <string name="english">English</string>
@@ -21,10 +21,10 @@
     <string name="day">am</string>
     <string name="night">pm</string>
     <string name="connected_device">Paired Device</string>
-    <string name="not_paring">No Paring Device</string>
+    <string name="not_paring">Not Paring Device</string>
     <string name="caution_title">Caution</string>
     <string name="caution_back">Back</string>
-    <string name="caution_message">Please Check The Power Again</string>
+    <string name="caution_message">Please Check The Connection Again</string>
     <string name="reconnect_bt_msg">Disconnected to Bluetooth\nRetry to Connect Device?</string>
     <string name="reconnect_bt_ok">연결</string>
     <string name="caution_ok">OK</string>

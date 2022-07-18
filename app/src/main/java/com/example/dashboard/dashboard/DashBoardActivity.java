@@ -20,6 +20,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.res.Configuration;
 import android.graphics.Color;
+import android.graphics.Point;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -27,6 +28,7 @@ import android.os.Looper;
 import android.os.Message;
 import android.util.DisplayMetrics;
 import android.util.Log;
+import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -34,6 +36,7 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -113,7 +116,8 @@ public class DashBoardActivity extends AppCompatActivity {
     String temp_str = null, humid_str = null, pm_str = null, co_str = null, co2_str = null, tvoc_str = null;
     String pm_grade = null, co_grade = null, co2_grade = null, tvoc_grade = null, virusIndex = null, cqiGrade = null;
     Short aqi_short;
-    Float pm_float, co_float, co2_float, tvoc_float, humid_float, temp_float, virusValue;
+    int virusValue;
+    Float pm_float, co_float, co2_float, tvoc_float, humid_float, temp_float;
     byte fan_control_byte, current_fan_byte, power_control_byte;
     ArrayList<String> xLabelList = new ArrayList<>();
 
@@ -240,15 +244,15 @@ public class DashBoardActivity extends AppCompatActivity {
 
         startCheckBluetooth();
 
-        Handler handler = new Handler(Looper.getMainLooper());
-        handler.postDelayed(new Runnable() {
+        Handler GetDataHandler = new Handler(Looper.getMainLooper());
+        GetDataHandler.postDelayed(new Runnable() {
             @Override
             public void run() {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
                         try {
-                            addSideView();
+
                             Thread.sleep(1000);
                             binding.loadingPb.setVisibility(View.GONE);
                             binding.idMain.setEnabled(true);
@@ -256,15 +260,20 @@ public class DashBoardActivity extends AppCompatActivity {
 
                             regVirusListener(VIEW_REQUEST_INTERVAL, virusScheduler);
 
-                            Handler handler1 = new Handler(Looper.getMainLooper());
-                            handler1.postDelayed(new Runnable() {
+                            Handler DrawGraphHandler = new Handler(Looper.getMainLooper());
+                            DrawGraphHandler.postDelayed(new Runnable() {
                                 @Override
                                 public void run() {
-                                    if (aqi_short == null) {
-                                        drawGraphClass.reDrawChart();
-                                    }
+                                    drawGraphClass.reDrawChart();
                                     drawGraphClass.drawFirstEntry(300, "cqi");
                                     ChartTimerTask(300, "cqi");
+                                    Handler addSideViewHandler = new Handler(Looper.getMainLooper());
+                                    addSideViewHandler.postDelayed(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            addSideView();
+                                        }
+                                    }, 500);
                                 }
                             }, 1500);
 
@@ -274,7 +283,7 @@ public class DashBoardActivity extends AppCompatActivity {
                     }
                 });
             }
-        }, 5000);
+        }, 3500);
     }
 
     @SuppressLint("MissingPermission")
@@ -329,8 +338,8 @@ public class DashBoardActivity extends AppCompatActivity {
 
             if (deviceType.equals("[T, I]")) { // DeviceFragment.DEVICE_TYPE_MINI
                 // Wifi State 확인
-                Handler handler = new Handler(Looper.getMainLooper());
-                handler.postDelayed(new Runnable() {
+                Handler ProcessRequestHandler = new Handler(Looper.getMainLooper());
+                ProcessRequestHandler.postDelayed(new Runnable() {
                     @Override
                     public void run() {
                         bluetoothThread.writeHex(
@@ -710,8 +719,8 @@ public class DashBoardActivity extends AppCompatActivity {
                     Log.d("bluetoothThread", "Bluetooth Socket is Connected");
                     Log.d("bluetoothThread", "setDevice by : " + bluetoothThread.getDeviceName());
 
-                    Handler handler = new Handler(Looper.getMainLooper());
-                    handler.postDelayed(new Runnable() {
+                    Handler ConnectedSocketHandler = new Handler(Looper.getMainLooper());
+                    ConnectedSocketHandler.postDelayed(new Runnable() {
                         @Override
                         public void run() {
 //                                센서 장착 여부 및 GPS 정보 요청
@@ -860,7 +869,7 @@ public class DashBoardActivity extends AppCompatActivity {
                                         "\nCQI Grade : " + cqiGrade);
 
                                 // 바이러스 지수 불러오기
-                                virusValue = virusFormulaClass.GetVirusValue((float) aqi_short, temp_float, humid_float, co2_float, tvoc_float);
+                                virusValue = Math.round(virusFormulaClass.GetVirusValue((float) aqi_short, temp_float, humid_float, co2_float, tvoc_float));
                                 virusIndex = virusFormulaClass.GetVirusIndex((float) aqi_short, temp_float, humid_float, co2_float, tvoc_float);
 
                                 try {
@@ -869,15 +878,15 @@ public class DashBoardActivity extends AppCompatActivity {
                                             tvoc_float + "\nVirusValue : " + virusValue + "\nVirusIndex : " + virusIndex);
                                     binding.listCardVIRUSIndex.setText(virusValue + "");
                                     if (virusIndex.equals("0")) {
-                                        CardItemTextColor("0", binding.listCardVIRUSUnit, binding.listCardVIRUSOCGrade, binding.listCardVIRUSIndex);
+                                        VirusItemTextColor("0", binding.listCardVIRUSIndex, binding.listCardVIRUSOCGrade);
                                     } else if (virusIndex.equals("1")) {
-                                        CardItemTextColor("1", binding.listCardVIRUSUnit, binding.listCardVIRUSOCGrade, binding.listCardVIRUSIndex);
+                                        VirusItemTextColor("1", binding.listCardVIRUSIndex, binding.listCardVIRUSOCGrade);
                                     } else if (virusIndex.equals("2")) {
-                                        CardItemTextColor("2", binding.listCardVIRUSUnit, binding.listCardVIRUSOCGrade, binding.listCardVIRUSIndex);
+                                        VirusItemTextColor("2", binding.listCardVIRUSIndex, binding.listCardVIRUSOCGrade);
                                     } else if (virusIndex.equals("3")) {
-                                        CardItemTextColor("3", binding.listCardVIRUSUnit, binding.listCardVIRUSOCGrade, binding.listCardVIRUSIndex);
+                                        VirusItemTextColor("3", binding.listCardVIRUSIndex, binding.listCardVIRUSOCGrade);
                                     } else {
-                                        CardItemTextColor("4", binding.listCardVIRUSUnit, binding.listCardVIRUSOCGrade, binding.listCardVIRUSIndex);
+                                        VirusItemTextColor("4", binding.listCardVIRUSIndex, binding.listCardVIRUSOCGrade);
                                     }
                                 } catch (NullPointerException e) {
                                     e.printStackTrace();
@@ -906,8 +915,8 @@ public class DashBoardActivity extends AppCompatActivity {
                     @Override
                     public void run() {
                         switch (s) {
-                            case "aqi":
-                                drawGraphClass.feedMultiple(yMax, aqi_short);
+                            case "cqi":
+                                drawGraphClass.feedMultiple(yMax, cqiIndex);
                                 break;
                             case "pm":
                                 drawGraphClass.feedMultiple(yMax, pm_float.intValue());
@@ -935,10 +944,10 @@ public class DashBoardActivity extends AppCompatActivity {
     }
 
     //AQI Index 별 차트 이동거리 계산
-    public void moveBarChart(int aqiNumber) {
+    public void moveBarChart(int cqiNumber) {
 
-        if (aqiNumber != 0) {
-            params.setMargins((aqiNumber * barViewWidth / 300) - (arrowWidth / 2),
+        if (cqiNumber != 0) {
+            params.setMargins((cqiNumber * barViewWidth / 300) - (arrowWidth / 2),
                     0,
                     0,
                     (int) getResources().getDimension(R.dimen.arrowBottom));  // 왼쪽, 위, 오른쪽, 아래 순서
@@ -951,19 +960,19 @@ public class DashBoardActivity extends AppCompatActivity {
 
 
         binding.aqiCurrentArrow.setLayoutParams(params);
-        binding.aqiCurrentArrow.setText(aqiNumber + "");
+        binding.aqiCurrentArrow.setText(cqiNumber + "");
 
-        if (aqiNumber < 51) {
+        if (cqiNumber < 51) {
             binding.apiCircleChartPb.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.signal_good, null));
             binding.aqiContentTv.setText(getResources().getString(R.string.good));
             binding.aqiContentTv.setTextColor(getResources().getColor(R.color.progressGood));
             binding.aqiCurrentArrow.setTextColor(getResources().getColor(R.color.progressGood));
-        } else if (aqiNumber < 101) {
+        } else if (cqiNumber < 101) {
             binding.apiCircleChartPb.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.signal_normal, null));
             binding.aqiContentTv.setText(getResources().getString(R.string.normal));
             binding.aqiContentTv.setTextColor(getResources().getColor(R.color.progressNormal));
             binding.aqiCurrentArrow.setTextColor(getResources().getColor(R.color.progressNormal));
-        } else if (aqiNumber < 251) {
+        } else if (cqiNumber < 251) {
             binding.apiCircleChartPb.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.signal_bad, null));
             binding.aqiContentTv.setText(getResources().getString(R.string.bad));
             binding.aqiContentTv.setTextColor(getResources().getColor(R.color.progressBad));
@@ -978,7 +987,7 @@ public class DashBoardActivity extends AppCompatActivity {
 
     //현재 시간 불러오기
     public void currentTimeIndex() {
-        final Handler handler = new Handler(Looper.getMainLooper()) {
+        final Handler CurrentTimeHandler = new Handler(Looper.getMainLooper()) {
             @Override
             public void handleMessage(@NonNull Message msg) {
                 Date currentTime = new Date(System.currentTimeMillis());
@@ -1014,7 +1023,7 @@ public class DashBoardActivity extends AppCompatActivity {
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
-                handler.sendEmptyMessage(1); // 핸들러 호출(시간 최신화)
+                CurrentTimeHandler.sendEmptyMessage(1); // 핸들러 호출(시간 최신화)
             }
         };
 
@@ -1275,8 +1284,8 @@ public class DashBoardActivity extends AppCompatActivity {
                         CHART_MADE_TIME = System.currentTimeMillis();
                         if (tv.getText().toString().equals(getString(R.string.aqi))) {
                             drawGraphClass.reDrawChart();
-                            drawGraphClass.drawFirstEntry(300, "aqi");
-                            ChartTimerTask(300, "aqi");
+                            drawGraphClass.drawFirstEntry(300, "cqi");
+                            ChartTimerTask(300, "cqi");
                         } else if (tv.getText().toString().equals(getString(R.string.fine_dust))) {
                             drawGraphClass.reDrawChart();
                             drawGraphClass.drawFirstEntry(75, "pm");
@@ -1295,8 +1304,8 @@ public class DashBoardActivity extends AppCompatActivity {
                             ChartTimerTask(2, "tvoc");
                         } else if (tv.getText().toString().equals(getString(R.string.virus))) {
                             drawGraphClass.reDrawChart();
-                            drawGraphClass.drawFirstEntry(300, "virus");
-                            ChartTimerTask(300, "virus");
+                            drawGraphClass.drawFirstEntry(100, "virus");
+                            ChartTimerTask(100, "virus");
                         }
                     }
                 }
@@ -1610,6 +1619,38 @@ public class DashBoardActivity extends AppCompatActivity {
                 tv1.setTextColor(ResourcesCompat.getColor(getResources(), R.color.statusUnitText, null));
                 tv2.setTextColor(ResourcesCompat.getColor(getResources(), R.color.statusUnitText, null));
                 tv1.setText(getString(R.string.error));
+        }
+    }
+
+    public void VirusItemTextColor(String i, TextView index, TextView grade) {
+        index.setVisibility(View.VISIBLE);
+        grade.setVisibility(View.VISIBLE);
+
+        switch (i) {
+            case "0":
+                index.setTextColor(ResourcesCompat.getColor(getResources(), R.color.progressGood, null));
+                grade.setTextColor(ResourcesCompat.getColor(getResources(), R.color.progressGood, null));
+                grade.setText(getString(R.string.good));
+                break;
+            case "1":
+                index.setTextColor(ResourcesCompat.getColor(getResources(), R.color.progressNormal, null));
+                grade.setTextColor(ResourcesCompat.getColor(getResources(), R.color.progressNormal, null));
+                grade.setText(getString(R.string.normal));
+                break;
+            case "2":
+                index.setTextColor(ResourcesCompat.getColor(getResources(), R.color.progressBad, null));
+                grade.setTextColor(ResourcesCompat.getColor(getResources(), R.color.progressBad, null));
+                grade.setText(getString(R.string.bad));
+                break;
+            case "3":
+                index.setTextColor(ResourcesCompat.getColor(getResources(), R.color.progressWorst, null));
+                grade.setTextColor(ResourcesCompat.getColor(getResources(), R.color.progressWorst, null));
+                grade.setText(getString(R.string.baddest));
+                break;
+            case "4":
+                index.setTextColor(ResourcesCompat.getColor(getResources(), R.color.statusUnitText, null));
+                grade.setTextColor(ResourcesCompat.getColor(getResources(), R.color.statusUnitText, null));
+                grade.setText(getString(R.string.error));
         }
     }
 

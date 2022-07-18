@@ -11,12 +11,14 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
+import android.graphics.Point;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.util.Log;
+import android.view.Display;
 import android.view.View;
 import android.widget.Toast;
 
@@ -69,19 +71,13 @@ public class ConnectDeviceActivity extends AppCompatActivity {
         super.onResume();
         outerClass.FullScreenMode(context);
 
-        if (!bluetoothAdapter.isDiscovering()) {
-            bluetoothAdapter.startDiscovery();
-        }
-
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
                 Log.d("LifeCycle", "On Resume");
                 cList.clear();
-
                 startCheckBluetooth();
 
-                findPairedDevice();
                 filter.addAction(BluetoothDevice.ACTION_FOUND);
                 filter.addAction(BluetoothDevice.ACTION_BOND_STATE_CHANGED);
                 registerReceiver(mReceiver, filter);
@@ -127,6 +123,7 @@ public class ConnectDeviceActivity extends AppCompatActivity {
         setContentView(view);
         Log.d("LifeCycle", "On Create");
 
+
         context = ConnectDeviceActivity.this;
         cAdapter = new ConnectRecyclerAdapter(cList);
         pAdapter = new PairedDeviceAdapter(pList);
@@ -148,30 +145,38 @@ public class ConnectDeviceActivity extends AppCompatActivity {
                 binding.loadingParingPb.setVisibility(View.VISIBLE);
                 binding.connMainLayout.setAlpha(0.3f);
 
-                Handler handler = new Handler(Looper.getMainLooper());
-                handler.postDelayed(new Runnable() {
+                Handler ParingDeviceHandler = new Handler(Looper.getMainLooper());
+                ParingDeviceHandler.postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                        binding.loadingParingPb.setVisibility(View.GONE);
-                        binding.connMainLayout.setAlpha(1f);
+                        if (position < cAdapter.getItemCount()) {
+                            try {
+                                //선택한 디바이스 페어링 요청
+                                Log.d("paringDevice", "position : " + position + " name : " + noBondedList.get(position).getName());
+                                noPairingPosition = position;
+                                BluetoothDevice device = noBondedList.get(position);
+                                Method method = device.getClass().getMethod("createBond", (Class[]) null);
+                                method.invoke(device, (Object[]) null);
+                                Handler refreshHandler = new Handler(Looper.getMainLooper());
+                                refreshHandler.postDelayed(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        cList.clear();
+                                        onResume();
+                                    }
+                                },1500);
+                            } catch (InvocationTargetException | NoSuchMethodException | IllegalAccessException e) {
+                                e.printStackTrace();
+                                Toast.makeText(context, getString(R.string.already_connected), Toast.LENGTH_SHORT).show();
+                            }
+                        } else {
+                            Toast.makeText(context, "다시 진행해 주세요", Toast.LENGTH_SHORT).show();
+                            binding.loadingParingPb.setVisibility(View.GONE);
+                            onResume();
+                        }
                     }
                 }, 1500);
-                if (position < cAdapter.getItemCount()) {
-                    try {
-                        //선택한 디바이스 페어링 요청
-                        Log.d("paringDevice", "position : " + position + " name : " + noBondedList.get(position).getName());
-                        noPairingPosition = position;
-                        BluetoothDevice device = noBondedList.get(position);
-                        Method method = device.getClass().getMethod("createBond", (Class[]) null);
-                        method.invoke(device, (Object[]) null);
-                    } catch (InvocationTargetException | NoSuchMethodException | IllegalAccessException e) {
-                        e.printStackTrace();
-                        Toast.makeText(context, getString(R.string.already_connected), Toast.LENGTH_SHORT).show();
-                    }
-                } else {
-                    Toast.makeText(context, "다시 진행해 주세요", Toast.LENGTH_SHORT).show();
-                    onResume();
-                }
+
             }
         });
 
@@ -250,10 +255,7 @@ public class ConnectDeviceActivity extends AppCompatActivity {
                                     deviceNameStrLeft = bt.getName().split(" ");
                                     Method m = bt.getClass().getMethod("removeBond", (Class[]) null);
                                     m.invoke(bt, (Object[]) null);
-                                    pList.remove(position);
-                                    pAdapter.notifyItemRemoved(position);
-                                    addCItem(filteringImage(deviceNameStrLeft[0]), deviceNameStrLeft[0], deviceNameStrLeft[1]);
-                                    cAdapter.notifyItemInserted(cAdapter.getItemCount() - 1);
+                                    onResume();
                                 } catch (Exception e) {
                                     e.printStackTrace();
                                 }
@@ -322,9 +324,9 @@ public class ConnectDeviceActivity extends AppCompatActivity {
             // 사용 가능한 디바이스 불러오는 브로드캐스트 리시버
             if (BluetoothDevice.ACTION_FOUND.equals(action)) {
                 BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
-                if (ActivityCompat.checkSelfPermission(context, Manifest.permission.BLUETOOTH_CONNECT) != PackageManager.PERMISSION_GRANTED) {
+
 //                    deviceNameStrRight = deviceName.split(" ");
-                    // 필터링 없이 하려면 주석 해제 + 밑에 필터링부분 주석처리
+                // 필터링 없이 하려면 주석 해제 + 밑에 필터링부분 주석처리
 //                    notPairedDeviceList.add(device);
 //                    addCItem(filteringImage(deviceNameStr[0],
 //                                deviceNameStr[0],
@@ -332,39 +334,38 @@ public class ConnectDeviceActivity extends AppCompatActivity {
 //                    cAdapter.notifyDataSetChanged();
 
 //                  필터링
-                    Handler handler = new Handler(Looper.getMainLooper());
-                    handler.postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-                            String deviceName = device.getName();
-                            if (deviceName != null && (deviceName.contains("BS_"))) {
-                                if (deviceName.contains(" ")) {
-                                    deviceNameStrRight = deviceName.split(" ");
-                                    for (int i = 0; i < pList.size(); i++) {
-                                        Log.d("LifeCycle", deviceNameStrRight[0] + deviceNameStrRight[1] + " : " + pList.get(i).getAddress());
-                                        if (!deviceNameStrRight[1].equals(pList.get(i).getAddress())) {
-                                            if (i == pList.size() - 1) {
-                                                noBondedList.add(device);
-                                                addCItem(filteringImage(deviceNameStrRight[0]),
-                                                        deviceNameStrRight[0],
-                                                        deviceNameStrRight[1]);
-                                                cAdapter.notifyDataSetChanged();
-                                            }
-                                        } else {
-                                            break;
+                Handler handler = new Handler(Looper.getMainLooper());
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        String deviceName = device.getName();
+                        if (deviceName != null && (deviceName.contains("BS_"))) {
+                            if (deviceName.contains(" ")) {
+                                deviceNameStrRight = deviceName.split(" ");
+                                for (int i = 0; i < pList.size(); i++) {
+                                    Log.d("LifeCycle", deviceNameStrRight[0] + deviceNameStrRight[1] + " : " + pList.get(i).getAddress());
+                                    if (!deviceNameStrRight[1].equals(pList.get(i).getAddress())) {
+                                        if (i == pList.size() - 1) {
+                                            noBondedList.add(device);
+                                            addCItem(filteringImage(deviceNameStrRight[0]),
+                                                    deviceNameStrRight[0],
+                                                    deviceNameStrRight[1]);
+                                            cAdapter.notifyDataSetChanged();
                                         }
+                                    } else {
+                                        break;
                                     }
-                                } else {
-                                    noBondedList.add(device);
-                                    addCItem(filteringImage(deviceName),
-                                            deviceName,
-                                            "(No Serial Number)");
-                                    cAdapter.notifyDataSetChanged();
                                 }
+                            } else {
+                                noBondedList.add(device);
+                                addCItem(filteringImage(deviceName),
+                                        deviceName,
+                                        "(No Serial Number)");
+                                cAdapter.notifyDataSetChanged();
                             }
                         }
-                    }, 1000);
-                }
+                    }
+                }, 1000);
             }
 
             // 디바이스 페어링 리시버
@@ -379,8 +380,7 @@ public class ConnectDeviceActivity extends AppCompatActivity {
                         public void run() {
                             binding.loadingParingPb.setVisibility(View.GONE);
                             binding.connMainLayout.setAlpha(1f);
-                            pAdapter.notifyDataSetChanged();
-                            onResume();
+                            findPairedDevice();
                         }
                     }, 1000);
                 } catch (IndexOutOfBoundsException e) {
@@ -408,7 +408,12 @@ public class ConnectDeviceActivity extends AppCompatActivity {
         } else {
             if (bluetoothAdapter.isEnabled()) {
                 try {
+
+                    if (!bluetoothAdapter.isDiscovering()) {
+                        bluetoothAdapter.startDiscovery();
+                    }
                     findPairedDevice();
+
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
