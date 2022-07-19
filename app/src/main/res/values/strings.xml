@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Dashboard</string>
     <string name="good">좋음</string>
@@ -21,7 +22,7 @@
     <string name="night">오후</string>
     <string name="not_paring">연결된 디바이스 없음</string>
     <string name="caution_title">경고</string>
-    <string name="caution_message">장치가 작동중인지 다시 확인해주세요</string>
+    <string name="caution_message">장치와의 연결을 다시 확인해주세요</string>
     <string name="reconnect_bt_msg">블루투스 연결이 끊어졌습니다.\n다시 블루투스에 연결하시겠습니까?</string>
     <string name="reconnect_bt_ok">연결</string>
     <string name="caution_ok">확인</string>

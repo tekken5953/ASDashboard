@@ -20,6 +20,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.res.Configuration;
 import android.graphics.Color;
+import android.graphics.Point;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -27,6 +28,7 @@ import android.os.Looper;
 import android.os.Message;
 import android.util.DisplayMetrics;
 import android.util.Log;
+import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -34,6 +36,7 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -52,6 +55,7 @@ import com.example.dashboard.R;
 import com.example.dashboard.SharedPreferenceManager;
 import com.example.dashboard.bluetooth.BluetoothAPI;
 import com.example.dashboard.bluetooth.BluetoothThread;
+import com.example.dashboard.bluetooth.VirusFormulaClass;
 import com.example.dashboard.databinding.ActivityDashboardBinding;
 import com.example.dashboard.language.LanguageSelectActivity;
 import com.example.dashboard.ui.SegmentedProgressBar;
@@ -83,7 +87,7 @@ public class DashBoardActivity extends AppCompatActivity {
 
     String FAN_CONTROL_COMPLETE = "com.example.dashboard";
 
-    int barViewWidth, barViewHeight, arrowWidth, VIEW_REQUEST_INTERVAL = 3, DRAW_CHART_INTERVAL = 60 * 10;
+    int barViewWidth, barViewHeight, arrowWidth, VIEW_REQUEST_INTERVAL = 3, DRAW_CHART_INTERVAL = 60 * 10, cqiIndex;
 
     ArrayList<SegmentedProgressBar.BarContext> barList = new ArrayList<>();
 
@@ -107,12 +111,13 @@ public class DashBoardActivity extends AppCompatActivity {
 
     long CHART_MADE_TIME = 0;
 
-    Timer data_scheduler, chart_scheduler;
+    Timer dataScheduler, chartScheduler, virusScheduler;
 
     String temp_str = null, humid_str = null, pm_str = null, co_str = null, co2_str = null, tvoc_str = null;
-    String pm_grade = null, co_grade = null, co2_grade = null, tvoc_grade = null;
+    String pm_grade = null, co_grade = null, co2_grade = null, tvoc_grade = null, virusIndex = null, cqiGrade = null;
     Short aqi_short;
-    Float pm_float, co_float, co2_float, tvoc_float;
+    int virusValue;
+    Float pm_float, co_float, co2_float, tvoc_float, humid_float, temp_float;
     byte fan_control_byte, current_fan_byte, power_control_byte;
     ArrayList<String> xLabelList = new ArrayList<>();
 
@@ -121,6 +126,7 @@ public class DashBoardActivity extends AppCompatActivity {
 
     OuterClass outerClass = new OuterClass();
     DrawGraphClass drawGraphClass = new DrawGraphClass();
+    VirusFormulaClass virusFormulaClass = new VirusFormulaClass();
 
     @Override
     protected void onDestroy() {
@@ -181,23 +187,9 @@ public class DashBoardActivity extends AppCompatActivity {
         binding.idMain.setEnabled(false);
         binding.idMain.setAlpha(0.3f);
 
-        Handler handler1 = new Handler(Looper.getMainLooper());
-        handler1.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
+        binding.listCardVIRUSIndex.setVisibility(View.GONE);
+        binding.listCardVIRUSOCGrade.setVisibility(View.GONE);
 
-                        addSideView();
-
-                        binding.loadingPb.setVisibility(View.GONE);
-                        binding.idMain.setEnabled(true);
-                        binding.idMain.setAlpha(1f);
-                    }
-                });
-            }
-        }, 4500);
     }
 
     public void init() {
@@ -252,23 +244,39 @@ public class DashBoardActivity extends AppCompatActivity {
 
         startCheckBluetooth();
 
-        Handler handler = new Handler(Looper.getMainLooper());
-        handler.postDelayed(new Runnable() {
+        Handler GetDataHandler = new Handler(Looper.getMainLooper());
+        GetDataHandler.postDelayed(new Runnable() {
             @Override
             public void run() {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
                         try {
+
                             Thread.sleep(1000);
-                            if (aqi_short == null) {
-                                drawGraphClass.reDrawChart();
-                                drawGraphClass.drawFirstEntry(300, "aqi");
-                                ChartTimerTask(300, "aqi");
-                            } else {
-                                drawGraphClass.drawFirstEntry(300, "aqi");
-                                ChartTimerTask(300, "aqi");
-                            }
+                            binding.loadingPb.setVisibility(View.GONE);
+                            binding.idMain.setEnabled(true);
+                            binding.idMain.setAlpha(1f);
+
+                            regVirusListener(VIEW_REQUEST_INTERVAL, virusScheduler);
+
+                            Handler DrawGraphHandler = new Handler(Looper.getMainLooper());
+                            DrawGraphHandler.postDelayed(new Runnable() {
+                                @Override
+                                public void run() {
+                                    drawGraphClass.reDrawChart();
+                                    drawGraphClass.drawFirstEntry(300, "cqi");
+                                    ChartTimerTask(300, "cqi");
+                                    Handler addSideViewHandler = new Handler(Looper.getMainLooper());
+                                    addSideViewHandler.postDelayed(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            addSideView();
+                                        }
+                                    }, 500);
+                                }
+                            }, 1500);
+
                         } catch (InterruptedException e) {
                             e.printStackTrace();
                         }
@@ -330,8 +338,8 @@ public class DashBoardActivity extends AppCompatActivity {
 
             if (deviceType.equals("[T, I]")) { // DeviceFragment.DEVICE_TYPE_MINI
                 // Wifi State 확인
-                Handler handler = new Handler(Looper.getMainLooper());
-                handler.postDelayed(new Runnable() {
+                Handler ProcessRequestHandler = new Handler(Looper.getMainLooper());
+                ProcessRequestHandler.postDelayed(new Runnable() {
                     @Override
                     public void run() {
                         bluetoothThread.writeHex(
@@ -405,6 +413,7 @@ public class DashBoardActivity extends AppCompatActivity {
 
         if (body.containsKey("10")) {
             temp_str = body.getString("10").substring(0, 4);
+            temp_float = Float.parseFloat(temp_str);
             if (Float.parseFloat(temp_str) > -20f && Float.parseFloat(temp_str) < 50f) {
                 binding.tempTv.setText(temp_str);
             }
@@ -413,6 +422,7 @@ public class DashBoardActivity extends AppCompatActivity {
 
         if (body.containsKey("12")) {
             humid_str = body.getString("12").substring(0, 4);
+            humid_float = Float.parseFloat(humid_str);
             if (Float.parseFloat(humid_str) >= 0f && Float.parseFloat(humid_str) <= 100f) {
                 binding.humidTv.setText(humid_str);
             }
@@ -487,7 +497,6 @@ public class DashBoardActivity extends AppCompatActivity {
 
         if (body.containsKey("0B")) {
             aqi_short = body.getShort("0B");
-            moveBarChart((int) aqi_short);
         }
 
         if (body.containsKey("3A")) {
@@ -710,8 +719,8 @@ public class DashBoardActivity extends AppCompatActivity {
                     Log.d("bluetoothThread", "Bluetooth Socket is Connected");
                     Log.d("bluetoothThread", "setDevice by : " + bluetoothThread.getDeviceName());
 
-                    Handler handler = new Handler(Looper.getMainLooper());
-                    handler.postDelayed(new Runnable() {
+                    Handler ConnectedSocketHandler = new Handler(Looper.getMainLooper());
+                    ConnectedSocketHandler.postDelayed(new Runnable() {
                         @Override
                         public void run() {
 //                                센서 장착 여부 및 GPS 정보 요청
@@ -737,9 +746,14 @@ public class DashBoardActivity extends AppCompatActivity {
                 public void onDisconnectedEvent() {
                     Log.d("bluetoothThread", "Bluetooth Socket is Disconnected");
 
-                    if (data_scheduler != null) {
-                        data_scheduler.purge();
-                        data_scheduler = null;
+                    if (dataScheduler != null) {
+                        dataScheduler.purge();
+                        dataScheduler = null;
+                    }
+
+                    if (virusScheduler != null) {
+                        virusScheduler.purge();
+                        virusScheduler = null;
                     }
 
                     if (mReceiver.isInitialStickyBroadcast()) {
@@ -773,11 +787,11 @@ public class DashBoardActivity extends AppCompatActivity {
                 bluetoothThread.start();
                 Log.d("bluetoothThread", "BluetoothThread is Run");
             }
-            regParentListener(VIEW_REQUEST_INTERVAL, data_scheduler);
+            regDataListener(VIEW_REQUEST_INTERVAL, dataScheduler);
         }
     }
 
-    private void regParentListener(int interval, Timer scheduler) {
+    private void regDataListener(int interval, Timer scheduler) {
         try {
             if (scheduler != null) {
                 scheduler.cancel();
@@ -785,10 +799,10 @@ public class DashBoardActivity extends AppCompatActivity {
         } catch (NullPointerException | IllegalStateException e) {
             e.printStackTrace();
         }
-        loopReceiveData(interval, scheduler);
+        loopReceiveData(interval);
     }
 
-    private void loopReceiveData(int interval, Timer scheduler) {
+    private void loopReceiveData(int interval) {
 
         if (bluetoothThread.isConnected()) {
             TimerTask data_timerTask = new TimerTask() {
@@ -802,8 +816,92 @@ public class DashBoardActivity extends AppCompatActivity {
                     }
                 }
             };
-            scheduler = new Timer();
+            Timer scheduler = new Timer();
             scheduler.scheduleAtFixedRate(data_timerTask, 4000, interval * 1000L);
+        }
+    }
+
+    private void regVirusListener(int interval, Timer scheduler) {
+        try {
+            if (scheduler != null) {
+                scheduler.cancel();
+            }
+        } catch (NullPointerException | IllegalStateException e) {
+            e.printStackTrace();
+        }
+        loopReceiveVirus(interval);
+    }
+
+    private void loopReceiveVirus(int interval) {
+
+        if (bluetoothThread.isConnected()) {
+            TimerTask data_timerTask = new TimerTask() {
+                @SuppressLint("SetTextI18n")
+                @Override
+                public void run() {
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            try {
+                                binding.listCardVIRUSIndex.setVisibility(View.VISIBLE);
+                                binding.listCardVIRUSOCGrade.setVisibility(View.VISIBLE);
+
+                                // CQI 불러오기
+                                cqiIndex = virusFormulaClass.GetCQIValue(aqi_short, co_float);
+                                cqiGrade = virusFormulaClass.GetCQIGrade(aqi_short, co_float);
+                                binding.aqiContentTv.setText(cqiGrade);
+
+                                if (binding.aqiContentTv.getText().toString().equals("0")) {
+                                    CqiGradeChange("0", binding.aqiContentTv, binding.aqiCurrentArrow);
+                                } else if (binding.aqiContentTv.getText().toString().equals("1")) {
+                                    CqiGradeChange("1", binding.aqiContentTv, binding.aqiCurrentArrow);
+                                } else if (binding.aqiContentTv.getText().toString().equals("2")) {
+                                    CqiGradeChange("2", binding.aqiContentTv, binding.aqiCurrentArrow);
+                                } else if (binding.aqiContentTv.getText().toString().equals("3")) {
+                                    CqiGradeChange("3", binding.aqiContentTv, binding.aqiCurrentArrow);
+                                } else {
+                                    CqiGradeChange("4", binding.aqiContentTv, binding.aqiCurrentArrow);
+                                }
+
+                                moveBarChart(cqiIndex);
+
+                                Log.d("CqiValue", "\n" + "\npm 2.5 aqi : " + aqi_short + "\nco : " + co_float + "\nCQI Index : " + cqiIndex +
+                                        "\nCQI Grade : " + cqiGrade);
+
+                                // 바이러스 지수 불러오기
+                                virusValue = Math.round(virusFormulaClass.GetVirusValue((float) aqi_short, temp_float, humid_float, co2_float, tvoc_float));
+                                virusIndex = virusFormulaClass.GetVirusIndex((float) aqi_short, temp_float, humid_float, co2_float, tvoc_float);
+
+                                try {
+                                    Log.d("virusValue", "\n" + "온도 : " + temp_float + "\n습도 : " + humid_float +
+                                            "\nPM AQI : " + aqi_short + "\nCO2 AQI : " + co2_float + "\nTVOC AQI : " +
+                                            tvoc_float + "\nVirusValue : " + virusValue + "\nVirusIndex : " + virusIndex);
+                                    binding.listCardVIRUSIndex.setText(virusValue + "");
+                                    if (virusIndex.equals("0")) {
+                                        VirusItemTextColor("0", binding.listCardVIRUSIndex, binding.listCardVIRUSOCGrade);
+                                    } else if (virusIndex.equals("1")) {
+                                        VirusItemTextColor("1", binding.listCardVIRUSIndex, binding.listCardVIRUSOCGrade);
+                                    } else if (virusIndex.equals("2")) {
+                                        VirusItemTextColor("2", binding.listCardVIRUSIndex, binding.listCardVIRUSOCGrade);
+                                    } else if (virusIndex.equals("3")) {
+                                        VirusItemTextColor("3", binding.listCardVIRUSIndex, binding.listCardVIRUSOCGrade);
+                                    } else {
+                                        VirusItemTextColor("4", binding.listCardVIRUSIndex, binding.listCardVIRUSOCGrade);
+                                    }
+                                } catch (NullPointerException e) {
+                                    e.printStackTrace();
+                                    binding.listCardVIRUSOCGrade.setText("에러");
+                                    binding.listCardVIRUSIndex.setText("0");
+                                }
+                            } catch (NullPointerException | IllegalStateException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    });
+                }
+            };
+            Timer scheduler = new Timer();
+            scheduler.scheduleAtFixedRate(data_timerTask, 0, interval * 1000L);
         }
     }
 
@@ -817,8 +915,8 @@ public class DashBoardActivity extends AppCompatActivity {
                     @Override
                     public void run() {
                         switch (s) {
-                            case "aqi":
-                                drawGraphClass.feedMultiple(yMax, aqi_short);
+                            case "cqi":
+                                drawGraphClass.feedMultiple(yMax, cqiIndex);
                                 break;
                             case "pm":
                                 drawGraphClass.feedMultiple(yMax, pm_float.intValue());
@@ -833,23 +931,23 @@ public class DashBoardActivity extends AppCompatActivity {
                                 drawGraphClass.feedMultiple(yMax, co_float.intValue());
                                 break;
                             case "virus":
-                                drawGraphClass.feedMultiple(yMax, 123);
+                                drawGraphClass.feedMultiple(yMax, virusValue);
                                 break;
                         }
                     }
                 });
             }
         };
-        chart_scheduler = new Timer();
-        chart_scheduler.schedule(timerTask, 0, 1000 * (long) DRAW_CHART_INTERVAL);
+        chartScheduler = new Timer();
+        chartScheduler.schedule(timerTask, 0, 1000 * (long) DRAW_CHART_INTERVAL);
 
     }
 
     //AQI Index 별 차트 이동거리 계산
-    public void moveBarChart(int aqiNumber) {
+    public void moveBarChart(int cqiNumber) {
 
-        if (aqiNumber != 0) {
-            params.setMargins((aqiNumber * barViewWidth / 300) - (arrowWidth / 2),
+        if (cqiNumber != 0) {
+            params.setMargins((cqiNumber * barViewWidth / 300) - (arrowWidth / 2),
                     0,
                     0,
                     (int) getResources().getDimension(R.dimen.arrowBottom));  // 왼쪽, 위, 오른쪽, 아래 순서
@@ -862,19 +960,19 @@ public class DashBoardActivity extends AppCompatActivity {
 
 
         binding.aqiCurrentArrow.setLayoutParams(params);
-        binding.aqiCurrentArrow.setText(aqiNumber + "");
+        binding.aqiCurrentArrow.setText(cqiNumber + "");
 
-        if (aqiNumber < 51) {
+        if (cqiNumber < 51) {
             binding.apiCircleChartPb.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.signal_good, null));
             binding.aqiContentTv.setText(getResources().getString(R.string.good));
             binding.aqiContentTv.setTextColor(getResources().getColor(R.color.progressGood));
             binding.aqiCurrentArrow.setTextColor(getResources().getColor(R.color.progressGood));
-        } else if (aqiNumber < 101) {
+        } else if (cqiNumber < 101) {
             binding.apiCircleChartPb.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.signal_normal, null));
             binding.aqiContentTv.setText(getResources().getString(R.string.normal));
             binding.aqiContentTv.setTextColor(getResources().getColor(R.color.progressNormal));
             binding.aqiCurrentArrow.setTextColor(getResources().getColor(R.color.progressNormal));
-        } else if (aqiNumber < 251) {
+        } else if (cqiNumber < 251) {
             binding.apiCircleChartPb.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.signal_bad, null));
             binding.aqiContentTv.setText(getResources().getString(R.string.bad));
             binding.aqiContentTv.setTextColor(getResources().getColor(R.color.progressBad));
@@ -889,7 +987,7 @@ public class DashBoardActivity extends AppCompatActivity {
 
     //현재 시간 불러오기
     public void currentTimeIndex() {
-        final Handler handler = new Handler(Looper.getMainLooper()) {
+        final Handler CurrentTimeHandler = new Handler(Looper.getMainLooper()) {
             @Override
             public void handleMessage(@NonNull Message msg) {
                 Date currentTime = new Date(System.currentTimeMillis());
@@ -925,7 +1023,7 @@ public class DashBoardActivity extends AppCompatActivity {
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
-                handler.sendEmptyMessage(1); // 핸들러 호출(시간 최신화)
+                CurrentTimeHandler.sendEmptyMessage(1); // 핸들러 호출(시간 최신화)
             }
         };
 
@@ -1186,8 +1284,8 @@ public class DashBoardActivity extends AppCompatActivity {
                         CHART_MADE_TIME = System.currentTimeMillis();
                         if (tv.getText().toString().equals(getString(R.string.aqi))) {
                             drawGraphClass.reDrawChart();
-                            drawGraphClass.drawFirstEntry(300, "aqi");
-                            ChartTimerTask(300, "aqi");
+                            drawGraphClass.drawFirstEntry(300, "cqi");
+                            ChartTimerTask(300, "cqi");
                         } else if (tv.getText().toString().equals(getString(R.string.fine_dust))) {
                             drawGraphClass.reDrawChart();
                             drawGraphClass.drawFirstEntry(75, "pm");
@@ -1206,8 +1304,8 @@ public class DashBoardActivity extends AppCompatActivity {
                             ChartTimerTask(2, "tvoc");
                         } else if (tv.getText().toString().equals(getString(R.string.virus))) {
                             drawGraphClass.reDrawChart();
-                            drawGraphClass.drawFirstEntry(300, "virus");
-                            ChartTimerTask(300, "virus");
+                            drawGraphClass.drawFirstEntry(100, "virus");
+                            ChartTimerTask(100, "virus");
                         }
                     }
                 }
@@ -1348,8 +1446,8 @@ public class DashBoardActivity extends AppCompatActivity {
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    if (chart_scheduler != null) {
-                        chart_scheduler.cancel();
+                    if (chartScheduler != null) {
+                        chartScheduler.cancel();
                     }
                     lineData.clearValues();
                     lineData.notifyDataChanged();
@@ -1366,8 +1464,8 @@ public class DashBoardActivity extends AppCompatActivity {
                 public void run() {
                     if (s != null) {
                         switch (s) {
-                            case "aqi":
-                                drawGraphClass.feedMultiple(setYMax, aqi_short);
+                            case "cqi":
+                                drawGraphClass.feedMultiple(setYMax, cqiIndex);
                                 break;
                             case "pm":
                                 drawGraphClass.feedMultiple(setYMax, pm_float.intValue());
@@ -1382,7 +1480,7 @@ public class DashBoardActivity extends AppCompatActivity {
                                 drawGraphClass.feedMultiple(setYMax, co_float.intValue());
                                 break;
                             case "virus":
-                                drawGraphClass.feedMultiple(setYMax, 123);
+                                drawGraphClass.feedMultiple(setYMax, virusValue);
                                 break;
                         }
                     }
@@ -1439,6 +1537,34 @@ public class DashBoardActivity extends AppCompatActivity {
         }
     }
 
+
+    public void CqiGradeChange(String s1, TextView cqi, TextView arrow) {
+        cqi.setVisibility(View.VISIBLE);
+        arrow.setVisibility(View.VISIBLE);
+
+        switch (s1) {
+            case "0":
+                cqi.setTextColor(ResourcesCompat.getColor(getResources(), R.color.progressGood, null));
+                cqi.setText(getString(R.string.good));
+                break;
+            case "1":
+                cqi.setTextColor(ResourcesCompat.getColor(getResources(), R.color.progressNormal, null));
+                cqi.setText(getString(R.string.normal));
+                break;
+            case "2":
+                cqi.setTextColor(ResourcesCompat.getColor(getResources(), R.color.progressBad, null));
+                cqi.setText(getString(R.string.bad));
+                break;
+            case "3":
+                cqi.setTextColor(ResourcesCompat.getColor(getResources(), R.color.progressWorst, null));
+                cqi.setText(getString(R.string.baddest));
+                break;
+            case "4":
+                cqi.setTextColor(ResourcesCompat.getColor(getResources(), R.color.statusUnitText, null));
+                cqi.setText(getString(R.string.error));
+        }
+    }
+
     // AQI 바 차트 그리기
     public void CreateSegmentProgressView() {
 
@@ -1464,9 +1590,10 @@ public class DashBoardActivity extends AppCompatActivity {
     }
 
     public void CardItemTextColor(String s1, TextView s2, TextView tv1, TextView tv2) {
+        s2.setVisibility(View.VISIBLE);
         tv1.setVisibility(View.VISIBLE);
         tv2.setVisibility(View.VISIBLE);
-        s2.setVisibility(View.VISIBLE);
+
         switch (s1) {
             case "0":
                 tv1.setTextColor(ResourcesCompat.getColor(getResources(), R.color.progressGood, null));
@@ -1488,6 +1615,42 @@ public class DashBoardActivity extends AppCompatActivity {
                 tv2.setTextColor(ResourcesCompat.getColor(getResources(), R.color.progressWorst, null));
                 tv1.setText(getString(R.string.baddest));
                 break;
+            case "4":
+                tv1.setTextColor(ResourcesCompat.getColor(getResources(), R.color.statusUnitText, null));
+                tv2.setTextColor(ResourcesCompat.getColor(getResources(), R.color.statusUnitText, null));
+                tv1.setText(getString(R.string.error));
+        }
+    }
+
+    public void VirusItemTextColor(String i, TextView index, TextView grade) {
+        index.setVisibility(View.VISIBLE);
+        grade.setVisibility(View.VISIBLE);
+
+        switch (i) {
+            case "0":
+                index.setTextColor(ResourcesCompat.getColor(getResources(), R.color.progressGood, null));
+                grade.setTextColor(ResourcesCompat.getColor(getResources(), R.color.progressGood, null));
+                grade.setText(getString(R.string.good));
+                break;
+            case "1":
+                index.setTextColor(ResourcesCompat.getColor(getResources(), R.color.progressNormal, null));
+                grade.setTextColor(ResourcesCompat.getColor(getResources(), R.color.progressNormal, null));
+                grade.setText(getString(R.string.normal));
+                break;
+            case "2":
+                index.setTextColor(ResourcesCompat.getColor(getResources(), R.color.progressBad, null));
+                grade.setTextColor(ResourcesCompat.getColor(getResources(), R.color.progressBad, null));
+                grade.setText(getString(R.string.bad));
+                break;
+            case "3":
+                index.setTextColor(ResourcesCompat.getColor(getResources(), R.color.progressWorst, null));
+                grade.setTextColor(ResourcesCompat.getColor(getResources(), R.color.progressWorst, null));
+                grade.setText(getString(R.string.baddest));
+                break;
+            case "4":
+                index.setTextColor(ResourcesCompat.getColor(getResources(), R.color.statusUnitText, null));
+                grade.setTextColor(ResourcesCompat.getColor(getResources(), R.color.statusUnitText, null));
+                grade.setText(getString(R.string.error));
         }
     }
 

@@ -1,18 +1,26 @@
 package com.example.dashboard.language;
 
+import android.Manifest;
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
+import android.graphics.Point;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Display;
 import android.view.View;
 import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.content.res.AppCompatResources;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.content.res.ResourcesCompat;
 
 import com.example.dashboard.OuterClass;
@@ -34,7 +42,7 @@ public class LanguageSelectActivity extends AppCompatActivity {
     Button langOkTv;
     ImageView koreaFlag, englishFlag;
     TextView langKorTitleTv, langEngTitleTv;
-    Context context;
+    Activity context = LanguageSelectActivity.this;
 
     @Override
     protected void onResume() {
@@ -42,10 +50,15 @@ public class LanguageSelectActivity extends AppCompatActivity {
         outerClass.FullScreenMode(LanguageSelectActivity.this);
     }
 
+
+
+    @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.language_select_activity);
+
+        checkBTPermissions();
 
         langOkTv = findViewById(R.id.langOkTv);
         koreaFlag = findViewById(R.id.langKorIconIv);
@@ -103,52 +116,58 @@ public class LanguageSelectActivity extends AppCompatActivity {
     @Override
     public void onWindowFocusChanged(boolean hasFocus) {
         super.onWindowFocusChanged(hasFocus);
-        outerClass.FullScreenMode(LanguageSelectActivity.this);
+        if (hasFocus) {
+            outerClass.FullScreenMode(LanguageSelectActivity.this);
+//            Display display = getWindowManager().getDefaultDisplay();
+//            Point size = new Point();
+//            display.getSize(size);
+//            Log.d("DisplaySize", ">>> size.x : " + size.x + ", size.y : " + size.y);
 
-        koreaFlag.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                SelectedKoreaFlag();
-                SharedPreferenceManager.setString(context, "current", "ko");
-            }
-        });
+            koreaFlag.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    SelectedKoreaFlag();
+                    SharedPreferenceManager.setString(context, "current", "ko");
+                }
+            });
 
-        englishFlag.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                SelectedEnglishFlag();
-                SharedPreferenceManager.setString(context, "current", "en");
-            }
-        });
+            englishFlag.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    SelectedEnglishFlag();
+                    SharedPreferenceManager.setString(context, "current", "en");
+                }
+            });
 
-        langOkTv.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (langOkTv.isEnabled()) {
-                    if (SharedPreferenceManager.getString(context, "current").equals("en")) {
-                        Configuration configuration = new Configuration();
-                        configuration.setLocale(Locale.ENGLISH);
-                        getResources().updateConfiguration(configuration, getResources().getDisplayMetrics());
-                        SharedPreferenceManager.setString(context, "final", SharedPreferenceManager.getString(context, "current"));
-                        SharedPreferenceManager.setString(context, "skip_lang", "ok");
-                        Intent intent = new Intent(LanguageSelectActivity.this, ConnectDeviceActivity.class);
-                        Toast.makeText(context, getString(R.string.complete_select_lang), Toast.LENGTH_SHORT).show();
-                        startActivity(intent);
-                        finish();
-                    } else if (SharedPreferenceManager.getString(context, "current").equals("ko")) {
-                        Configuration configuration = new Configuration();
-                        configuration.setLocale(Locale.KOREA);
-                        getResources().updateConfiguration(configuration, getResources().getDisplayMetrics());
-                        SharedPreferenceManager.setString(context, "final", SharedPreferenceManager.getString(context, "current"));
-                        SharedPreferenceManager.setString(context, "skip_lang", "ok");
-                        Intent intent = new Intent(LanguageSelectActivity.this, ConnectDeviceActivity.class);
-                        Toast.makeText(context, getString(R.string.complete_select_lang), Toast.LENGTH_SHORT).show();
-                        startActivity(intent);
-                        finish();
+            langOkTv.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (langOkTv.isEnabled()) {
+                        if (SharedPreferenceManager.getString(context, "current").equals("en")) {
+                            Configuration configuration = new Configuration();
+                            configuration.setLocale(Locale.ENGLISH);
+                            getResources().updateConfiguration(configuration, getResources().getDisplayMetrics());
+                            SharedPreferenceManager.setString(context, "final", SharedPreferenceManager.getString(context, "current"));
+                            SharedPreferenceManager.setString(context, "skip_lang", "ok");
+                            Intent intent = new Intent(LanguageSelectActivity.this, ConnectDeviceActivity.class);
+                            Toast.makeText(context, getString(R.string.complete_select_lang), Toast.LENGTH_SHORT).show();
+                            startActivity(intent);
+                            finish();
+                        } else if (SharedPreferenceManager.getString(context, "current").equals("ko")) {
+                            Configuration configuration = new Configuration();
+                            configuration.setLocale(Locale.KOREA);
+                            getResources().updateConfiguration(configuration, getResources().getDisplayMetrics());
+                            SharedPreferenceManager.setString(context, "final", SharedPreferenceManager.getString(context, "current"));
+                            SharedPreferenceManager.setString(context, "skip_lang", "ok");
+                            Intent intent = new Intent(LanguageSelectActivity.this, ConnectDeviceActivity.class);
+                            Toast.makeText(context, getString(R.string.complete_select_lang), Toast.LENGTH_SHORT).show();
+                            startActivity(intent);
+                            finish();
+                        }
                     }
                 }
-            }
-        });
+            });
+        }
     }
 
     public void SelectedKoreaFlag() {
@@ -185,5 +204,19 @@ public class LanguageSelectActivity extends AppCompatActivity {
         langOkTv.setEnabled(false);
         langOkTv.setBackground(AppCompatResources.getDrawable(context, R.drawable.lang_ok_b));
         langOkTv.setTextColor(ResourcesCompat.getColor(getResources(), R.color.statusUnitText, null));
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.M)
+    private void checkBTPermissions() {
+        // ref) https://it-recording.tistory.com/15
+        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP) {
+            int permissionCheck = context.checkSelfPermission("Manifest.permission.ACCESS_FINE_LOCATION");
+            permissionCheck += context.checkSelfPermission("Manifest.permission.ACCESS_FINE_LOCATION");
+            if (permissionCheck != 0) {
+                context.requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION}, 1001);
+            } else {
+                Log.d("checkPermission", "No need to check permissions. SDK version < LoLLIPOP");
+            }
+        }
     }
 }
