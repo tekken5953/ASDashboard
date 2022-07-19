@@ -1,7 +1,5 @@
 package com.example.dashboard.bluetooth;
 
-import android.util.Log;
-
 public class VirusFormulaClass {
 
     /**     AQI 값 범위 별 구간

@@ -1,6 +1,5 @@
 package com.example.dashboard.connect;
 
-import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
@@ -10,22 +9,18 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.content.pm.PackageManager;
-import android.graphics.Point;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.util.Log;
-import android.view.Display;
 import android.view.View;
 import android.widget.Toast;
 
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
 import androidx.core.content.res.ResourcesCompat;
 
 import com.example.dashboard.OuterClass;
@@ -164,18 +159,19 @@ public class ConnectDeviceActivity extends AppCompatActivity {
                                         cList.clear();
                                         onResume();
                                     }
-                                },1500);
+                                }, 500);
                             } catch (InvocationTargetException | NoSuchMethodException | IllegalAccessException e) {
                                 e.printStackTrace();
                                 Toast.makeText(context, getString(R.string.already_connected), Toast.LENGTH_SHORT).show();
                             }
                         } else {
-                            Toast.makeText(context, "다시 진행해 주세요", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(context, getString(R.string.retry_please), Toast.LENGTH_SHORT).show();
                             binding.loadingParingPb.setVisibility(View.GONE);
+                            binding.connMainLayout.setAlpha(1f);
                             onResume();
                         }
                     }
-                }, 1500);
+                }, 1000);
 
             }
         });
@@ -356,12 +352,6 @@ public class ConnectDeviceActivity extends AppCompatActivity {
                                         break;
                                     }
                                 }
-                            } else {
-                                noBondedList.add(device);
-                                addCItem(filteringImage(deviceName),
-                                        deviceName,
-                                        "(No Serial Number)");
-                                cAdapter.notifyDataSetChanged();
                             }
                         }
                     }
@@ -404,7 +394,7 @@ public class ConnectDeviceActivity extends AppCompatActivity {
     @SuppressLint("MissingPermission")
     public void startCheckBluetooth() {
         if (bluetoothAdapter == null) {
-            Toast.makeText(this, "해당 기기는 블루투스를 지원하지 않습니다", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, getString(R.string.no_bluetooth_device), Toast.LENGTH_SHORT).show();
         } else {
             if (bluetoothAdapter.isEnabled()) {
                 try {

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Dashboard</string>
+    <string name="app_name">BS-Dashboard</string>
     <string name="good">Good</string>
     <string name="normal">Normal</string>
     <string name="bad">Bad</string>
@@ -21,6 +21,7 @@
     <string name="day">am</string>
     <string name="night">pm</string>
     <string name="connected_device">Paired Device</string>
+    <string name="no_bluetooth_device">This device does not support Bluetooth</string>
     <string name="not_paring">Not Paring Device</string>
     <string name="caution_title">Caution</string>
     <string name="caution_back">Back</string>
@@ -65,4 +66,7 @@
     <string name="web_site">http://www.airsignal.kr</string>
     <string name="ask_turn_off">Turn Off the Mini?</string>
     <string name="already_connected">Already Connected Device</string>
+    <string name="exit_complete">Device has been shut down</string>
+    <string name="fail_to_change">Fail to changes</string>
+    <string name="retry_please">Please try again</string>
 </resources>

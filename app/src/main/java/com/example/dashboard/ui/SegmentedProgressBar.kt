@@ -9,7 +9,6 @@ import android.view.View
 
 // 출처 : https://github.com/Komdosh/android-segmented-progressbar
 
-
 class SegmentedProgressBar(context: Context?, attributeSet: AttributeSet? = null) : View(context, attributeSet) {
     private var cornerRadius = 0f // set corner radius for your segmented progress bar
 
@@ -181,7 +180,6 @@ class SegmentedProgressBar(context: Context?, attributeSet: AttributeSet? = null
             return this
         }
     }
-
 
     class BarContext(val colorFrom: Int, val colorTo: Int, val percentage: Float)
 

@@ -2,17 +2,13 @@ package com.example.dashboard.language;
 
 import android.Manifest;
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
-import android.graphics.Point;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.Display;
 import android.view.View;
 import android.widget.Button;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -20,7 +16,6 @@ import android.widget.Toast;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.content.res.AppCompatResources;
-import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.content.res.ResourcesCompat;
 
 import com.example.dashboard.OuterClass;
@@ -49,7 +44,6 @@ public class LanguageSelectActivity extends AppCompatActivity {
         super.onResume();
         outerClass.FullScreenMode(LanguageSelectActivity.this);
     }
-
 
 
     @RequiresApi(api = Build.VERSION_CODES.M)
@@ -118,10 +112,6 @@ public class LanguageSelectActivity extends AppCompatActivity {
         super.onWindowFocusChanged(hasFocus);
         if (hasFocus) {
             outerClass.FullScreenMode(LanguageSelectActivity.this);
-//            Display display = getWindowManager().getDefaultDisplay();
-//            Point size = new Point();
-//            display.getSize(size);
-//            Log.d("DisplaySize", ">>> size.x : " + size.x + ", size.y : " + size.y);
 
             koreaFlag.setOnClickListener(new View.OnClickListener() {
                 @Override

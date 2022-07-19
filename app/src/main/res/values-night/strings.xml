@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Dashboard</string>
+    <string name="app_name">BS-Dashboard</string>
     <string name="good">좋음</string>
     <string name="normal">보통</string>
     <string name="bad">나쁨</string>
@@ -21,6 +21,7 @@
     <string name="day">오전</string>
     <string name="night">오후</string>
     <string name="not_paring">연결된 디바이스 없음</string>
+    <string name="no_bluetooth_device">해당 기기는 블루투스를 지원하지 않습니다</string>
     <string name="caution_title">경고</string>
     <string name="caution_message">장치와의 연결을 다시 확인해주세요</string>
     <string name="reconnect_bt_msg">블루투스 연결이 끊어졌습니다.\n다시 블루투스에 연결하시겠습니까?</string>
@@ -65,4 +66,7 @@
     <string name="web_site">http://www.airsignal.kr</string>
     <string name="ask_turn_off">전원을 끄시겠습니까?</string>
     <string name="already_connected">이미 연결된 디바이스 입니다</string>
+    <string name="exit_complete">장치를 종료했습니다</string>
+    <string name="fail_to_change">변경에 실패했습니다</string>
+    <string name="retry_please">다시 시도해주세요</string>
 </resources>

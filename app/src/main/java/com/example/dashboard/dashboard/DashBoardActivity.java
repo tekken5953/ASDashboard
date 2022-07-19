@@ -20,7 +20,6 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.res.Configuration;
 import android.graphics.Color;
-import android.graphics.Point;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -28,7 +27,6 @@ import android.os.Looper;
 import android.os.Message;
 import android.util.DisplayMetrics;
 import android.util.Log;
-import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -36,7 +34,6 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -86,6 +83,7 @@ public class DashBoardActivity extends AppCompatActivity {
     Activity context = DashBoardActivity.this;
 
     String FAN_CONTROL_COMPLETE = "com.example.dashboard";
+    static final String TAG = "BTThread";
 
     int barViewWidth, barViewHeight, arrowWidth, VIEW_REQUEST_INTERVAL = 3, DRAW_CHART_INTERVAL = 60 * 10, cqiIndex;
 
@@ -164,15 +162,15 @@ public class DashBoardActivity extends AppCompatActivity {
         configuration = new Configuration();
 
         if (SharedPreferenceManager.getString(context, "final").equals("en")) {
-            Log.d("bluetoothThread", "Language is ENGLISH");
+            Log.d(TAG, "Language is ENGLISH");
             configuration.setLocale(Locale.US);
             getResources().updateConfiguration(configuration, getResources().getDisplayMetrics());
         } else if (SharedPreferenceManager.getString(context, "final").equals("ko")) {
-            Log.d("bluetoothThread", "Language is KOREAN");
+            Log.d(TAG, "Language is KOREAN");
             configuration.setLocale(Locale.KOREA);
             getResources().updateConfiguration(configuration, getResources().getDisplayMetrics());
         } else {
-            Log.d("bluetoothThread", "Language is DEFAULT");
+            Log.d(TAG, "Language is DEFAULT");
             configuration.setLocale(Locale.KOREA);
             getResources().updateConfiguration(configuration, getResources().getDisplayMetrics());
         }
@@ -209,7 +207,7 @@ public class DashBoardActivity extends AppCompatActivity {
                 if (recvHex == null) return;
 
                 byte[][] bundleOfHex = separatedFrame(recvHex);
-            /*
+            /**
             String stx          = byteArrayToHexString(bundleOfHex[0]);
             String length       = byteArrayToHexString(bundleOfHex[1]);
             String sequence     = byteArrayToHexString(bundleOfHex[2]);
@@ -244,52 +242,12 @@ public class DashBoardActivity extends AppCompatActivity {
 
         startCheckBluetooth();
 
-        Handler GetDataHandler = new Handler(Looper.getMainLooper());
-        GetDataHandler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        try {
-
-                            Thread.sleep(1000);
-                            binding.loadingPb.setVisibility(View.GONE);
-                            binding.idMain.setEnabled(true);
-                            binding.idMain.setAlpha(1f);
-
-                            regVirusListener(VIEW_REQUEST_INTERVAL, virusScheduler);
-
-                            Handler DrawGraphHandler = new Handler(Looper.getMainLooper());
-                            DrawGraphHandler.postDelayed(new Runnable() {
-                                @Override
-                                public void run() {
-                                    drawGraphClass.reDrawChart();
-                                    drawGraphClass.drawFirstEntry(300, "cqi");
-                                    ChartTimerTask(300, "cqi");
-                                    Handler addSideViewHandler = new Handler(Looper.getMainLooper());
-                                    addSideViewHandler.postDelayed(new Runnable() {
-                                        @Override
-                                        public void run() {
-                                            addSideView();
-                                        }
-                                    }, 500);
-                                }
-                            }, 1500);
-
-                        } catch (InterruptedException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                });
-            }
-        }, 3500);
     }
 
     @SuppressLint("MissingPermission")
     public void startCheckBluetooth() {
         if (bluetoothAdapter == null) {
-            Toast.makeText(this, "해당 기기는 블루투스를 지원하지 않습니다", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, getString(R.string.no_bluetooth_device), Toast.LENGTH_SHORT).show();
         } else {
             if (bluetoothAdapter.isEnabled()) {
                 try {
@@ -332,7 +290,7 @@ public class DashBoardActivity extends AppCompatActivity {
         if (body.containsKey("47")) {
             deviceType = Arrays.toString(body.getCharArray("47"));
 
-            Log.d("bluetoothThread", "Device Type is " + deviceType);
+            Log.d(TAG, "Device Type is " + deviceType);
 
             System.out.println("Device Type : " + Arrays.toString(body.getCharArray("47")));
 
@@ -347,24 +305,26 @@ public class DashBoardActivity extends AppCompatActivity {
                                         new byte[]{REQUEST_INDIVIDUAL_STATE},
                                         new byte[]{
                                                 0x48, 0x00, 0x00,  // S/N
-                                                0x65, 0x00, 0x00,  // WIFI Connect State
+//                                                0x65, 0x00, 0x00,  // WIFI Connect State
                                                 0x3A, 0x00, 0x00  // 현재바람세기
                                         },
                                         bluetoothThread.getSequence()
                                 )
                         );
+
+                        GraphDataSideHandler();
                     }
-                }, 1000);
+                }, 1500);
 
 
             } else {
                 bluetoothThread.writeHex(makeFrame(
                         new byte[]{REQUEST_INDIVIDUAL_STATE},
                         new byte[]{
-                                0x43, 0x00, 0x00, // GPS 위도
-                                0x44, 0x00, 0x00, // GPS 경도
-                                0x45, 0x00, 0x00, // 펌웨어버전
-                                0x46, 0x00, 0x00,  // 모듈설치날짜
+//                                0x43, 0x00, 0x00, // GPS 위도
+//                                0x44, 0x00, 0x00, // GPS 경도
+//                                0x45, 0x00, 0x00, // 펌웨어버전
+//                                0x46, 0x00, 0x00,  // 모듈설치날짜
                         },
                         bluetoothThread.getSequence()
                 ));
@@ -402,13 +362,13 @@ public class DashBoardActivity extends AppCompatActivity {
 
         if (body.containsKey("48")) {
             serialNumber = new String(body.getCharArray("48"));
-            Log.d("bluetoothThread", "Serial Number is " + serialNumber);
+            Log.d(TAG, "Serial Number is " + serialNumber);
         }
 
         if (body.containsKey("46")) {
             setup_date = body.getInt("46");
             setUpDateStr = setup_date + "";
-            Log.d("bluetoothThread", "SetUp Date is " + setup_date + "");
+            Log.d(TAG, "SetUp Date is " + setup_date + "");
         }
 
         if (body.containsKey("10")) {
@@ -419,22 +379,20 @@ public class DashBoardActivity extends AppCompatActivity {
             }
         }
 
-
         if (body.containsKey("12")) {
             humid_str = body.getString("12").substring(0, 4);
             humid_float = Float.parseFloat(humid_str);
             if (Float.parseFloat(humid_str) >= 0f && Float.parseFloat(humid_str) <= 100f) {
                 binding.humidTv.setText(humid_str);
             }
-
         }
 
         if (body.containsKey("09")) {
             pm_str = body.getString("09");
-            pm_str = pm_str.substring(0, pm_str.length() - 3);
             pm_float = Float.parseFloat(pm_str);
-            if (pm_float >= 0f && pm_float <= 100f) {
-                binding.listCardPMIndex.setText(pm_str);
+            int i = Math.round(pm_float);
+            if (i >= 0 && i <= 100) {
+                binding.listCardPMIndex.setText(i+"");
             }
         }
 
@@ -456,10 +414,10 @@ public class DashBoardActivity extends AppCompatActivity {
 
         if (body.containsKey("1E")) {
             co2_str = body.getString("1E");
-            co2_str = co2_str.substring(0, co2_str.length() - 3);
             co2_float = Float.parseFloat(co2_str);
-            if (co2_float >= 0f && co_float <= 2000f) {
-                binding.listCardCO2Index.setText(co2_str);
+            int i = Math.round(co2_float);
+            if (i >= 0 && i <= 2000) {
+                binding.listCardCO2Index.setText(i+"");
             }
         }
 
@@ -501,7 +459,7 @@ public class DashBoardActivity extends AppCompatActivity {
 
         if (body.containsKey("3A")) {
             current_fan_byte = body.getByte("3A");
-            Log.d("bluetoothThread", "Current Fan is " + current_fan_byte);
+            Log.d(TAG, "Current Fan is " + current_fan_byte);
         }
     }
 
@@ -519,7 +477,7 @@ public class DashBoardActivity extends AppCompatActivity {
                         // 어플 강제종료
 //                        android.os.Process.killProcess(android.os.Process.myPid());
 
-                        Toast.makeText(context, "BS-M을 종료했습니다", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(context, getString(R.string.exit_complete), Toast.LENGTH_SHORT).show();
 
                         // 어플 재시작
                         finishAffinity();
@@ -553,99 +511,100 @@ public class DashBoardActivity extends AppCompatActivity {
             if (fan_control_byte != 0x00) {
                 if (fan_control_byte == 0x01) {
                     bluetoothThread.writeHex(makeFrame(new byte[]{REQUEST_CONTROL}, generateTag((byte) 0x3A, new byte[]{0x01}), bluetoothThread.getSequence()));
-                    Log.d("bluetoothThread", "Fan 수면 단계");
+                    Log.d(TAG, "Fan 수면 단계");
                 } else if (fan_control_byte == 0x02) {
                     bluetoothThread.writeHex(makeFrame(new byte[]{REQUEST_CONTROL}, generateTag((byte) 0x3A, new byte[]{0x02}), bluetoothThread.getSequence()));
-                    Log.d("bluetoothThread", "Fan 약 단계");
+                    Log.d(TAG, "Fan 약 단계");
                 } else if (fan_control_byte == 0x03) {
                     bluetoothThread.writeHex(makeFrame(new byte[]{REQUEST_CONTROL}, generateTag((byte) 0x3A, new byte[]{0x03}), bluetoothThread.getSequence()));
-                    Log.d("bluetoothThread", "Fan 강 단계");
+                    Log.d(TAG, "Fan 강 단계");
                 } else if (fan_control_byte == 0x04) {
                     bluetoothThread.writeHex(makeFrame(new byte[]{REQUEST_CONTROL}, generateTag((byte) 0x3A, new byte[]{0x04}), bluetoothThread.getSequence()));
-                    Log.d("bluetoothThread", "Fan 터보 단계");
+                    Log.d(TAG, "Fan 터보 단계");
                 }
             } else {
-                Log.e("bluetoothThread", "Error 발생");
+                Log.e(TAG, "Error 발생");
             }
 
-        } else if (body.containsKey("48")) {
-
-            if (body.getByte("48") == 0x01) {
-                bluetoothThread.writeHex(
-                        makeFrame(
-                                new byte[]{REQUEST_INDIVIDUAL_STATE},
-                                new byte[]{0x48, 0x00, 0x00},
-                                bluetoothThread.getSequence()
-                        )
-                );
-
-                Toast.makeText(this, "S/N 변경에 성공했습니다.", Toast.LENGTH_SHORT).show();
-
-            } else {
-
-                Toast.makeText(this, "S/N 변경에 실패했습니다.", Toast.LENGTH_SHORT).show();
-
-            }
-        } else if (body.containsKey("49")) {
-
-            if (body.getByte("49") == 0x01) {
-
-                bluetoothThread.writeHex(
-                        makeFrame(
-                                new byte[]{REQUEST_INDIVIDUAL_STATE},
-                                new byte[]{0x49, 0x00, 0x00},
-                                bluetoothThread.getSequence()
-                        )
-                );
-
-                Toast.makeText(this, "포트 설정 정보 변경에 성공했습니다.", Toast.LENGTH_SHORT).show();
-
-            } else {
-
-                Toast.makeText(this, "포트 설정 정보 변경에 실패했습니다.", Toast.LENGTH_SHORT).show();
-
-            }
-        } else if (body.containsKey("57")) {
-
-            if (body.getByte("57") == 0x01) {
-                bluetoothThread.writeHex(
-                        makeFrame(
-                                new byte[]{REQUEST_INDIVIDUAL_STATE},
-                                new byte[]{0x57, 0x00, 0x00},
-                                bluetoothThread.getSequence()
-                        )
-                );
-
-                Toast.makeText(this, "데이터 전송 간격 변경에 성공했습니다.", Toast.LENGTH_SHORT).show();
-
-            } else {
-
-                Toast.makeText(this, "데이터 전송 간격 변경에 실패했습니다.", Toast.LENGTH_SHORT).show();
-
-            }
-        } else if (body.containsKey("69")) {
-
-            if (body.getByte("69") == 0x01) {
-                bluetoothThread.writeHex(
-                        makeFrame(
-                                new byte[]{REQUEST_INDIVIDUAL_STATE},
-                                new byte[]{0x69, 0x00, 0x00},
-                                bluetoothThread.getSequence()
-                        )
-                );
-
-                Toast.makeText(this, "Server IP 변경에 성공했습니다.", Toast.LENGTH_SHORT).show();
-
-            } else {
-
-                Toast.makeText(this, "Server IP 변경에 실패했습니다.", Toast.LENGTH_SHORT).show();
-
-            }
-        } else {
+//        } else if (body.containsKey("48")) {
+//
+//            if (body.getByte("48") == 0x01) {
+//                bluetoothThread.writeHex(
+//                        makeFrame(
+//                                new byte[]{REQUEST_INDIVIDUAL_STATE},
+//                                new byte[]{0x48, 0x00, 0x00},
+//                                bluetoothThread.getSequence()
+//                        )
+//                );
+//
+//                Toast.makeText(this, "S/N 변경에 성공했습니다.", Toast.LENGTH_SHORT).show();
+//
+//            } else {
+//
+//                Toast.makeText(this, "S/N 변경에 실패했습니다.", Toast.LENGTH_SHORT).show();
+//
+//            }
+//        } else if (body.containsKey("49")) {
+//
+//            if (body.getByte("49") == 0x01) {
+//
+//                bluetoothThread.writeHex(
+//                        makeFrame(
+//                                new byte[]{REQUEST_INDIVIDUAL_STATE},
+//                                new byte[]{0x49, 0x00, 0x00},
+//                                bluetoothThread.getSequence()
+//                        )
+//                );
+//
+//                Toast.makeText(this, "포트 설정 정보 변경에 성공했습니다.", Toast.LENGTH_SHORT).show();
+//
+//            } else {
+//
+//                Toast.makeText(this, "포트 설정 정보 변경에 실패했습니다.", Toast.LENGTH_SHORT).show();
+//
+//            }
+//        } else if (body.containsKey("57")) {
+//
+//            if (body.getByte("57") == 0x01) {
+//                bluetoothThread.writeHex(
+//                        makeFrame(
+//                                new byte[]{REQUEST_INDIVIDUAL_STATE},
+//                                new byte[]{0x57, 0x00, 0x00},
+//                                bluetoothThread.getSequence()
+//                        )
+//                );
+//
+//                Toast.makeText(this, "데이터 전송 간격 변경에 성공했습니다.", Toast.LENGTH_SHORT).show();
+//
+//            } else {
+//
+//                Toast.makeText(this, "데이터 전송 간격 변경에 실패했습니다.", Toast.LENGTH_SHORT).show();
+//
+//            }
+//        } else if (body.containsKey("69")) {
+//
+//            if (body.getByte("69") == 0x01) {
+//                bluetoothThread.writeHex(
+//                        makeFrame(
+//                                new byte[]{REQUEST_INDIVIDUAL_STATE},
+//                                new byte[]{0x69, 0x00, 0x00},
+//                                bluetoothThread.getSequence()
+//                        )
+//                );
+//
+//                Toast.makeText(this, "Server IP 변경에 성공했습니다.", Toast.LENGTH_SHORT).show();
+//
+//            } else {
+//
+//                Toast.makeText(this, "Server IP 변경에 실패했습니다.", Toast.LENGTH_SHORT).show();
+//
+//            }
+        }
+        else {
             Iterator<String> iterator = body.keySet().iterator();
             try {
                 while (iterator.hasNext()) {
-                    String key = (String) iterator.next();
+                    String key = iterator.next();
                     byte result = body.getByte(key);
 
                     if (result == (byte) 0x01) {
@@ -655,7 +614,7 @@ public class DashBoardActivity extends AppCompatActivity {
 
 //                        Toast.makeText(this, "성공적으로 변경했습니다.", Toast.LENGTH_SHORT).show();
                     } else {
-                        Toast.makeText(this, "변경에 실패했습니다.", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(this, getString(R.string.fail_to_change), Toast.LENGTH_SHORT).show();
                     }
                 }
             } catch (NullPointerException | ClassCastException e) {
@@ -675,8 +634,7 @@ public class DashBoardActivity extends AppCompatActivity {
             outerClass.FullScreenMode(context);// 하단 바 없애기
 
             //barChart 가로세로 구하기
-
-            params.setMargins(-arrowWidth / 2, 0, 0, (int) getResources().getDimension(R.dimen.arrowBottom));
+            params.setMargins(-arrowWidth / 2, 0, 0, 15);
             binding.aqiCurrentArrow.setLayoutParams(params);
 
             if (!bluetoothAdapter.isEnabled()) {
@@ -707,7 +665,7 @@ public class DashBoardActivity extends AppCompatActivity {
         //페어링 된 디바이스
         int position = getIntent().getExtras().getInt("device_position");
         arrayListDevice = new ArrayList<>();
-        bluetoothThread = new BluetoothThread((Activity) context);
+        bluetoothThread = new BluetoothThread(context);
         paredDevice = bluetoothAdapter.getBondedDevices();
         if (!paredDevice.isEmpty()) {
             arrayListDevice.addAll(paredDevice);
@@ -716,8 +674,8 @@ public class DashBoardActivity extends AppCompatActivity {
                 @Override
                 public void onConnectedEvent() {
                     modelName = bluetoothThread.getDeviceName();
-                    Log.d("bluetoothThread", "Bluetooth Socket is Connected");
-                    Log.d("bluetoothThread", "setDevice by : " + bluetoothThread.getDeviceName());
+                    Log.d(TAG, "Bluetooth Socket is Connected");
+                    Log.d(TAG, "setDevice by : " + bluetoothThread.getDeviceName());
 
                     Handler ConnectedSocketHandler = new Handler(Looper.getMainLooper());
                     ConnectedSocketHandler.postDelayed(new Runnable() {
@@ -727,7 +685,7 @@ public class DashBoardActivity extends AppCompatActivity {
                             bluetoothThread.writeHex(makeFrame(
                                     new byte[]{REQUEST_INDIVIDUAL_STATE},
                                     new byte[]{
-                                            0x35, 0x00, 0x00, // 센서연결확인
+//                                            0x35, 0x00, 0x00, // 센서연결확인
                                             //0x43, 0x00, 0x00, // GPS 위도
                                             //0x44, 0x00, 0x00, // GPS 경도
                                             //0x45, 0x00, 0x00, // 펌웨어버전
@@ -744,7 +702,7 @@ public class DashBoardActivity extends AppCompatActivity {
             bluetoothThread.setDisconnectedSocketEventListener(new BluetoothThread.disConnectedSocketEventListener() {
                 @Override
                 public void onDisconnectedEvent() {
-                    Log.d("bluetoothThread", "Bluetooth Socket is Disconnected");
+                    Log.d(TAG, "Bluetooth Socket is Disconnected");
 
                     if (dataScheduler != null) {
                         dataScheduler.purge();
@@ -771,6 +729,18 @@ public class DashBoardActivity extends AppCompatActivity {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
                                     dialog.dismiss();
+
+                                    if (bluetoothThread.isConnected()) {
+                                        bluetoothThread.closeSocket();
+                                    }
+                                    if (bluetoothThread.isRunning()) {
+                                        bluetoothThread.interrupt();
+                                    }
+                                    if (mReceiver.isInitialStickyBroadcast())
+                                        unregisterReceiver(mReceiver);
+
+                                    drawGraphClass.reDrawChart();
+
                                     outerClass.backToConnectDevice(context);
                                 }
                             });
@@ -785,7 +755,7 @@ public class DashBoardActivity extends AppCompatActivity {
 
             if (!bluetoothThread.isRunning()) {
                 bluetoothThread.start();
-                Log.d("bluetoothThread", "BluetoothThread is Run");
+                Log.d(TAG, "BluetoothThread is Run");
             }
             regDataListener(VIEW_REQUEST_INTERVAL, dataScheduler);
         }
@@ -877,16 +847,22 @@ public class DashBoardActivity extends AppCompatActivity {
                                             "\nPM AQI : " + aqi_short + "\nCO2 AQI : " + co2_float + "\nTVOC AQI : " +
                                             tvoc_float + "\nVirusValue : " + virusValue + "\nVirusIndex : " + virusIndex);
                                     binding.listCardVIRUSIndex.setText(virusValue + "");
-                                    if (virusIndex.equals("0")) {
-                                        VirusItemTextColor("0", binding.listCardVIRUSIndex, binding.listCardVIRUSOCGrade);
-                                    } else if (virusIndex.equals("1")) {
-                                        VirusItemTextColor("1", binding.listCardVIRUSIndex, binding.listCardVIRUSOCGrade);
-                                    } else if (virusIndex.equals("2")) {
-                                        VirusItemTextColor("2", binding.listCardVIRUSIndex, binding.listCardVIRUSOCGrade);
-                                    } else if (virusIndex.equals("3")) {
-                                        VirusItemTextColor("3", binding.listCardVIRUSIndex, binding.listCardVIRUSOCGrade);
-                                    } else {
-                                        VirusItemTextColor("4", binding.listCardVIRUSIndex, binding.listCardVIRUSOCGrade);
+                                    switch (virusIndex) {
+                                        case "0":
+                                            VirusItemTextColor("0", binding.listCardVIRUSIndex, binding.listCardVIRUSOCGrade);
+                                            break;
+                                        case "1":
+                                            VirusItemTextColor("1", binding.listCardVIRUSIndex, binding.listCardVIRUSOCGrade);
+                                            break;
+                                        case "2":
+                                            VirusItemTextColor("2", binding.listCardVIRUSIndex, binding.listCardVIRUSOCGrade);
+                                            break;
+                                        case "3":
+                                            VirusItemTextColor("3", binding.listCardVIRUSIndex, binding.listCardVIRUSOCGrade);
+                                            break;
+                                        default:
+                                            VirusItemTextColor("4", binding.listCardVIRUSIndex, binding.listCardVIRUSOCGrade);
+                                            break;
                                     }
                                 } catch (NullPointerException e) {
                                     e.printStackTrace();
@@ -950,12 +926,12 @@ public class DashBoardActivity extends AppCompatActivity {
             params.setMargins((cqiNumber * barViewWidth / 300) - (arrowWidth / 2),
                     0,
                     0,
-                    (int) getResources().getDimension(R.dimen.arrowBottom));  // 왼쪽, 위, 오른쪽, 아래 순서
+                    15);  // 왼쪽, 위, 오른쪽, 아래 순서
         } else {
             params.setMargins(0,
                     0,
                     0,
-                    (int) getResources().getDimension(R.dimen.arrowBottom));  // 왼쪽, 위, 오른쪽, 아래 순서
+                    15);  // 왼쪽, 위, 오른쪽, 아래 순서
         }
 
 
@@ -1038,7 +1014,7 @@ public class DashBoardActivity extends AppCompatActivity {
         filter.addAction(FAN_CONTROL_COMPLETE);
         registerReceiver(mReceiver, filter);
 
-        Log.d("bluetoothThread", "Add Side Menu Complete");
+        Log.d(TAG, "Add Side Menu Complete");
         sidebar = new SideBarCustomView(context);
 
         binding.viewSildebar.addView(sidebar);
@@ -1313,6 +1289,48 @@ public class DashBoardActivity extends AppCompatActivity {
         } catch (NullPointerException e) {
             e.printStackTrace();
         }
+    }
+
+    private void GraphDataSideHandler() {
+        Handler GetDataHandler = new Handler(Looper.getMainLooper());
+        GetDataHandler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        try {
+                            Thread.sleep(1000);
+                            binding.loadingPb.setVisibility(View.GONE);
+                            binding.idMain.setEnabled(true);
+                            binding.idMain.setAlpha(1f);
+
+                            regVirusListener(VIEW_REQUEST_INTERVAL, virusScheduler);
+
+                            Handler DrawGraphHandler = new Handler(Looper.getMainLooper());
+                            DrawGraphHandler.postDelayed(new Runnable() {
+                                @Override
+                                public void run() {
+                                    drawGraphClass.reDrawChart();
+                                    drawGraphClass.drawFirstEntry(300, "cqi");
+                                    ChartTimerTask(300, "cqi");
+                                    Handler addSideViewHandler = new Handler(Looper.getMainLooper());
+                                    addSideViewHandler.postDelayed(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            addSideView();
+                                        }
+                                    }, 500);
+                                }
+                            }, 500);
+
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                });
+            }
+        }, 500);
     }
 
     public class DrawGraphClass extends Thread {

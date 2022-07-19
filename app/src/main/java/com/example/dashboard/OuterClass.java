@@ -3,9 +3,7 @@ package com.example.dashboard;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Color;
-import android.graphics.Point;
 import android.os.Build;
-import android.view.Display;
 import android.view.View;
 import android.widget.TextView;
 
@@ -14,11 +12,8 @@ import androidx.appcompat.content.res.AppCompatResources;
 
 import com.example.dashboard.connect.ConnectDeviceActivity;
 
-import java.lang.reflect.Array;
-import java.util.ArrayList;
-
 public class OuterClass {
-    
+
     @RequiresApi(api = Build.VERSION_CODES.N)
     public String translateData(String before, Activity activity) {
         String after;

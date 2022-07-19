@@ -5,6 +5,7 @@
     tools:context=".dashboard.DashBoardActivity">
 
     <data>
+
         <variable
             name="viewModel"
             type="com.example.dashboard.bluetooth.BluetoothThread.DataShareViewModel" />
@@ -20,9 +21,9 @@
             style="@style/Widget.AppCompat.ProgressBar"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
             android:progressTint="@color/white"
-            android:visibility="visible"
-            android:layout_centerInParent="true" />
+            android:visibility="visible" />
 
         <FrameLayout
             android:id="@+id/fl_silde"
@@ -415,7 +416,7 @@
                     android:layout_height="268dp"
                     android:layout_marginStart="354dp"
                     android:layout_marginTop="105dp"
-                    android:layout_marginEnd="50dp"/>
+                    android:layout_marginEnd="50dp" />
 
                 <!--                <TextView-->
                 <!--                    android:layout_width="wrap_content"-->
@@ -435,23 +436,23 @@
                 android:id="@+id/cardLinearLayout"
                 android:layout_width="match_parent"
                 android:layout_height="195dp"
-                android:orientation="horizontal"
                 android:layout_marginStart="60dp"
                 android:layout_marginEnd="60dp"
                 android:layout_marginBottom="15dp"
+                android:orientation="horizontal"
+                android:weightSum="1"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/topFrameLayout"
-                android:weightSum="1">
+                app:layout_constraintTop_toBottomOf="@+id/topFrameLayout">
 
                 <RelativeLayout
                     android:layout_width="0dp"
-                    android:layout_weight="0.2"
                     android:layout_height="match_parent"
                     android:layout_marginTop="2dp"
                     android:layout_marginEnd="12dp"
                     android:layout_marginBottom="2dp"
+                    android:layout_weight="0.2"
                     android:background="@drawable/topframe_outline">
 
                     <TextView
@@ -501,9 +502,9 @@
                         android:layout_below="@+id/listCardPMUnit"
                         android:layout_alignParentEnd="true"
                         android:layout_alignParentBottom="true"
-                        android:gravity="center_vertical"
                         android:layout_marginEnd="28dp"
                         android:fontFamily="@font/pretendardvariable"
+                        android:gravity="center_vertical"
                         android:text="에러"
                         android:textAllCaps="false"
                         android:textColor="@color/statusUnitText"
@@ -514,11 +515,11 @@
 
                 <RelativeLayout
                     android:layout_width="0dp"
-                    android:layout_weight="0.2"
                     android:layout_height="match_parent"
                     android:layout_marginTop="2dp"
                     android:layout_marginEnd="12dp"
                     android:layout_marginBottom="2dp"
+                    android:layout_weight="0.2"
                     android:background="@drawable/topframe_outline">
 
                     <TextView
@@ -567,9 +568,9 @@
                         android:layout_below="@+id/listCardTVOCUnit"
                         android:layout_alignParentEnd="true"
                         android:layout_alignParentBottom="true"
-                        android:gravity="center_vertical"
                         android:layout_marginEnd="28dp"
                         android:fontFamily="@font/pretendardvariable"
+                        android:gravity="center_vertical"
                         android:text="에러"
                         android:textAllCaps="false"
                         android:textColor="@color/statusUnitText"
@@ -580,11 +581,11 @@
 
                 <RelativeLayout
                     android:layout_width="0dp"
-                    android:layout_weight="0.2"
                     android:layout_height="match_parent"
                     android:layout_marginTop="2dp"
                     android:layout_marginEnd="12dp"
                     android:layout_marginBottom="2dp"
+                    android:layout_weight="0.2"
                     android:background="@drawable/topframe_outline">
 
                     <TextView
@@ -633,9 +634,9 @@
                         android:layout_below="@+id/listCardCO2Unit"
                         android:layout_alignParentEnd="true"
                         android:layout_alignParentBottom="true"
-                        android:gravity="center_vertical"
                         android:layout_marginEnd="28dp"
                         android:fontFamily="@font/pretendardvariable"
+                        android:gravity="center_vertical"
                         android:text="에러"
                         android:textAllCaps="false"
                         android:textColor="@color/statusUnitText"
@@ -646,11 +647,11 @@
 
                 <RelativeLayout
                     android:layout_width="0dp"
-                    android:layout_weight="0.2"
                     android:layout_height="match_parent"
                     android:layout_marginTop="2dp"
                     android:layout_marginEnd="12dp"
                     android:layout_marginBottom="2dp"
+                    android:layout_weight="0.2"
                     android:background="@drawable/topframe_outline">
 
                     <TextView
@@ -699,9 +700,9 @@
                         android:layout_below="@+id/listCardCOUnit"
                         android:layout_alignParentEnd="true"
                         android:layout_alignParentBottom="true"
-                        android:gravity="center_vertical"
                         android:layout_marginEnd="28dp"
                         android:fontFamily="@font/pretendardvariable"
+                        android:gravity="center_vertical"
                         android:text="에러"
                         android:textAllCaps="false"
                         android:textColor="@color/statusUnitText"
@@ -712,10 +713,10 @@
 
                 <RelativeLayout
                     android:layout_width="0dp"
-                    android:layout_weight="0.2"
                     android:layout_height="match_parent"
                     android:layout_marginTop="2dp"
                     android:layout_marginBottom="2dp"
+                    android:layout_weight="0.2"
                     android:background="@drawable/topframe_outline">
 
                     <TextView
@@ -749,9 +750,9 @@
                         android:layout_below="@+id/listCardVIRUSIndex"
                         android:layout_alignParentEnd="true"
                         android:layout_alignParentBottom="true"
-                        android:gravity="center_vertical"
                         android:layout_marginEnd="28dp"
                         android:fontFamily="@font/pretendardvariable"
+                        android:gravity="center_vertical"
                         android:text="@string/error"
                         android:textAllCaps="false"
                         android:textColor="@color/statusUnitText"
