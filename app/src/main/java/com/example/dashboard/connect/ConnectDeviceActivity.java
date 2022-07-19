@@ -23,6 +23,7 @@ import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.res.ResourcesCompat;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.example.dashboard.OuterClass;
 import com.example.dashboard.R;
@@ -59,7 +60,8 @@ public class ConnectDeviceActivity extends AppCompatActivity {
     String[] deviceNameStrLeft, deviceNameStrRight;
     int noPairingPosition = 0;
 
-    IntentFilter filter = new IntentFilter();
+    IntentFilter mFilter = new IntentFilter();
+    IntentFilter pFilter = new IntentFilter();
 
     OuterClass outerClass = new OuterClass();
 
@@ -69,18 +71,25 @@ public class ConnectDeviceActivity extends AppCompatActivity {
         super.onResume();
         outerClass.FullScreenMode(context);
 
-        runOnUiThread(new Runnable() {
+        Handler FindConnectableHandler = new Handler(Looper.getMainLooper());
+        FindConnectableHandler.postDelayed(new Runnable() {
             @Override
             public void run() {
-                Log.d(TAG_LIFECYCLE, "On Resume");
-                cList.clear();
-                startCheckBluetooth();
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Log.d(TAG_LIFECYCLE, "On Resume");
+                        cList.clear();
+                        startCheckBluetooth();
 
-                filter.addAction(BluetoothDevice.ACTION_FOUND);
-                filter.addAction(BluetoothDevice.ACTION_BOND_STATE_CHANGED);
-                registerReceiver(mReceiver, filter);
+                        mFilter.addAction(BluetoothDevice.ACTION_FOUND);
+                        pFilter.addAction(BluetoothDevice.ACTION_BOND_STATE_CHANGED);
+                        registerReceiver(mReceiver, mFilter);
+                        registerReceiver(pReceiver, pFilter);
+                    }
+                });
             }
-        });
+        },1500);
     }
 
     @Override
@@ -89,6 +98,7 @@ public class ConnectDeviceActivity extends AppCompatActivity {
         Log.d(TAG_LIFECYCLE, "On Destroy");
         if (bluetoothAdapter.isDiscovering()) {
             unregisterReceiver(mReceiver);
+            unregisterReceiver(pReceiver);
             bluetoothAdapter.cancelDiscovery();
         }
         cList.clear();
@@ -120,7 +130,6 @@ public class ConnectDeviceActivity extends AppCompatActivity {
         View view = binding.getRoot();
         setContentView(view);
         Log.d(TAG_LIFECYCLE, "On Create");
-
 
         context = ConnectDeviceActivity.this;
         cAdapter = new ConnectRecyclerAdapter(cList);
@@ -183,7 +192,6 @@ public class ConnectDeviceActivity extends AppCompatActivity {
             public void onClick(View v) {
                 if (binding.connOkTv.isEnabled()) {
                     outerClass.CallVibrate(context,10);
-                    binding.loadingParingPb.setVisibility(View.VISIBLE);
                     binding.connMainLayout.setAlpha(0.3f);
                     Intent intent = new Intent(context, DashBoardActivity.class);
                     intent.putExtra("device_position", SELECTED_POSITION);
@@ -318,6 +326,31 @@ public class ConnectDeviceActivity extends AppCompatActivity {
         }
     }
 
+    private final BroadcastReceiver pReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            String action = intent.getAction();
+            // 디바이스 페어링 리시버
+            if (action.equals(BluetoothDevice.ACTION_BOND_STATE_CHANGED)) {
+                binding.loadingParingPb.setVisibility(View.VISIBLE);
+                binding.connMainLayout.setAlpha(0.3f);
+                try {
+                    binding.connPairedDeviceRv.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            binding.loadingParingPb.setVisibility(View.GONE);
+                            binding.connMainLayout.setAlpha(1f);
+                            findPairedDevice();
+                        }
+                    }, 1000);
+                } catch (IndexOutOfBoundsException e) {
+                    e.printStackTrace();
+                    onResume();
+                }
+            }
+        }
+    };
+
     private final BroadcastReceiver mReceiver = new BroadcastReceiver() { //각각의 디바이스로부터 정보를 받으려면 만들어야함
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -361,27 +394,6 @@ public class ConnectDeviceActivity extends AppCompatActivity {
                         }
                     }
                 }, 1000);
-            }
-
-            // 디바이스 페어링 리시버
-            if (action.equals(BluetoothDevice.ACTION_BOND_STATE_CHANGED)) {
-
-                binding.loadingParingPb.setVisibility(View.VISIBLE);
-                binding.connMainLayout.setAlpha(0.3f);
-
-                try {
-                    binding.connPairedDeviceRv.postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-                            binding.loadingParingPb.setVisibility(View.GONE);
-                            binding.connMainLayout.setAlpha(1f);
-                            findPairedDevice();
-                        }
-                    }, 1000);
-                } catch (IndexOutOfBoundsException e) {
-                    e.printStackTrace();
-                    onResume();
-                }
             }
         }
     };

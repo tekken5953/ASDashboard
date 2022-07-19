@@ -185,7 +185,7 @@
                 android:descendantFocusability="blocksDescendants"
                 android:padding="3dp"
                 android:src="@drawable/refresh"
-                android:visibility="gone"
+                android:visibility="visible"
                 app:layout_constraintBottom_toBottomOf="@+id/connConnectableDeviceTv"
                 app:layout_constraintStart_toEndOf="@+id/connConnectableDeviceTv"
                 app:layout_constraintTop_toTopOf="@+id/connConnectableDeviceTv" />
@@ -193,17 +193,16 @@
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/connConnectableList"
                 android:layout_width="300dp"
-                android:layout_height="405dp"
-                android:layout_marginBottom="20dp"
+                android:layout_height="0dp"
                 android:orientation="vertical"
                 android:overScrollMode="never"
                 android:padding="5dp"
                 android:scrollbars="none"
                 android:visibility="visible"
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="@+id/connConnectableDeviceTv"
-                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/connPairedDeviceRv"
+                app:layout_constraintBottom_toBottomOf="@+id/connPairedDeviceRv"
                 tools:listitem="@layout/listitem_connectable_device" />
 
             <androidx.appcompat.widget.AppCompatButton

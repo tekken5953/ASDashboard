@@ -713,7 +713,7 @@ public class DashBoardActivity extends AppCompatActivity {
                             builder.setPositiveButton(getString(R.string.caution_ok), new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
-                                    if(data_timerTask != null){
+                                    if (data_timerTask != null) {
                                         data_timerTask.cancel();
                                     }
 
@@ -753,7 +753,7 @@ public class DashBoardActivity extends AppCompatActivity {
     private void loopReceiveData(int interval) {
 
         if (bluetoothThread.isConnected()) {
-             data_timerTask = new TimerTask() {
+            data_timerTask = new TimerTask() {
                 @Override
                 public void run() {
                     try {
@@ -1308,7 +1308,7 @@ public class DashBoardActivity extends AppCompatActivity {
                                         }
                                     }, 500);
                                 }
-                            }, 500);
+                            }, 1000);
 
                         } catch (InterruptedException e) {
                             e.printStackTrace();
@@ -1316,7 +1316,7 @@ public class DashBoardActivity extends AppCompatActivity {
                     }
                 });
             }
-        }, 500);
+        }, 1000);
     }
 
     public class DrawGraphClass extends Thread {
@@ -1339,6 +1339,7 @@ public class DashBoardActivity extends AppCompatActivity {
             xAxis.setGranularity(1);
             binding.virusLineChart.setAutoScaleMinMaxEnabled(true); // Max = Count
             xAxis.setLabelCount(6); // 라벨 갯수
+            xAxis.setTextSize(12);
 
             binding.virusLineChart.moveViewToX(lineData.getEntryCount()); // 계속 X축을 데이터의 오른쪽 끝으로 옮기기
             binding.virusLineChart.setVisibleXRangeMaximum(5); // X축 최대 표현 개수
@@ -1358,13 +1359,12 @@ public class DashBoardActivity extends AppCompatActivity {
             yAxis.setValueFormatter(new YAxisValueFormat()); // y축 데이터 포맷
             yAxis.setGranularityEnabled(false); // y축 간격을 제한하는 세분화 기능
             yAxis.setDrawLabels(true); // Y축 라벨 위치
-            yAxis.setLabelCount(2);
+            yAxis.setLabelCount(3);
+            yAxis.setTextSize(12);
             yAxis.setDrawGridLines(false); // GridLine 표시
             yAxis.setDrawAxisLine(false); // AxisLine 표시
 
-            legend.setTextColor(Color.WHITE);
             legend.setEnabled(false); // 범례 비활성화
-            legend.setTextSize(11);
 
             binding.virusLineChart.setData(lineData); // 라인차트 데이터 설정
         }
@@ -1560,7 +1560,7 @@ public class DashBoardActivity extends AppCompatActivity {
                 break;
             case "3":
                 cqi.setTextColor(ResourcesCompat.getColor(getResources(), R.color.progressWorst, null));
-                cqi.setText(getString(R.string.baddest));
+                cqi.setText(getString(R.string.cqi_baddest));
                 break;
             case "4":
                 cqi.setTextColor(ResourcesCompat.getColor(getResources(), R.color.statusUnitText, null));

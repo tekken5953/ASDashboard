@@ -5,6 +5,7 @@
     <string name="normal">보통</string>
     <string name="bad">나쁨</string>
     <string name="baddest">매우나쁨</string>
+    <string name="cqi_baddest">매우\n나쁨</string>
     <string name="aqi">공기질 통합지수</string>
     <string name="aqi_1_hour">지난 1시간 공기질 데이터</string>
     <string name="fine_dust">미세먼지</string>

@@ -5,12 +5,13 @@
     <string name="normal">Normal</string>
     <string name="bad">Bad</string>
     <string name="baddest">Very Bad</string>
+    <string name="cqi_baddest">Very\nBad</string>
     <string name="aqi">Air Quality Index</string>
     <string name="aqi_1_hour">Last Hour Air Quality</string>
     <string name="fine_dust">PM2.5</string>
     <string name="tvoc">TVOC</string>
-    <string name="co2">Co2</string>
-    <string name="co">Co</string>
+    <string name="co2">CO2</string>
+    <string name="co">CO</string>
     <string name="virus">Virus Index</string>
     <string name="language">Languages</string>
     <string name="korean">Korean</string>
