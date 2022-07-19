@@ -83,7 +83,7 @@ public class DashBoardActivity extends AppCompatActivity {
     Activity context = DashBoardActivity.this;
 
     String FAN_CONTROL_COMPLETE = "com.example.dashboard";
-    static final String TAG = "BTThread";
+    static final String TAG_BTThread = "BTThread";
 
     int barViewWidth, barViewHeight, arrowWidth, VIEW_REQUEST_INTERVAL = 3, DRAW_CHART_INTERVAL = 60 * 10, cqiIndex;
 
@@ -110,6 +110,7 @@ public class DashBoardActivity extends AppCompatActivity {
     long CHART_MADE_TIME = 0;
 
     Timer dataScheduler, chartScheduler, virusScheduler;
+    TimerTask data_timerTask;
 
     String temp_str = null, humid_str = null, pm_str = null, co_str = null, co2_str = null, tvoc_str = null;
     String pm_grade = null, co_grade = null, co2_grade = null, tvoc_grade = null, virusIndex = null, cqiGrade = null;
@@ -162,20 +163,18 @@ public class DashBoardActivity extends AppCompatActivity {
         configuration = new Configuration();
 
         if (SharedPreferenceManager.getString(context, "final").equals("en")) {
-            Log.d(TAG, "Language is ENGLISH");
+            Log.d(TAG_BTThread, "Language is ENGLISH");
             configuration.setLocale(Locale.US);
             getResources().updateConfiguration(configuration, getResources().getDisplayMetrics());
         } else if (SharedPreferenceManager.getString(context, "final").equals("ko")) {
-            Log.d(TAG, "Language is KOREAN");
+            Log.d(TAG_BTThread, "Language is KOREAN");
             configuration.setLocale(Locale.KOREA);
             getResources().updateConfiguration(configuration, getResources().getDisplayMetrics());
         } else {
-            Log.d(TAG, "Language is DEFAULT");
+            Log.d(TAG_BTThread, "Language is DEFAULT");
             configuration.setLocale(Locale.KOREA);
             getResources().updateConfiguration(configuration, getResources().getDisplayMetrics());
         }
-
-        CHART_MADE_TIME = System.currentTimeMillis();
 
         CreateSegmentProgressView(); // AQI 바 차트 그리기
 
@@ -207,14 +206,14 @@ public class DashBoardActivity extends AppCompatActivity {
                 if (recvHex == null) return;
 
                 byte[][] bundleOfHex = separatedFrame(recvHex);
-            /**
-            String stx          = byteArrayToHexString(bundleOfHex[0]);
-            String length       = byteArrayToHexString(bundleOfHex[1]);
-            String sequence     = byteArrayToHexString(bundleOfHex[2]);
-            String command      = byteArrayToHexString(bundleOfHex[3]);
-            String body         = byteArrayToHexString(bundleOfHex[4]);
-            String etx          = byteArrayToHexString(bundleOfHex[5]);
-            */
+                /**
+                 String stx          = byteArrayToHexString(bundleOfHex[0]);
+                 String length       = byteArrayToHexString(bundleOfHex[1]);
+                 String sequence     = byteArrayToHexString(bundleOfHex[2]);
+                 String command      = byteArrayToHexString(bundleOfHex[3]);
+                 String body         = byteArrayToHexString(bundleOfHex[4]);
+                 String etx          = byteArrayToHexString(bundleOfHex[5]);
+                 */
                 String command = byteArrayToHexString(bundleOfHex[3]);
                 Bundle body = null;
 
@@ -290,7 +289,7 @@ public class DashBoardActivity extends AppCompatActivity {
         if (body.containsKey("47")) {
             deviceType = Arrays.toString(body.getCharArray("47"));
 
-            Log.d(TAG, "Device Type is " + deviceType);
+            Log.d(TAG_BTThread, "Device Type is " + deviceType);
 
             System.out.println("Device Type : " + Arrays.toString(body.getCharArray("47")));
 
@@ -362,13 +361,13 @@ public class DashBoardActivity extends AppCompatActivity {
 
         if (body.containsKey("48")) {
             serialNumber = new String(body.getCharArray("48"));
-            Log.d(TAG, "Serial Number is " + serialNumber);
+            Log.d(TAG_BTThread, "Serial Number is " + serialNumber);
         }
 
         if (body.containsKey("46")) {
             setup_date = body.getInt("46");
             setUpDateStr = setup_date + "";
-            Log.d(TAG, "SetUp Date is " + setup_date + "");
+            Log.d(TAG_BTThread, "SetUp Date is " + setup_date + "");
         }
 
         if (body.containsKey("10")) {
@@ -392,7 +391,7 @@ public class DashBoardActivity extends AppCompatActivity {
             pm_float = Float.parseFloat(pm_str);
             int i = Math.round(pm_float);
             if (i >= 0 && i <= 100) {
-                binding.listCardPMIndex.setText(i+"");
+                binding.listCardPMIndex.setText(i + "");
             }
         }
 
@@ -417,7 +416,7 @@ public class DashBoardActivity extends AppCompatActivity {
             co2_float = Float.parseFloat(co2_str);
             int i = Math.round(co2_float);
             if (i >= 0 && i <= 2000) {
-                binding.listCardCO2Index.setText(i+"");
+                binding.listCardCO2Index.setText(i + "");
             }
         }
 
@@ -459,7 +458,7 @@ public class DashBoardActivity extends AppCompatActivity {
 
         if (body.containsKey("3A")) {
             current_fan_byte = body.getByte("3A");
-            Log.d(TAG, "Current Fan is " + current_fan_byte);
+            Log.d(TAG_BTThread, "Current Fan is " + current_fan_byte);
         }
     }
 
@@ -511,19 +510,19 @@ public class DashBoardActivity extends AppCompatActivity {
             if (fan_control_byte != 0x00) {
                 if (fan_control_byte == 0x01) {
                     bluetoothThread.writeHex(makeFrame(new byte[]{REQUEST_CONTROL}, generateTag((byte) 0x3A, new byte[]{0x01}), bluetoothThread.getSequence()));
-                    Log.d(TAG, "Fan 수면 단계");
+                    Log.d(TAG_BTThread, "Fan 수면 단계");
                 } else if (fan_control_byte == 0x02) {
                     bluetoothThread.writeHex(makeFrame(new byte[]{REQUEST_CONTROL}, generateTag((byte) 0x3A, new byte[]{0x02}), bluetoothThread.getSequence()));
-                    Log.d(TAG, "Fan 약 단계");
+                    Log.d(TAG_BTThread, "Fan 약 단계");
                 } else if (fan_control_byte == 0x03) {
                     bluetoothThread.writeHex(makeFrame(new byte[]{REQUEST_CONTROL}, generateTag((byte) 0x3A, new byte[]{0x03}), bluetoothThread.getSequence()));
-                    Log.d(TAG, "Fan 강 단계");
+                    Log.d(TAG_BTThread, "Fan 강 단계");
                 } else if (fan_control_byte == 0x04) {
                     bluetoothThread.writeHex(makeFrame(new byte[]{REQUEST_CONTROL}, generateTag((byte) 0x3A, new byte[]{0x04}), bluetoothThread.getSequence()));
-                    Log.d(TAG, "Fan 터보 단계");
+                    Log.d(TAG_BTThread, "Fan 터보 단계");
                 }
             } else {
-                Log.e(TAG, "Error 발생");
+                Log.e(TAG_BTThread, "Error 발생");
             }
 
 //        } else if (body.containsKey("48")) {
@@ -599,8 +598,7 @@ public class DashBoardActivity extends AppCompatActivity {
 //                Toast.makeText(this, "Server IP 변경에 실패했습니다.", Toast.LENGTH_SHORT).show();
 //
 //            }
-        }
-        else {
+        } else {
             Iterator<String> iterator = body.keySet().iterator();
             try {
                 while (iterator.hasNext()) {
@@ -674,8 +672,8 @@ public class DashBoardActivity extends AppCompatActivity {
                 @Override
                 public void onConnectedEvent() {
                     modelName = bluetoothThread.getDeviceName();
-                    Log.d(TAG, "Bluetooth Socket is Connected");
-                    Log.d(TAG, "setDevice by : " + bluetoothThread.getDeviceName());
+                    Log.d(TAG_BTThread, "Bluetooth Socket is Connected");
+                    Log.d(TAG_BTThread, "setDevice by : " + bluetoothThread.getDeviceName());
 
                     Handler ConnectedSocketHandler = new Handler(Looper.getMainLooper());
                     ConnectedSocketHandler.postDelayed(new Runnable() {
@@ -696,27 +694,14 @@ public class DashBoardActivity extends AppCompatActivity {
                             ));
                         }
                     }, 500);
+                    regDataListener(VIEW_REQUEST_INTERVAL, dataScheduler);
                 }
             });
 
             bluetoothThread.setDisconnectedSocketEventListener(new BluetoothThread.disConnectedSocketEventListener() {
                 @Override
                 public void onDisconnectedEvent() {
-                    Log.d(TAG, "Bluetooth Socket is Disconnected");
-
-                    if (dataScheduler != null) {
-                        dataScheduler.purge();
-                        dataScheduler = null;
-                    }
-
-                    if (virusScheduler != null) {
-                        virusScheduler.purge();
-                        virusScheduler = null;
-                    }
-
-                    if (mReceiver.isInitialStickyBroadcast()) {
-                        unregisterReceiver(mReceiver);
-                    }
+                    Log.d(TAG_BTThread, "Bluetooth Socket is Disconnected");
 
                     runOnUiThread(new Runnable() {
                         @Override
@@ -728,20 +713,14 @@ public class DashBoardActivity extends AppCompatActivity {
                             builder.setPositiveButton(getString(R.string.caution_ok), new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
+                                    if(data_timerTask != null){
+                                        data_timerTask.cancel();
+                                    }
+
                                     dialog.dismiss();
-
-                                    if (bluetoothThread.isConnected()) {
-                                        bluetoothThread.closeSocket();
-                                    }
-                                    if (bluetoothThread.isRunning()) {
-                                        bluetoothThread.interrupt();
-                                    }
-                                    if (mReceiver.isInitialStickyBroadcast())
-                                        unregisterReceiver(mReceiver);
-
-                                    drawGraphClass.reDrawChart();
-
                                     outerClass.backToConnectDevice(context);
+                                    drawGraphClass.reDrawChart();
+                                    bluetoothThread.closeSocket();
                                 }
                             });
                             if (!context.isDestroyed())
@@ -755,9 +734,8 @@ public class DashBoardActivity extends AppCompatActivity {
 
             if (!bluetoothThread.isRunning()) {
                 bluetoothThread.start();
-                Log.d(TAG, "BluetoothThread is Run");
+                Log.d(TAG_BTThread, "BluetoothThread is Run");
             }
-            regDataListener(VIEW_REQUEST_INTERVAL, dataScheduler);
         }
     }
 
@@ -775,7 +753,7 @@ public class DashBoardActivity extends AppCompatActivity {
     private void loopReceiveData(int interval) {
 
         if (bluetoothThread.isConnected()) {
-            TimerTask data_timerTask = new TimerTask() {
+             data_timerTask = new TimerTask() {
                 @Override
                 public void run() {
                     try {
@@ -843,7 +821,7 @@ public class DashBoardActivity extends AppCompatActivity {
                                 virusIndex = virusFormulaClass.GetVirusIndex((float) aqi_short, temp_float, humid_float, co2_float, tvoc_float);
 
                                 try {
-                                    Log.d("virusValue", "\n" + "온도 : " + temp_float + "\n습도 : " + humid_float +
+                                    Log.d("VirusValue", "\n" + "온도 : " + temp_float + "\n습도 : " + humid_float +
                                             "\nPM AQI : " + aqi_short + "\nCO2 AQI : " + co2_float + "\nTVOC AQI : " +
                                             tvoc_float + "\nVirusValue : " + virusValue + "\nVirusIndex : " + virusIndex);
                                     binding.listCardVIRUSIndex.setText(virusValue + "");
@@ -1014,7 +992,7 @@ public class DashBoardActivity extends AppCompatActivity {
         filter.addAction(FAN_CONTROL_COMPLETE);
         registerReceiver(mReceiver, filter);
 
-        Log.d(TAG, "Add Side Menu Complete");
+        Log.d(TAG_BTThread, "Add Side Menu Complete");
         sidebar = new SideBarCustomView(context);
 
         binding.viewSildebar.addView(sidebar);
@@ -1093,6 +1071,7 @@ public class DashBoardActivity extends AppCompatActivity {
                             runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
+                                    outerClass.CallVibrate(context, 10);
                                     alertDialog.dismiss();
                                 }
                             });
@@ -1103,6 +1082,7 @@ public class DashBoardActivity extends AppCompatActivity {
                 dialog_cancel.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+                        outerClass.CallVibrate(context, 10);
                         alertDialog.dismiss();
                     }
                 });
@@ -1161,12 +1141,16 @@ public class DashBoardActivity extends AppCompatActivity {
                             final TextView dialog_fan4 = sidebar.findViewById(R.id.sideMenuFan4Tv);
 
                             if (fan_control_byte == 0x01) {
+                                outerClass.CallVibrate(context, 10);
                                 outerClass.fanBackgroundChange(dialog_fan1, dialog_fan2, dialog_fan3, dialog_fan4, context);
                             } else if (fan_control_byte == 0x02) {
+                                outerClass.CallVibrate(context, 10);
                                 outerClass.fanBackgroundChange(dialog_fan2, dialog_fan1, dialog_fan3, dialog_fan4, context);
                             } else if (fan_control_byte == 0x03) {
+                                outerClass.CallVibrate(context, 10);
                                 outerClass.fanBackgroundChange(dialog_fan3, dialog_fan2, dialog_fan1, dialog_fan4, context);
                             } else if (fan_control_byte == 0x04) {
+                                outerClass.CallVibrate(context, 10);
                                 outerClass.fanBackgroundChange(dialog_fan4, dialog_fan2, dialog_fan3, dialog_fan1, context);
                             }
                         }
@@ -1178,6 +1162,7 @@ public class DashBoardActivity extends AppCompatActivity {
 
     //햄버거 메뉴 닫기
     public void closeMenu() {
+        outerClass.CallVibrate(context, 10);
         isMenuShow = false;
         Animation slide = AnimationUtils.loadAnimation(context, R.anim.sidebar_hidden);
         binding.viewSildebar.startAnimation(slide);
@@ -1189,6 +1174,7 @@ public class DashBoardActivity extends AppCompatActivity {
 
     //햄버거 메뉴 보여주기
     public void showMenu() {
+        outerClass.CallVibrate(context, 10);
         isMenuShow = true;
         Animation slide = AnimationUtils.loadAnimation(context, R.anim.sidebar_show);
         binding.viewSildebar.startAnimation(slide);
@@ -1340,7 +1326,6 @@ public class DashBoardActivity extends AppCompatActivity {
         Legend legend = new Legend();
         LineDataSet lineDataSet;
 
-
         void setChart(int setYMax) {
             // X축
             XAxis xAxis = binding.virusLineChart.getXAxis();
@@ -1411,7 +1396,6 @@ public class DashBoardActivity extends AppCompatActivity {
                         lineData = binding.virusLineChart.getData();
                         createSet();
                         lineData.addDataSet(lineDataSet);
-                        Log.d("chartTimeDivider", lineData.getEntryCount() + "");
                         lineData.addEntry(new Entry(lineData.getEntryCount(), yData), 0); // 데이터 엔트리 추가
                         lineData.notifyDataChanged(); // 데이터 변경 알림
                         binding.virusLineChart.notifyDataSetChanged(); // 라인차트 변경 알림
@@ -1510,6 +1494,7 @@ public class DashBoardActivity extends AppCompatActivity {
             @SuppressLint("SimpleDateFormat") SimpleDateFormat simpleDateFormat = new SimpleDateFormat("hh:mm");
             long lArray;
             if (count == 0) {
+                CHART_MADE_TIME = System.currentTimeMillis();
                 lArray = CHART_MADE_TIME - (10 * 60 * 1000);
             } else if (count == 1) {
                 lArray = CHART_MADE_TIME;

@@ -20,24 +20,24 @@
     <string name="error">Error</string>
     <string name="day">am</string>
     <string name="night">pm</string>
-    <string name="connected_device">Paired Device</string>
+    <string name="connected_device">  Paired Devices  </string>
     <string name="no_bluetooth_device">This device does not support Bluetooth</string>
-    <string name="not_paring">Not Paring Device</string>
+    <string name="not_paring">Not Paring Devices</string>
     <string name="caution_title">Caution</string>
     <string name="caution_back">Back</string>
-    <string name="caution_message">Please Check The Connection Again</string>
+    <string name="caution_message">Check The Connection Again</string>
     <string name="reconnect_bt_msg">Disconnected to Bluetooth\nRetry to Connect Device?</string>
     <string name="reconnect_bt_ok">연결</string>
     <string name="caution_ok">OK</string>
     <string name="select_lang">01 Select Language</string>
     <string name="connect_device">02 Connect Device</string>
-    <string name="please_select_lang_main">Please select a language</string>
+    <string name="please_select_lang_main">Select a language</string>
     <string name="please_select_a_lang_sub">사용할 언어를 선택해주세요</string>
     <string name="korean_lang">한국어</string>
     <string name="eng_lang">English</string>
     <string name="ok">OK</string>
     <string name="cancel">Cancel</string>
-    <string name="please_select_device">Please Select a Device to Connect</string>
+    <string name="please_select_device">Select a Device to Connect</string>
     <string name="connectable_device">Device List</string>
     <string name="complete_select_lang">Language Setting is Complete</string>
     <string name="skip_lang_msg">Language Set to Automatic </string>
@@ -46,7 +46,7 @@
     <string name="exit_app_message">Do you want to Exit this App?</string>
     <string name="exit_app_yes">Yes</string>
     <string name="exit_app_no">No</string>
-    <string name="disconect_socket">Please check your Device on</string>
+    <string name="disconect_socket">Check your Device on</string>
     <string name="no_paring_device">Do you want to pair the current Phone to the device?</string>
     <string name="no_data_text">Drawing Graph…</string>
     <string name="settings">Settings</string>
@@ -69,4 +69,8 @@
     <string name="exit_complete">Device has been shut down</string>
     <string name="fail_to_change">Fail to changes</string>
     <string name="retry_please">Please try again</string>
+    <string name="unpairing_title">UnParing</string>
+    <string name="unpairing_msg">Do you want to unpair to the device?</string>
+    <string name="unpairing_ok_btn">Unpair</string>
+    <string name="unpairing_cancel_btn">Cancel</string>
 </resources>

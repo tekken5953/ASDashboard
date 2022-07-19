@@ -18,6 +18,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
+import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
@@ -39,6 +40,8 @@ import java.util.Set;
 @SuppressLint({"MissingPermission", "NotifyDataSetChanged"})
 public class ConnectDeviceActivity extends AppCompatActivity {
     ConnectBluetoothActivityBinding binding;
+
+    static final String TAG_LIFECYCLE = "LIFECYCLE";
 
     int SELECTED_POSITION = -1;
 
@@ -69,7 +72,7 @@ public class ConnectDeviceActivity extends AppCompatActivity {
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                Log.d("LifeCycle", "On Resume");
+                Log.d(TAG_LIFECYCLE, "On Resume");
                 cList.clear();
                 startCheckBluetooth();
 
@@ -83,7 +86,7 @@ public class ConnectDeviceActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        Log.d("LifeCycle", "On Destroy");
+        Log.d(TAG_LIFECYCLE, "On Destroy");
         if (bluetoothAdapter.isDiscovering()) {
             unregisterReceiver(mReceiver);
             bluetoothAdapter.cancelDiscovery();
@@ -95,7 +98,7 @@ public class ConnectDeviceActivity extends AppCompatActivity {
     @Override
     protected void onPause() {
         super.onPause();
-        Log.d("LifeCycle", "On Pause");
+        Log.d(TAG_LIFECYCLE, "On Pause");
         binding.connRefreshIv.setVisibility(View.VISIBLE);
     }
 
@@ -104,7 +107,7 @@ public class ConnectDeviceActivity extends AppCompatActivity {
         super.onWindowFocusChanged(hasFocus);
         if (hasFocus) {
             outerClass.FullScreenMode(context); // 하단 바 없애기
-            Log.d("LifeCycle", "On WindowFocusChanged");
+            Log.d(TAG_LIFECYCLE, "On WindowFocusChanged");
             findPairedDevice();
         }
     }
@@ -116,7 +119,7 @@ public class ConnectDeviceActivity extends AppCompatActivity {
         binding = ConnectBluetoothActivityBinding.inflate(getLayoutInflater());
         View view = binding.getRoot();
         setContentView(view);
-        Log.d("LifeCycle", "On Create");
+        Log.d(TAG_LIFECYCLE, "On Create");
 
 
         context = ConnectDeviceActivity.this;
@@ -147,7 +150,6 @@ public class ConnectDeviceActivity extends AppCompatActivity {
                         if (position < cAdapter.getItemCount()) {
                             try {
                                 //선택한 디바이스 페어링 요청
-                                Log.d("paringDevice", "position : " + position + " name : " + noBondedList.get(position).getName());
                                 noPairingPosition = position;
                                 BluetoothDevice device = noBondedList.get(position);
                                 Method method = device.getClass().getMethod("createBond", (Class[]) null);
@@ -180,6 +182,7 @@ public class ConnectDeviceActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if (binding.connOkTv.isEnabled()) {
+                    outerClass.CallVibrate(context,10);
                     binding.loadingParingPb.setVisibility(View.VISIBLE);
                     binding.connMainLayout.setAlpha(0.3f);
                     Intent intent = new Intent(context, DashBoardActivity.class);
@@ -218,6 +221,7 @@ public class ConnectDeviceActivity extends AppCompatActivity {
         binding.connTopBackIv.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                outerClass.CallVibrate(context,10);
                 SharedPreferenceManager.setString(context, "skip_lang", "no");
                 Intent intent = new Intent(context, LanguageSelectActivity.class);
                 startActivity(intent);
@@ -228,6 +232,7 @@ public class ConnectDeviceActivity extends AppCompatActivity {
         binding.connRefreshIv.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                outerClass.CallVibrate(context,10);
                 binding.connRefreshIv.setVisibility(View.GONE);
                 onResume();
             }
@@ -241,9 +246,9 @@ public class ConnectDeviceActivity extends AppCompatActivity {
                     if (bt.getName().contains(pList.get(position).getName())) {
 
                         final AlertDialog.Builder builder = new AlertDialog.Builder(context);
-                        builder.setTitle("페어링 해제");
-                        builder.setMessage("페어링을 해제하시겠습니까?");
-                        builder.setPositiveButton("해제", new DialogInterface.OnClickListener() {
+                        builder.setTitle(getString(R.string.unpairing_title));
+                        builder.setMessage(getString(R.string.unpairing_msg));
+                        builder.setPositiveButton(getString(R.string.unpairing_ok_btn), new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 try {
@@ -257,7 +262,7 @@ public class ConnectDeviceActivity extends AppCompatActivity {
                                 }
                             }
                         });
-                        builder.setNegativeButton("취소", new DialogInterface.OnClickListener() {
+                        builder.setNegativeButton(getString(R.string.unpairing_cancel_btn), new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 dialog.dismiss();
@@ -339,7 +344,7 @@ public class ConnectDeviceActivity extends AppCompatActivity {
                             if (deviceName.contains(" ")) {
                                 deviceNameStrRight = deviceName.split(" ");
                                 for (int i = 0; i < pList.size(); i++) {
-                                    Log.d("LifeCycle", deviceNameStrRight[0] + deviceNameStrRight[1] + " : " + pList.get(i).getAddress());
+                                    Log.d(TAG_LIFECYCLE, deviceNameStrRight[0] + deviceNameStrRight[1] + " : " + pList.get(i).getAddress());
                                     if (!deviceNameStrRight[1].equals(pList.get(i).getAddress())) {
                                         if (i == pList.size() - 1) {
                                             noBondedList.add(device);

@@ -69,4 +69,8 @@
     <string name="exit_complete">장치를 종료했습니다</string>
     <string name="fail_to_change">변경에 실패했습니다</string>
     <string name="retry_please">다시 시도해주세요</string>
+    <string name="unpairing_title">페어링 해제</string>
+    <string name="unpairing_msg">페어링을 해제하시겠습니까?</string>
+    <string name="unpairing_ok_btn">해제</string>
+    <string name="unpairing_cancel_btn">취소</string>
 </resources>
