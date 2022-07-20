@@ -76,7 +76,7 @@
             android:text="@string/connect_device"
             android:textAllCaps="false"
             android:textColor="@color/statusUnitText"
-            android:textSize="23sp" />
+            android:textSize="23sp"/>
 
         <TextView
             android:id="@+id/langTopConnContentTv"
@@ -91,7 +91,7 @@
             android:text="@string/please_select_device"
             android:textAllCaps="false"
             android:textColor="@color/statusUnitText"
-            android:textSize="14sp" />
+            android:textSize="14sp"/>
 
     </RelativeLayout>
 

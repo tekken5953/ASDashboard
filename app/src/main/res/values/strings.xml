@@ -47,7 +47,7 @@
     <string name="exit_app_message">대쉬보드를 종료하시겠습니까?</string>
     <string name="exit_app_yes">예</string>
     <string name="exit_app_no">아니오</string>
-    <string name="disconect_socket">장치가 켜져있는지 확인해주세요</string>
+    <string name="disconnect_socket">장치가 켜져있는지 확인해주세요</string>
     <string name="no_paring_device">현재 기기를 디바이스에 페어링 하시겠습니까?</string>
     <string name="no_data_text">그래프를 그리는 중입니다</string>
     <string name="settings">설정</string>

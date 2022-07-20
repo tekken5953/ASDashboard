@@ -47,8 +47,8 @@
     <string name="exit_app_message">Do you want to Exit this App?</string>
     <string name="exit_app_yes">Yes</string>
     <string name="exit_app_no">No</string>
-    <string name="disconect_socket">Check your Device on</string>
-    <string name="no_paring_device">Do you want to pair the current Phone to the device?</string>
+    <string name="disconnect_socket">Check your Device on</string>
+    <string name="no_paring_device">Pairing the current phone to the device?</string>
     <string name="no_data_text">Drawing Graph…</string>
     <string name="settings">Settings</string>
     <string name="power_off">Power Off</string>

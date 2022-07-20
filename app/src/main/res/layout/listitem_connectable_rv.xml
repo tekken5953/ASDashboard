@@ -1,25 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="290dp"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="280dp"
     android:layout_height="75dp"
-    android:background="@drawable/connectable_rv_bg"
     android:layout_marginBottom="17dp"
+    android:background="@drawable/connectable_rv_bg"
     android:padding="1dp">
 
     <ImageView
         android:id="@+id/listItemConnDeviceImageIv"
         android:layout_width="45dp"
         android:layout_height="45dp"
+        android:layout_centerVertical="true"
         android:layout_marginStart="20dp"
-        android:src="@drawable/side_100"
-        android:layout_centerVertical="true"/>
+        android:src="@drawable/side_100" />
 
     <TextView
         android:id="@+id/listItemConnDeviceTitleTv"
         android:layout_width="wrap_content"
         android:layout_height="16dp"
-        android:layout_marginStart="11dp"
+        android:layout_marginStart="8dp"
         android:layout_marginTop="18dp"
         android:layout_toEndOf="@+id/listItemConnDeviceImageIv"
         android:fontFamily="@font/pretendardvariable"
@@ -33,7 +32,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/listItemConnDeviceTitleTv"
-        android:layout_marginStart="11dp"
+        android:layout_marginStart="10dp"
         android:layout_marginTop="3dp"
         android:layout_toEndOf="@+id/listItemConnDeviceImageIv"
         android:fontFamily="@font/pretendardvariable"
@@ -48,7 +47,7 @@
         android:layout_height="16dp"
         android:layout_alignParentEnd="true"
         android:layout_centerVertical="true"
-        android:layout_marginEnd="12dp"
+        android:layout_marginEnd="17dp"
         android:fontFamily="@font/pretendardvariable"
         android:text="@string/connect"
         android:textAllCaps="false"

@@ -67,6 +67,7 @@
         <entry key="..\:/AndroidStudio/Dashboard/app/src/main/res/layout-sw720dp/language_select_activity.xml" value="0.2" />
         <entry key="..\:/AndroidStudio/Dashboard/app/src/main/res/layout-sw720dp/listitem.xml" value="0.21432291666666667" />
         <entry key="..\:/AndroidStudio/Dashboard/app/src/main/res/layout-sw720dp/listitem_connectable_device.xml" value="0.21432291666666667" />
+        <entry key="..\:/AndroidStudio/Dashboard/app/src/main/res/layout-sw720dp/listitem_connectable_rv.xml" value="0.21432291666666667" />
         <entry key="..\:/AndroidStudio/Dashboard/app/src/main/res/layout-sw720dp/listitem_recent_device.xml" value="0.21432291666666667" />
         <entry key="..\:/AndroidStudio/Dashboard/app/src/main/res/layout-sw720dp/search_device_listitem.xml" value="0.14253472222222222" />
         <entry key="..\:/AndroidStudio/Dashboard/app/src/main/res/layout-sw720dp/select_bluetooth_fragment.xml" value="0.14166666666666666" />
@@ -92,6 +93,7 @@
         <entry key="..\:/AndroidStudio/Dashboard/app/src/main/res/layout/language_select_activity.xml" value="0.1" />
         <entry key="..\:/AndroidStudio/Dashboard/app/src/main/res/layout/listitem.xml" value="0.14288194444444444" />
         <entry key="..\:/AndroidStudio/Dashboard/app/src/main/res/layout/listitem_connectable_device.xml" value="0.42864583333333334" />
+        <entry key="..\:/AndroidStudio/Dashboard/app/src/main/res/layout/listitem_connectable_rv.xml" value="0.21380208333333334" />
         <entry key="..\:/AndroidStudio/Dashboard/app/src/main/res/layout/listitem_recent_device.xml" value="0.42864583333333334" />
         <entry key="..\:/AndroidStudio/Dashboard/app/src/main/res/layout/listitem_small.xml" value="0.21432291666666667" />
         <entry key="..\:/AndroidStudio/Dashboard/app/src/main/res/layout/search_device_listitem.xml" value="0.14288194444444444" />

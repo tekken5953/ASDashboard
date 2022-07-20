@@ -7,5 +7,6 @@
 
     <solid android:color="#33697687"/>
     <padding android:right="14dp" android:left="14dp"
-        android:bottom="10dp" android:top="8dp"/>
+        android:bottom="8dp" android:top="6dp"/>
+    <size android:height="42dp"/>
 </shape>
