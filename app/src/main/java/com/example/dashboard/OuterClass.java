@@ -1,23 +1,21 @@
 package com.example.dashboard;
 
-import android.annotation.SuppressLint;
 import android.app.Activity;
-import android.bluetooth.BluetoothAdapter;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Vibrator;
 import android.view.View;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.RequiresApi;
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.content.res.AppCompatResources;
 
 import com.example.dashboard.connect.ConnectDeviceActivity;
+
+import java.util.Locale;
 
 public class OuterClass {
 
@@ -103,5 +101,19 @@ public class OuterClass {
         if (vibrator.hasVibrator()) {
             vibrator.vibrate(time);
         }
+    }
+
+    // 국가를 대한민국으로 설정합니다
+    public void setLocaleToKorea(Context context) {
+        Configuration configuration = new Configuration();
+        configuration.setLocale(Locale.KOREA);
+        context.getResources().updateConfiguration(configuration, context.getResources().getDisplayMetrics());
+    }
+
+    // 국가를 영어권으로 설정합니다
+    public void setLocaleToEnglish(Context context) {
+        Configuration configuration = new Configuration();
+        configuration.setLocale(Locale.ENGLISH);
+        context.getResources().updateConfiguration(configuration, context.getResources().getDisplayMetrics());
     }
 }

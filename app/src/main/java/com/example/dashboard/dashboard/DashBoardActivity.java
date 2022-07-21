@@ -18,7 +18,6 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.content.res.Configuration;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
@@ -71,7 +70,6 @@ import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Iterator;
-import java.util.Locale;
 import java.util.Set;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -143,7 +141,7 @@ public class DashBoardActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        outerClass.FullScreenMode(context); // 하단 바 없애기
+        outerClass.FullScreenMode(context);
     }
 
     @SuppressLint("NotifyDataSetChanged")
@@ -160,17 +158,15 @@ public class DashBoardActivity extends AppCompatActivity {
         // 기기의 해상도를 구합니다
         getWindowManager().getDefaultDisplay().getMetrics(dm);
 
-        LanguageSelectActivity languageSelectActivity = new LanguageSelectActivity();
-
         if (SharedPreferenceManager.getString(context, "final").equals("en")) {
             Log.d(TAG_BTThread, "Language is ENGLISH");
-            languageSelectActivity.setLocaleToEnglish();
+            outerClass.setLocaleToEnglish(context);
         } else if (SharedPreferenceManager.getString(context, "final").equals("ko")) {
             Log.d(TAG_BTThread, "Language is KOREAN");
-            languageSelectActivity.setLocaleToKorea();
+            outerClass.setLocaleToKorea(context);
         } else {
             Log.d(TAG_BTThread, "Language is DEFAULT");
-            languageSelectActivity.setLocaleToKorea();
+            outerClass.setLocaleToKorea(context);
         }
 
         // CQI 바 차트를 그립니다
@@ -376,6 +372,12 @@ public class DashBoardActivity extends AppCompatActivity {
             Log.d(TAG_BTThread, "SetUp Date is " + setup_date + "");
         }
 
+        // 현재 풍량 정보
+        if (body.containsKey("3A")) {
+            current_fan_byte = body.getByte("3A");
+            Log.d(TAG_BTThread, "Current Fan is " + current_fan_byte);
+        }
+
         // 온도
         if (body.containsKey("10")) {
             temp_str = body.getString("10").substring(0, 4);
@@ -485,11 +487,6 @@ public class DashBoardActivity extends AppCompatActivity {
             aqi_short = body.getShort("0B");
         }
 
-        // 현재 풍량 정보
-        if (body.containsKey("3A")) {
-            current_fan_byte = body.getByte("3A");
-            Log.d(TAG_BTThread, "Current Fan is " + current_fan_byte);
-        }
     }
 
     private void processControlBody(Bundle body) {
@@ -750,28 +747,7 @@ public class DashBoardActivity extends AppCompatActivity {
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-
-                            // 장치와의 연결이 끊어짐을 알리고 디바이스 연결 화면으로 돌아갑니다
-                            final AlertDialog.Builder builder = new AlertDialog.Builder(context);
-                            builder.create();
-                            builder.setTitle(getString(R.string.caution_title));
-                            builder.setMessage(getString(R.string.caution_message));
-                            builder.setPositiveButton(getString(R.string.caution_ok), new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    // 현재 진행중이던 타이머테스크를 중지합니다
-                                    if (data_timerTask != null) {
-                                        data_timerTask.cancel();
-                                    }
-
-                                    dialog.dismiss();
-                                    outerClass.backToConnectDevice(context);
-                                    drawGraphClass.reDrawChart();
-                                    bluetoothThread.closeSocket();
-                                }
-                            });
-                            if (!context.isDestroyed())
-                                builder.show();
+                            DisconnectBTDialog();
                         }
                     });
                 }
@@ -1335,11 +1311,14 @@ public class DashBoardActivity extends AppCompatActivity {
                             drawGraphClass.drawFirstEntry(100, "virus");
                             ChartTimerTask(100, "virus");
                         }
+                    } else {
+                        DisconnectBTDialog();
                     }
                 }
             });
         } catch (NullPointerException e) {
             e.printStackTrace();
+            DisconnectBTDialog();
         }
     }
 
@@ -1370,6 +1349,7 @@ public class DashBoardActivity extends AppCompatActivity {
                                     drawGraphClass.reDrawChart();
                                     drawGraphClass.drawFirstEntry(300, "cqi");
                                     ChartTimerTask(300, "cqi");
+                                    // 사이드 메뉴 활성화
                                     Handler addSideViewHandler = new Handler(Looper.getMainLooper());
                                     addSideViewHandler.postDelayed(new Runnable() {
                                         @Override
@@ -1431,8 +1411,8 @@ public class DashBoardActivity extends AppCompatActivity {
             yAxis.setValueFormatter(new YAxisValueFormat()); // y축 데이터 포맷
             yAxis.setGranularityEnabled(false); // y축 간격을 제한하는 세분화 기능
             yAxis.setDrawLabels(true); // Y축 라벨 위치
-            yAxis.setLabelCount(3);
-            yAxis.setTextSize(12);
+            yAxis.setLabelCount(3); // Y축 라벨 개수
+            yAxis.setTextSize(12); // Y축 라벨 텍스트 사이즈
             yAxis.setDrawGridLines(false); // GridLine 표시
             yAxis.setDrawAxisLine(false); // AxisLine 표시
 
@@ -1451,7 +1431,6 @@ public class DashBoardActivity extends AppCompatActivity {
                         public void run() {
                             setChart(SetYMax);
                             addEntry(yData);
-                            Log.d(TAG_BTThread, "lineData Count :" + lineData.getEntryCount());
                         }
                     });
                 }
@@ -1495,6 +1474,7 @@ public class DashBoardActivity extends AppCompatActivity {
             lineDataSet.setDrawCircleHole(false); // 원 안에 작은 원 표시
             lineDataSet.setDrawCircles(false); // 원 표시
             lineDataSet.setDrawValues(true); // 차트포인트에 값 표시
+            lineDataSet.setValueFormatter(new DataSetValueFormat());
             lineDataSet.setValueTextSize(11); // 차트 텍스트 크기
             lineDataSet.setColor(ResourcesCompat.getColor(getResources(), R.color.lineChartLine, null)); // 색상 지정
         }
@@ -1519,6 +1499,13 @@ public class DashBoardActivity extends AppCompatActivity {
             @Override
             public String getFormattedValue(float value) {
                 return chartTimeDivider(xLabelList, (int) value);
+            }
+        }
+
+        private class DataSetValueFormat extends IndexAxisValueFormatter {
+            @Override
+            public String getFormattedValue(float value) {
+                return (int) value + "";
             }
         }
 
@@ -1744,6 +1731,31 @@ public class DashBoardActivity extends AppCompatActivity {
                 grade.setTextColor(ResourcesCompat.getColor(getResources(), R.color.statusUnitText, null));
                 grade.setText(getString(R.string.error));
         }
+    }
+
+    // 블루투스 연결 끊김 시 디바이스 연결 액티비티로 전환
+    private void DisconnectBTDialog() {
+        // 장치와의 연결이 끊어짐을 알리고 디바이스 연결 화면으로 돌아갑니다
+        final AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        builder.create();
+        builder.setTitle(getString(R.string.caution_title));
+        builder.setMessage(getString(R.string.caution_message));
+        builder.setPositiveButton(getString(R.string.caution_ok), new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                // 현재 진행중이던 타이머테스크를 중지합니다
+                if (data_timerTask != null) {
+                    data_timerTask.cancel();
+                }
+
+                dialog.dismiss();
+                outerClass.backToConnectDevice(context);
+                drawGraphClass.reDrawChart();
+                bluetoothThread.closeSocket();
+            }
+        });
+        if (!context.isDestroyed())
+            builder.show();
     }
 
     //  앱 종료 메시지 창 띄우기

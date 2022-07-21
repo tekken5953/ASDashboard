@@ -2,7 +2,6 @@ package com.example.dashboard.language;
 
 import android.Manifest;
 import android.app.Activity;
-import android.content.res.Configuration;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
@@ -20,8 +19,6 @@ import androidx.core.content.res.ResourcesCompat;
 import com.example.dashboard.OuterClass;
 import com.example.dashboard.R;
 import com.example.dashboard.SharedPreferenceManager;
-
-import java.util.Locale;
 
 public class LanguageSelectActivity extends AppCompatActivity {
 
@@ -77,12 +74,12 @@ public class LanguageSelectActivity extends AppCompatActivity {
                 // 한국어 일 때
                 if (FINAL_LANGUAGE.equals("ko")) {
                     SelectedKoreaFlag();
-                    setLocaleToKorea();
+                    outerClass.setLocaleToKorea(context);
                 }
                 // 영어 일 때
                 else if (FINAL_LANGUAGE.equals("en")) {
                     SelectedEnglishFlag();
-                    setLocaleToEnglish();
+                    outerClass.setLocaleToEnglish(context);
                 }
             }
         }
@@ -90,9 +87,9 @@ public class LanguageSelectActivity extends AppCompatActivity {
         else if (SKIP_SELECT_LANGUAGE.equals("ok")) {
             // 로케이션을 현재 선택된 언어로 설정합니다
             if (SharedPreferenceManager.getString(this, "final").equals("ko")) {
-                setLocaleToKorea();
+                outerClass.setLocaleToKorea(context);
             } else {
-                setLocaleToEnglish();
+                outerClass.setLocaleToEnglish(context);
             }
             Toast.makeText(context, getString(R.string.skip_lang_msg), Toast.LENGTH_SHORT).show();
             // 현재 액티비티를 스킵하고 디바이스 연결 화면으로 넘어갑니다
@@ -101,7 +98,7 @@ public class LanguageSelectActivity extends AppCompatActivity {
         // 현재 선택 된 언어가 없을 때
         else {
             SelectedNothing();
-            setLocaleToKorea();
+            outerClass.setLocaleToKorea(context);
         }
     }
 
@@ -142,13 +139,13 @@ public class LanguageSelectActivity extends AppCompatActivity {
                         // 그 언어를 바탕으로 국가를 설정하고 현재 선택된 언어를 최종 언어로 변경하여 저장합니다
                         // 디바이스 연결 화면으로 이동합니다
                         if (SharedPreferenceManager.getString(context, "current").equals("en")) {
-                            setLocaleToEnglish();
+                            outerClass.setLocaleToEnglish(context);
                             SharedPreferenceManager.setString(context, "final", SharedPreferenceManager.getString(context, "current"));
                             SharedPreferenceManager.setString(context, "skip_lang", "ok");
                             Toast.makeText(context, getString(R.string.complete_select_lang), Toast.LENGTH_SHORT).show();
                             outerClass.backToConnectDevice(context);
                         } else if (SharedPreferenceManager.getString(context, "current").equals("ko")) {
-                            setLocaleToKorea();
+                            outerClass.setLocaleToKorea(context);
                             SharedPreferenceManager.setString(context, "final", SharedPreferenceManager.getString(context, "current"));
                             SharedPreferenceManager.setString(context, "skip_lang", "ok");
                             Toast.makeText(context, getString(R.string.complete_select_lang), Toast.LENGTH_SHORT).show();
@@ -196,19 +193,6 @@ public class LanguageSelectActivity extends AppCompatActivity {
         langOkTv.setTextColor(ResourcesCompat.getColor(getResources(), R.color.statusUnitText, null));
     }
 
-    // 국가를 대한민국으로 설정합니다
-    public void setLocaleToKorea() {
-        Configuration configuration = new Configuration();
-        configuration.setLocale(Locale.KOREA);
-        getResources().updateConfiguration(configuration, getResources().getDisplayMetrics());
-    }
-
-    // 국가를 영어권으로 설정합니다
-    public void setLocaleToEnglish() {
-        Configuration configuration = new Configuration();
-        configuration.setLocale(Locale.ENGLISH);
-        getResources().updateConfiguration(configuration, getResources().getDisplayMetrics());
-    }
 
     // 블루투스 퍼미션을 체크합니다
     @RequiresApi(api = Build.VERSION_CODES.M)
