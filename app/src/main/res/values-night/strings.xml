@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Dashboard</string>
+    <string name="app_name">BS-Dashboard</string>
     <string name="good">좋음</string>
     <string name="normal">보통</string>
     <string name="bad">나쁨</string>
     <string name="baddest">매우나쁨</string>
+    <string name="cqi_baddest">매우\n나쁨</string>
     <string name="aqi">공기질 통합지수</string>
     <string name="aqi_1_hour">지난 1시간 공기질 데이터</string>
     <string name="fine_dust">미세먼지</string>
@@ -21,6 +22,7 @@
     <string name="day">오전</string>
     <string name="night">오후</string>
     <string name="not_paring">연결된 디바이스 없음</string>
+    <string name="no_bluetooth_device">해당 기기는 블루투스를 지원하지 않습니다</string>
     <string name="caution_title">경고</string>
     <string name="caution_message">장치와의 연결을 다시 확인해주세요</string>
     <string name="reconnect_bt_msg">블루투스 연결이 끊어졌습니다.\n다시 블루투스에 연결하시겠습니까?</string>
@@ -45,7 +47,7 @@
     <string name="exit_app_message">대쉬보드를 종료하시겠습니까?</string>
     <string name="exit_app_yes">예</string>
     <string name="exit_app_no">아니오</string>
-    <string name="disconect_socket">장치가 켜져있는지 확인해주세요</string>
+    <string name="disconnect_socket">장치가 켜져있는지 확인해주세요</string>
     <string name="no_paring_device">현재 기기를 디바이스에 페어링 하시겠습니까?</string>
     <string name="no_data_text">그래프를 그리는 중입니다</string>
     <string name="settings">설정</string>
@@ -65,4 +67,11 @@
     <string name="web_site">http://www.airsignal.kr</string>
     <string name="ask_turn_off">전원을 끄시겠습니까?</string>
     <string name="already_connected">이미 연결된 디바이스 입니다</string>
+    <string name="exit_complete">장치를 종료했습니다</string>
+    <string name="fail_to_change">변경에 실패했습니다</string>
+    <string name="retry_please">다시 시도해주세요</string>
+    <string name="unpairing_title">페어링 해제</string>
+    <string name="unpairing_msg">페어링을 해제하시겠습니까?</string>
+    <string name="unpairing_ok_btn">해제</string>
+    <string name="unpairing_cancel_btn">취소</string>
 </resources>

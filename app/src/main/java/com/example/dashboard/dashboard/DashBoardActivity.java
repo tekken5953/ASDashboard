@@ -18,9 +18,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.content.res.Configuration;
 import android.graphics.Color;
-import android.graphics.Point;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -28,7 +26,6 @@ import android.os.Looper;
 import android.os.Message;
 import android.util.DisplayMetrics;
 import android.util.Log;
-import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -36,7 +33,6 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -74,7 +70,6 @@ import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Iterator;
-import java.util.Locale;
 import java.util.Set;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -87,15 +82,15 @@ public class DashBoardActivity extends AppCompatActivity {
 
     String FAN_CONTROL_COMPLETE = "com.example.dashboard";
 
-    int barViewWidth, barViewHeight, arrowWidth, VIEW_REQUEST_INTERVAL = 3, DRAW_CHART_INTERVAL = 60 * 10, cqiIndex;
+    static final String TAG_BTThread = "BTThread";
+
+    int VIEW_REQUEST_INTERVAL = 3, DRAW_CHART_INTERVAL = 60 * 10;
 
     ArrayList<SegmentedProgressBar.BarContext> barList = new ArrayList<>();
 
     LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
 
     private Boolean isMenuShow = false;
-
-    Configuration configuration;
 
     BluetoothAdapter bluetoothAdapter;
     BluetoothThread bluetoothThread;
@@ -112,21 +107,21 @@ public class DashBoardActivity extends AppCompatActivity {
     long CHART_MADE_TIME = 0;
 
     Timer dataScheduler, chartScheduler, virusScheduler;
+    TimerTask data_timerTask;
 
     String temp_str = null, humid_str = null, pm_str = null, co_str = null, co2_str = null, tvoc_str = null;
     String pm_grade = null, co_grade = null, co2_grade = null, tvoc_grade = null, virusIndex = null, cqiGrade = null;
     Short aqi_short;
-    int virusValue;
+    int virusValue, barViewWidth, barViewHeight, arrowWidth, cqiIndex;
     Float pm_float, co_float, co2_float, tvoc_float, humid_float, temp_float;
     byte fan_control_byte, current_fan_byte, power_control_byte;
-    ArrayList<String> xLabelList = new ArrayList<>();
 
-    //    BroadcastReceiver mReceiver;
     SideBarCustomView sidebar;
 
     OuterClass outerClass = new OuterClass();
     DrawGraphClass drawGraphClass = new DrawGraphClass();
     VirusFormulaClass virusFormulaClass = new VirusFormulaClass();
+    ArrayList<String> xLabelList = new ArrayList<>();
 
     @Override
     protected void onDestroy() {
@@ -146,7 +141,7 @@ public class DashBoardActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        outerClass.FullScreenMode(context); // 하단 바 없애기
+        outerClass.FullScreenMode(context);
     }
 
     @SuppressLint("NotifyDataSetChanged")
@@ -159,27 +154,23 @@ public class DashBoardActivity extends AppCompatActivity {
         binding.setViewModel(viewModel);
 
         init(); //뷰 바인딩
-        getWindowManager().getDefaultDisplay().getMetrics(dm); // 기기 해상도를 구하기 위함
 
-        configuration = new Configuration();
+        // 기기의 해상도를 구합니다
+        getWindowManager().getDefaultDisplay().getMetrics(dm);
 
         if (SharedPreferenceManager.getString(context, "final").equals("en")) {
-            Log.d("bluetoothThread", "Language is ENGLISH");
-            configuration.setLocale(Locale.US);
-            getResources().updateConfiguration(configuration, getResources().getDisplayMetrics());
+            Log.d(TAG_BTThread, "Language is ENGLISH");
+            outerClass.setLocaleToEnglish(context);
         } else if (SharedPreferenceManager.getString(context, "final").equals("ko")) {
-            Log.d("bluetoothThread", "Language is KOREAN");
-            configuration.setLocale(Locale.KOREA);
-            getResources().updateConfiguration(configuration, getResources().getDisplayMetrics());
+            Log.d(TAG_BTThread, "Language is KOREAN");
+            outerClass.setLocaleToKorea(context);
         } else {
-            Log.d("bluetoothThread", "Language is DEFAULT");
-            configuration.setLocale(Locale.KOREA);
-            getResources().updateConfiguration(configuration, getResources().getDisplayMetrics());
+            Log.d(TAG_BTThread, "Language is DEFAULT");
+            outerClass.setLocaleToKorea(context);
         }
 
-        CHART_MADE_TIME = System.currentTimeMillis();
-
-        CreateSegmentProgressView(); // AQI 바 차트 그리기
+        // CQI 바 차트를 그립니다
+        CreateSegmentProgressView();
 
         binding.virusLineChart.setNoDataText(getString(R.string.no_data_text));
 
@@ -189,15 +180,17 @@ public class DashBoardActivity extends AppCompatActivity {
 
         binding.listCardVIRUSIndex.setVisibility(View.GONE);
         binding.listCardVIRUSOCGrade.setVisibility(View.GONE);
-
     }
 
     public void init() {
 
-        currentTimeIndex(); // 현재 시간 적용
+        // 현재 시간을 구해 실시간으로 변경합니다
+        currentTimeIndex();
 
+        // 블루투스 어댑터를 초기화합니다
         bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
 
+        // 사이드 메뉴의 클릭 이벤트를 등록합니다
         binding.hambugerMenuIv.setOnClickListener(this::onClick);
 
         // 데이터 관리
@@ -209,14 +202,14 @@ public class DashBoardActivity extends AppCompatActivity {
                 if (recvHex == null) return;
 
                 byte[][] bundleOfHex = separatedFrame(recvHex);
-            /*
-            String stx          = byteArrayToHexString(bundleOfHex[0]);
-            String length       = byteArrayToHexString(bundleOfHex[1]);
-            String sequence     = byteArrayToHexString(bundleOfHex[2]);
-            String command      = byteArrayToHexString(bundleOfHex[3]);
-            String body         = byteArrayToHexString(bundleOfHex[4]);
-            String etx          = byteArrayToHexString(bundleOfHex[5]);
-            */
+                /**
+                 String stx          = byteArrayToHexString(bundleOfHex[0]);
+                 String length       = byteArrayToHexString(bundleOfHex[1]);
+                 String sequence     = byteArrayToHexString(bundleOfHex[2]);
+                 String command      = byteArrayToHexString(bundleOfHex[3]);
+                 String body         = byteArrayToHexString(bundleOfHex[4]);
+                 String etx          = byteArrayToHexString(bundleOfHex[5]);
+                 */
                 String command = byteArrayToHexString(bundleOfHex[3]);
                 Bundle body = null;
 
@@ -240,56 +233,18 @@ public class DashBoardActivity extends AppCompatActivity {
                 }
             }
         };
+        // 이제부터 뷰모델이 하단 아이템의 데이터를 관리합니다
         viewModel.getReceiveData().observe(this, data);
 
+        // 블루투스 사용 여부를 체크합니다
         startCheckBluetooth();
 
-        Handler GetDataHandler = new Handler(Looper.getMainLooper());
-        GetDataHandler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        try {
-
-                            Thread.sleep(1000);
-                            binding.loadingPb.setVisibility(View.GONE);
-                            binding.idMain.setEnabled(true);
-                            binding.idMain.setAlpha(1f);
-
-                            regVirusListener(VIEW_REQUEST_INTERVAL, virusScheduler);
-
-                            Handler DrawGraphHandler = new Handler(Looper.getMainLooper());
-                            DrawGraphHandler.postDelayed(new Runnable() {
-                                @Override
-                                public void run() {
-                                    drawGraphClass.reDrawChart();
-                                    drawGraphClass.drawFirstEntry(300, "cqi");
-                                    ChartTimerTask(300, "cqi");
-                                    Handler addSideViewHandler = new Handler(Looper.getMainLooper());
-                                    addSideViewHandler.postDelayed(new Runnable() {
-                                        @Override
-                                        public void run() {
-                                            addSideView();
-                                        }
-                                    }, 500);
-                                }
-                            }, 1500);
-
-                        } catch (InterruptedException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                });
-            }
-        }, 3500);
     }
 
     @SuppressLint("MissingPermission")
     public void startCheckBluetooth() {
         if (bluetoothAdapter == null) {
-            Toast.makeText(this, "해당 기기는 블루투스를 지원하지 않습니다", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, getString(R.string.no_bluetooth_device), Toast.LENGTH_SHORT).show();
         } else {
             if (bluetoothAdapter.isEnabled()) {
                 try {
@@ -326,13 +281,14 @@ public class DashBoardActivity extends AppCompatActivity {
         }
     }
 
+    // 블루투스 요청 프로세스를 처리하는 함수입니다
     @RequiresApi(api = Build.VERSION_CODES.N)
     private void processRequestBody(Bundle body) {
 
         if (body.containsKey("47")) {
             deviceType = Arrays.toString(body.getCharArray("47"));
 
-            Log.d("bluetoothThread", "Device Type is " + deviceType);
+            Log.d(TAG_BTThread, "Device Type is " + deviceType);
 
             System.out.println("Device Type : " + Arrays.toString(body.getCharArray("47")));
 
@@ -347,27 +303,30 @@ public class DashBoardActivity extends AppCompatActivity {
                                         new byte[]{REQUEST_INDIVIDUAL_STATE},
                                         new byte[]{
                                                 0x48, 0x00, 0x00,  // S/N
-                                                0x65, 0x00, 0x00,  // WIFI Connect State
+//                                                0x65, 0x00, 0x00,  // WIFI Connect State
                                                 0x3A, 0x00, 0x00  // 현재바람세기
                                         },
                                         bluetoothThread.getSequence()
                                 )
                         );
+                        GraphDataSideHandler();
                     }
-                }, 1000);
+                }, 1500);
 
 
             } else {
                 bluetoothThread.writeHex(makeFrame(
                         new byte[]{REQUEST_INDIVIDUAL_STATE},
                         new byte[]{
-                                0x43, 0x00, 0x00, // GPS 위도
-                                0x44, 0x00, 0x00, // GPS 경도
-                                0x45, 0x00, 0x00, // 펌웨어버전
-                                0x46, 0x00, 0x00,  // 모듈설치날짜
+//                                0x43, 0x00, 0x00, // GPS 위도
+//                                0x44, 0x00, 0x00, // GPS 경도
+//                                0x45, 0x00, 0x00, // 펌웨어버전
+//                                0x46, 0x00, 0x00,  // 모듈설치날짜
                         },
                         bluetoothThread.getSequence()
                 ));
+                Toast.makeText(context, "일시적인 오류입니다. 다시 접속해주세요", Toast.LENGTH_SHORT).show();
+                outerClass.backToConnectDevice(context);
             }
         }
 
@@ -400,115 +359,141 @@ public class DashBoardActivity extends AppCompatActivity {
                 bluetoothThread.getSequence()
         ));
 
+        // S/N
         if (body.containsKey("48")) {
             serialNumber = new String(body.getCharArray("48"));
-            Log.d("bluetoothThread", "Serial Number is " + serialNumber);
+            Log.d(TAG_BTThread, "Serial Number is " + serialNumber);
         }
 
+        // 설치날짜
         if (body.containsKey("46")) {
             setup_date = body.getInt("46");
             setUpDateStr = setup_date + "";
-            Log.d("bluetoothThread", "SetUp Date is " + setup_date + "");
+            Log.d(TAG_BTThread, "SetUp Date is " + setup_date + "");
         }
 
+        // 현재 풍량 정보
+        if (body.containsKey("3A")) {
+            current_fan_byte = body.getByte("3A");
+            Log.d(TAG_BTThread, "Current Fan is " + current_fan_byte);
+        }
+
+        // 온도
         if (body.containsKey("10")) {
             temp_str = body.getString("10").substring(0, 4);
             temp_float = Float.parseFloat(temp_str);
+            // 온도는 영하 20도 부터 영상 50도 까지만 변화를 적용합니다
             if (Float.parseFloat(temp_str) > -20f && Float.parseFloat(temp_str) < 50f) {
                 binding.tempTv.setText(temp_str);
             }
         }
 
-
+        // 습도
         if (body.containsKey("12")) {
             humid_str = body.getString("12").substring(0, 4);
             humid_float = Float.parseFloat(humid_str);
+            // 습도는 0% 부터 100% 까지만 변화를 적용합니다
             if (Float.parseFloat(humid_str) >= 0f && Float.parseFloat(humid_str) <= 100f) {
                 binding.humidTv.setText(humid_str);
             }
-
         }
 
+        // 미세먼지 2.5 지수
         if (body.containsKey("09")) {
             pm_str = body.getString("09");
-            pm_str = pm_str.substring(0, pm_str.length() - 3);
             pm_float = Float.parseFloat(pm_str);
-            if (pm_float >= 0f && pm_float <= 100f) {
-                binding.listCardPMIndex.setText(pm_str);
+            // 소수점 첫번 째 자리에서 반올림
+            int i = Math.round(pm_float);
+            // 0 ~ 100
+            if (i >= 0 && i <= 100) {
+                binding.listCardPMIndex.setText(i + "");
             }
         }
 
+        // 휘발성 유기화합물
         if (body.containsKey("21")) {
             tvoc_str = body.getString("21");
             tvoc_float = Float.parseFloat(tvoc_str);
+            // 0 ~ 3
             if (tvoc_float >= 0f && tvoc_float <= 3f) {
                 binding.listCardTVOCIndex.setText(tvoc_str);
             }
         }
 
+        // 일산화탄소
         if (body.containsKey("1B")) {
             co_str = body.getString("1B");
             co_float = Float.parseFloat(co_str);
+            // 0 ~ 15
             if (co_float >= 0f && co_float <= 15f) {
                 binding.listCardCOIndex.setText(co_str);
             }
         }
 
+        // 이산화탄소
         if (body.containsKey("1E")) {
             co2_str = body.getString("1E");
-            co2_str = co2_str.substring(0, co2_str.length() - 3);
             co2_float = Float.parseFloat(co2_str);
-            if (co2_float >= 0f && co_float <= 2000f) {
-                binding.listCardCO2Index.setText(co2_str);
+            // 소수점 첫번째 자리에서 반올림
+            int i = Math.round(co2_float);
+            // 0 ~ 2000
+            if (i >= 0 && i <= 2000) {
+                binding.listCardCO2Index.setText(i + "");
             }
         }
 
+        // 미세먼지 등급
         if (body.containsKey("0A")) {
             pm_grade = body.getByte("0A") + "";
+            // 0 ~ 100
             if (pm_float != null && pm_float >= 0f && pm_float <= 100f) {
                 binding.listCardPMGrade.setText(pm_grade);
                 CardItemTextColor(pm_grade, binding.listCardPMUnit, binding.listCardPMGrade, binding.listCardPMIndex);
             }
         }
 
+        // 휘발성 유기화합물 등급
         if (body.containsKey("22")) {
             tvoc_grade = body.getByte("22") + "";
+            // 0 ~ 3
             if (tvoc_float != null && tvoc_float >= 0f && tvoc_float <= 3f) {
                 binding.listCardTVOCGrade.setText(tvoc_grade);
                 CardItemTextColor(tvoc_grade, binding.listCardTVOCUnit, binding.listCardTVOCGrade, binding.listCardTVOCIndex);
             }
         }
 
+        // 일산화탄소 등급
         if (body.containsKey("1C")) {
             co_grade = body.getByte("1C") + "";
+            // 0 ~ 15
             if (co_float != null && co_float >= 0f && co_float <= 15f) {
                 binding.listCardCOGrade.setText(outerClass.translateData(co_grade, context));
                 CardItemTextColor(co_grade, binding.listCardCOUnit, binding.listCardCOGrade, binding.listCardCOIndex);
             }
         }
 
+        // 이산화탄소 등급
         if (body.containsKey("1F")) {
             co2_grade = body.getByte("1F") + "";
+            // 0 ~ 2000
             if (co2_float != null && co2_float >= 0f && co_float <= 2000f) {
                 binding.listCardCO2Grade.setText(outerClass.translateData(co2_grade, context));
                 CardItemTextColor(co2_grade, binding.listCardCO2Unit, binding.listCardCO2Grade, binding.listCardCO2Index);
             }
         }
 
+        // PM 2.5 AQI 지수
         if (body.containsKey("0B")) {
             aqi_short = body.getShort("0B");
         }
 
-        if (body.containsKey("3A")) {
-            current_fan_byte = body.getByte("3A");
-            Log.d("bluetoothThread", "Current Fan is " + current_fan_byte);
-        }
     }
 
     private void processControlBody(Bundle body) {
         // 임시
         if (body.containsKey("50")) {
 
+            // 장치 꺼짐 호출
             if (power_control_byte == 0x01) {
 
                 bluetoothThread.writeHex(makeFrame(new byte[]{REQUEST_CONTROL}, generateTag((byte) 0x50, new byte[]{0x01}), bluetoothThread.getSequence()));
@@ -519,7 +504,7 @@ public class DashBoardActivity extends AppCompatActivity {
                         // 어플 강제종료
 //                        android.os.Process.killProcess(android.os.Process.myPid());
 
-                        Toast.makeText(context, "BS-M을 종료했습니다", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(context, getString(R.string.exit_complete), Toast.LENGTH_SHORT).show();
 
                         // 어플 재시작
                         finishAffinity();
@@ -530,122 +515,125 @@ public class DashBoardActivity extends AppCompatActivity {
                 });
             }
 
-        } else if (body.containsKey("46")) {
-
-            if (body.getByte("46") == 0x01) {
-
-                bluetoothThread.writeHex(
-                        makeFrame(
-                                new byte[]{REQUEST_INDIVIDUAL_STATE},
-                                new byte[]{0x46, 0x00, 0x00},
-                                bluetoothThread.getSequence()
-                        )
-                );
-
-                Toast.makeText(this, "설치날짜 변경에 성공했습니다.", Toast.LENGTH_SHORT).show();
-
-            } else {
-
-                Toast.makeText(this, "설치날짜 변경에 실패했습니다.", Toast.LENGTH_SHORT).show();
-
-            }
-        } else if (body.containsKey("3B")) {
+//        }
+//        else if (body.containsKey("46")) {
+//
+//            if (body.getByte("46") == 0x01) {
+//
+//                bluetoothThread.writeHex(
+//                        makeFrame(
+//                                new byte[]{REQUEST_INDIVIDUAL_STATE},
+//                                new byte[]{0x46, 0x00, 0x00},
+//                                bluetoothThread.getSequence()
+//                        )
+//                );
+//
+//                Toast.makeText(this, "설치날짜 변경에 성공했습니다.", Toast.LENGTH_SHORT).show();
+//
+//            } else {
+//
+//                Toast.makeText(this, "설치날짜 변경에 실패했습니다.", Toast.LENGTH_SHORT).show();
+//
+//            }
+        }
+        // 펜의 풍량 제어
+        else if (body.containsKey("3B")) {
             if (fan_control_byte != 0x00) {
                 if (fan_control_byte == 0x01) {
                     bluetoothThread.writeHex(makeFrame(new byte[]{REQUEST_CONTROL}, generateTag((byte) 0x3A, new byte[]{0x01}), bluetoothThread.getSequence()));
-                    Log.d("bluetoothThread", "Fan 수면 단계");
+                    Log.d(TAG_BTThread, "Fan 수면 단계");
                 } else if (fan_control_byte == 0x02) {
                     bluetoothThread.writeHex(makeFrame(new byte[]{REQUEST_CONTROL}, generateTag((byte) 0x3A, new byte[]{0x02}), bluetoothThread.getSequence()));
-                    Log.d("bluetoothThread", "Fan 약 단계");
+                    Log.d(TAG_BTThread, "Fan 약 단계");
                 } else if (fan_control_byte == 0x03) {
                     bluetoothThread.writeHex(makeFrame(new byte[]{REQUEST_CONTROL}, generateTag((byte) 0x3A, new byte[]{0x03}), bluetoothThread.getSequence()));
-                    Log.d("bluetoothThread", "Fan 강 단계");
+                    Log.d(TAG_BTThread, "Fan 강 단계");
                 } else if (fan_control_byte == 0x04) {
                     bluetoothThread.writeHex(makeFrame(new byte[]{REQUEST_CONTROL}, generateTag((byte) 0x3A, new byte[]{0x04}), bluetoothThread.getSequence()));
-                    Log.d("bluetoothThread", "Fan 터보 단계");
+                    Log.d(TAG_BTThread, "Fan 터보 단계");
                 }
             } else {
-                Log.e("bluetoothThread", "Error 발생");
+                Log.e(TAG_BTThread, "Error 발생");
             }
 
-        } else if (body.containsKey("48")) {
-
-            if (body.getByte("48") == 0x01) {
-                bluetoothThread.writeHex(
-                        makeFrame(
-                                new byte[]{REQUEST_INDIVIDUAL_STATE},
-                                new byte[]{0x48, 0x00, 0x00},
-                                bluetoothThread.getSequence()
-                        )
-                );
-
-                Toast.makeText(this, "S/N 변경에 성공했습니다.", Toast.LENGTH_SHORT).show();
-
-            } else {
-
-                Toast.makeText(this, "S/N 변경에 실패했습니다.", Toast.LENGTH_SHORT).show();
-
-            }
-        } else if (body.containsKey("49")) {
-
-            if (body.getByte("49") == 0x01) {
-
-                bluetoothThread.writeHex(
-                        makeFrame(
-                                new byte[]{REQUEST_INDIVIDUAL_STATE},
-                                new byte[]{0x49, 0x00, 0x00},
-                                bluetoothThread.getSequence()
-                        )
-                );
-
-                Toast.makeText(this, "포트 설정 정보 변경에 성공했습니다.", Toast.LENGTH_SHORT).show();
-
-            } else {
-
-                Toast.makeText(this, "포트 설정 정보 변경에 실패했습니다.", Toast.LENGTH_SHORT).show();
-
-            }
-        } else if (body.containsKey("57")) {
-
-            if (body.getByte("57") == 0x01) {
-                bluetoothThread.writeHex(
-                        makeFrame(
-                                new byte[]{REQUEST_INDIVIDUAL_STATE},
-                                new byte[]{0x57, 0x00, 0x00},
-                                bluetoothThread.getSequence()
-                        )
-                );
-
-                Toast.makeText(this, "데이터 전송 간격 변경에 성공했습니다.", Toast.LENGTH_SHORT).show();
-
-            } else {
-
-                Toast.makeText(this, "데이터 전송 간격 변경에 실패했습니다.", Toast.LENGTH_SHORT).show();
-
-            }
-        } else if (body.containsKey("69")) {
-
-            if (body.getByte("69") == 0x01) {
-                bluetoothThread.writeHex(
-                        makeFrame(
-                                new byte[]{REQUEST_INDIVIDUAL_STATE},
-                                new byte[]{0x69, 0x00, 0x00},
-                                bluetoothThread.getSequence()
-                        )
-                );
-
-                Toast.makeText(this, "Server IP 변경에 성공했습니다.", Toast.LENGTH_SHORT).show();
-
-            } else {
-
-                Toast.makeText(this, "Server IP 변경에 실패했습니다.", Toast.LENGTH_SHORT).show();
-
-            }
+//        } else if (body.containsKey("48")) {
+//
+//            if (body.getByte("48") == 0x01) {
+//                bluetoothThread.writeHex(
+//                        makeFrame(
+//                                new byte[]{REQUEST_INDIVIDUAL_STATE},
+//                                new byte[]{0x48, 0x00, 0x00},
+//                                bluetoothThread.getSequence()
+//                        )
+//                );
+//
+//                Toast.makeText(this, "S/N 변경에 성공했습니다.", Toast.LENGTH_SHORT).show();
+//
+//            } else {
+//
+//                Toast.makeText(this, "S/N 변경에 실패했습니다.", Toast.LENGTH_SHORT).show();
+//
+//            }
+//        } else if (body.containsKey("49")) {
+//
+//            if (body.getByte("49") == 0x01) {
+//
+//                bluetoothThread.writeHex(
+//                        makeFrame(
+//                                new byte[]{REQUEST_INDIVIDUAL_STATE},
+//                                new byte[]{0x49, 0x00, 0x00},
+//                                bluetoothThread.getSequence()
+//                        )
+//                );
+//
+//                Toast.makeText(this, "포트 설정 정보 변경에 성공했습니다.", Toast.LENGTH_SHORT).show();
+//
+//            } else {
+//
+//                Toast.makeText(this, "포트 설정 정보 변경에 실패했습니다.", Toast.LENGTH_SHORT).show();
+//
+//            }
+//        } else if (body.containsKey("57")) {
+//
+//            if (body.getByte("57") == 0x01) {
+//                bluetoothThread.writeHex(
+//                        makeFrame(
+//                                new byte[]{REQUEST_INDIVIDUAL_STATE},
+//                                new byte[]{0x57, 0x00, 0x00},
+//                                bluetoothThread.getSequence()
+//                        )
+//                );
+//
+//                Toast.makeText(this, "데이터 전송 간격 변경에 성공했습니다.", Toast.LENGTH_SHORT).show();
+//
+//            } else {
+//
+//                Toast.makeText(this, "데이터 전송 간격 변경에 실패했습니다.", Toast.LENGTH_SHORT).show();
+//
+//            }
+//        } else if (body.containsKey("69")) {
+//
+//            if (body.getByte("69") == 0x01) {
+//                bluetoothThread.writeHex(
+//                        makeFrame(
+//                                new byte[]{REQUEST_INDIVIDUAL_STATE},
+//                                new byte[]{0x69, 0x00, 0x00},
+//                                bluetoothThread.getSequence()
+//                        )
+//                );
+//
+//                Toast.makeText(this, "Server IP 변경에 성공했습니다.", Toast.LENGTH_SHORT).show();
+//
+//            } else {
+//
+//                Toast.makeText(this, "Server IP 변경에 실패했습니다.", Toast.LENGTH_SHORT).show();
+//
+//            }
         } else {
             Iterator<String> iterator = body.keySet().iterator();
             try {
                 while (iterator.hasNext()) {
-                    String key = (String) iterator.next();
+                    String key = iterator.next();
                     byte result = body.getByte(key);
 
                     if (result == (byte) 0x01) {
@@ -655,7 +643,7 @@ public class DashBoardActivity extends AppCompatActivity {
 
 //                        Toast.makeText(this, "성공적으로 변경했습니다.", Toast.LENGTH_SHORT).show();
                     } else {
-                        Toast.makeText(this, "변경에 실패했습니다.", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(this, getString(R.string.fail_to_change), Toast.LENGTH_SHORT).show();
                     }
                 }
             } catch (NullPointerException | ClassCastException e) {
@@ -672,15 +660,15 @@ public class DashBoardActivity extends AppCompatActivity {
             barViewHeight = binding.aqiBarChartPb.getHeight();
             arrowWidth = binding.aqiCurrentArrow.getWidth();
 
-            outerClass.FullScreenMode(context);// 하단 바 없애기
+            // 하단 바 없애기
+            outerClass.FullScreenMode(context);
 
             //barChart 가로세로 구하기
-
-            params.setMargins(-arrowWidth / 2, 0, 0, (int) getResources().getDimension(R.dimen.arrowBottom));
+            params.setMargins(-arrowWidth / 2, 0, 0, 15);
             binding.aqiCurrentArrow.setLayoutParams(params);
 
+            //븥루투스가 꺼져있음
             if (!bluetoothAdapter.isEnabled()) {
-                //븥루투스가 꺼져있음
                 final AlertDialog.Builder builder = new AlertDialog.Builder(context);
                 final AlertDialog alertDialog = builder.create();
                 builder.setTitle(getString(R.string.caution_title))
@@ -704,21 +692,27 @@ public class DashBoardActivity extends AppCompatActivity {
 
     @SuppressLint("MissingPermission")
     private void pairedDeviceConnect() {
-        //페어링 된 디바이스
+        // 페어링 된 디바이스 포지션을 받아옵니다
         int position = getIntent().getExtras().getInt("device_position");
+
         arrayListDevice = new ArrayList<>();
-        bluetoothThread = new BluetoothThread((Activity) context);
+        bluetoothThread = new BluetoothThread(context);
         paredDevice = bluetoothAdapter.getBondedDevices();
+
+        // 페어링 된 디바이스가 없다면 불러온 디바이스를 모두 추가시킵니다
         if (!paredDevice.isEmpty()) {
             arrayListDevice.addAll(paredDevice);
             bluetoothThread.setBluetoothDevice(arrayListDevice.get(position));
+            // 소켓이 연결 되었을 경우 발생하는 이벤트 리스너
             bluetoothThread.setConnectedSocketEventListener(new BluetoothThread.connectedSocketEventListener() {
                 @Override
                 public void onConnectedEvent() {
+                    // 모델명을 불러옵니다
                     modelName = bluetoothThread.getDeviceName();
-                    Log.d("bluetoothThread", "Bluetooth Socket is Connected");
-                    Log.d("bluetoothThread", "setDevice by : " + bluetoothThread.getDeviceName());
+                    Log.d(TAG_BTThread, "Bluetooth Socket is Connected");
+                    Log.d(TAG_BTThread, "setDevice by : " + bluetoothThread.getDeviceName());
 
+                    // 최초 데이터인 모듈 설치날짜와 모델명을 API를 통해 스레드에 요청합니다
                     Handler ConnectedSocketHandler = new Handler(Looper.getMainLooper());
                     ConnectedSocketHandler.postDelayed(new Runnable() {
                         @Override
@@ -727,7 +721,7 @@ public class DashBoardActivity extends AppCompatActivity {
                             bluetoothThread.writeHex(makeFrame(
                                     new byte[]{REQUEST_INDIVIDUAL_STATE},
                                     new byte[]{
-                                            0x35, 0x00, 0x00, // 센서연결확인
+//                                            0x35, 0x00, 0x00, // 센서연결확인
                                             //0x43, 0x00, 0x00, // GPS 위도
                                             //0x44, 0x00, 0x00, // GPS 경도
                                             //0x45, 0x00, 0x00, // 펌웨어버전
@@ -738,59 +732,39 @@ public class DashBoardActivity extends AppCompatActivity {
                             ));
                         }
                     }, 500);
+
+                    // 데이터를 3초에 한번 지속적으로 요청합니다
+                    regDataListener(VIEW_REQUEST_INTERVAL, dataScheduler);
                 }
             });
 
+            // 소켓연결에 실패하였을 경우 발생하는 이벤트 리스너입니다
             bluetoothThread.setDisconnectedSocketEventListener(new BluetoothThread.disConnectedSocketEventListener() {
                 @Override
                 public void onDisconnectedEvent() {
-                    Log.d("bluetoothThread", "Bluetooth Socket is Disconnected");
-
-                    if (dataScheduler != null) {
-                        dataScheduler.purge();
-                        dataScheduler = null;
-                    }
-
-                    if (virusScheduler != null) {
-                        virusScheduler.purge();
-                        virusScheduler = null;
-                    }
-
-                    if (mReceiver.isInitialStickyBroadcast()) {
-                        unregisterReceiver(mReceiver);
-                    }
+                    Log.d(TAG_BTThread, "Bluetooth Socket is Disconnected");
 
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            final AlertDialog.Builder builder = new AlertDialog.Builder(context);
-                            builder.create();
-                            builder.setTitle(getString(R.string.caution_title));
-                            builder.setMessage(getString(R.string.caution_message));
-                            builder.setPositiveButton(getString(R.string.caution_ok), new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    dialog.dismiss();
-                                    outerClass.backToConnectDevice(context);
-                                }
-                            });
-                            if (!context.isDestroyed())
-                                builder.show();
+                            DisconnectBTDialog();
                         }
                     });
                 }
             });
 
+            // 소켓을 연결합니다
             bluetoothThread.connectSocket();
 
+            // 블루투스 스레드에 연결중이 아니라면 연결합니다
             if (!bluetoothThread.isRunning()) {
                 bluetoothThread.start();
-                Log.d("bluetoothThread", "BluetoothThread is Run");
+                Log.d(TAG_BTThread, "BluetoothThread is Run");
             }
-            regDataListener(VIEW_REQUEST_INTERVAL, dataScheduler);
         }
     }
 
+    // 지속적으로 공기질 데이터를 요청하는 스케줄러입니다
     private void regDataListener(int interval, Timer scheduler) {
         try {
             if (scheduler != null) {
@@ -802,10 +776,11 @@ public class DashBoardActivity extends AppCompatActivity {
         loopReceiveData(interval);
     }
 
+    // 스케쥴러가 호출하면 작업을 진행 할 타이머테스크입니다
     private void loopReceiveData(int interval) {
 
         if (bluetoothThread.isConnected()) {
-            TimerTask data_timerTask = new TimerTask() {
+            data_timerTask = new TimerTask() {
                 @Override
                 public void run() {
                     try {
@@ -821,6 +796,7 @@ public class DashBoardActivity extends AppCompatActivity {
         }
     }
 
+    // 지속적으로 바이러스 정보를 요청하는 스케줄러입니다
     private void regVirusListener(int interval, Timer scheduler) {
         try {
             if (scheduler != null) {
@@ -832,6 +808,7 @@ public class DashBoardActivity extends AppCompatActivity {
         loopReceiveVirus(interval);
     }
 
+    // 스케쥴러가 호출하면 작업을 진행 할 타이머테스크입니다
     private void loopReceiveVirus(int interval) {
 
         if (bluetoothThread.isConnected()) {
@@ -851,6 +828,7 @@ public class DashBoardActivity extends AppCompatActivity {
                                 cqiGrade = virusFormulaClass.GetCQIGrade(aqi_short, co_float);
                                 binding.aqiContentTv.setText(cqiGrade);
 
+                                //  CQI 등급을 불러오고 표시하기
                                 if (binding.aqiContentTv.getText().toString().equals("0")) {
                                     CqiGradeChange("0", binding.aqiContentTv, binding.aqiCurrentArrow);
                                 } else if (binding.aqiContentTv.getText().toString().equals("1")) {
@@ -863,6 +841,7 @@ public class DashBoardActivity extends AppCompatActivity {
                                     CqiGradeChange("4", binding.aqiContentTv, binding.aqiCurrentArrow);
                                 }
 
+                                // CQI 지수에 따라 BarChart의 화살표 이동시키기
                                 moveBarChart(cqiIndex);
 
                                 Log.d("CqiValue", "\n" + "\npm 2.5 aqi : " + aqi_short + "\nco : " + co_float + "\nCQI Index : " + cqiIndex +
@@ -873,20 +852,28 @@ public class DashBoardActivity extends AppCompatActivity {
                                 virusIndex = virusFormulaClass.GetVirusIndex((float) aqi_short, temp_float, humid_float, co2_float, tvoc_float);
 
                                 try {
-                                    Log.d("virusValue", "\n" + "온도 : " + temp_float + "\n습도 : " + humid_float +
+                                    Log.d("VirusValue", "\n" + "온도 : " + temp_float + "\n습도 : " + humid_float +
                                             "\nPM AQI : " + aqi_short + "\nCO2 AQI : " + co2_float + "\nTVOC AQI : " +
                                             tvoc_float + "\nVirusValue : " + virusValue + "\nVirusIndex : " + virusIndex);
                                     binding.listCardVIRUSIndex.setText(virusValue + "");
-                                    if (virusIndex.equals("0")) {
-                                        VirusItemTextColor("0", binding.listCardVIRUSIndex, binding.listCardVIRUSOCGrade);
-                                    } else if (virusIndex.equals("1")) {
-                                        VirusItemTextColor("1", binding.listCardVIRUSIndex, binding.listCardVIRUSOCGrade);
-                                    } else if (virusIndex.equals("2")) {
-                                        VirusItemTextColor("2", binding.listCardVIRUSIndex, binding.listCardVIRUSOCGrade);
-                                    } else if (virusIndex.equals("3")) {
-                                        VirusItemTextColor("3", binding.listCardVIRUSIndex, binding.listCardVIRUSOCGrade);
-                                    } else {
-                                        VirusItemTextColor("4", binding.listCardVIRUSIndex, binding.listCardVIRUSOCGrade);
+
+                                    // 바이러스 지수에 따라 데이터 표시하기
+                                    switch (virusIndex) {
+                                        case "0":
+                                            VirusItemTextColor("0", binding.listCardVIRUSIndex, binding.listCardVIRUSOCGrade);
+                                            break;
+                                        case "1":
+                                            VirusItemTextColor("1", binding.listCardVIRUSIndex, binding.listCardVIRUSOCGrade);
+                                            break;
+                                        case "2":
+                                            VirusItemTextColor("2", binding.listCardVIRUSIndex, binding.listCardVIRUSOCGrade);
+                                            break;
+                                        case "3":
+                                            VirusItemTextColor("3", binding.listCardVIRUSIndex, binding.listCardVIRUSOCGrade);
+                                            break;
+                                        default:
+                                            VirusItemTextColor("4", binding.listCardVIRUSIndex, binding.listCardVIRUSOCGrade);
+                                            break;
                                     }
                                 } catch (NullPointerException e) {
                                     e.printStackTrace();
@@ -905,6 +892,7 @@ public class DashBoardActivity extends AppCompatActivity {
         }
     }
 
+    // 일정 시간마다 선 그래프를 그립니다
     private void ChartTimerTask(int yMax, String s) {
 
         TimerTask timerTask = new TimerTask() {
@@ -914,6 +902,7 @@ public class DashBoardActivity extends AppCompatActivity {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
+                        // 사용자가 요청 한 정보에 따라 다른 그래프를 그립니다
                         switch (s) {
                             case "cqi":
                                 drawGraphClass.feedMultiple(yMax, cqiIndex);
@@ -943,19 +932,19 @@ public class DashBoardActivity extends AppCompatActivity {
 
     }
 
-    //AQI Index 별 차트 이동거리 계산
+    //AQI Index 별 차트 이동거리를 계산합니다
     public void moveBarChart(int cqiNumber) {
 
         if (cqiNumber != 0) {
             params.setMargins((cqiNumber * barViewWidth / 300) - (arrowWidth / 2),
                     0,
                     0,
-                    (int) getResources().getDimension(R.dimen.arrowBottom));  // 왼쪽, 위, 오른쪽, 아래 순서
+                    15);  // 왼쪽, 위, 오른쪽, 아래 순서
         } else {
             params.setMargins(0,
                     0,
                     0,
-                    (int) getResources().getDimension(R.dimen.arrowBottom));  // 왼쪽, 위, 오른쪽, 아래 순서
+                    15);  // 왼쪽, 위, 오른쪽, 아래 순서
         }
 
 
@@ -979,13 +968,13 @@ public class DashBoardActivity extends AppCompatActivity {
             binding.aqiCurrentArrow.setTextColor(getResources().getColor(R.color.progressBad));
         } else {
             binding.apiCircleChartPb.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.signal_verybad, null));
-            binding.aqiContentTv.setText(getResources().getString(R.string.baddest));
+            binding.aqiContentTv.setText(getResources().getString(R.string.cqi_baddest));
             binding.aqiContentTv.setTextColor(getResources().getColor(R.color.progressWorst));
             binding.aqiCurrentArrow.setTextColor(getResources().getColor(R.color.progressWorst));
         }
     }
 
-    //현재 시간 불러오기
+    //현재 시간을 불러옵니다
     public void currentTimeIndex() {
         final Handler CurrentTimeHandler = new Handler(Looper.getMainLooper()) {
             @Override
@@ -1016,6 +1005,7 @@ public class DashBoardActivity extends AppCompatActivity {
             }
         };
 
+        // 시간을 1초에 한번씩 Refresh합니다
         Runnable task = () -> {
             while (true) {
                 try {
@@ -1031,14 +1021,14 @@ public class DashBoardActivity extends AppCompatActivity {
         thread.start();
     }
 
-    //햄버거 메뉴 추가
+    // 햄버거 메뉴 추가
     private void addSideView() {
 
         IntentFilter filter = new IntentFilter();
         filter.addAction(FAN_CONTROL_COMPLETE);
         registerReceiver(mReceiver, filter);
 
-        Log.d("bluetoothThread", "Add Side Menu Complete");
+        Log.d(TAG_BTThread, "Add Side Menu Complete");
         sidebar = new SideBarCustomView(context);
 
         binding.viewSildebar.addView(sidebar);
@@ -1055,9 +1045,11 @@ public class DashBoardActivity extends AppCompatActivity {
             @Override
             public void run() {
                 if (bluetoothThread.isConnected() && bluetoothThread != null) {
+                    // 대쉬보드가 불러와지면서 요청한 데이터들을 화면에 표시합니다
                     dialog_setupDate.setText(setUpDateStr);
                     dialog_serialNumber.setText(serialNumber);
 
+                    // 모델명에 따른 필터링
                     if (modelName.contains(" ")) {
                         String[] s = modelName.split(" ");
                         dialog_productName.setText(s[0]);
@@ -1075,6 +1067,7 @@ public class DashBoardActivity extends AppCompatActivity {
                         dialog_product_img.setImageDrawable(null);
                     }
 
+                    // 펜 제어에 따른 UI 변경
                     if (current_fan_byte == 0x01) {
                         dialog_fan1.setBackground(AppCompatResources.getDrawable(context, R.drawable.side_menu_fan_tv_bg));
                         dialog_fan1.setTextColor(Color.parseColor("#5CC2E4"));
@@ -1093,12 +1086,15 @@ public class DashBoardActivity extends AppCompatActivity {
             }
         });
 
+        // 사이드 메뉴 이벤트 리스너
         sidebar.setEventListener(new SideBarCustomView.EventListener() {
             @Override
             public void btnCancel() {
+                // 메뉴 닫기
                 closeMenu();
             }
 
+            // 전원 종료
             @Override
             public void powerOff() {
                 final AlertDialog.Builder builder = new AlertDialog.Builder(context, R.style.CustomAlertDialog);
@@ -1117,6 +1113,7 @@ public class DashBoardActivity extends AppCompatActivity {
                             runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
+                                    outerClass.CallVibrate(context, 10);
                                     alertDialog.dismiss();
                                 }
                             });
@@ -1127,6 +1124,7 @@ public class DashBoardActivity extends AppCompatActivity {
                 dialog_cancel.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+                        outerClass.CallVibrate(context, 10);
                         alertDialog.dismiss();
                     }
                 });
@@ -1134,6 +1132,7 @@ public class DashBoardActivity extends AppCompatActivity {
                 alertDialog.show();
             }
 
+            // 펜 제어
             @Override
             public void fan1() {
                 if (bluetoothThread.isConnected()) {
@@ -1185,12 +1184,16 @@ public class DashBoardActivity extends AppCompatActivity {
                             final TextView dialog_fan4 = sidebar.findViewById(R.id.sideMenuFan4Tv);
 
                             if (fan_control_byte == 0x01) {
+                                outerClass.CallVibrate(context, 10);
                                 outerClass.fanBackgroundChange(dialog_fan1, dialog_fan2, dialog_fan3, dialog_fan4, context);
                             } else if (fan_control_byte == 0x02) {
+                                outerClass.CallVibrate(context, 10);
                                 outerClass.fanBackgroundChange(dialog_fan2, dialog_fan1, dialog_fan3, dialog_fan4, context);
                             } else if (fan_control_byte == 0x03) {
+                                outerClass.CallVibrate(context, 10);
                                 outerClass.fanBackgroundChange(dialog_fan3, dialog_fan2, dialog_fan1, dialog_fan4, context);
                             } else if (fan_control_byte == 0x04) {
+                                outerClass.CallVibrate(context, 10);
                                 outerClass.fanBackgroundChange(dialog_fan4, dialog_fan2, dialog_fan3, dialog_fan1, context);
                             }
                         }
@@ -1202,6 +1205,7 @@ public class DashBoardActivity extends AppCompatActivity {
 
     //햄버거 메뉴 닫기
     public void closeMenu() {
+        outerClass.CallVibrate(context, 10);
         isMenuShow = false;
         Animation slide = AnimationUtils.loadAnimation(context, R.anim.sidebar_hidden);
         binding.viewSildebar.startAnimation(slide);
@@ -1213,6 +1217,7 @@ public class DashBoardActivity extends AppCompatActivity {
 
     //햄버거 메뉴 보여주기
     public void showMenu() {
+        outerClass.CallVibrate(context, 10);
         isMenuShow = true;
         Animation slide = AnimationUtils.loadAnimation(context, R.anim.sidebar_show);
         binding.viewSildebar.startAnimation(slide);
@@ -1275,7 +1280,6 @@ public class DashBoardActivity extends AppCompatActivity {
                         tv.setTextColor(ResourcesCompat.getColor(getResources(), R.color.white, null));
                         if (dm.widthPixels > 1900 && dm.heightPixels > 1000) {
                             tv.setTextSize(18);
-
                         } else {
                             tv.setTextSize(14);
                         }
@@ -1307,14 +1311,65 @@ public class DashBoardActivity extends AppCompatActivity {
                             drawGraphClass.drawFirstEntry(100, "virus");
                             ChartTimerTask(100, "virus");
                         }
+                    } else {
+                        DisconnectBTDialog();
                     }
                 }
             });
         } catch (NullPointerException e) {
             e.printStackTrace();
+            DisconnectBTDialog();
         }
     }
 
+    // 그래프를 그리고 바이러스, CQI 지수를 그리는 함수
+    private void GraphDataSideHandler() {
+        Handler GetDataHandler = new Handler(Looper.getMainLooper());
+        GetDataHandler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        try {
+                            binding.loadingPb.setVisibility(View.GONE);
+                            binding.idMain.setEnabled(true);
+                            binding.idMain.setAlpha(1f);
+
+                            // 바이러스 지수 갱신 요청
+                            regVirusListener(VIEW_REQUEST_INTERVAL, virusScheduler);
+
+                            Thread.sleep(1000);
+
+                            // 그래프 그리기
+                            Handler DrawGraphHandler = new Handler(Looper.getMainLooper());
+                            DrawGraphHandler.postDelayed(new Runnable() {
+                                @Override
+                                public void run() {
+                                    drawGraphClass.reDrawChart();
+                                    drawGraphClass.drawFirstEntry(300, "cqi");
+                                    ChartTimerTask(300, "cqi");
+                                    // 사이드 메뉴 활성화
+                                    Handler addSideViewHandler = new Handler(Looper.getMainLooper());
+                                    addSideViewHandler.postDelayed(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            addSideView();
+                                        }
+                                    }, 500);
+                                }
+                            }, 1000);
+
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                });
+            }
+        }, 1500);
+    }
+
+    // 선 그래프 설정
     public class DrawGraphClass extends Thread {
         // https://medium.com/hongbeomi-dev/mpandroidchart-%EB%9D%BC%EC%9D%B4%EB%B8%8C%EB%9F%AC%EB%A6%AC%EB%A5%BC-%ED%99%9C%EC%9A%A9%ED%95%9C-chart-%EC%82%AC%EC%9A%A9%ED%95%98%EA%B8%B0-kotlin-93c18ae7568e
 
@@ -1322,7 +1377,7 @@ public class DashBoardActivity extends AppCompatActivity {
         Legend legend = new Legend();
         LineDataSet lineDataSet;
 
-
+        // 그래프 X축, Y축 설정 및 모양 설정
         void setChart(int setYMax) {
             // X축
             XAxis xAxis = binding.virusLineChart.getXAxis();
@@ -1332,10 +1387,11 @@ public class DashBoardActivity extends AppCompatActivity {
             xAxis.setDrawAxisLine(false); // AxisLine 표시
             xAxis.setDrawGridLines(false); // GridLine 표시
             xAxis.setGranularityEnabled(false); // x축 간격을 제한하는 세분화 기능
-            xAxis.setValueFormatter(new XAxisValueFormat());
+            xAxis.setValueFormatter(new XAxisValueFormat()); // X축 라벨데이터 포멧
             xAxis.setGranularity(1);
             binding.virusLineChart.setAutoScaleMinMaxEnabled(true); // Max = Count
             xAxis.setLabelCount(6); // 라벨 갯수
+            xAxis.setTextSize(12);
 
             binding.virusLineChart.moveViewToX(lineData.getEntryCount()); // 계속 X축을 데이터의 오른쪽 끝으로 옮기기
             binding.virusLineChart.setVisibleXRangeMaximum(5); // X축 최대 표현 개수
@@ -1355,13 +1411,12 @@ public class DashBoardActivity extends AppCompatActivity {
             yAxis.setValueFormatter(new YAxisValueFormat()); // y축 데이터 포맷
             yAxis.setGranularityEnabled(false); // y축 간격을 제한하는 세분화 기능
             yAxis.setDrawLabels(true); // Y축 라벨 위치
-            yAxis.setLabelCount(2);
+            yAxis.setLabelCount(3); // Y축 라벨 개수
+            yAxis.setTextSize(12); // Y축 라벨 텍스트 사이즈
             yAxis.setDrawGridLines(false); // GridLine 표시
             yAxis.setDrawAxisLine(false); // AxisLine 표시
 
-            legend.setTextColor(Color.WHITE);
             legend.setEnabled(false); // 범례 비활성화
-            legend.setTextSize(11);
 
             binding.virusLineChart.setData(lineData); // 라인차트 데이터 설정
         }
@@ -1393,17 +1448,21 @@ public class DashBoardActivity extends AppCompatActivity {
                         lineData = binding.virusLineChart.getData();
                         createSet();
                         lineData.addDataSet(lineDataSet);
-                        Log.d("chartTimeDivider", lineData.getEntryCount() + "");
-                        lineData.addEntry(new Entry(lineData.getEntryCount(), yData), 0); // 데이터 엔트리 추가
-                        lineData.notifyDataChanged(); // 데이터 변경 알림
-                        binding.virusLineChart.notifyDataSetChanged(); // 라인차트 변경 알림
+
+                        if (lineData != null) {
+                            lineData = binding.virusLineChart.getData();
+                            createSet();
+                            lineData.addDataSet(lineDataSet);
+                            lineData.addEntry(new Entry(lineData.getEntryCount(), yData), 0); // 데이터 엔트리 추가
+                            lineData.notifyDataChanged(); // 데이터 변경 알림
+                            binding.virusLineChart.notifyDataSetChanged(); // 라인차트 변경 알림
+                        }
                     }
                 }
             });
         }
 
         void createSet() {
-
             lineDataSet = new LineDataSet(null, null); // 범례, yVals 설정
             lineDataSet.setAxisDependency(YAxis.AxisDependency.LEFT); // Y값 데이터를 왼쪽으로
             lineDataSet.setFillColor(Color.parseColor("#147AD6")); // 차트 채우기 색상
@@ -1414,8 +1473,9 @@ public class DashBoardActivity extends AppCompatActivity {
             lineDataSet.setMode(LineDataSet.Mode.CUBIC_BEZIER); // 선 그리는 방식
             lineDataSet.setDrawCircleHole(false); // 원 안에 작은 원 표시
             lineDataSet.setDrawCircles(false); // 원 표시
-            lineDataSet.setDrawValues(true);
-            lineDataSet.setValueTextSize(11);
+            lineDataSet.setDrawValues(true); // 차트포인트에 값 표시
+            lineDataSet.setValueFormatter(new DataSetValueFormat());
+            lineDataSet.setValueTextSize(11); // 차트 텍스트 크기
             lineDataSet.setColor(ResourcesCompat.getColor(getResources(), R.color.lineChartLine, null)); // 색상 지정
         }
 
@@ -1442,6 +1502,14 @@ public class DashBoardActivity extends AppCompatActivity {
             }
         }
 
+        private class DataSetValueFormat extends IndexAxisValueFormatter {
+            @Override
+            public String getFormattedValue(float value) {
+                return (int) value + "";
+            }
+        }
+
+        // 그래프를 초기화 하고 새로 그릴 준비를 합니다
         public void reDrawChart() {
             runOnUiThread(new Runnable() {
                 @Override
@@ -1458,6 +1526,7 @@ public class DashBoardActivity extends AppCompatActivity {
             });
         }
 
+        // 공기질 수치에 따라 첫번째 엔트리를 미리 그립니다
         public void drawFirstEntry(int setYMax, String s) {
             runOnUiThread(new Runnable() {
                 @Override
@@ -1488,19 +1557,26 @@ public class DashBoardActivity extends AppCompatActivity {
             });
         }
 
+        // 현재 시간기준으로 그래프의 X축 라벨을 포맷합니다
         private String chartTimeDivider(ArrayList<String> arrayList, int count) {
             @SuppressLint("SimpleDateFormat") SimpleDateFormat simpleDateFormat = new SimpleDateFormat("hh:mm");
             long lArray;
             if (count == 0) {
+                CHART_MADE_TIME = System.currentTimeMillis();
                 lArray = CHART_MADE_TIME - (10 * 60 * 1000);
+                arrayList.add(count + 1, simpleDateFormat.format(lArray));
+                return arrayList.get(count + 1);
             } else if (count == 1) {
                 lArray = CHART_MADE_TIME;
+                arrayList.add(count + 1, simpleDateFormat.format(lArray));
+                return arrayList.get(count + 1);
             } else {
                 lArray = CHART_MADE_TIME + ((long) (count - 1) * 10 * 60 * 1000);
+                arrayList.add(count + 1, simpleDateFormat.format(lArray));
+                return arrayList.get(count + 1);
             }
-            arrayList.add(count + 1, simpleDateFormat.format(lArray));
-            return arrayList.get(count + 1);
         }
+
     }
 
     // 그래프차트 카테고리 클릭 이벤트(미선택)
@@ -1538,6 +1614,7 @@ public class DashBoardActivity extends AppCompatActivity {
     }
 
 
+    // CQI 등급 변경
     public void CqiGradeChange(String s1, TextView cqi, TextView arrow) {
         cqi.setVisibility(View.VISIBLE);
         arrow.setVisibility(View.VISIBLE);
@@ -1557,7 +1634,7 @@ public class DashBoardActivity extends AppCompatActivity {
                 break;
             case "3":
                 cqi.setTextColor(ResourcesCompat.getColor(getResources(), R.color.progressWorst, null));
-                cqi.setText(getString(R.string.baddest));
+                cqi.setText(getString(R.string.cqi_baddest));
                 break;
             case "4":
                 cqi.setTextColor(ResourcesCompat.getColor(getResources(), R.color.statusUnitText, null));
@@ -1589,6 +1666,7 @@ public class DashBoardActivity extends AppCompatActivity {
         binding.aqiBarChartPb.setContexts(barList);
     }
 
+    // 하단 아이템 텍스트, 컬러 설정
     public void CardItemTextColor(String s1, TextView s2, TextView tv1, TextView tv2) {
         s2.setVisibility(View.VISIBLE);
         tv1.setVisibility(View.VISIBLE);
@@ -1622,6 +1700,7 @@ public class DashBoardActivity extends AppCompatActivity {
         }
     }
 
+    // 바이러스 아이템 텍스트, 컬러 설정
     public void VirusItemTextColor(String i, TextView index, TextView grade) {
         index.setVisibility(View.VISIBLE);
         grade.setVisibility(View.VISIBLE);
@@ -1654,9 +1733,34 @@ public class DashBoardActivity extends AppCompatActivity {
         }
     }
 
+    // 블루투스 연결 끊김 시 디바이스 연결 액티비티로 전환
+    private void DisconnectBTDialog() {
+        // 장치와의 연결이 끊어짐을 알리고 디바이스 연결 화면으로 돌아갑니다
+        final AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        builder.create();
+        builder.setTitle(getString(R.string.caution_title));
+        builder.setMessage(getString(R.string.caution_message));
+        builder.setPositiveButton(getString(R.string.caution_ok), new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                // 현재 진행중이던 타이머테스크를 중지합니다
+                if (data_timerTask != null) {
+                    data_timerTask.cancel();
+                }
+
+                dialog.dismiss();
+                outerClass.backToConnectDevice(context);
+                drawGraphClass.reDrawChart();
+                bluetoothThread.closeSocket();
+            }
+        });
+        if (!context.isDestroyed())
+            builder.show();
+    }
+
+    //  앱 종료 메시지 창 띄우기
     @Override
     public void onBackPressed() {
-        //  앱 종료 메시지 창 띄우기
         final AlertDialog.Builder builder = new AlertDialog.Builder(context);
         builder.setTitle(getString(R.string.exit_app_title));
         builder.setMessage(getString(R.string.exit_app_message));

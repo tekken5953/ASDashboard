@@ -21,7 +21,7 @@
     <TextView
         android:id="@+id/sideMenuTitleTv"
         android:layout_width="wrap_content"
-        android:layout_height="30dp"
+        android:layout_height="wrap_content"
         android:layout_marginStart="30dp"
         android:fontFamily="@font/pretendardvariable"
         android:gravity="center"
@@ -50,7 +50,7 @@
     <TextView
         android:id="@+id/sideMenuPowerOffTv"
         android:layout_width="wrap_content"
-        android:layout_height="40dp"
+        android:layout_height="wrap_content"
         android:layout_marginBottom="3dp"
         android:layout_marginStart="17dp"
         android:fontFamily="@font/pretendardvariable"
@@ -86,7 +86,7 @@
     <TextView
         android:id="@+id/sideMenuFanControllTv"
         android:layout_width="wrap_content"
-        android:layout_height="40dp"
+        android:layout_height="wrap_content"
         android:layout_marginStart="17dp"
         android:fontFamily="@font/pretendardvariable"
         android:gravity="center"
@@ -188,7 +188,7 @@
     <TextView
         android:id="@+id/sideMenuInfoTv"
         android:layout_width="wrap_content"
-        android:layout_height="40dp"
+        android:layout_height="wrap_content"
         android:layout_marginStart="17dp"
         android:fontFamily="@font/pretendardvariable"
         android:gravity="center"
@@ -212,7 +212,7 @@
 
         <TableRow
             android:layout_width="fill_parent"
-            android:layout_height="18dp"
+            android:layout_height="22dp"
             android:orientation="horizontal">
 
             <TextView
@@ -237,7 +237,7 @@
 
         <TableRow
             android:layout_width="fill_parent"
-            android:layout_height="18dp"
+            android:layout_height="22dp"
             android:layout_marginTop="15dp"
             android:orientation="horizontal">
 
@@ -263,7 +263,7 @@
 
         <TableRow
             android:layout_width="fill_parent"
-            android:layout_height="18dp"
+            android:layout_height="22dp"
             android:layout_marginTop="15dp"
             android:orientation="horizontal">
 
@@ -311,8 +311,8 @@
 
     <ImageView
         android:id="@+id/sideMenuLogoIv"
-        android:layout_width="73dp"
-        android:layout_height="26dp"
+        android:layout_width="80dp"
+        android:layout_height="wrap_content"
         android:layout_marginTop="110dp"
         android:src="@drawable/as_logo"
         app:layout_constraintStart_toStartOf="@+id/sideMenuCancelIv"
@@ -321,7 +321,7 @@
     <TableRow
         android:id="@+id/sideMenuTableRow2"
         android:layout_width="wrap_content"
-        android:layout_height="18dp"
+        android:layout_height="wrap_content"
         android:orientation="horizontal"
         app:layout_constraintTop_toBottomOf="@+id/sideMenuLogoIv"
         app:layout_constraintStart_toStartOf="@+id/sideMenuLogoIv"
@@ -329,7 +329,7 @@
 
         <TextView
             android:layout_width="wrap_content"
-            android:layout_height="16dp"
+            android:layout_height="wrap_content"
             android:text="@string/company_name"
             android:textSize="14sp"
             android:textColor="@color/statusUnitText"
@@ -338,7 +338,7 @@
 
         <TextView
             android:layout_width="wrap_content"
-            android:layout_height="16dp"
+            android:layout_height="wrap_content"
             android:text="@string/information"
             android:textSize="14sp"
             android:textColor="@color/statusUnitText"
@@ -348,7 +348,7 @@
 
         <TextView
             android:layout_width="wrap_content"
-            android:layout_height="16dp"
+            android:layout_height="wrap_content"
             android:text="@string/web_site"
             android:textSize="14sp"
             android:textColor="@color/statusUnitText"

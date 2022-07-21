@@ -1,16 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Dashboard</string>
+    <string name="app_name">BS-Dashboard</string>
     <string name="good">Good</string>
     <string name="normal">Normal</string>
     <string name="bad">Bad</string>
     <string name="baddest">Very Bad</string>
+    <string name="cqi_baddest">Very\nBad</string>
     <string name="aqi">Air Quality Index</string>
     <string name="aqi_1_hour">Last Hour Air Quality</string>
     <string name="fine_dust">PM2.5</string>
     <string name="tvoc">TVOC</string>
-    <string name="co2">Co2</string>
-    <string name="co">Co</string>
+    <string name="co2">CO2</string>
+    <string name="co">CO</string>
     <string name="virus">Virus Index</string>
     <string name="language">Languages</string>
     <string name="korean">Korean</string>
@@ -20,23 +21,24 @@
     <string name="error">Error</string>
     <string name="day">am</string>
     <string name="night">pm</string>
-    <string name="connected_device">Paired Device</string>
-    <string name="not_paring">Not Paring Device</string>
+    <string name="connected_device">  Paired Devices  </string>
+    <string name="no_bluetooth_device">This device does not support Bluetooth</string>
+    <string name="not_paring">Not Paring Devices</string>
     <string name="caution_title">Caution</string>
     <string name="caution_back">Back</string>
-    <string name="caution_message">Please Check The Connection Again</string>
+    <string name="caution_message">Check The Connection Again</string>
     <string name="reconnect_bt_msg">Disconnected to Bluetooth\nRetry to Connect Device?</string>
     <string name="reconnect_bt_ok">연결</string>
     <string name="caution_ok">OK</string>
     <string name="select_lang">01 Select Language</string>
     <string name="connect_device">02 Connect Device</string>
-    <string name="please_select_lang_main">Please select a language</string>
+    <string name="please_select_lang_main">Select a language</string>
     <string name="please_select_a_lang_sub">사용할 언어를 선택해주세요</string>
     <string name="korean_lang">한국어</string>
     <string name="eng_lang">English</string>
     <string name="ok">OK</string>
     <string name="cancel">Cancel</string>
-    <string name="please_select_device">Please Select a Device to Connect</string>
+    <string name="please_select_device">Select a Device to Connect</string>
     <string name="connectable_device">Device List</string>
     <string name="complete_select_lang">Language Setting is Complete</string>
     <string name="skip_lang_msg">Language Set to Automatic </string>
@@ -45,8 +47,8 @@
     <string name="exit_app_message">Do you want to Exit this App?</string>
     <string name="exit_app_yes">Yes</string>
     <string name="exit_app_no">No</string>
-    <string name="disconect_socket">Please check your Device on</string>
-    <string name="no_paring_device">Do you want to pair the current Phone to the device?</string>
+    <string name="disconnect_socket">Check your Device on</string>
+    <string name="no_paring_device">Pairing the current phone to the device?</string>
     <string name="no_data_text">Drawing Graph…</string>
     <string name="settings">Settings</string>
     <string name="power_off">Power Off</string>
@@ -65,4 +67,11 @@
     <string name="web_site">http://www.airsignal.kr</string>
     <string name="ask_turn_off">Turn Off the Mini?</string>
     <string name="already_connected">Already Connected Device</string>
+    <string name="exit_complete">Device has been shut down</string>
+    <string name="fail_to_change">Fail to changes</string>
+    <string name="retry_please">Please try again</string>
+    <string name="unpairing_title">UnParing</string>
+    <string name="unpairing_msg">Do you want to unpair to the device?</string>
+    <string name="unpairing_ok_btn">Unpair</string>
+    <string name="unpairing_cancel_btn">Cancel</string>
 </resources>

@@ -35,7 +35,7 @@ public class ConnectRecyclerAdapter extends RecyclerView.Adapter<ConnectRecycler
         Context context = parent.getContext();
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
-        View view = inflater.inflate(R.layout.listitem_connectable_device, parent, false);
+        View view = inflater.inflate(R.layout.listitem_connectable_rv, parent, false);
 
         return new ViewHolder(view);
     }
@@ -81,7 +81,6 @@ public class ConnectRecyclerAdapter extends RecyclerView.Adapter<ConnectRecycler
                 @Override
                 public void onClick(View v) {
                     int position = getAdapterPosition();
-                    long id = getItemId();
 
                     if (position != RecyclerView.NO_POSITION) {
                         if (mListener != null) {
