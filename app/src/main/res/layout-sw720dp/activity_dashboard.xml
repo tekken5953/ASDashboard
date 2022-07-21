@@ -22,7 +22,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            android:progressTint="@color/white"
+            android:secondaryProgressTint="@color/white"
+            android:progressTint="@color/progressGood"
             android:visibility="visible" />
 
         <FrameLayout
@@ -314,15 +315,15 @@
 
                 <HorizontalScrollView
                     android:layout_width="match_parent"
-                    android:layout_height="45dp"
+                    android:layout_height="wrap_content"
                     android:layout_gravity="top"
                     android:layout_marginStart="540dp"
                     android:layout_marginTop="38dp"
                     android:layout_marginEnd="50dp"
                     android:gravity="center"
                     android:overScrollMode="never"
-                    android:paddingTop="2dp"
-                    android:paddingBottom="2dp"
+                    android:paddingTop="3dp"
+                    android:paddingBottom="3dp"
                     android:scrollbars="none">
 
                     <TableRow
@@ -469,6 +470,19 @@
                         android:textSize="22sp" />
 
                     <TextView
+                        android:id="@+id/listCardPMLoadingTv"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerInParent="true"
+                        android:fontFamily="@font/pretendardvariable"
+                        android:lines="1"
+                        android:text="@string/loading_data"
+                        android:textAllCaps="false"
+                        android:textColor="@color/progressGood"
+                        android:textSize="17sp" />
+
+
+                    <TextView
                         android:id="@+id/listCardPMIndex"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -535,6 +549,18 @@
                         android:text="@string/tvoc"
                         android:textColor="@color/textColorMain"
                         android:textSize="22sp" />
+
+                    <TextView
+                        android:id="@+id/listCardTVOCLoadingTv"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerInParent="true"
+                        android:fontFamily="@font/pretendardvariable"
+                        android:lines="1"
+                        android:text="@string/loading_data"
+                        android:textAllCaps="false"
+                        android:textColor="@color/progressGood"
+                        android:textSize="17sp" />
 
                     <TextView
                         android:id="@+id/listCardTVOCIndex"
@@ -604,6 +630,18 @@
                         android:textSize="22sp" />
 
                     <TextView
+                        android:id="@+id/listCardCO2LoadingTv"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerInParent="true"
+                        android:fontFamily="@font/pretendardvariable"
+                        android:lines="1"
+                        android:text="@string/loading_data"
+                        android:textAllCaps="false"
+                        android:textColor="@color/progressGood"
+                        android:textSize="17sp" />
+
+                    <TextView
                         android:id="@+id/listCardCO2Index"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -671,6 +709,18 @@
                         android:textSize="22sp" />
 
                     <TextView
+                        android:id="@+id/listCardCOLoadingTv"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerInParent="true"
+                        android:fontFamily="@font/pretendardvariable"
+                        android:lines="1"
+                        android:text="@string/loading_data"
+                        android:textAllCaps="false"
+                        android:textColor="@color/progressGood"
+                        android:textSize="17sp" />
+
+                    <TextView
                         android:id="@+id/listCardCOIndex"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -735,6 +785,18 @@
                         android:text="@string/virus"
                         android:textColor="@color/textColorMain"
                         android:textSize="22sp" />
+
+                    <TextView
+                        android:id="@+id/listCardVIRUSLoadingTv"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerInParent="true"
+                        android:fontFamily="@font/pretendardvariable"
+                        android:lines="1"
+                        android:text="@string/loading_data"
+                        android:textAllCaps="false"
+                        android:textColor="@color/progressGood"
+                        android:textSize="17sp" />
 
                     <TextView
                         android:id="@+id/listCardVIRUSIndex"

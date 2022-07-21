@@ -1,19 +1,27 @@
 package com.example.dashboard;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.graphics.Color;
+import android.net.Uri;
 import android.os.Build;
+import android.os.PowerManager;
 import android.os.Vibrator;
+import android.provider.Settings;
 import android.view.View;
 import android.widget.TextView;
 
 import androidx.annotation.RequiresApi;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.content.res.AppCompatResources;
 
 import com.example.dashboard.connect.ConnectDeviceActivity;
+import com.example.dashboard.dashboard.DashBoardActivity;
+import com.example.dashboard.language.LanguageSelectActivity;
 
 import java.util.Locale;
 
@@ -78,8 +86,22 @@ public class OuterClass {
     }
 
     // 디바이스 연결 화면으로 Intent 합니다
-    public void backToConnectDevice(Activity activity) {
+    public void GoToConnectByLang(Activity activity) {
         Intent intent = new Intent(activity, ConnectDeviceActivity.class);
+        intent.putExtra("dialog", "no");
+        activity.startActivity(intent);
+        activity.finish();
+    }
+
+    public void GoToLanguageByConnect(Activity activity) {
+        Intent intent = new Intent(activity, LanguageSelectActivity.class);
+        activity.startActivity(intent);
+        activity.finish();
+    }
+
+    public void GoToConnectByDashboard(Activity activity) {
+        Intent intent = new Intent(activity, ConnectDeviceActivity.class);
+        intent.putExtra("dialog", "yes");
         activity.startActivity(intent);
         activity.finish();
     }
@@ -115,5 +137,24 @@ public class OuterClass {
         Configuration configuration = new Configuration();
         configuration.setLocale(Locale.ENGLISH);
         context.getResources().updateConfiguration(configuration, context.getResources().getDisplayMetrics());
+    }
+
+    // 절대 절전모드에 빠지지 않습니다
+    // 퍼미션을 사용자에게 요청합니다
+    @SuppressLint("BatteryLife")
+    @RequiresApi(api = Build.VERSION_CODES.M)
+    public void DoNotGoingSleepMode(Activity activity) {
+        PowerManager pm = (PowerManager) activity.getSystemService(Context.POWER_SERVICE);
+        String packageName = activity.getPackageName();
+        if (pm.isIgnoringBatteryOptimizations(packageName)) {
+
+        }
+        // 메모리 최적화가 되어 있다면, 풀기 위해 설정 화면 띄움.
+        else {
+            Intent intent = new Intent();
+            intent.setAction(Settings.ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS);
+            intent.setData(Uri.parse("package:" + packageName));
+            activity.startActivity(intent);
+        }
     }
 }

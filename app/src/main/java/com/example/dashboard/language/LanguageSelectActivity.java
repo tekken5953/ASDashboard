@@ -6,9 +6,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.widget.Button;
-import android.widget.ImageView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.RequiresApi;
@@ -19,8 +16,10 @@ import androidx.core.content.res.ResourcesCompat;
 import com.example.dashboard.OuterClass;
 import com.example.dashboard.R;
 import com.example.dashboard.SharedPreferenceManager;
+import com.example.dashboard.databinding.LanguageSelectActivityBinding;
 
 public class LanguageSelectActivity extends AppCompatActivity {
+    LanguageSelectActivityBinding binding;
 
     boolean FLAG_KOR_SELECTED = false;
     boolean FLAG_ENG_SELECTED = false;
@@ -29,10 +28,7 @@ public class LanguageSelectActivity extends AppCompatActivity {
     private final String LANGUAGE_LOG = "language_log";
     OuterClass outerClass = new OuterClass();
 
-    Button langOkTv;
-    ImageView koreaFlag, englishFlag;
-    TextView langKorTitleTv, langEngTitleTv;
-    Activity context = LanguageSelectActivity.this;
+    Activity context;
 
     @Override
     protected void onResume() {
@@ -41,17 +37,14 @@ public class LanguageSelectActivity extends AppCompatActivity {
         outerClass.FullScreenMode(LanguageSelectActivity.this);
     }
 
-
     @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.language_select_activity);
-        langOkTv = findViewById(R.id.langOkTv);
-        koreaFlag = findViewById(R.id.langKorIconIv);
-        englishFlag = findViewById(R.id.langEngIconIv);
-        langKorTitleTv = findViewById(R.id.langKorTitleTv);
-        langEngTitleTv = findViewById(R.id.langEngTitleTv);
+        binding = LanguageSelectActivityBinding.inflate(getLayoutInflater());
+        View v = binding.getRoot();
+        setContentView(v);
+
         context = LanguageSelectActivity.this;
 
         // 블루투스 퍼미션 체크 다이얼로그를 출력합니다
@@ -62,8 +55,8 @@ public class LanguageSelectActivity extends AppCompatActivity {
         SKIP_SELECT_LANGUAGE = SharedPreferenceManager.getString(context, "skip_lang");
 
         // 미 선택 된 이미지의 Capacity 설정 입니다
-        koreaFlag.setImageAlpha(76);
-        englishFlag.setImageAlpha(76);
+        binding.langKorIconIv.setImageAlpha(76);
+        binding.langEngIconIv.setImageAlpha(76);
 
         Log.d(LANGUAGE_LOG, "final lang : " + FINAL_LANGUAGE + "\nskip : " + SKIP_SELECT_LANGUAGE);
 
@@ -93,7 +86,7 @@ public class LanguageSelectActivity extends AppCompatActivity {
             }
             Toast.makeText(context, getString(R.string.skip_lang_msg), Toast.LENGTH_SHORT).show();
             // 현재 액티비티를 스킵하고 디바이스 연결 화면으로 넘어갑니다
-            outerClass.backToConnectDevice(context);
+            outerClass.GoToConnectByLang(context);
         }
         // 현재 선택 된 언어가 없을 때
         else {
@@ -109,7 +102,7 @@ public class LanguageSelectActivity extends AppCompatActivity {
             outerClass.FullScreenMode(LanguageSelectActivity.this);
 
             // 한국어 이미지를 클릭 하였을 경우
-            koreaFlag.setOnClickListener(new View.OnClickListener() {
+            binding.langKorIconIv.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     SelectedKoreaFlag();
@@ -119,7 +112,7 @@ public class LanguageSelectActivity extends AppCompatActivity {
             });
 
             // 영어 이미지를 클릭 하였을 경우
-            englishFlag.setOnClickListener(new View.OnClickListener() {
+            binding.langEngIconIv.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     SelectedEnglishFlag();
@@ -129,27 +122,20 @@ public class LanguageSelectActivity extends AppCompatActivity {
             });
 
             // 확인 버튼을 눌렀을 경우 이벤트 리스너
-            langOkTv.setOnClickListener(new View.OnClickListener() {
+            binding.langOkTv.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if (langOkTv.isEnabled()) {
+                    if (binding.langOkTv.isEnabled()) {
                         outerClass.CallVibrate(context, 10);
-
                         // 현재 선택된 언어를 불러옵니다
                         // 그 언어를 바탕으로 국가를 설정하고 현재 선택된 언어를 최종 언어로 변경하여 저장합니다
                         // 디바이스 연결 화면으로 이동합니다
                         if (SharedPreferenceManager.getString(context, "current").equals("en")) {
                             outerClass.setLocaleToEnglish(context);
-                            SharedPreferenceManager.setString(context, "final", SharedPreferenceManager.getString(context, "current"));
-                            SharedPreferenceManager.setString(context, "skip_lang", "ok");
-                            Toast.makeText(context, getString(R.string.complete_select_lang), Toast.LENGTH_SHORT).show();
-                            outerClass.backToConnectDevice(context);
+                            SetCurrentToFinal();
                         } else if (SharedPreferenceManager.getString(context, "current").equals("ko")) {
                             outerClass.setLocaleToKorea(context);
-                            SharedPreferenceManager.setString(context, "final", SharedPreferenceManager.getString(context, "current"));
-                            SharedPreferenceManager.setString(context, "skip_lang", "ok");
-                            Toast.makeText(context, getString(R.string.complete_select_lang), Toast.LENGTH_SHORT).show();
-                            outerClass.backToConnectDevice(context);
+                            SetCurrentToFinal();
                         }
                     }
                 }
@@ -157,42 +143,53 @@ public class LanguageSelectActivity extends AppCompatActivity {
         }
     }
 
+    private void SetCurrentToFinal() {
+        SharedPreferenceManager.setString(context, "final", SharedPreferenceManager.getString(context, "current"));
+        SharedPreferenceManager.setString(context, "skip_lang", "ok");
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                Toast.makeText(context, getString(R.string.complete_select_lang), Toast.LENGTH_SHORT).show();
+                outerClass.GoToConnectByLang(context);
+            }
+        });
+    }
+
     private void SelectedKoreaFlag() {
-        koreaFlag.setImageAlpha(255);
-        englishFlag.setImageAlpha(76);
-        langKorTitleTv.setTextColor(ResourcesCompat.getColor(getResources(), R.color.white, null));
-        langEngTitleTv.setTextColor(ResourcesCompat.getColor(getResources(), R.color.statusUnitText, null));
+        binding.langKorIconIv.setImageAlpha(255);
+        binding.langEngIconIv.setImageAlpha(76);
+        binding.langKorTitleTv.setTextColor(ResourcesCompat.getColor(getResources(), R.color.white, null));
+        binding.langEngTitleTv.setTextColor(ResourcesCompat.getColor(getResources(), R.color.statusUnitText, null));
         FLAG_KOR_SELECTED = true;
         FLAG_ENG_SELECTED = false;
-        langOkTv.setEnabled(true);
-        langOkTv.setBackground(AppCompatResources.getDrawable(context, R.drawable.lang_ok_w));
-        langOkTv.setTextColor(ResourcesCompat.getColor(getResources(), R.color.white, null));
+        binding.langOkTv.setEnabled(true);
+        binding.langOkTv.setBackground(AppCompatResources.getDrawable(context, R.drawable.lang_ok_w));
+        binding.langOkTv.setTextColor(ResourcesCompat.getColor(getResources(), R.color.white, null));
     }
 
     private void SelectedEnglishFlag() {
-        englishFlag.setImageAlpha(255);
-        koreaFlag.setImageAlpha(76);
-        langEngTitleTv.setTextColor(ResourcesCompat.getColor(getResources(), R.color.white, null));
-        langKorTitleTv.setTextColor(ResourcesCompat.getColor(getResources(), R.color.statusUnitText, null));
+        binding.langEngIconIv.setImageAlpha(255);
+        binding.langKorIconIv.setImageAlpha(76);
+        binding.langEngTitleTv.setTextColor(ResourcesCompat.getColor(getResources(), R.color.white, null));
+        binding.langKorTitleTv.setTextColor(ResourcesCompat.getColor(getResources(), R.color.statusUnitText, null));
         FLAG_KOR_SELECTED = false;
         FLAG_ENG_SELECTED = true;
-        langOkTv.setEnabled(true);
-        langOkTv.setBackground(AppCompatResources.getDrawable(context, R.drawable.lang_ok_w));
-        langOkTv.setTextColor(ResourcesCompat.getColor(getResources(), R.color.white, null));
+        binding.langOkTv.setEnabled(true);
+        binding.langOkTv.setBackground(AppCompatResources.getDrawable(context, R.drawable.lang_ok_w));
+        binding.langOkTv.setTextColor(ResourcesCompat.getColor(getResources(), R.color.white, null));
     }
 
     private void SelectedNothing() {
-        koreaFlag.setImageAlpha(76);
-        englishFlag.setImageAlpha(76);
-        langEngTitleTv.setTextColor(ResourcesCompat.getColor(getResources(), R.color.statusUnitText, null));
-        langKorTitleTv.setTextColor(ResourcesCompat.getColor(getResources(), R.color.statusUnitText, null));
+        binding.langKorIconIv.setImageAlpha(76);
+        binding.langEngIconIv.setImageAlpha(76);
+        binding.langEngTitleTv.setTextColor(ResourcesCompat.getColor(getResources(), R.color.statusUnitText, null));
+        binding.langKorTitleTv.setTextColor(ResourcesCompat.getColor(getResources(), R.color.statusUnitText, null));
         FLAG_KOR_SELECTED = false;
         FLAG_ENG_SELECTED = false;
-        langOkTv.setEnabled(false);
-        langOkTv.setBackground(AppCompatResources.getDrawable(context, R.drawable.lang_ok_b));
-        langOkTv.setTextColor(ResourcesCompat.getColor(getResources(), R.color.statusUnitText, null));
+        binding.langOkTv.setEnabled(false);
+        binding.langOkTv.setBackground(AppCompatResources.getDrawable(context, R.drawable.lang_ok_b));
+        binding.langOkTv.setTextColor(ResourcesCompat.getColor(getResources(), R.color.statusUnitText, null));
     }
-
 
     // 블루투스 퍼미션을 체크합니다
     @RequiresApi(api = Build.VERSION_CODES.M)

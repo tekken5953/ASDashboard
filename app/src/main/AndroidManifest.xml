@@ -23,6 +23,8 @@
 
     <uses-permission android:name="android.permission.VIBRATE" />
 
+<!--    <uses-permission android:name="android.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS" />-->
+
     <application
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
@@ -49,7 +51,7 @@
             android:screenOrientation="landscape"/>
         <activity
             android:name=".language.LanguageSelectActivity"
-            android:exported="true"
+            android:exported="false"
             android:screenOrientation="landscape"/>
         <activity
             android:name=".dashboard.DashBoardActivity"
