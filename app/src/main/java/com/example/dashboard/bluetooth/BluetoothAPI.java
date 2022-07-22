@@ -13,19 +13,19 @@ public class BluetoothAPI {
     public static final byte[] STX = {(byte) 0xFF, (byte) 0xFF, (byte) 0xFF, (byte) 0xFF};
     public static final byte[] ETX = {(byte) 0xFE, (byte) 0xFE, (byte) 0xFE, (byte) 0xFE};
 
-    public static final byte REQUEST_INDIVIDUAL_STATE = (byte) 0x01;
-    public static final byte RESPONSE_INDIVIDUAL_STATE = (byte) 0x81;
-    public static final byte REQUEST_ALL_STATE = (byte) 0x03;
-    public static final byte RESPONSE_ALL_STATE = (byte) 0x83;
-    public static final byte REQUEST_CONTROL = (byte) 0x02;
-    public static final byte RESPONSE_CONTROL = (byte) 0x82;
-    public static final byte CALL_EVENTS = (byte) 0x84;
+//    public static final byte REQUEST_INDIVIDUAL_STATE = (byte) 0x01;
+//    public static final byte RESPONSE_INDIVIDUAL_STATE = (byte) 0x81;
+//    public static final byte REQUEST_ALL_STATE = (byte) 0x03;
+//    public static final byte RESPONSE_ALL_STATE = (byte) 0x83;
+//    public static final byte REQUEST_CONTROL = (byte) 0x02;
+//    public static final byte RESPONSE_CONTROL = (byte) 0x82;
+//    public static final byte CALL_EVENTS = (byte) 0x84;
 
     public static final int SENSOR_EQUIP_COUNT = 13;
-    public static final int SENSOR_TOTAL_COUNT = 15;
+//    public static final int SENSOR_TOTAL_COUNT = 15;
 
     private static final int BYTE_UNSIGNED_SHORT = 2;
-    private static final int BYTE_INTEGER = 4;
+//    private static final int BYTE_INTEGER = 4;
     private static final int BYTE_DOUBLE = 8;
     private static final int MAX_BUFFER = 1024;
 

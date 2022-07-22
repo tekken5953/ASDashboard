@@ -69,7 +69,7 @@ public class BluetoothThread extends Thread {
     }
 
     @Override
-    public void run() {
+    public synchronized void run() {
         isRun = true;
 
         while (isRunning()) {
@@ -138,7 +138,7 @@ public class BluetoothThread extends Thread {
     }
 
     @SuppressLint("MissingPermission")
-    public boolean connectSocket() {
+    public void connectSocket() {
         //mBluetoothAdapter.cancelDiscovery();
         try {
             mBluetoothSocket = mBluetoothDevice.createInsecureRfcommSocketToServiceRecord(uuid);
@@ -153,15 +153,13 @@ public class BluetoothThread extends Thread {
             macAddress = mBluetoothDevice.getAddress();
 
             mConnectedSocketEventListener.onConnectedEvent();
-            return true;
         } catch (IOException e) {
             System.out.println("Connect Socket Error");
             mDisconnectedSocketEventListener.onDisconnectedEvent();
-            return false;
         }
     }
 
-    public boolean closeSocket() {
+    public void closeSocket() {
         //if(isConnect == false) return;
         try {
             isConnect = false;
@@ -169,7 +167,7 @@ public class BluetoothThread extends Thread {
             mBluetoothSocket.close();
             mDisconnectedSocketEventListener.onDisconnectedEvent();
             System.out.println("Thread Removed");
-            return true;
+            return;
         } catch (IOException e) {
             Log.e(TAG, "unable to close() " +
                     " socket during connection failure", e);
@@ -178,7 +176,6 @@ public class BluetoothThread extends Thread {
             mDisconnectedSocketEventListener.onDisconnectedEvent();
         }
         System.out.println("Thread Removed");
-        return false;
     }
 
     public void writeHex(byte[] hex) {
