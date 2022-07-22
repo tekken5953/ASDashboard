@@ -1,7 +1,5 @@
 package com.example.dashboard.dashboard;
 
-import static com.example.dashboard.bluetooth.BluetoothAPI.REQUEST_CONTROL;
-import static com.example.dashboard.bluetooth.BluetoothAPI.REQUEST_INDIVIDUAL_STATE;
 import static com.example.dashboard.bluetooth.BluetoothAPI.analyzedControlBody;
 import static com.example.dashboard.bluetooth.BluetoothAPI.analyzedRequestBody;
 import static com.example.dashboard.bluetooth.BluetoothAPI.byteArrayToHexString;
@@ -82,10 +80,12 @@ public class DashBoardActivity extends AppCompatActivity {
 
     String FAN_CONTROL_COMPLETE = "com.example.dashboard";
 
-    static final String TAG_BTThread = "BTThread";
-    static final String TAG_LifeCycle = "DashBoardLifeCycle";
+    private final String TAG_BTThread = "BTThread";
+    private final String TAG_LifeCycle = "DashBoardLifeCycle";
+    private final byte REQUEST_CONTROL = (byte) 0x02;
+    private final byte REQUEST_INDIVIDUAL_STATE = (byte) 0x01;
 
-    int VIEW_REQUEST_INTERVAL = 3, DRAW_CHART_INTERVAL = 60 * 10;
+    int VIEW_REQUEST_INTERVAL = 7, DRAW_CHART_INTERVAL = 60 * 10;
 
     ArrayList<SegmentedProgressBar.BarContext> barList = new ArrayList<>();
 
@@ -106,13 +106,14 @@ public class DashBoardActivity extends AppCompatActivity {
     String serialNumber = null, currentTimeIndex, deviceType, modelName, setUpDateStr;
 
     long CHART_MADE_TIME = 0;
+    Thread currentTimeThread;
 
     Timer dataScheduler, chartScheduler, virusScheduler;
     TimerTask data_timerTask, virus_timerTask;
 
     String temp_str = null, humid_str = null, pm_str = null, co_str = null, co2_str = null, tvoc_str = null;
     String pm_grade = null, co_grade = null, co2_grade = null, tvoc_grade = null, virusIndex = null, cqiGrade = null;
-    Short aqi_short;
+    Short pm_aqi_short;
     int virusValue, barViewWidth, barViewHeight, arrowWidth, cqiIndex;
     Float pm_float, co_float, co2_float, tvoc_float, humid_float, temp_float;
     byte fan_control_byte, current_fan_byte, power_control_byte;
@@ -142,6 +143,11 @@ public class DashBoardActivity extends AppCompatActivity {
 
         if (virus_timerTask != null)
             virus_timerTask.cancel();
+
+        if (currentTimeThread.isAlive()) {
+            currentTimeThread.interrupt();
+            currentTimeThread = null;
+        }
 
         drawGraphClass.reDrawChart();
     }
@@ -186,7 +192,7 @@ public class DashBoardActivity extends AppCompatActivity {
             outerClass.FullScreenMode(context);
 
             // 븥루투스가 꺼져있을 경우 재 연결을 시도합니다
-            IfBluetoothIsNull();
+            outerClass.IfBluetoothIsNull(context, bluetoothAdapter);
 
         }
     }
@@ -301,7 +307,7 @@ public class DashBoardActivity extends AppCompatActivity {
                                 }).setNegativeButton(getString(R.string.caution_back), new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {
-                                        outerClass.GoToConnectByLang(context);
+                                        outerClass.GoToConnectFromLang(context);
                                     }
                                 }).setCancelable(false).show();
                     }
@@ -311,7 +317,6 @@ public class DashBoardActivity extends AppCompatActivity {
     }
 
     // 블루투스 요청 프로세스를 처리하는 함수입니다
-    @RequiresApi(api = Build.VERSION_CODES.N)
     private void processRequestBody(Bundle body) {
 
         if (body.containsKey("47")) {
@@ -355,7 +360,7 @@ public class DashBoardActivity extends AppCompatActivity {
                         bluetoothThread.getSequence()
                 ));
                 Toast.makeText(context, "일시적인 오류입니다. 다시 접속해주세요", Toast.LENGTH_SHORT).show();
-                outerClass.GoToConnectByLang(context);
+                outerClass.GoToConnectFromLang(context);
             }
         }
 
@@ -513,7 +518,7 @@ public class DashBoardActivity extends AppCompatActivity {
 
         // PM 2.5 AQI 지수
         if (body.containsKey("0B")) {
-            aqi_short = body.getShort("0B");
+            pm_aqi_short = body.getShort("0B");
         }
     }
 
@@ -736,7 +741,7 @@ public class DashBoardActivity extends AppCompatActivity {
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            outerClass.GoToConnectByDashboard(context);
+                            outerClass.GoToConnectFromDashboard(context);
                         }
                     });
                 }
@@ -776,7 +781,7 @@ public class DashBoardActivity extends AppCompatActivity {
                         bluetoothThread.writeHex(makeFrame(new byte[]{0x03}, new byte[]{(byte) 0xFF, 0x00, 0x00}, bluetoothThread.getSequence()));
                     } catch (NullPointerException | IllegalStateException e) {
                         e.printStackTrace();
-                        outerClass.GoToConnectByLang(context);
+                        outerClass.GoToConnectFromLang(context);
                     }
                 }
             };
@@ -813,8 +818,8 @@ public class DashBoardActivity extends AppCompatActivity {
                                 binding.listCardVIRUSOCGrade.setVisibility(View.VISIBLE);
 
                                 // CQI 불러오기
-                                cqiIndex = virusFormulaClass.GetCQIValue(aqi_short, co_float);
-                                cqiGrade = virusFormulaClass.GetCQIGrade(aqi_short, co_float);
+                                cqiIndex = virusFormulaClass.GetCQIValue(pm_aqi_short, co_float);
+                                cqiGrade = virusFormulaClass.GetCQIGrade(pm_aqi_short, co_float);
                                 binding.aqiContentTv.setText(cqiGrade);
 
                                 //  CQI 등급을 불러오고 표시하기
@@ -833,18 +838,19 @@ public class DashBoardActivity extends AppCompatActivity {
                                 // CQI 지수에 따라 BarChart의 화살표 이동시키기
                                 moveBarChart(cqiIndex);
 
-                                Log.d("CqiValue", "\n" + "\npm 2.5 aqi : " + aqi_short + "\nco : " + co_float + "\nCQI Index : " + cqiIndex +
-                                        "\nCQI Grade : " + cqiGrade);
+                                Log.d("CqiValue", "\t" + "\tpm 2.5 aqi : " + pm_aqi_short + "\tco : " + co_float + "\tCQI Index : " + cqiIndex +
+                                        "\tCQI Grade : " + cqiGrade);
 
                                 // 바이러스 지수 불러오기
-                                virusValue = Math.round(virusFormulaClass.GetVirusValue((float) aqi_short, temp_float, humid_float, co2_float, tvoc_float));
-                                virusIndex = virusFormulaClass.GetVirusIndex((float) aqi_short, temp_float, humid_float, co2_float, tvoc_float);
+                                virusValue = Math.round(virusFormulaClass.GetVirusValue((float) pm_aqi_short, temp_float, humid_float, co2_float, tvoc_float));
+                                virusIndex = virusFormulaClass.GetVirusIndex((float) pm_aqi_short, temp_float, humid_float, co2_float, tvoc_float);
 
                                 try {
-                                    Log.d("VirusValue", "\n" + "온도 : " + temp_float + "\n습도 : " + humid_float +
-                                            "\nPM AQI : " + aqi_short + "\nCO2 AQI : " + co2_float + "\nTVOC AQI : " +
-                                            tvoc_float + "\nVirusValue : " + virusValue + "\nVirusIndex : " + virusIndex);
+                                    Log.d("VirusValue", "\t" + "온도 : " + temp_float + "\t습도 : " + humid_float +
+                                            "\tPM AQI : " + pm_aqi_short + "\tCO2 AQI : " + co2_float + "\tTVOC AQI : " +
+                                            tvoc_float + "\tVirusValue : " + virusValue + "\tVirusIndex : " + virusIndex);
                                     binding.listCardVIRUSIndex.setText(virusValue + "");
+
                                     HideLoading();
 
                                     // 바이러스 지수에 따라 데이터 표시하기
@@ -931,8 +937,9 @@ public class DashBoardActivity extends AppCompatActivity {
                     0,
                     0,
                     15);  // 왼쪽, 위, 오른쪽, 아래 순서
-        } else {
-            params.setMargins(0,
+        }
+            else {
+            params.setMargins(10,
                     0,
                     0,
                     15);  // 왼쪽, 위, 오른쪽, 아래 순서
@@ -1007,8 +1014,8 @@ public class DashBoardActivity extends AppCompatActivity {
             }
         };
 
-        Thread thread = new Thread(task);
-        thread.start();
+        currentTimeThread = new Thread(task);
+        currentTimeThread.start();
     }
 
     // 햄버거 메뉴 추가
@@ -1269,13 +1276,13 @@ public class DashBoardActivity extends AppCompatActivity {
                         ClickCategory(tv, getString(R.string.virus), 100, "virus");
 
                     } else {
-                        outerClass.GoToConnectByDashboard(context);
+                        outerClass.GoToConnectFromDashboard(context);
                     }
                 }
             });
         } catch (NullPointerException e) {
             e.printStackTrace();
-            outerClass.GoToConnectByDashboard(context);
+            outerClass.GoToConnectFromDashboard(context);
         }
     }
 
@@ -1599,14 +1606,21 @@ public class DashBoardActivity extends AppCompatActivity {
     private void ClickCategory(TextView tv, String equals, int yMax, String filter) {
         if (tv.getText().toString().equals(equals)) {
             drawGraphClass.reDrawChart();
-            Handler handler = new Handler(Looper.getMainLooper());
-            handler.postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    drawGraphClass.drawFirstEntry(yMax, filter);
-                    ChartTimerTask(yMax, filter);
-                }
-            }, 1500);
+            try {
+                binding.virusLineChart.setNoDataText(getString(R.string.no_data_text));
+                Handler handler = new Handler(Looper.getMainLooper());
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        drawGraphClass.drawFirstEntry(yMax, filter);
+                        ChartTimerTask(yMax, filter);
+                    }
+                }, 1500);
+            } catch (Exception e) {
+                e.printStackTrace();
+                binding.virusLineChart.setNoDataText(getString(R.string.no_data_error));
+            }
+
         }
     }
 
@@ -1695,33 +1709,6 @@ public class DashBoardActivity extends AppCompatActivity {
         binding.loadingPb.setVisibility(View.VISIBLE);
         binding.idMain.setEnabled(false);
         binding.idMain.setAlpha(0.3f);
-    }
-
-    private void IfBluetoothIsNull() {
-        if (!bluetoothAdapter.isEnabled()) {
-            final AlertDialog.Builder builder = new AlertDialog.Builder(context);
-            final AlertDialog alertDialog = builder.create();
-            builder.setTitle(getString(R.string.caution_title))
-                    .setMessage(getString(R.string.reconnect_bt_msg))
-                    .setPositiveButton(getString(R.string.reconnect_bt_ok), new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            alertDialog.dismiss();
-                            RequestBluetooth();
-                        }
-                    }).setNegativeButton(getString(R.string.caution_back), new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            outerClass.GoToConnectByLang(context);
-                        }
-                    }).setCancelable(false).show();
-        }
-    }
-
-    @SuppressLint("MissingPermission")
-    private void RequestBluetooth() {
-        Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
-        startActivity(enableBtIntent);
     }
 
     private void GetBarChartDimens() {

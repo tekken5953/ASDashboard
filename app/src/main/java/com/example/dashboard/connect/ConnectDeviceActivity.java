@@ -39,7 +39,7 @@ import java.util.Set;
 public class ConnectDeviceActivity extends AppCompatActivity {
     ConnectBluetoothActivityBinding binding;
 
-    static final String TAG_LIFECYCLE = "ConnectLifeCycle";
+    final String TAG_LIFECYCLE = "ConnectLifeCycle";
 
     int SELECTED_POSITION = -1;
 
@@ -276,7 +276,7 @@ public class ConnectDeviceActivity extends AppCompatActivity {
             public void onClick(View v) {
                 outerClass.CallVibrate(context, 10);
                 SharedPreferenceManager.setString(context, "skip_lang", "no");
-                outerClass.GoToLanguageByConnect(context);
+                outerClass.GoToLanguageFromConnect(context);
             }
         });
 
@@ -356,7 +356,7 @@ public class ConnectDeviceActivity extends AppCompatActivity {
                 String deviceName = device.getName();
                 // 디바이스가 페어링 되어있지 않다면
                 if (device.getBondState() != BluetoothDevice.BOND_BONDED) {
-                    // 이름이 NULL이 아니라면
+                    // 이름이 Null 이 아니라면
                     if (deviceName != null) {
                         Log.d("paringReceiver", noPairingPosition + " : " + deviceName);
                         if (filterAlreadyAddList(deviceName)) {
@@ -417,7 +417,7 @@ public class ConnectDeviceActivity extends AppCompatActivity {
             case (R.id.connTopLangTitleTv):
             case (R.id.connTopLangContentTv):
                 SharedPreferenceManager.setString(context, "skip_lang", "no");
-                outerClass.GoToLanguageByConnect(context);
+                outerClass.GoToLanguageFromConnect(context);
                 break;
         }
     }
@@ -568,23 +568,7 @@ public class ConnectDeviceActivity extends AppCompatActivity {
                     @Override
                     public void run() {
                         //븥루투스가 꺼져있음
-                        final AlertDialog.Builder builder = new AlertDialog.Builder(context);
-                        final AlertDialog alertDialog = builder.create();
-                        builder.setTitle(getString(R.string.caution_title))
-                                .setMessage(getString(R.string.reconnect_bt_msg))
-                                .setPositiveButton(getString(R.string.reconnect_bt_ok), new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialog, int which) {
-                                        alertDialog.dismiss();
-                                        Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
-                                        startActivity(enableBtIntent);
-                                    }
-                                }).setNegativeButton(getString(R.string.cancel), new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialog, int which) {
-                                        android.os.Process.killProcess(android.os.Process.myPid());
-                                    }
-                                }).setCancelable(false).show();
+                        outerClass.IfBluetoothIsNull(context, bluetoothAdapter);
                     }
                 });
             }

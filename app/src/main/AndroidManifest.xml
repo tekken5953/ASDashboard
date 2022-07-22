@@ -23,6 +23,7 @@
 
     <uses-permission android:name="android.permission.VIBRATE" />
 
+    <!-- 배터리 절약 모드 해제 사용 시 주석 해제 -->
 <!--    <uses-permission android:name="android.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS" />-->
 
     <application

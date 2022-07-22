@@ -22,8 +22,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            android:secondaryProgressTint="@color/white"
             android:progressTint="@color/progressGood"
+            android:secondaryProgressTint="@color/white"
             android:visibility="visible" />
 
         <FrameLayout
@@ -271,6 +271,7 @@
                         android:textSize="14sp"
                         android:visibility="gone"
                         app:drawableTopCompat="@drawable/arrow_up" />
+
                 </LinearLayout>
 
                 <TextView

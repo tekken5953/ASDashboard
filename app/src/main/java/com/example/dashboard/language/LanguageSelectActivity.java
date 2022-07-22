@@ -86,7 +86,7 @@ public class LanguageSelectActivity extends AppCompatActivity {
             }
             Toast.makeText(context, getString(R.string.skip_lang_msg), Toast.LENGTH_SHORT).show();
             // 현재 액티비티를 스킵하고 디바이스 연결 화면으로 넘어갑니다
-            outerClass.GoToConnectByLang(context);
+            outerClass.GoToConnectFromLang(context);
         }
         // 현재 선택 된 언어가 없을 때
         else {
@@ -150,7 +150,7 @@ public class LanguageSelectActivity extends AppCompatActivity {
             @Override
             public void run() {
                 Toast.makeText(context, getString(R.string.complete_select_lang), Toast.LENGTH_SHORT).show();
-                outerClass.GoToConnectByLang(context);
+                outerClass.GoToConnectFromLang(context);
             }
         });
     }

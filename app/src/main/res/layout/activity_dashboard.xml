@@ -22,7 +22,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            android:progressTint="@color/white"
+            android:progressTint="@color/progressGood"
+            android:secondaryProgressTint="@color/white"
             android:visibility="visible" />
 
         <FrameLayout
@@ -263,8 +264,6 @@
                         android:id="@+id/aqiCurrentArrow"
                         android:layout_width="16dp"
                         android:layout_height="30dp"
-                        android:layout_marginStart="3dp"
-                        android:drawablePadding="-7dp"
                         android:fontFamily="@font/pretendardvariable"
                         android:gravity="center"
                         android:text="0"

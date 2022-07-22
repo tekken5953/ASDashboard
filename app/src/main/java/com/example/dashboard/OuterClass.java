@@ -2,6 +2,7 @@ package com.example.dashboard;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.bluetooth.BluetoothAdapter;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -20,7 +21,6 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.content.res.AppCompatResources;
 
 import com.example.dashboard.connect.ConnectDeviceActivity;
-import com.example.dashboard.dashboard.DashBoardActivity;
 import com.example.dashboard.language.LanguageSelectActivity;
 
 import java.util.Locale;
@@ -28,10 +28,8 @@ import java.util.Locale;
 public class OuterClass {
 
     // 펌웨어와 통신 중 불러온 데이터를 설정된 국가의 언어로 변경합니다
-    @RequiresApi(api = Build.VERSION_CODES.N)
     public String translateData(String before, Activity activity) {
         String after;
-
         switch (before) {
             case "0":
                 after = activity.getString(R.string.good);
@@ -86,20 +84,20 @@ public class OuterClass {
     }
 
     // 디바이스 연결 화면으로 Intent 합니다
-    public void GoToConnectByLang(Activity activity) {
+    public void GoToConnectFromLang(Activity activity) {
         Intent intent = new Intent(activity, ConnectDeviceActivity.class);
         intent.putExtra("dialog", "no");
         activity.startActivity(intent);
         activity.finish();
     }
 
-    public void GoToLanguageByConnect(Activity activity) {
+    public void GoToLanguageFromConnect(Activity activity) {
         Intent intent = new Intent(activity, LanguageSelectActivity.class);
         activity.startActivity(intent);
         activity.finish();
     }
 
-    public void GoToConnectByDashboard(Activity activity) {
+    public void GoToConnectFromDashboard(Activity activity) {
         Intent intent = new Intent(activity, ConnectDeviceActivity.class);
         intent.putExtra("dialog", "yes");
         activity.startActivity(intent);
@@ -130,6 +128,33 @@ public class OuterClass {
         Configuration configuration = new Configuration();
         configuration.setLocale(Locale.KOREA);
         context.getResources().updateConfiguration(configuration, context.getResources().getDisplayMetrics());
+    }
+
+    // 블루투스 연결이 끊어졌을 경우 재연결을 시도합니다
+    public void IfBluetoothIsNull(Activity activity, BluetoothAdapter adapter) {
+        if (!adapter.isEnabled()) {
+            final AlertDialog.Builder builder = new AlertDialog.Builder(activity);
+            final AlertDialog alertDialog = builder.create();
+            builder.setTitle(activity.getString(R.string.caution_title))
+                    .setMessage(activity.getString(R.string.reconnect_bt_msg))
+                    .setPositiveButton(activity.getString(R.string.reconnect_bt_ok), new DialogInterface.OnClickListener() {
+                        @SuppressLint("MissingPermission")
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            alertDialog.dismiss();
+                            Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
+                            activity.startActivity(enableBtIntent);
+                        }
+                    }).setNegativeButton(activity.getString(R.string.caution_back), new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            if (activity.getClass().getSimpleName().equals("DashBoardActivity"))
+                                GoToConnectFromLang(activity);
+                            else if (activity.getClass().getSimpleName().equals("ConnectDeviceActivity"))
+                                android.os.Process.killProcess(android.os.Process.myPid());
+                        }
+                    }).setCancelable(false).show();
+        }
     }
 
     // 국가를 영어권으로 설정합니다
