@@ -83,6 +83,7 @@ public class DashBoardActivity extends AppCompatActivity {
     String FAN_CONTROL_COMPLETE = "com.example.dashboard";
 
     static final String TAG_BTThread = "BTThread";
+    static final String TAG_LifeCycle = "DashBoardLifeCycle";
 
     int VIEW_REQUEST_INTERVAL = 3, DRAW_CHART_INTERVAL = 60 * 10;
 
@@ -107,7 +108,7 @@ public class DashBoardActivity extends AppCompatActivity {
     long CHART_MADE_TIME = 0;
 
     Timer dataScheduler, chartScheduler, virusScheduler;
-    TimerTask data_timerTask;
+    TimerTask data_timerTask, virus_timerTask;
 
     String temp_str = null, humid_str = null, pm_str = null, co_str = null, co2_str = null, tvoc_str = null;
     String pm_grade = null, co_grade = null, co2_grade = null, tvoc_grade = null, virusIndex = null, cqiGrade = null;
@@ -125,6 +126,7 @@ public class DashBoardActivity extends AppCompatActivity {
 
     @Override
     protected void onDestroy() {
+        Log.d(TAG_LifeCycle, "onDestroy");
         super.onDestroy();
         if (bluetoothThread.isConnected()) {
             bluetoothThread.closeSocket();
@@ -138,12 +140,17 @@ public class DashBoardActivity extends AppCompatActivity {
         if (data_timerTask != null)
             data_timerTask.cancel();
 
+        if (virus_timerTask != null)
+            virus_timerTask.cancel();
+
         drawGraphClass.reDrawChart();
     }
 
     @Override
     protected void onResume() {
+        Log.d(TAG_LifeCycle, "onResume");
         super.onResume();
+
         outerClass.FullScreenMode(context);
     }
 
@@ -151,6 +158,7 @@ public class DashBoardActivity extends AppCompatActivity {
     @SuppressLint({"NotifyDataSetChanged", "BatteryLife"})
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        Log.d(TAG_LifeCycle, "onCreate");
         super.onCreate(savedInstanceState);
         binding = DataBindingUtil.setContentView(DashBoardActivity.this, R.layout.activity_dashboard);
         viewModel = new ViewModelProvider(DashBoardActivity.this).get(BluetoothThread.DataShareViewModel.class);
@@ -161,18 +169,33 @@ public class DashBoardActivity extends AppCompatActivity {
         // 받아온 현재 기기의 국가를 설정합니다
         SetFinalLocale();
 
+        // CQI 바 차트의 구성요소들의 길이정보를 구합니다
+        GetBarChartDimens();
+
         // CQI 바 차트를 그립니다
         CreateSegmentProgressView();
 
+    }
+
+    @SuppressLint("MissingPermission")
+    @Override
+    public void onWindowFocusChanged(boolean hasFocus) {
+        Log.d(TAG_LifeCycle, "onWindowFocusChanged");
+        if (hasFocus) {
+
+            outerClass.FullScreenMode(context);
+
+            // 븥루투스가 꺼져있을 경우 재 연결을 시도합니다
+            IfBluetoothIsNull();
+
+        }
     }
 
     public void init() {
         // 초기화 작업
         binding.setLifecycleOwner(this);
         binding.setViewModel(viewModel);
-        binding.loadingPb.setVisibility(View.VISIBLE);
-        binding.idMain.setEnabled(false);
-        binding.idMain.setAlpha(0.3f);
+        StartLoading();
         binding.listCardVIRUSIndex.setVisibility(View.GONE);
         binding.listCardVIRUSOCGrade.setVisibility(View.GONE);
         binding.virusLineChart.setNoDataText(getString(R.string.no_data_text));
@@ -204,27 +227,38 @@ public class DashBoardActivity extends AppCompatActivity {
                  String body         = byteArrayToHexString(bundleOfHex[4]);
                  String etx          = byteArrayToHexString(bundleOfHex[5]);
                  */
-                String command = byteArrayToHexString(bundleOfHex[3]);
-                Bundle body = null;
+                try {
+                    String command = byteArrayToHexString(bundleOfHex[3]);
+                    Bundle body = null;
 
-                switch (command) {
-                    case "81":
-                    case "83":
-                        body = analyzedRequestBody(bundleOfHex[4]);
-                        break;
-                    case "82":
-                        body = analyzedControlBody(bundleOfHex[4]);
-                        break;
+                    switch (command) {
+                        case "81":
+                        case "83":
+                            body = analyzedRequestBody(bundleOfHex[4]);
+                            break;
+                        case "82":
+                            body = analyzedControlBody(bundleOfHex[4]);
+                            break;
+                    }
+
+                    if (body == null) return;
+                    System.out.println("body is " + body);
+
+                    if (command.equals("82")) {
+                        processControlBody(body);
+                    } else {
+                        processRequestBody(body);
+                    }
+                } catch (ArrayIndexOutOfBoundsException e) {
+                    e.printStackTrace();
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            Toast.makeText(context, "예기치 못한 에러가 발생했습니다", Toast.LENGTH_SHORT).show();
+                        }
+                    });
                 }
 
-                if (body == null) return;
-                System.out.println("body is " + body);
-
-                if (command.equals("82")) {
-                    processControlBody(body);
-                } else {
-                    processRequestBody(body);
-                }
             }
         };
 
@@ -306,7 +340,7 @@ public class DashBoardActivity extends AppCompatActivity {
                         );
                         GraphDataSideHandler();
                     }
-                }, 1500);
+                }, 2000);
 
 
             } else {
@@ -645,44 +679,6 @@ public class DashBoardActivity extends AppCompatActivity {
     }
 
     @SuppressLint("MissingPermission")
-    @Override
-    public void onWindowFocusChanged(boolean hasFocus) {
-        if (hasFocus) {
-            barViewWidth = binding.aqiBarChartPb.getWidth();
-            barViewHeight = binding.aqiBarChartPb.getHeight();
-            arrowWidth = binding.aqiCurrentArrow.getWidth();
-
-            // 하단 바 없애기
-            outerClass.FullScreenMode(context);
-
-            //barChart 가로세로 구하기
-            params.setMargins(-arrowWidth / 2, 0, 0, 15);
-            binding.aqiCurrentArrow.setLayoutParams(params);
-
-            //븥루투스가 꺼져있음
-            if (!bluetoothAdapter.isEnabled()) {
-                final AlertDialog.Builder builder = new AlertDialog.Builder(context);
-                final AlertDialog alertDialog = builder.create();
-                builder.setTitle(getString(R.string.caution_title))
-                        .setMessage(getString(R.string.reconnect_bt_msg))
-                        .setPositiveButton(getString(R.string.reconnect_bt_ok), new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                alertDialog.dismiss();
-                                Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
-                                startActivity(enableBtIntent);
-                            }
-                        }).setNegativeButton(getString(R.string.caution_back), new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                outerClass.GoToConnectByLang(context);
-                            }
-                        }).setCancelable(false).show();
-            }
-        }
-    }
-
-    @SuppressLint("MissingPermission")
     private void pairedDeviceConnect() {
         // 페어링 된 디바이스 포지션을 받아옵니다
         int position = getIntent().getExtras().getInt("device_position");
@@ -805,7 +801,7 @@ public class DashBoardActivity extends AppCompatActivity {
     private void loopReceiveVirus(int interval) {
 
         if (bluetoothThread.isConnected()) {
-            TimerTask data_timerTask = new TimerTask() {
+            virus_timerTask = new TimerTask() {
                 @SuppressLint("SetTextI18n")
                 @Override
                 public void run() {
@@ -849,23 +845,24 @@ public class DashBoardActivity extends AppCompatActivity {
                                             "\nPM AQI : " + aqi_short + "\nCO2 AQI : " + co2_float + "\nTVOC AQI : " +
                                             tvoc_float + "\nVirusValue : " + virusValue + "\nVirusIndex : " + virusIndex);
                                     binding.listCardVIRUSIndex.setText(virusValue + "");
+                                    HideLoading();
 
                                     // 바이러스 지수에 따라 데이터 표시하기
                                     switch (virusIndex) {
                                         case "0":
-                                            VirusItemTextColor("0", binding.listCardVIRUSIndex, binding.listCardVIRUSOCGrade, binding.listCardVIRUSLoadingTv);
+                                            CardItemTextColor("0", null, binding.listCardVIRUSOCGrade, binding.listCardVIRUSIndex, binding.listCardVIRUSLoadingTv);
                                             break;
                                         case "1":
-                                            VirusItemTextColor("1", binding.listCardVIRUSIndex, binding.listCardVIRUSOCGrade, binding.listCardVIRUSLoadingTv);
+                                            CardItemTextColor("1", null, binding.listCardVIRUSOCGrade, binding.listCardVIRUSIndex, binding.listCardVIRUSLoadingTv);
                                             break;
                                         case "2":
-                                            VirusItemTextColor("2", binding.listCardVIRUSIndex, binding.listCardVIRUSOCGrade, binding.listCardVIRUSLoadingTv);
+                                            CardItemTextColor("2", null, binding.listCardVIRUSOCGrade, binding.listCardVIRUSIndex, binding.listCardVIRUSLoadingTv);
                                             break;
                                         case "3":
-                                            VirusItemTextColor("3", binding.listCardVIRUSIndex, binding.listCardVIRUSOCGrade, binding.listCardVIRUSLoadingTv);
+                                            CardItemTextColor("3", null, binding.listCardVIRUSOCGrade, binding.listCardVIRUSIndex, binding.listCardVIRUSLoadingTv);
                                             break;
                                         default:
-                                            VirusItemTextColor("4", binding.listCardVIRUSIndex, binding.listCardVIRUSOCGrade, binding.listCardVIRUSLoadingTv);
+                                            CardItemTextColor("4", null, binding.listCardVIRUSOCGrade, binding.listCardVIRUSIndex, binding.listCardVIRUSLoadingTv);
                                             break;
                                     }
                                 } catch (NullPointerException e) {
@@ -882,7 +879,7 @@ public class DashBoardActivity extends AppCompatActivity {
                 }
             };
             Timer scheduler = new Timer();
-            scheduler.scheduleAtFixedRate(data_timerTask, 0, interval * 1000L);
+            scheduler.scheduleAtFixedRate(virus_timerTask, 0, interval * 1000L);
         }
     }
 
@@ -930,7 +927,7 @@ public class DashBoardActivity extends AppCompatActivity {
     public void moveBarChart(int cqiNumber) {
 
         if (cqiNumber != 0) {
-            params.setMargins((cqiNumber * barViewWidth / 300) - (arrowWidth / 2),
+            params.setMargins((cqiNumber * barViewWidth / 300) + 10 - (arrowWidth / 2),
                     0,
                     0,
                     15);  // 왼쪽, 위, 오른쪽, 아래 순서
@@ -940,7 +937,6 @@ public class DashBoardActivity extends AppCompatActivity {
                     0,
                     15);  // 왼쪽, 위, 오른쪽, 아래 순서
         }
-
 
         binding.aqiCurrentArrow.setLayoutParams(params);
         binding.aqiCurrentArrow.setText(cqiNumber + "");
@@ -1264,31 +1260,14 @@ public class DashBoardActivity extends AppCompatActivity {
                         tv.setBackground(AppCompatResources.getDrawable(context, R.drawable.category_text_outline));
                         xLabelList.clear();
                         CHART_MADE_TIME = System.currentTimeMillis();
-                        if (tv.getText().toString().equals(getString(R.string.aqi))) {
-                            drawGraphClass.reDrawChart();
-                            drawGraphClass.drawFirstEntry(300, "cqi");
-                            ChartTimerTask(300, "cqi");
-                        } else if (tv.getText().toString().equals(getString(R.string.fine_dust))) {
-                            drawGraphClass.reDrawChart();
-                            drawGraphClass.drawFirstEntry(75, "pm");
-                            ChartTimerTask(75, "pm");
-                        } else if (tv.getText().toString().equals(getString(R.string.co))) {
-                            drawGraphClass.reDrawChart();
-                            drawGraphClass.drawFirstEntry(11, "co");
-                            ChartTimerTask(11, "co");
-                        } else if (tv.getText().toString().equals(getString(R.string.co2))) {
-                            drawGraphClass.reDrawChart();
-                            drawGraphClass.drawFirstEntry(co2_float.intValue() + 500, "co2");
-                            ChartTimerTask(co2_float.intValue() + 500, "co2");
-                        } else if (tv.getText().toString().equals(getString(R.string.tvoc))) {
-                            drawGraphClass.reDrawChart();
-                            drawGraphClass.drawFirstEntry(2, "tvoc");
-                            ChartTimerTask(2, "tvoc");
-                        } else if (tv.getText().toString().equals(getString(R.string.virus))) {
-                            drawGraphClass.reDrawChart();
-                            drawGraphClass.drawFirstEntry(100, "virus");
-                            ChartTimerTask(100, "virus");
-                        }
+
+                        ClickCategory(tv, getString(R.string.aqi), 300, "cqi");
+                        ClickCategory(tv, getString(R.string.fine_dust), 80, "pm");
+                        ClickCategory(tv, getString(R.string.co), 10, "co");
+                        ClickCategory(tv, getString(R.string.co2), co2_float.intValue() + 500, "co2");
+                        ClickCategory(tv, getString(R.string.tvoc), 5, "tvoc");
+                        ClickCategory(tv, getString(R.string.virus), 100, "virus");
+
                     } else {
                         outerClass.GoToConnectByDashboard(context);
                     }
@@ -1309,63 +1288,52 @@ public class DashBoardActivity extends AppCompatActivity {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        try {
-                            binding.loadingPb.setVisibility(View.GONE);
-                            binding.idMain.setEnabled(true);
-                            binding.idMain.setAlpha(1f);
 
-                            // 바이러스 지수 갱신 요청
-                            regVirusListener(VIEW_REQUEST_INTERVAL, virusScheduler);
-
-                            Thread.sleep(1000);
-
-                            // 그래프 그리기
-                            Handler DrawGraphHandler = new Handler(Looper.getMainLooper());
-                            DrawGraphHandler.postDelayed(new Runnable() {
-                                @Override
-                                public void run() {
-                                    if (cqiIndex != 0) {
-                                        drawGraphClass.reDrawChart();
-                                        drawGraphClass.drawFirstEntry(300, "cqi");
-                                        ChartTimerTask(300, "cqi");
-                                        // 사이드 메뉴 활성화
-                                        Handler addSideViewHandler = new Handler(Looper.getMainLooper());
-                                        addSideViewHandler.postDelayed(new Runnable() {
-                                            @Override
-                                            public void run() {
-                                                addSideView();
-                                            }
-                                        }, 500);
-                                    } else {
-                                        // 사이드 메뉴 활성화
-                                        Handler addSideViewHandler = new Handler(Looper.getMainLooper());
-                                        addSideViewHandler.postDelayed(new Runnable() {
-                                            @Override
-                                            public void run() {
-                                                addSideView();
-                                                Handler handler = new Handler(Looper.getMainLooper());
-                                                handler.postDelayed(new Runnable() {
-                                                    @Override
-                                                    public void run() {
-                                                        drawGraphClass.reDrawChart();
-                                                        drawGraphClass.drawFirstEntry(300, "cqi");
-                                                        ChartTimerTask(300, "cqi");
-                                                    }
-                                                }, 1500);
-                                            }
-                                        }, 500);
-                                    }
-
+                        // 바이러스 지수 갱신 요청
+                        regVirusListener(VIEW_REQUEST_INTERVAL, virusScheduler);
+                        // 그래프 그리기
+                        Handler DrawGraphHandler = new Handler(Looper.getMainLooper());
+                        DrawGraphHandler.postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                if (cqiIndex != 0) {
+                                    drawGraphClass.reDrawChart();
+                                    drawGraphClass.drawFirstEntry(300, "cqi");
+                                    ChartTimerTask(300, "cqi");
+                                    // 사이드 메뉴 활성화
+                                    Handler addSideViewHandler = new Handler(Looper.getMainLooper());
+                                    addSideViewHandler.postDelayed(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            addSideView();
+                                        }
+                                    }, 500);
+                                } else {
+                                    // 사이드 메뉴 활성화
+                                    Handler addSideViewHandler = new Handler(Looper.getMainLooper());
+                                    addSideViewHandler.postDelayed(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            addSideView();
+                                            Handler handler = new Handler(Looper.getMainLooper());
+                                            handler.postDelayed(new Runnable() {
+                                                @Override
+                                                public void run() {
+                                                    drawGraphClass.reDrawChart();
+                                                    drawGraphClass.drawFirstEntry(300, "cqi");
+                                                    ChartTimerTask(300, "cqi");
+                                                }
+                                            }, 1500);
+                                        }
+                                    }, 500);
                                 }
-                            }, 1000);
 
-                        } catch (InterruptedException e) {
-                            e.printStackTrace();
-                        }
+                            }
+                        }, 2000);
                     }
                 });
             }
-        }, 1500);
+        }, 2000);
     }
 
     // 선 그래프 설정
@@ -1386,7 +1354,7 @@ public class DashBoardActivity extends AppCompatActivity {
             xAxis.setDrawAxisLine(false); // AxisLine 표시
             xAxis.setDrawGridLines(false); // GridLine 표시
             xAxis.setGranularityEnabled(false); // x축 간격을 제한하는 세분화 기능
-//            xAxis.setValueFormatter(new XAxisValueFormat()); // X축 라벨데이터 포멧
+            xAxis.setValueFormatter(new XAxisValueFormat()); // X축 라벨데이터 포멧
             xAxis.setGranularity(1);
             binding.virusLineChart.setAutoScaleMinMaxEnabled(true); // Max = Count
             xAxis.setLabelCount(6); // 라벨 갯수
@@ -1410,7 +1378,7 @@ public class DashBoardActivity extends AppCompatActivity {
             yAxis.setValueFormatter(new YAxisValueFormat()); // y축 데이터 포맷
             yAxis.setGranularityEnabled(false); // y축 간격을 제한하는 세분화 기능
             yAxis.setDrawLabels(true); // Y축 라벨 위치
-            yAxis.setLabelCount(3); // Y축 라벨 개수
+            yAxis.setLabelCount(2); // Y축 라벨 개수
             yAxis.setTextSize(12); // Y축 라벨 텍스트 사이즈
             yAxis.setDrawGridLines(false); // GridLine 표시
             yAxis.setDrawAxisLine(false); // AxisLine 표시
@@ -1479,7 +1447,7 @@ public class DashBoardActivity extends AppCompatActivity {
         }
 
         //Y축 엔트리 포멧
-        private class YAxisValueFormat extends IndexAxisValueFormatter {
+        public class YAxisValueFormat extends IndexAxisValueFormatter {
             @Override
             public String getFormattedValue(float value) {
                 String newValue = value + "";
@@ -1494,14 +1462,14 @@ public class DashBoardActivity extends AppCompatActivity {
         }
 
         //X축 엔트리 포멧
-        private class XAxisValueFormat extends IndexAxisValueFormatter {
+        public class XAxisValueFormat extends IndexAxisValueFormatter {
             @Override
             public String getFormattedValue(float value) {
                 return chartTimeDivider(xLabelList, (int) value);
             }
         }
 
-        private class DataSetValueFormat extends IndexAxisValueFormatter {
+        public class DataSetValueFormat extends IndexAxisValueFormatter {
             @Override
             public String getFormattedValue(float value) {
                 return (int) value + "";
@@ -1519,8 +1487,8 @@ public class DashBoardActivity extends AppCompatActivity {
                     lineData.clearValues();
                     lineData.notifyDataChanged();
                     binding.virusLineChart.clear();
-                    binding.virusLineChart.notifyDataSetChanged();
                     binding.virusLineChart.removeAllViews();
+                    binding.virusLineChart.notifyDataSetChanged();
                 }
             });
         }
@@ -1628,6 +1596,20 @@ public class DashBoardActivity extends AppCompatActivity {
         }
     }
 
+    private void ClickCategory(TextView tv, String equals, int yMax, String filter) {
+        if (tv.getText().toString().equals(equals)) {
+            drawGraphClass.reDrawChart();
+            Handler handler = new Handler(Looper.getMainLooper());
+            handler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    drawGraphClass.drawFirstEntry(yMax, filter);
+                    ChartTimerTask(yMax, filter);
+                }
+            }, 1500);
+        }
+    }
+
     // AQI 바 차트 그리기
     private void CreateSegmentProgressView() {
 
@@ -1653,72 +1635,39 @@ public class DashBoardActivity extends AppCompatActivity {
     }
 
     // 하단 아이템 텍스트, 컬러 설정
-    private void CardItemTextColor(String s1, TextView s2, TextView tv1, TextView tv2, TextView loading) {
-        s2.setVisibility(View.VISIBLE);
-        tv1.setVisibility(View.VISIBLE);
-        tv2.setVisibility(View.VISIBLE);
-        if (loading.getVisibility() == View.VISIBLE)
-            loading.setVisibility(View.GONE);
-
-        switch (s1) {
-            case "0":
-                tv1.setTextColor(ResourcesCompat.getColor(getResources(), R.color.progressGood, null));
-                tv2.setTextColor(ResourcesCompat.getColor(getResources(), R.color.progressGood, null));
-                tv1.setText(getString(R.string.good));
-                break;
-            case "1":
-                tv1.setTextColor(ResourcesCompat.getColor(getResources(), R.color.progressNormal, null));
-                tv2.setTextColor(ResourcesCompat.getColor(getResources(), R.color.progressNormal, null));
-                tv1.setText(getString(R.string.normal));
-                break;
-            case "2":
-                tv1.setTextColor(ResourcesCompat.getColor(getResources(), R.color.progressBad, null));
-                tv2.setTextColor(ResourcesCompat.getColor(getResources(), R.color.progressBad, null));
-                tv1.setText(getString(R.string.bad));
-                break;
-            case "3":
-                tv1.setTextColor(ResourcesCompat.getColor(getResources(), R.color.progressWorst, null));
-                tv2.setTextColor(ResourcesCompat.getColor(getResources(), R.color.progressWorst, null));
-                tv1.setText(getString(R.string.baddest));
-                break;
-            case "4":
-                tv1.setTextColor(ResourcesCompat.getColor(getResources(), R.color.statusUnitText, null));
-                tv2.setTextColor(ResourcesCompat.getColor(getResources(), R.color.statusUnitText, null));
-                tv1.setText(getString(R.string.error));
-        }
-    }
-
-    // 바이러스 아이템 텍스트, 컬러 설정
-    private void VirusItemTextColor(String i, TextView index, TextView grade, TextView loading) {
-        index.setVisibility(View.VISIBLE);
+    private void CardItemTextColor(String title, TextView unit, TextView grade, TextView index, TextView loading) {
+        if (unit != null)
+            unit.setVisibility(View.VISIBLE);
         grade.setVisibility(View.VISIBLE);
+        index.setVisibility(View.VISIBLE);
+
         if (loading.getVisibility() == View.VISIBLE)
             loading.setVisibility(View.GONE);
 
-        switch (i) {
+        switch (title) {
             case "0":
-                index.setTextColor(ResourcesCompat.getColor(getResources(), R.color.progressGood, null));
                 grade.setTextColor(ResourcesCompat.getColor(getResources(), R.color.progressGood, null));
+                index.setTextColor(ResourcesCompat.getColor(getResources(), R.color.progressGood, null));
                 grade.setText(getString(R.string.good));
                 break;
             case "1":
-                index.setTextColor(ResourcesCompat.getColor(getResources(), R.color.progressNormal, null));
                 grade.setTextColor(ResourcesCompat.getColor(getResources(), R.color.progressNormal, null));
+                index.setTextColor(ResourcesCompat.getColor(getResources(), R.color.progressNormal, null));
                 grade.setText(getString(R.string.normal));
                 break;
             case "2":
-                index.setTextColor(ResourcesCompat.getColor(getResources(), R.color.progressBad, null));
                 grade.setTextColor(ResourcesCompat.getColor(getResources(), R.color.progressBad, null));
+                index.setTextColor(ResourcesCompat.getColor(getResources(), R.color.progressBad, null));
                 grade.setText(getString(R.string.bad));
                 break;
             case "3":
-                index.setTextColor(ResourcesCompat.getColor(getResources(), R.color.progressWorst, null));
                 grade.setTextColor(ResourcesCompat.getColor(getResources(), R.color.progressWorst, null));
+                index.setTextColor(ResourcesCompat.getColor(getResources(), R.color.progressWorst, null));
                 grade.setText(getString(R.string.baddest));
                 break;
             case "4":
-                index.setTextColor(ResourcesCompat.getColor(getResources(), R.color.statusUnitText, null));
                 grade.setTextColor(ResourcesCompat.getColor(getResources(), R.color.statusUnitText, null));
+                index.setTextColor(ResourcesCompat.getColor(getResources(), R.color.statusUnitText, null));
                 grade.setText(getString(R.string.error));
         }
     }
@@ -1734,6 +1683,51 @@ public class DashBoardActivity extends AppCompatActivity {
             Log.d(TAG_BTThread, "Language is DEFAULT");
             outerClass.setLocaleToKorea(context);
         }
+    }
+
+    private void HideLoading() {
+        binding.loadingPb.setVisibility(View.GONE);
+        binding.idMain.setEnabled(true);
+        binding.idMain.setAlpha(1f);
+    }
+
+    private void StartLoading() {
+        binding.loadingPb.setVisibility(View.VISIBLE);
+        binding.idMain.setEnabled(false);
+        binding.idMain.setAlpha(0.3f);
+    }
+
+    private void IfBluetoothIsNull() {
+        if (!bluetoothAdapter.isEnabled()) {
+            final AlertDialog.Builder builder = new AlertDialog.Builder(context);
+            final AlertDialog alertDialog = builder.create();
+            builder.setTitle(getString(R.string.caution_title))
+                    .setMessage(getString(R.string.reconnect_bt_msg))
+                    .setPositiveButton(getString(R.string.reconnect_bt_ok), new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            alertDialog.dismiss();
+                            RequestBluetooth();
+                        }
+                    }).setNegativeButton(getString(R.string.caution_back), new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            outerClass.GoToConnectByLang(context);
+                        }
+                    }).setCancelable(false).show();
+        }
+    }
+
+    @SuppressLint("MissingPermission")
+    private void RequestBluetooth() {
+        Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
+        startActivity(enableBtIntent);
+    }
+
+    private void GetBarChartDimens() {
+        barViewWidth = binding.aqiBarChartPb.getWidth();
+        barViewHeight = binding.aqiBarChartPb.getHeight();
+        arrowWidth = binding.aqiCurrentArrow.getWidth();
     }
 
     //  앱 종료 메시지 창 띄우기
@@ -1759,6 +1753,13 @@ public class DashBoardActivity extends AppCompatActivity {
         builder.setNegativeButton(getString(R.string.exit_app_no), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
+                if (!bluetoothThread.isRunning()) {
+                    bluetoothThread.start();
+                }
+
+                if (bluetoothThread.isInterrupted()) {
+                    bluetoothThread.connectSocket();
+                }
                 dialog.dismiss();
 
             }

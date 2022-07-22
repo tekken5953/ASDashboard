@@ -32,13 +32,14 @@ import com.example.dashboard.databinding.ConnectBluetoothActivityBinding;
 
 import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.Objects;
 import java.util.Set;
 
 @SuppressLint({"MissingPermission", "NotifyDataSetChanged"})
 public class ConnectDeviceActivity extends AppCompatActivity {
     ConnectBluetoothActivityBinding binding;
 
-    static final String TAG_LIFECYCLE = "LIFECYCLE";
+    static final String TAG_LIFECYCLE = "ConnectLifeCycle";
 
     int SELECTED_POSITION = -1;
 
@@ -159,12 +160,18 @@ public class ConnectDeviceActivity extends AppCompatActivity {
                     new Thread(new Runnable() {
                         @Override
                         public void run() {
-                            device.createBond();
+                            try {
+                                device.createBond();
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+
                         }
                     }).start();
 
                 } else {
                     Toast.makeText(context, getString(R.string.retry_please), Toast.LENGTH_SHORT).show();
+                    ShowRefresh();
                     getConnectableDeviceList();
                 }
             }
@@ -200,10 +207,12 @@ public class ConnectDeviceActivity extends AppCompatActivity {
                     // 이미 선택 된 아이템을 다시 클릭 했을 경우
                     // 아무 작업도 진행하지 않습니다
                 } else {
-                    for (int i = 0; i < binding.connPairedDeviceRv.getAdapter().getItemCount(); i++) {
-                        View otherView = binding.connPairedDeviceRv.getLayoutManager().findViewByPosition(i);
+                    for (int i = 0; i < pAdapter.getItemCount(); i++) {
+                        View otherView = Objects.requireNonNull(binding.connPairedDeviceRv.getLayoutManager()).findViewByPosition(i);
                         if (otherView != v) {
-                            otherView.setAlpha(0.5f);
+                            if (otherView != null) {
+                                otherView.setAlpha(0.5f);
+                            }
                         }
                     }
                     v.setAlpha(1f);
@@ -224,7 +233,7 @@ public class ConnectDeviceActivity extends AppCompatActivity {
                         // 페어링 취소 여부를 확인하는 다이얼로그
                         final AlertDialog.Builder builder = new AlertDialog.Builder(context);
                         builder.setTitle(getString(R.string.unpairing_title));
-                        builder.setMessage(getString(R.string.unpairing_msg));
+                        builder.setMessage(bt.getName() + getString(R.string.unpairing_msg));
                         builder.setPositiveButton(getString(R.string.unpairing_ok_btn), new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
@@ -459,32 +468,30 @@ public class ConnectDeviceActivity extends AppCompatActivity {
     }
 
     private void getConnectableDeviceList() {
+        cList.clear();
+        noPairingPosition = 0;
+        noBondedList.clear();
+
+        if (!bluetoothAdapter.isDiscovering()) {
+            bluetoothAdapter.startDiscovery();
+        }
+
+        // ACTION_FOUND 가 호출될 때 마다 데이터를 전송하는 역할을 합니다
+        foundFilter.addAction(BluetoothDevice.ACTION_FOUND);
+        // 디바이스와 페어링 작업이 요청 될 때 마다 호출됩니다
+        foundFilter.addAction(BluetoothDevice.ACTION_BOND_STATE_CHANGED);
+        // 실제 리시버에 등록합니다
+        registerReceiver(connectReceiver, foundFilter);
+
+        // 페어링 디바이스 리스트를 다시그립니다
+        findPairedDevice();
 
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-
-                if (binding.loadingParingPb.getVisibility() == View.VISIBLE)
+                if (binding.loadingParingPb.getVisibility() == View.VISIBLE) {
                     goneProgress();
-
-                noBondedList.clear();
-                cList.clear();
-                noPairingPosition = 0;
-
-                // ACTION_FOUND가 호출될 때 마다 데이터를 전송하는 역할을 합니다
-                foundFilter.addAction(BluetoothDevice.ACTION_FOUND);
-                // 디바이스와 페어링 작업이 요청 될 때 마다 호출됩니다
-                foundFilter.addAction(BluetoothDevice.ACTION_BOND_STATE_CHANGED);
-                // 실제 리시버에 등록합니다
-                registerReceiver(connectReceiver, foundFilter);
-
-                Handler handler1 = new Handler(Looper.getMainLooper());
-                handler1.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        findPairedDevice();
-                    }
-                }, 1000);
+                }
             }
         });
     }
@@ -538,7 +545,7 @@ public class ConnectDeviceActivity extends AppCompatActivity {
             }
         });
         if (!context.isDestroyed())
-        builder.show();
+            builder.show();
     }
 
     // 블루투스 연결 및 사용가능 여부 확인
