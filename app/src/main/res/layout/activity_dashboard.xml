@@ -271,6 +271,7 @@
                         android:textSize="14sp"
                         android:visibility="gone"
                         app:drawableTopCompat="@drawable/arrow_up" />
+
                 </LinearLayout>
 
                 <TextView
@@ -312,6 +313,7 @@
                     android:textSize="18sp" />
 
                 <HorizontalScrollView
+                    android:id="@+id/categoryScroll"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="top"

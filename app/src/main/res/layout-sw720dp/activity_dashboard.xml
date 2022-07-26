@@ -313,6 +313,7 @@
                     android:textSize="18sp" />
 
                 <HorizontalScrollView
+                    android:id="@+id/categoryScroll"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="top"
@@ -337,7 +338,6 @@
                             android:background="@drawable/category_text_outline"
                             android:fontFamily="@font/pretendardvariable"
                             android:gravity="center"
-                            android:onClick="onClick"
                             android:text="@string/aqi"
                             android:textColor="@color/white"
                             android:textSize="14sp" />
@@ -350,7 +350,6 @@
                             android:background="@drawable/category_nontext_outline"
                             android:fontFamily="@font/pretendardvariable"
                             android:gravity="center"
-                            android:onClick="onClick"
                             android:text="@string/fine_dust"
                             android:textColor="@color/lineChartCategoryNonSelectText"
                             android:textSize="15sp" />
@@ -363,7 +362,6 @@
                             android:background="@drawable/category_nontext_outline"
                             android:fontFamily="@font/pretendardvariable"
                             android:gravity="center"
-                            android:onClick="onClick"
                             android:text="@string/tvoc"
                             android:textColor="@color/lineChartCategoryNonSelectText"
                             android:textSize="15sp" />
@@ -376,7 +374,6 @@
                             android:background="@drawable/category_nontext_outline"
                             android:fontFamily="@font/pretendardvariable"
                             android:gravity="center"
-                            android:onClick="onClick"
                             android:text="@string/co2"
                             android:textColor="@color/lineChartCategoryNonSelectText"
                             android:textSize="15sp" />
@@ -389,7 +386,6 @@
                             android:background="@drawable/category_nontext_outline"
                             android:fontFamily="@font/pretendardvariable"
                             android:gravity="center"
-                            android:onClick="onClick"
                             android:text="@string/co"
                             android:textColor="@color/lineChartCategoryNonSelectText"
                             android:textSize="15sp" />
@@ -402,7 +398,6 @@
                             android:background="@drawable/category_nontext_outline"
                             android:fontFamily="@font/pretendardvariable"
                             android:gravity="center"
-                            android:onClick="onClick"
                             android:text="@string/virus"
                             android:textColor="@color/lineChartCategoryNonSelectText"
                             android:textSize="15sp" />

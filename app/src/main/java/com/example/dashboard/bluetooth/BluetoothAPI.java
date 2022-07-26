@@ -465,19 +465,19 @@ public class BluetoothAPI {
         int deviceType;
         switch (String.valueOf(type)) {
             case "SI":
-//                deviceType = DeviceFragment.DEVICE_TYPE_S;
+//                deviceType = SI : BIO-Sentinel 100
                 deviceType = 1;
                 break;
             case "PI":
-//                deviceType = DeviceFragment.DEVICE_TYPE_S_PLUS;
+//                deviceType = PI : BIO-Sentinel 200
                 deviceType = 2;
                 break;
             case "TI":
-//                deviceType = DeviceFragment.DEVICE_TYPE_MINI;
+//                deviceType = TI : BIO-Sentinel Mini
                 deviceType = 3;
                 break;
             case "MI":
-//                deviceType = DeviceFragment.DEVICE_TYPE_PRO;
+//                deviceType = MI : BIO-Sentinel 300
                 deviceType = 4;
                 break;
             default:

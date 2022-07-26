@@ -76,4 +76,6 @@
     <string name="unpairing_ok_btn">해제</string>
     <string name="unpairing_cancel_btn">취소</string>
     <string name="loading_data">데이터를 불러오고 있습니다</string>
+    <string name="light_error">일시적인 오류입니다. 다시 접속해주세요</string>
+    <string name="unknown_error">예기치 못한 에러가 발생했습니다\n복구중입니다</string>
 </resources>

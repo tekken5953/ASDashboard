@@ -76,4 +76,6 @@
     <string name="unpairing_ok_btn">Unpair</string>
     <string name="unpairing_cancel_btn">Cancel</string>
     <string name="loading_data">Loading Data</string>
+    <string name="light_error">Temporary error. Please connect again</string>
+    <string name="unknown_error">An unexpected error has occurred\nRecovering</string>
 </resources>
