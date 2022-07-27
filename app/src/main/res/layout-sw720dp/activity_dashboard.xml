@@ -66,32 +66,17 @@
                 app:layout_constraintTop_toTopOf="@+id/currentTimeTv"
                 app:srcCompat="@drawable/menu_icon" />
 
-
-            <TextView
-                android:id="@+id/dayOfNightTv"
-                android:layout_width="wrap_content"
-                android:layout_height="19dp"
-                android:layout_marginEnd="5dp"
-                android:fontFamily="@font/pretendardvariable"
-                android:text="오후"
-                android:textAllCaps="true"
-                android:textColor="@color/white"
-                android:textSize="16sp"
-                app:layout_constraintEnd_toStartOf="@+id/currentTimeTv"
-                app:layout_constraintTop_toTopOf="@+id/currentTimeTv" />
-
-            <TextView
+            <TextClock
                 android:id="@+id/currentTimeTv"
                 android:layout_width="wrap_content"
-                android:layout_height="19dp"
-                android:layout_marginTop="60dp"
-                android:layout_marginEnd="60dp"
-                android:fontFamily="@font/pretendardvariable"
-                android:gravity="center"
-                android:text="null"
-                android:textAllCaps="false"
-                android:textColor="@color/textColorMain"
+                android:layout_height="wrap_content"
+                android:format24Hour="a hh:mm"
+                android:text="time"
+                android:textColor="@color/white"
                 android:textSize="16sp"
+                android:gravity="center"
+                android:layout_marginTop="60dp"
+                android:layout_marginEnd="65dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 

@@ -40,6 +40,7 @@ import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Objects;
 import java.util.Set;
+import java.util.concurrent.CompletableFuture;
 
 @SuppressLint({"MissingPermission", "NotifyDataSetChanged"})
 public class ConnectDeviceActivity extends AppCompatActivity {
@@ -188,14 +189,17 @@ public class ConnectDeviceActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if (binding.connOkTv.isEnabled()) {
-                    outerClass.CallVibrate(context, 10);
-                    visibleProgress();
-                    // 대쉬보드 화면으로 이동합니다
-                    Intent intent = new Intent(context, DashBoardActivity.class);
-                    // 해당 클릭아이템의 포지션을 인텐트와 함께 전송합니다
-                    intent.putExtra("device_position", SELECTED_POSITION);
-                    startActivity(intent);
-                    finish();
+                    CompletableFuture.runAsync(() -> {
+                        outerClass.CallVibrate(context, 10);
+                        visibleProgress();
+                    }).thenAccept(result -> {
+                        // 대쉬보드 화면으로 이동합니다
+                        Intent intent = new Intent(context, DashBoardActivity.class);
+                        // 해당 클릭아이템의 포지션을 인텐트와 함께 전송합니다
+                        intent.putExtra("device_position", SELECTED_POSITION);
+                        startActivity(intent);
+                        finish();
+                    });
                 }
             }
         });
@@ -474,9 +478,11 @@ public class ConnectDeviceActivity extends AppCompatActivity {
         cList.clear();
         noPairingPosition = 0;
         noBondedList.clear();
+        Log.d("Discovery", "find one");
 
         if (!bluetoothAdapter.isDiscovering()) {
             bluetoothAdapter.startDiscovery();
+            Log.d("Discovery", "Start Discovery");
         }
 
         // ACTION_FOUND 가 호출될 때 마다 데이터를 전송하는 역할을 합니다
