@@ -1,3 +1,9 @@
+/**
+ * 에어시그널 태블릿 대쉬보드 (사용자용)
+ * 개발자 LeeJaeYoung (jy5953@airsignal.kr)
+ * 개발시작 2022-06-20
+ */
+
 package com.example.dashboard;
 
 import android.content.Intent;

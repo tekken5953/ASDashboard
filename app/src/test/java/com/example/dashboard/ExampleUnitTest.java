@@ -1,8 +1,11 @@
 package com.example.dashboard;
 
+import org.junit.Before;
 import org.junit.Test;
 
 import static org.junit.Assert.*;
+
+import com.example.dashboard.dashboard.DashBoardActivity;
 
 /**
  * Example local unit test, which will execute on the development machine (host).
@@ -14,8 +17,4 @@ import static org.junit.Assert.*;
  * https://yoon-dailylife.tistory.com/114
  */
 public class ExampleUnitTest {
-    @Test
-    public void addition_isCorrect() {
-        assertEquals(4, 2 + 2);
-    }
 }

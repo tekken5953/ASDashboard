@@ -221,36 +221,61 @@ public class VirusFormulaClass {
         return -1;
     }
 
+    public int TransformPmIndexToAQI(float pmIndexFloat) {
+        if (pmIndexFloat >= 0 && pmIndexFloat <= 100) {
+            // 좋음
+            if (pmIndexFloat <= 15) {
+                return Math.round(pmIndexFloat * 50 / 15);
+            }
+            // 보통
+            else if (pmIndexFloat <= 35) {
+                return Math.round((pmIndexFloat - 15) * 50 / 20 + 50);
+            }
+            // 나쁨
+            else if (pmIndexFloat <= 75) {
+                return Math.round((pmIndexFloat - 35) * 150 / 35 + 100);
+            }
+            // 매우나쁨
+            else {
+                return Math.round((pmIndexFloat - 75) * 250 / 425 + 250);
+            }
+        } else {
+            // 범위 밖
+            return -1;
+        }
+    }
+
     // CQI 선정 및 계산
-    public int GetCQIValue(int pm, float co) {
+    public int GetCQIValue(float pm, float co) {
+        int tansPM = TransformPmIndexToAQI(pm);
         int coIndex = (int) TransformCoAqiToIndex(co);
         // PM은 100보다 작고 CO가 100보다 큰 경우
-        if (pm < 100 && coIndex >= 100) {
+        if (tansPM < 100 && coIndex >= 100) {
             return coIndex;
         }
         // CO가 100보다 작고 PM은 100보다 큰 경우
-        else if (pm >= 100 && coIndex < 100) {
-            return pm;
+        else if (tansPM >= 100 && coIndex < 100) {
+            return tansPM;
         }
         // 둘다 100보다 작은 경우
-        else if (pm < 100 && coIndex < 100) {
-            if (pm >= coIndex) {
-                return pm;
+        else if (tansPM < 100 && coIndex < 100) {
+            if (tansPM >= coIndex) {
+                return tansPM;
             } else {
                 return coIndex;
             }
         }
         // 둘다 100보다 큰 경우
         else {
-            if (pm >= coIndex) {
-                return pm + 25;
+            if (tansPM >= coIndex) {
+                return tansPM + 25;
             } else {
                 return coIndex + 25;
             }
         }
     }
 
-    public String GetCQIGrade(int pm, float co) {
+    public String GetCQIGrade(float pm, float co) {
         int cqi = GetCQIValue(pm, co);
         if (cqi >= 0 && cqi <= 50) {
             return "0";
