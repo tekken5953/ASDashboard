@@ -155,7 +155,10 @@ public class BluetoothThread extends Thread {
             mConnectedSocketEventListener.onConnectedEvent();
         } catch (IOException e) {
             System.out.println("Connect Socket Error");
-            mDisconnectedSocketEventListener.onDisconnectedEvent();
+            Log.e("BTThread", "Connect Socket Error");
+            if (!isRun) {
+                mDisconnectedSocketEventListener.onDisconnectedEvent();
+            }
         }
     }
 

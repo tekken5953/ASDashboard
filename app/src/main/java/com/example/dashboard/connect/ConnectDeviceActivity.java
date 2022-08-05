@@ -73,7 +73,6 @@ public class ConnectDeviceActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        outerClass.FullScreenMode(context);
         Log.d(TAG_LIFECYCLE, "On Resume");
     }
 
@@ -540,7 +539,7 @@ public class ConnectDeviceActivity extends AppCompatActivity {
                     bluetoothThread.closeSocket();
                 }
 
-                if (bluetoothThread.isRunning()) {
+                if (bluetoothThread.isInterrupted()) {
                     bluetoothThread.interrupt();
                 }
                 dialog.dismiss();

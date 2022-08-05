@@ -5,13 +5,13 @@
     tools:context=".dashboard.DashBoardActivity">
 
     <data>
-
         <variable
             name="viewModel"
             type="com.example.dashboard.bluetooth.BluetoothThread.DataShareViewModel" />
     </data>
 
     <RelativeLayout
+        android:id="@+id/dashboardMainLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@drawable/bg_image">
@@ -398,19 +398,6 @@
                     android:layout_marginStart="354dp"
                     android:layout_marginTop="105dp"
                     android:layout_marginEnd="50dp" />
-
-                <!--                <TextView-->
-                <!--                    android:layout_width="wrap_content"-->
-                <!--                    android:layout_height="wrap_content"-->
-                <!--                    android:layout_gravity="bottom|end"-->
-                <!--                    android:text="데이터가 변하면 그래프가 수정됩니다"-->
-                <!--                    android:textStyle="italic"-->
-                <!--                    android:fontFamily="@font/pretendardvariable"-->
-                <!--                    android:textColor="#99FFFFFF"-->
-                <!--                    android:textSize="12sp"-->
-                <!--                    android:layout_marginBottom="35dp"-->
-                <!--                    android:layout_marginEnd="45dp"/>-->
-
             </FrameLayout>
 
             <LinearLayout
@@ -426,7 +413,8 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/topFrameLayout">
+                app:layout_constraintTop_toBottomOf="@+id/topFrameLayout"
+                android:baselineAligned="false">
 
                 <RelativeLayout
                     android:layout_width="0dp"

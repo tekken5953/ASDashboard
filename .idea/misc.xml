@@ -103,6 +103,16 @@
         <entry key="..\:/AndroidStudio/Dashboard/app/src/main/res/layout/splash_activity.xml" value="0.21432291666666667" />
         <entry key="..\:/AndroidStudio/Dashboard/app/src/main/res/menu/side_menu.xml" value="0.14288194444444444" />
         <entry key="..\:/AndroidStudio/Dashboard/app/src/main/res/mipmap-anydpi-v26/ic_launcher_round.xml" value="0.3725" />
+        <entry key="..\:/Users/USER/StudioProjects/BsDashboard/app/src/main/res/drawable-sw720dp/connectable_rv_bg.xml" value="0.2485" />
+        <entry key="..\:/Users/USER/StudioProjects/BsDashboard/app/src/main/res/layout-sw720dp/activity_dashboard.xml" value="0.15598958333333332" />
+        <entry key="..\:/Users/USER/StudioProjects/BsDashboard/app/src/main/res/layout-sw720dp/connect_bluetooth_activity.xml" value="0.152" />
+        <entry key="..\:/Users/USER/StudioProjects/BsDashboard/app/src/main/res/layout-sw720dp/language_select_activity.xml" value="0.152" />
+        <entry key="..\:/Users/USER/StudioProjects/BsDashboard/app/src/main/res/layout-sw720dp/listitem_connectable_rv.xml" value="0.152" />
+        <entry key="..\:/Users/USER/StudioProjects/BsDashboard/app/src/main/res/layout-sw720dp/listitem_recent_device.xml" value="0.30327868852459017" />
+        <entry key="..\:/Users/USER/StudioProjects/BsDashboard/app/src/main/res/layout-sw720dp/sidemenu_dialog.xml" value="0.21432291666666667" />
+        <entry key="..\:/Users/USER/StudioProjects/BsDashboard/app/src/main/res/layout-sw720dp/splash_activity.xml" value="0.21432291666666667" />
+        <entry key="..\:/Users/USER/StudioProjects/BsDashboard/app/src/main/res/layout/activity_dashboard.xml" value="0.42864583333333334" />
+        <entry key="..\:/Users/USER/StudioProjects/BsDashboard/app/src/main/res/layout/connect_bluetooth_activity.xml" value="0.42864583333333334" />
       </map>
     </option>
   </component>
