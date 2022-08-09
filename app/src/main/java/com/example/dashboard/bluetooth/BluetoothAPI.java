@@ -80,7 +80,7 @@ public class BluetoothAPI {
         int totalLength = recvBody.length;
         byte[] tag = new byte[recvBody.length];
 
-        ArrayList<Integer> arrayList = new ArrayList<Integer>();
+        ArrayList<Integer> arrayList = new ArrayList<>();
         Bundle bundle = new Bundle();
 
         byte tag_id;
@@ -110,7 +110,7 @@ public class BluetoothAPI {
 
             String id = byteArrayToHexString(new byte[]{tag_id});
 
-            // TAG ID별로 분기 처리 추가
+            // TAG ID 별로 분기 처리 추가
             switch (tag_id) {
                 case 0x01:
                 case 0x0F:
@@ -393,18 +393,18 @@ public class BluetoothAPI {
     public static String bytesToBinary(byte[] bytes) {
         String strHex = byteArrayToHexString(bytes);
         int iHex = Integer.parseInt(strHex, 16);
-        String strBinary = Integer.toBinaryString(iHex);
+        StringBuilder strBinary = new StringBuilder(Integer.toBinaryString(iHex));
 
         int len = strBinary.length();
         if (len < SENSOR_EQUIP_COUNT) {
             for (int i = 0; i < SENSOR_EQUIP_COUNT - len; i++) {
-                strBinary = "0" + strBinary;
+                strBinary.insert(0, "0");
             }
         }
 
         // 배열 Reverse
         //StringBuilder stringBuilder = new StringBuilder("1111111111111");
-        StringBuilder stringBuilder = new StringBuilder(strBinary);
+        StringBuilder stringBuilder = new StringBuilder(strBinary.toString());
         String reversedBinary = stringBuilder.reverse().toString();
 
         return reversedBinary;
@@ -414,7 +414,7 @@ public class BluetoothAPI {
         int byteIndex = value.length;
         byte[] orderedByte = new byte[byteIndex];
 
-        if (isLittle == true) {
+        if (isLittle) {
             for (int i = 0; i < byteIndex; i++) {
                 orderedByte[i] = value[byteIndex - (i + 1)];
             }
@@ -434,9 +434,9 @@ public class BluetoothAPI {
     public static byte[] combineArray(byte[][] bundleOfByte) {
         byte[] tempArray = new byte[MAX_BUFFER];
         int totalLength = 0;
-        for (int i = 0; i < bundleOfByte.length; i++) {
-            System.arraycopy(bundleOfByte[i], 0, tempArray, totalLength, bundleOfByte[i].length);
-            totalLength += bundleOfByte[i].length;
+        for (byte[] bytes : bundleOfByte) {
+            System.arraycopy(bytes, 0, tempArray, totalLength, bytes.length);
+            totalLength += bytes.length;
         }
         byte[] resultArray = new byte[totalLength];
         System.arraycopy(tempArray, 0, resultArray, 0, totalLength);

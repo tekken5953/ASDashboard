@@ -4,18 +4,15 @@
  * 개발시작 2022-06-20
  */
 
-
 package com.example.dashboard.language;
 
 import android.Manifest;
 import android.app.Activity;
-import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
-import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.content.res.AppCompatResources;
 import androidx.core.content.res.ResourcesCompat;
@@ -32,7 +29,6 @@ public class LanguageSelectActivity extends AppCompatActivity {
     boolean FLAG_ENG_SELECTED = false;
     String FINAL_LANGUAGE = null;
     String SKIP_SELECT_LANGUAGE = null;
-    private final String LANGUAGE_LOG = "language_log";
     OuterClass outerClass = new OuterClass();
 
     Activity context;
@@ -44,7 +40,6 @@ public class LanguageSelectActivity extends AppCompatActivity {
         outerClass.FullScreenMode(LanguageSelectActivity.this);
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -65,6 +60,7 @@ public class LanguageSelectActivity extends AppCompatActivity {
         binding.langKorIconIv.setImageAlpha(76);
         binding.langEngIconIv.setImageAlpha(76);
 
+        String LANGUAGE_LOG = "language_log";
         Log.d(LANGUAGE_LOG, "final lang : " + FINAL_LANGUAGE + "\nskip : " + SKIP_SELECT_LANGUAGE);
 
         // 언어 설정이 스킵되지 않았을 경우
@@ -199,17 +195,14 @@ public class LanguageSelectActivity extends AppCompatActivity {
     }
 
     // 블루투스 퍼미션을 체크합니다
-    @RequiresApi(api = Build.VERSION_CODES.M)
     private void checkBTPermissions() {
         // ref) https://it-recording.tistory.com/15
-        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP) {
-            int permissionCheck = context.checkSelfPermission("Manifest.permission.ACCESS_FINE_LOCATION");
-            permissionCheck += context.checkSelfPermission("Manifest.permission.ACCESS_FINE_LOCATION");
-            if (permissionCheck != 0) {
-                context.requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION}, 1001);
-            } else {
-                Log.d("checkPermission", "No need to check permissions. SDK version < LoLLIPOP");
-            }
+        int permissionCheck = context.checkSelfPermission("Manifest.permission.ACCESS_FINE_LOCATION");
+        permissionCheck += context.checkSelfPermission("Manifest.permission.ACCESS_FINE_LOCATION");
+        if (permissionCheck != 0) {
+            context.requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION}, 1001);
+        } else {
+            Log.d("checkPermission", "No need to check permissions. SDK version < LOLLIPOP");
         }
     }
 }

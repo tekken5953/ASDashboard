@@ -67,7 +67,6 @@ import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
 import com.github.mikephil.charting.formatter.IndexAxisValueFormatter;
 
-import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -317,13 +316,7 @@ public class DashBoardActivity extends AppCompatActivity {
                         processRequestBody(body);
                     }
                 } catch (ArrayIndexOutOfBoundsException | InterruptedException e) {
-                    e.printStackTrace();
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            Toast.makeText(context, getString(R.string.unknown_error), Toast.LENGTH_SHORT).show();
-                        }
-                    });
+                    Log.e(TAG_BTThread, "Error : " + e);
                 }
             }
         };
@@ -384,16 +377,6 @@ public class DashBoardActivity extends AppCompatActivity {
             }).thenAcceptAsync(b -> {
                 // DeviceFragment.DEVICE_TYPE_MINI
                 if (deviceType.equals("[T, I]")) {
-//                    bluetoothThread.writeHex(
-//                            makeFrame(
-//                                    new byte[]{REQUEST_INDIVIDUAL_STATE},
-//                                    new byte[]{
-//                                            0x48, 0x00, 0x00,  // S/N
-//                                            0x3A, 0x00, 0x00  // 현재바람세기
-//                                    },
-//                                    bluetoothThread.getSequence()
-//                            )
-//                    );
 
                     bluetoothThread.writeHex(makeFrame(
                             new byte[]{REQUEST_INDIVIDUAL_STATE},
@@ -757,7 +740,7 @@ public class DashBoardActivity extends AppCompatActivity {
                     Log.d(TAG_BTThread, "Bluetooth Socket is Connected");
                     Log.d(TAG_BTThread, "setDevice by : " + bluetoothThread.getDeviceName());
 
-                    // 최초 데이터인 모듈 설치날짜와 모델명을 API를 통해 스레드에 요청합니다
+                    // 최초 데이터인 모듈 설치날짜와 모델명을 API 를 통해 스레드에 요청합니다
 //                                센서 장착 여부 및 GPS 정보 요청
                     bluetoothThread.writeHex(makeFrame(
                             new byte[]{REQUEST_INDIVIDUAL_STATE},
@@ -803,7 +786,7 @@ public class DashBoardActivity extends AppCompatActivity {
                 e.printStackTrace();
             }
 
-            if (!bluetoothThread.isInterrupted()) {
+            if (bluetoothThread.isConnected()) {
                 bluetoothThread.start();
                 Log.d(TAG_BTThread, "BluetoothThread is Run");
             }
@@ -887,8 +870,8 @@ public class DashBoardActivity extends AppCompatActivity {
                 binding.listCardVIRUSOCGrade.setVisibility(View.VISIBLE);
 
                 // 바이러스 지수 불러오기
-                virusValue = Math.round(virusFormulaClass.GetVirusValue((float) pm_float, temp_float, humid_float, co2_float, tvoc_float));
-                virusIndex = virusFormulaClass.GetVirusIndex((float) pm_float, temp_float, humid_float, co2_float, tvoc_float);
+                virusValue = Math.round(virusFormulaClass.GetVirusValue(pm_float, temp_float, humid_float, co2_float, tvoc_float));
+                virusIndex = virusFormulaClass.GetVirusIndex(pm_float, temp_float, humid_float, co2_float, tvoc_float);
 
                 try {
                     binding.listCardVIRUSIndex.setText(virusValue + "");
@@ -947,7 +930,6 @@ public class DashBoardActivity extends AppCompatActivity {
 
     //AQI Index 별 차트 이동거리를 계산합니다
     public void moveBarChart(int cqiNumber) {
-
         if (cqiNumber != 0) {
             params.setMargins((cqiNumber * barViewWidth / 300) - (arrowWidth / 2),
                     0,
@@ -966,23 +948,23 @@ public class DashBoardActivity extends AppCompatActivity {
         if (cqiNumber < 51) {
             binding.apiCircleChartPb.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.signal_good, null));
             binding.aqiContentTv.setText(getResources().getString(R.string.good));
-            binding.aqiContentTv.setTextColor(getResources().getColor(R.color.progressGood));
-            binding.aqiCurrentArrow.setTextColor(getResources().getColor(R.color.progressGood));
+            binding.aqiContentTv.setTextColor(ResourcesCompat.getColor(getResources(),R.color.progressGood,null));
+            binding.aqiCurrentArrow.setTextColor(ResourcesCompat.getColor(getResources(),R.color.progressGood,null));
         } else if (cqiNumber < 101) {
             binding.apiCircleChartPb.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.signal_normal, null));
             binding.aqiContentTv.setText(getResources().getString(R.string.normal));
-            binding.aqiContentTv.setTextColor(getResources().getColor(R.color.progressNormal));
-            binding.aqiCurrentArrow.setTextColor(getResources().getColor(R.color.progressNormal));
+            binding.aqiContentTv.setTextColor(ResourcesCompat.getColor(getResources(),R.color.progressNormal,null));
+            binding.aqiCurrentArrow.setTextColor(ResourcesCompat.getColor(getResources(),R.color.progressNormal,null));
         } else if (cqiNumber < 251) {
             binding.apiCircleChartPb.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.signal_bad, null));
             binding.aqiContentTv.setText(getResources().getString(R.string.bad));
-            binding.aqiContentTv.setTextColor(getResources().getColor(R.color.progressBad));
-            binding.aqiCurrentArrow.setTextColor(getResources().getColor(R.color.progressBad));
+            binding.aqiContentTv.setTextColor(ResourcesCompat.getColor(getResources(),R.color.progressBad,null));
+            binding.aqiCurrentArrow.setTextColor(ResourcesCompat.getColor(getResources(),R.color.progressBad,null));
         } else {
             binding.apiCircleChartPb.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.signal_verybad, null));
             binding.aqiContentTv.setText(getResources().getString(R.string.cqi_baddest));
-            binding.aqiContentTv.setTextColor(getResources().getColor(R.color.progressWorst));
-            binding.aqiCurrentArrow.setTextColor(getResources().getColor(R.color.progressWorst));
+            binding.aqiContentTv.setTextColor(ResourcesCompat.getColor(getResources(),R.color.progressWorst,null));
+            binding.aqiCurrentArrow.setTextColor(ResourcesCompat.getColor(getResources(),R.color.progressWorst,null));
         }
     }
 
@@ -1645,7 +1627,7 @@ public class DashBoardActivity extends AppCompatActivity {
         builder.setNegativeButton(getString(R.string.exit_app_no), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                try{
+                try {
                     if (!bluetoothThread.isInterrupted()) {
                         bluetoothThread.start();
                     }

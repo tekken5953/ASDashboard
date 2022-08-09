@@ -80,7 +80,7 @@ public class ConnectDeviceActivity extends AppCompatActivity {
     protected void onDestroy() {
         super.onDestroy();
         Log.d(TAG_LIFECYCLE, "On Destroy");
-        // 액티비티의 LifeCycle이 종료 될 때 어댑터를 초기화 하고
+        // 액티비티의 LifeCycle 이 종료 될 때 어댑터를 초기화 하고
         // 등록된 리시버를 해제합니다
         // 디바이스 스캔 작업도 취소합니다
         if (bluetoothAdapter.isDiscovering()) {
@@ -148,7 +148,7 @@ public class ConnectDeviceActivity extends AppCompatActivity {
             @Override
             public void onItemClick(View v, int position) {
                 // https://ghj1001020.tistory.com/291
-                // ProgressView를 보여주고 레이아웃의 명암을 낮춥니다
+                // ProgressView 를 보여주고 레이아웃의 명암을 낮춥니다
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
@@ -171,7 +171,6 @@ public class ConnectDeviceActivity extends AppCompatActivity {
                             } catch (Exception e) {
                                 e.printStackTrace();
                             }
-
                         }
                     }).start();
 
@@ -295,6 +294,7 @@ public class ConnectDeviceActivity extends AppCompatActivity {
             public void onClick(View v) {
                 outerClass.CallVibrate(context, 10);
                 HideRefresh();
+                startCheckBluetooth();
                 getConnectableDeviceList();
             }
         });

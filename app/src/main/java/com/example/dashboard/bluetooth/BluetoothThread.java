@@ -4,7 +4,6 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothSocket;
-import android.content.Context;
 import android.util.Log;
 
 import androidx.lifecycle.MutableLiveData;
@@ -26,8 +25,6 @@ public class BluetoothThread extends Thread {
     private final int MINIMUM_LENGTH = 15;
 
     // 액티비티
-    private Context listContext;
-    private Context fragmentContext;
     private InputStream mInputStream = null;
     private OutputStream mOutputStream = null;
 
@@ -41,7 +38,6 @@ public class BluetoothThread extends Thread {
     // 스레드
     private boolean isRun = false;
     private boolean isConnect = false;
-    private static boolean isConnectionError = false;
 
     // 이벤트
     private connectedSocketEventListener mConnectedSocketEventListener;
@@ -208,15 +204,6 @@ public class BluetoothThread extends Thread {
 
     public boolean isConnected() {
         return isConnect;
-    }
-
-    /* Set Method 모음 */
-    public void setListContext(Context c) {
-        listContext = c;
-    }
-
-    public void setFragmentContext(Context c) {
-        fragmentContext = c;
     }
 
     public void setConnect(boolean connect) {

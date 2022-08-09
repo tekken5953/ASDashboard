@@ -59,7 +59,7 @@ public class VirusFormulaClass {
         }
     }
 
-    // TVOC의 AQI 값 범위 계산
+    // TVOC 의 AQI 값 범위 계산
     private double GetZ(float tvocIndexFloat) {
         //범위 내의 값
         if (tvocIndexFloat >= 0 && tvocIndexFloat <= 4.0) {
@@ -258,7 +258,7 @@ public class VirusFormulaClass {
             return tansPM;
         }
         // 둘다 100보다 작은 경우
-        else if (tansPM < 100 && coIndex < 100) {
+        else if (tansPM < 100) {
             if (tansPM >= coIndex) {
                 return tansPM;
             } else {

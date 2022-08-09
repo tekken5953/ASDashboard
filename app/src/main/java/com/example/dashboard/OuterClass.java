@@ -8,15 +8,10 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.graphics.Color;
-import android.net.Uri;
-import android.os.Build;
-import android.os.PowerManager;
 import android.os.Vibrator;
-import android.provider.Settings;
 import android.view.View;
 import android.widget.TextView;
 
-import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.content.res.AppCompatResources;
 
@@ -162,24 +157,5 @@ public class OuterClass {
         Configuration configuration = new Configuration();
         configuration.setLocale(Locale.ENGLISH);
         context.getResources().updateConfiguration(configuration, context.getResources().getDisplayMetrics());
-    }
-
-    // 절대 절전모드에 빠지지 않습니다
-    // 퍼미션을 사용자에게 요청합니다
-    @SuppressLint("BatteryLife")
-    @RequiresApi(api = Build.VERSION_CODES.M)
-    public void DoNotGoingSleepMode(Activity activity) {
-        PowerManager pm = (PowerManager) activity.getSystemService(Context.POWER_SERVICE);
-        String packageName = activity.getPackageName();
-        if (pm.isIgnoringBatteryOptimizations(packageName)) {
-
-        }
-        // 메모리 최적화가 되어 있다면, 풀기 위해 설정 화면 띄움.
-        else {
-            Intent intent = new Intent();
-            intent.setAction(Settings.ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS);
-            intent.setData(Uri.parse("package:" + packageName));
-            activity.startActivity(intent);
-        }
     }
 }
