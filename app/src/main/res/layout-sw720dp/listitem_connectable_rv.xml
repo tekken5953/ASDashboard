@@ -17,7 +17,7 @@
     <TextView
         android:id="@+id/listItemConnDeviceTitleTv"
         android:layout_width="wrap_content"
-        android:layout_height="16dp"
+        android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginTop="18dp"
         android:layout_toEndOf="@+id/listItemConnDeviceImageIv"
@@ -45,7 +45,7 @@
     <TextView
         android:id="@+id/listItemConnDeviceConnTv"
         android:layout_width="wrap_content"
-        android:layout_height="16dp"
+        android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
         android:layout_centerVertical="true"
         android:layout_marginEnd="17dp"

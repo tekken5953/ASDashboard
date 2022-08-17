@@ -254,7 +254,7 @@
                         android:text="0"
                         android:textColor="@color/progressText"
                         android:textSize="14sp"
-                        android:visibility="gone"
+                        android:visibility="visible"
                         app:drawableTopCompat="@drawable/arrow_up" />
 
                 </LinearLayout>
@@ -441,12 +441,13 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_centerInParent="true"
+                        android:ellipsize="end"
                         android:fontFamily="@font/pretendardvariable"
                         android:lines="1"
                         android:text="@string/loading_data"
                         android:textAllCaps="false"
                         android:textColor="@color/progressGood"
-                        android:textSize="17sp" />
+                        android:textSize="16sp" />
 
 
                     <TextView
@@ -522,12 +523,13 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_centerInParent="true"
+                        android:ellipsize="end"
                         android:fontFamily="@font/pretendardvariable"
                         android:lines="1"
                         android:text="@string/loading_data"
                         android:textAllCaps="false"
                         android:textColor="@color/progressGood"
-                        android:textSize="17sp" />
+                        android:textSize="16sp" />
 
                     <TextView
                         android:id="@+id/listCardTVOCIndex"
@@ -601,12 +603,13 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_centerInParent="true"
+                        android:ellipsize="end"
                         android:fontFamily="@font/pretendardvariable"
                         android:lines="1"
                         android:text="@string/loading_data"
                         android:textAllCaps="false"
                         android:textColor="@color/progressGood"
-                        android:textSize="17sp" />
+                        android:textSize="16sp" />
 
                     <TextView
                         android:id="@+id/listCardCO2Index"
@@ -680,12 +683,13 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_centerInParent="true"
+                        android:ellipsize="end"
                         android:fontFamily="@font/pretendardvariable"
                         android:lines="1"
                         android:text="@string/loading_data"
                         android:textAllCaps="false"
                         android:textColor="@color/progressGood"
-                        android:textSize="17sp" />
+                        android:textSize="16sp" />
 
                     <TextView
                         android:id="@+id/listCardCOIndex"
@@ -760,10 +764,11 @@
                         android:layout_centerInParent="true"
                         android:fontFamily="@font/pretendardvariable"
                         android:lines="1"
+                        android:ellipsize="end"
                         android:text="@string/loading_data"
                         android:textAllCaps="false"
                         android:textColor="@color/progressGood"
-                        android:textSize="17sp" />
+                        android:textSize="16sp" />
 
                     <TextView
                         android:id="@+id/listCardVIRUSIndex"

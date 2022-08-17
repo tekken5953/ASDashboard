@@ -1,25 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="280dp"
+    android:layout_width="224dp"
     android:layout_height="wrap_content"
-    android:layout_marginBottom="20dp"
+    android:layout_marginBottom="16dp"
     android:background="@drawable/connectable_rv_bg"
     android:padding="1dp">
 
     <ImageView
         android:id="@+id/listItemConnDeviceImageIv"
-        android:layout_width="45dp"
-        android:layout_height="45dp"
+        android:layout_width="36dp"
+        android:layout_height="36dp"
         android:layout_centerVertical="true"
-        android:layout_marginStart="20dp"
+        android:layout_marginStart="16dp"
         android:src="@drawable/side_100" />
 
     <TextView
         android:id="@+id/listItemConnDeviceTitleTv"
         android:layout_width="wrap_content"
-        android:layout_height="16dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="18dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="6dp"
+        android:layout_marginTop="14dp"
         android:layout_toEndOf="@+id/listItemConnDeviceImageIv"
         android:fontFamily="@font/pretendardvariable"
         android:text="Bio Sentinel 100(test)"
@@ -32,27 +32,27 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/listItemConnDeviceTitleTv"
-        android:layout_marginStart="10dp"
+        android:layout_marginStart="6dp"
         android:layout_marginTop="3dp"
         android:layout_toEndOf="@+id/listItemConnDeviceImageIv"
         android:fontFamily="@font/pretendardvariable"
         android:text="TIA0001505"
-        android:layout_marginBottom="18dp"
+        android:layout_marginBottom="15dp"
         android:textAllCaps="false"
         android:textColor="@color/statusUnitText"
-        android:textSize="13sp" />
+        android:textSize="12sp" />
 
     <TextView
         android:id="@+id/listItemConnDeviceConnTv"
         android:layout_width="wrap_content"
-        android:layout_height="16dp"
+        android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
         android:layout_centerVertical="true"
-        android:layout_marginEnd="17dp"
+        android:layout_marginEnd="14dp"
         android:fontFamily="@font/pretendardvariable"
         android:text="@string/connect"
         android:textAllCaps="false"
         android:textColor="@color/white"
-        android:textSize="12sp" />
+        android:textSize="11sp" />
 
 </RelativeLayout>

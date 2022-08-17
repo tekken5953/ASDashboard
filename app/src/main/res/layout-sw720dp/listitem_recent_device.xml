@@ -19,7 +19,7 @@
     <TextView
         android:id="@+id/listItemRecentTitleTv"
         android:layout_width="wrap_content"
-        android:layout_height="14dp"
+        android:layout_height="wrap_content"
         android:layout_below="@+id/listItemRecentIconIv"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="13dp"
@@ -33,7 +33,7 @@
     <TextView
         android:id="@+id/listItemRecentNumberTv"
         android:layout_width="wrap_content"
-        android:layout_height="14dp"
+        android:layout_height="wrap_content"
         android:layout_below="@+id/listItemRecentTitleTv"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="5dp"

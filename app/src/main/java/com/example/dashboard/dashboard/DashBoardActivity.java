@@ -421,12 +421,8 @@ public class DashBoardActivity extends AppCompatActivity {
 
         // 현재 풍량 정보
         if (body.containsKey("3A")) {
-            CompletableFuture.runAsync(() -> {
-                current_fan_byte = body.getByte("3A");
-                Log.d(TAG_BTThread, "Current Fan is " + current_fan_byte);
-            }).thenAcceptAsync(b -> {
-                addSideView();
-            });
+            current_fan_byte = body.getByte("3A");
+            Log.d(TAG_BTThread, "Current Fan is " + current_fan_byte);
         }
 
         // 온도
@@ -948,23 +944,23 @@ public class DashBoardActivity extends AppCompatActivity {
         if (cqiNumber < 51) {
             binding.apiCircleChartPb.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.signal_good, null));
             binding.aqiContentTv.setText(getResources().getString(R.string.good));
-            binding.aqiContentTv.setTextColor(ResourcesCompat.getColor(getResources(),R.color.progressGood,null));
-            binding.aqiCurrentArrow.setTextColor(ResourcesCompat.getColor(getResources(),R.color.progressGood,null));
+            binding.aqiContentTv.setTextColor(ResourcesCompat.getColor(getResources(), R.color.progressGood, null));
+            binding.aqiCurrentArrow.setTextColor(ResourcesCompat.getColor(getResources(), R.color.progressGood, null));
         } else if (cqiNumber < 101) {
             binding.apiCircleChartPb.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.signal_normal, null));
             binding.aqiContentTv.setText(getResources().getString(R.string.normal));
-            binding.aqiContentTv.setTextColor(ResourcesCompat.getColor(getResources(),R.color.progressNormal,null));
-            binding.aqiCurrentArrow.setTextColor(ResourcesCompat.getColor(getResources(),R.color.progressNormal,null));
+            binding.aqiContentTv.setTextColor(ResourcesCompat.getColor(getResources(), R.color.progressNormal, null));
+            binding.aqiCurrentArrow.setTextColor(ResourcesCompat.getColor(getResources(), R.color.progressNormal, null));
         } else if (cqiNumber < 251) {
             binding.apiCircleChartPb.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.signal_bad, null));
             binding.aqiContentTv.setText(getResources().getString(R.string.bad));
-            binding.aqiContentTv.setTextColor(ResourcesCompat.getColor(getResources(),R.color.progressBad,null));
-            binding.aqiCurrentArrow.setTextColor(ResourcesCompat.getColor(getResources(),R.color.progressBad,null));
+            binding.aqiContentTv.setTextColor(ResourcesCompat.getColor(getResources(), R.color.progressBad, null));
+            binding.aqiCurrentArrow.setTextColor(ResourcesCompat.getColor(getResources(), R.color.progressBad, null));
         } else {
             binding.apiCircleChartPb.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.signal_verybad, null));
             binding.aqiContentTv.setText(getResources().getString(R.string.cqi_baddest));
-            binding.aqiContentTv.setTextColor(ResourcesCompat.getColor(getResources(),R.color.progressWorst,null));
-            binding.aqiCurrentArrow.setTextColor(ResourcesCompat.getColor(getResources(),R.color.progressWorst,null));
+            binding.aqiContentTv.setTextColor(ResourcesCompat.getColor(getResources(), R.color.progressWorst, null));
+            binding.aqiCurrentArrow.setTextColor(ResourcesCompat.getColor(getResources(), R.color.progressWorst, null));
         }
     }
 
@@ -1252,6 +1248,7 @@ public class DashBoardActivity extends AppCompatActivity {
                         drawGraphClass.reDrawChart();
                         drawGraphClass.drawFirstEntry(300, "cqi");
                         ChartTimerTask(300, "cqi");
+                        addSideView();
                     }
                 });
             }
@@ -1462,7 +1459,6 @@ public class DashBoardActivity extends AppCompatActivity {
             }
             return null;
         }
-
     }
 
     // CQI 등급 변경
