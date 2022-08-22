@@ -10,10 +10,10 @@
 
     <ImageView
         android:id="@+id/listItemRecentIconIv"
-        android:layout_width="60dp"
-        android:layout_height="60dp"
+        android:layout_width="72dp"
+        android:layout_height="72dp"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="12dp"
         android:src="@drawable/side_m" />
 
     <TextView
@@ -22,7 +22,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/listItemRecentIconIv"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="9dp"
+        android:layout_marginTop="10dp"
         android:fontFamily="@font/pretendardvariable"
         android:gravity="center"
         android:text="BS-100"

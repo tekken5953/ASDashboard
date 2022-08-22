@@ -24,7 +24,7 @@
     <string name="not_paring">연결된 디바이스 없음</string>
     <string name="no_bluetooth_device">해당 기기는 블루투스를 지원하지 않습니다</string>
     <string name="caution_title">경고</string>
-    <string name="caution_message">Mini와의 연결이 끊어졌습니다.\n 전원을 확인 후 다시 접속해주세요</string>
+    <string name="caution_message">장치와의 연결이 끊어졌습니다.\n 전원을 확인 후 다시 접속해주세요</string>
     <string name="reconnect_bt_msg">블루투스 연결이 끊어졌습니다.\n다시 블루투스에 연결하시겠습니까?</string>
     <string name="reconnect_bt_ok">연결</string>
     <string name="caution_ok">확인</string>

@@ -88,6 +88,5 @@ public class SideBarCustomView extends RelativeLayout implements View.OnClickLis
                 break;
         }
     }
-
 }
 

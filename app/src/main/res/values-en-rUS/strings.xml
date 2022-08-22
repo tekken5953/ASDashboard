@@ -26,7 +26,7 @@
     <string name="not_paring">Not Paring Devices</string>
     <string name="caution_title">Caution</string>
     <string name="caution_back">Back</string>
-    <string name="caution_message">The Connection has been lost\nPlease check the Mini and reconnect</string>
+    <string name="caution_message">The Connection has been lost\nPlease check the Device and reconnect</string>
     <string name="reconnect_bt_msg">Disconnected to Bluetooth\nRetry to Connect Device?</string>
     <string name="reconnect_bt_ok">연결</string>
     <string name="caution_ok">OK</string>

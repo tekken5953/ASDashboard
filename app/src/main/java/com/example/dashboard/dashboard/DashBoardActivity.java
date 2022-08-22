@@ -131,7 +131,7 @@ public class DashBoardActivity extends AppCompatActivity {
 
     @Override
     protected void onDestroy() {
-        Log.d(TAG_LifeCycle, "onDestroy");
+        Log.d(TAG_BTThread, "onDestroy");
         super.onDestroy();
 
         if (data_timerTask != null)
@@ -154,7 +154,7 @@ public class DashBoardActivity extends AppCompatActivity {
 
     @Override
     protected void onResume() {
-        Log.d(TAG_LifeCycle, "onResume");
+        Log.d(TAG_BTThread, "onResume");
         super.onResume();
         outerClass.FullScreenMode(context);
     }
@@ -162,7 +162,7 @@ public class DashBoardActivity extends AppCompatActivity {
     @SuppressLint("NotifyDataSetChanged")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        Log.d(TAG_LifeCycle, "onCreate");
+        Log.d(TAG_BTThread, "onCreate");
         super.onCreate(savedInstanceState);
         binding = DataBindingUtil.setContentView(DashBoardActivity.this, R.layout.activity_dashboard);
         viewModel = new ViewModelProvider(DashBoardActivity.this).get(BluetoothThread.DataShareViewModel.class);
@@ -239,7 +239,7 @@ public class DashBoardActivity extends AppCompatActivity {
     @SuppressLint("MissingPermission")
     @Override
     public void onWindowFocusChanged(boolean hasFocus) {
-        Log.d(TAG_LifeCycle, "onWindowFocusChanged");
+        Log.d(TAG_BTThread, "onWindowFocusChanged");
         if (hasFocus) {
 
             outerClass.FullScreenMode(context);
@@ -522,7 +522,7 @@ public class DashBoardActivity extends AppCompatActivity {
         if (body.containsKey("1F")) {
             co2_grade = body.getByte("1F") + "";
             // 0 ~ 2500
-            if (co2_float != null && co2_float >= 0f && co_float <= 2000f) {
+            if (co2_float != null && Math.round(co2_float) >= 0 && Math.round(co2_float) <= 2000) {
                 binding.listCardCO2Grade.setText(outerClass.translateData(co2_grade, context));
                 CardItemTextColor(co2_grade, binding.listCardCO2Unit, binding.listCardCO2Grade, binding.listCardCO2Index, binding.listCardCO2LoadingTv);
             }
@@ -541,8 +541,10 @@ public class DashBoardActivity extends AppCompatActivity {
                         GetCQIData();
                     }).thenAcceptAsync(d -> {
                         if (count == 0) {
-                            DrawingGraphMethod();
-                            count++;
+                            if (bluetoothThread.isConnected()) {
+                                DrawingGraphMethod();
+                                count++;
+                            }
                         }
                     });
                 }
@@ -596,98 +598,6 @@ public class DashBoardActivity extends AppCompatActivity {
                 }
             } else {
                 Log.e(TAG_BTThread, "Error 발생");
-            }
-        } else if (body.containsKey("46")) {
-
-            if (body.getByte("46") == 0x01) {
-
-                bluetoothThread.writeHex(
-                        makeFrame(
-                                new byte[]{REQUEST_INDIVIDUAL_STATE},
-                                new byte[]{0x46, 0x00, 0x00},
-                                bluetoothThread.getSequence()
-                        )
-                );
-
-                Toast.makeText(this, "설치날짜 변경에 성공했습니다.", Toast.LENGTH_SHORT).show();
-
-            } else {
-
-                Toast.makeText(this, "설치날짜 변경에 실패했습니다.", Toast.LENGTH_SHORT).show();
-
-            }
-        } else if (body.containsKey("48")) {
-
-            if (body.getByte("48") == 0x01) {
-                bluetoothThread.writeHex(
-                        makeFrame(
-                                new byte[]{REQUEST_INDIVIDUAL_STATE},
-                                new byte[]{0x48, 0x00, 0x00},
-                                bluetoothThread.getSequence()
-                        )
-                );
-
-                Toast.makeText(this, "S/N 변경에 성공했습니다.", Toast.LENGTH_SHORT).show();
-
-            } else {
-
-                Toast.makeText(this, "S/N 변경에 실패했습니다.", Toast.LENGTH_SHORT).show();
-
-            }
-        } else if (body.containsKey("49")) {
-
-            if (body.getByte("49") == 0x01) {
-
-                bluetoothThread.writeHex(
-                        makeFrame(
-                                new byte[]{REQUEST_INDIVIDUAL_STATE},
-                                new byte[]{0x49, 0x00, 0x00},
-                                bluetoothThread.getSequence()
-                        )
-                );
-
-                Toast.makeText(this, "포트 설정 정보 변경에 성공했습니다.", Toast.LENGTH_SHORT).show();
-
-            } else {
-
-                Toast.makeText(this, "포트 설정 정보 변경에 실패했습니다.", Toast.LENGTH_SHORT).show();
-
-            }
-        } else if (body.containsKey("57")) {
-
-            if (body.getByte("57") == 0x01) {
-                bluetoothThread.writeHex(
-                        makeFrame(
-                                new byte[]{REQUEST_INDIVIDUAL_STATE},
-                                new byte[]{0x57, 0x00, 0x00},
-                                bluetoothThread.getSequence()
-                        )
-                );
-
-                Toast.makeText(this, "데이터 전송 간격 변경에 성공했습니다.", Toast.LENGTH_SHORT).show();
-
-            } else {
-
-                Toast.makeText(this, "데이터 전송 간격 변경에 실패했습니다.", Toast.LENGTH_SHORT).show();
-
-            }
-        } else if (body.containsKey("69")) {
-
-            if (body.getByte("69") == 0x01) {
-                bluetoothThread.writeHex(
-                        makeFrame(
-                                new byte[]{REQUEST_INDIVIDUAL_STATE},
-                                new byte[]{0x69, 0x00, 0x00},
-                                bluetoothThread.getSequence()
-                        )
-                );
-
-                Toast.makeText(this, "Server IP 변경에 성공했습니다.", Toast.LENGTH_SHORT).show();
-
-            } else {
-
-                Toast.makeText(this, "Server IP 변경에 실패했습니다.", Toast.LENGTH_SHORT).show();
-
             }
         } else {
             Iterator<String> iterator = body.keySet().iterator();
@@ -757,6 +667,7 @@ public class DashBoardActivity extends AppCompatActivity {
                 public void onDisconnectedEvent() {
                     binding.dashboardMainLayout.setEnabled(false);
                     Log.d(TAG_BTThread, "Bluetooth Socket is Disconnected");
+                    Log.d(TAG_BTThread, "Running : " + bluetoothThread.isRunning());
 
                     runOnUiThread(new Runnable() {
                         @Override
@@ -776,8 +687,7 @@ public class DashBoardActivity extends AppCompatActivity {
             bluetoothThread.connectSocket();
 
             try {
-                regDataListener(dataScheduler);
-                Log.d(TAG_BTThread, "Loop Data Request");
+                Thread.sleep(1000);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
@@ -785,7 +695,16 @@ public class DashBoardActivity extends AppCompatActivity {
             if (bluetoothThread.isConnected()) {
                 bluetoothThread.start();
                 Log.d(TAG_BTThread, "BluetoothThread is Run");
+
+                try {
+                    regDataListener(dataScheduler);
+                    Log.d(TAG_BTThread, "Loop Data Request");
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
             }
+        } else {
+            Log.e(TAG_BTThread, "pairedDevice is null");
         }
     }
 
@@ -927,7 +846,7 @@ public class DashBoardActivity extends AppCompatActivity {
     //AQI Index 별 차트 이동거리를 계산합니다
     public void moveBarChart(int cqiNumber) {
         if (cqiNumber != 0) {
-            params.setMargins((cqiNumber * barViewWidth / 300) - (arrowWidth / 2),
+            params.setMargins((cqiNumber * barViewWidth / 300) - (arrowWidth / 2) + 10,
                     0,
                     0,
                     15);  // 왼쪽, 위, 오른쪽, 아래 순서
@@ -1453,7 +1372,7 @@ public class DashBoardActivity extends AppCompatActivity {
                     return arrayList.get(count + 1);
                 }
             } catch (IndexOutOfBoundsException | NullPointerException e) {
-                Toast.makeText(context, "일시적인 오류입니다. 다시 접속해주세요", Toast.LENGTH_SHORT).show();
+                Toast.makeText(context, getString(R.string.unknown_error), Toast.LENGTH_SHORT).show();
                 outerClass.GoToConnectFromDashboard(context);
                 Log.e(TAG_BTThread, "IndexOutOfBoundsException : " + e);
             }

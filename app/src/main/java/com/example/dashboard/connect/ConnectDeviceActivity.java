@@ -15,12 +15,15 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.graphics.Point;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
+import android.util.DisplayMetrics;
 import android.util.Log;
+import android.view.Display;
 import android.view.View;
 import android.widget.Toast;
 
@@ -132,6 +135,13 @@ public class ConnectDeviceActivity extends AppCompatActivity {
         binding.connOkTv.setTextColor(ResourcesCompat.getColor(getResources(), R.color.statusUnitText, null));
         noBondedList = new ArrayList<>();
         bondedList = new ArrayList<>();
+
+        DisplayMetrics metrics = new DisplayMetrics();
+        getWindowManager().getDefaultDisplay().getMetrics(metrics);
+        float scaleFactor = metrics.density;
+        float widthDp = metrics.widthPixels / scaleFactor;
+        float heightDp = metrics.heightPixels / scaleFactor;
+        Log.d("sizeDp",">>> size.x : " + widthDp + ", size.y : " + heightDp );
 
         // 블루투스 어댑터를 초기화합니다
         bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();

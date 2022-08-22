@@ -14,7 +14,7 @@
         android:id="@+id/dashboardMainLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@drawable/bg_image">
+        android:background="@color/black">
 
         <ProgressBar
             android:id="@+id/loadingPb"
@@ -52,9 +52,9 @@
 
             <ImageView
                 android:id="@+id/hambugerMenuIv"
-                android:layout_width="26dp"
-                android:layout_height="26dp"
-                android:layout_marginStart="48dp"
+                android:layout_width="21dp"
+                android:layout_height="21dp"
+                android:layout_marginStart="38dp"
                 android:layout_marginTop="3dp"
                 android:background="@drawable/ripple_round"
                 android:gravity="center"
@@ -75,8 +75,8 @@
                 android:textColor="@color/white"
                 android:textSize="14sp"
                 android:gravity="center"
-                android:layout_marginTop="48dp"
-                android:layout_marginEnd="52dp"
+                android:layout_marginTop="38dp"
+                android:layout_marginEnd="42dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
@@ -95,7 +95,7 @@
 
             <TextView
                 android:id="@+id/humidUnitTv"
-                android:layout_width="22dp"
+                android:layout_width="18dp"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="46dp"
                 android:fontFamily="@font/pretendardvariable"
@@ -111,7 +111,7 @@
                 android:id="@+id/humidIndexTv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="8dp"
+                android:layout_marginEnd="7dp"
                 android:fontFamily="@font/pretendardvariable"
                 android:gravity="center"
                 android:text="@string/humid"
@@ -123,9 +123,9 @@
 
             <TextView
                 android:id="@+id/tempUnitTv"
-                android:layout_width="22dp"
+                android:layout_width="18dp"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="58dp"
+                android:layout_marginEnd="46dp"
                 android:fontFamily="@font/pretendardvariable"
                 android:gravity="center"
                 android:text="℃"
@@ -152,7 +152,7 @@
                 android:id="@+id/textView6"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="8dp"
+                android:layout_marginEnd="7dp"
                 android:fontFamily="@font/pretendardvariable"
                 android:gravity="center"
                 android:text="@string/temp"
@@ -165,10 +165,10 @@
             <FrameLayout
                 android:id="@+id/topFrameLayout"
                 android:layout_width="match_parent"
-                android:layout_height="340dp"
-                android:layout_marginStart="48dp"
-                android:layout_marginTop="26dp"
-                android:layout_marginEnd="48dp"
+                android:layout_height="288dp"
+                android:layout_marginStart="38dp"
+                android:layout_marginTop="21dp"
+                android:layout_marginEnd="38dp"
                 android:background="@drawable/topframe_outline"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -176,21 +176,21 @@
 
                 <ImageView
                     android:id="@+id/apiCircleChartPb"
-                    android:layout_width="205dp"
-                    android:layout_height="205dp"
-                    android:layout_marginStart="23dp"
-                    android:layout_marginTop="40dp"
+                    android:layout_width="164dp"
+                    android:layout_height="164dp"
+                    android:layout_marginStart="18dp"
+                    android:layout_marginTop="32dp"
                     android:background="@drawable/signal_good" />
 
                 <LinearLayout
-                    android:layout_width="210dp"
+                    android:layout_width="168dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="38dp"
-                    android:layout_marginTop="264dp"
+                    android:layout_marginStart="20dp"
+                    android:layout_marginTop="211dp"
                     android:orientation="vertical">
 
                     <TableRow
-                        android:layout_width="200dp"
+                        android:layout_width="160dp"
                         android:layout_height="0dp"
                         android:layout_gravity="end"
                         android:layout_marginBottom="3dp"
@@ -200,7 +200,7 @@
 
                         <TextView
                             android:layout_width="wrap_content"
-                            android:layout_height="15dp"
+                            android:layout_height="wrap_content"
                             android:layout_weight="0.17"
                             android:fontFamily="@font/pretendardvariable"
                             android:gravity="start"
@@ -210,7 +210,7 @@
 
                         <TextView
                             android:layout_width="wrap_content"
-                            android:layout_height="15dp"
+                            android:layout_height="wrap_content"
                             android:layout_weight="0.17"
                             android:fontFamily="@font/pretendardvariable"
                             android:gravity="start"
@@ -220,7 +220,7 @@
 
                         <TextView
                             android:layout_width="wrap_content"
-                            android:layout_height="15dp"
+                            android:layout_height="wrap_content"
                             android:layout_weight="0.5"
                             android:fontFamily="@font/pretendardvariable"
                             android:gravity="start"
@@ -230,7 +230,7 @@
 
                         <TextView
                             android:layout_width="wrap_content"
-                            android:layout_height="15dp"
+                            android:layout_height="wrap_content"
                             android:layout_weight="0.16"
                             android:fontFamily="@font/pretendardvariable"
                             android:gravity="start"
@@ -241,19 +241,19 @@
 
                     <com.example.dashboard.ui.SegmentedProgressBar
                         android:id="@+id/aqiBarChartPb"
-                        android:layout_width="200dp"
-                        android:layout_height="15dp"
+                        android:layout_width="160dp"
+                        android:layout_height="12dp"
                         android:layout_gravity="end" />
 
                     <TextView
                         android:id="@+id/aqiCurrentArrow"
-                        android:layout_width="16dp"
-                        android:layout_height="35dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
                         android:fontFamily="@font/pretendardvariable"
                         android:gravity="center"
                         android:text="0"
                         android:textColor="@color/progressText"
-                        android:textSize="14sp"
+                        android:textSize="13sp"
                         android:visibility="visible"
                         app:drawableTopCompat="@drawable/arrow_up" />
 
@@ -261,36 +261,38 @@
 
                 <TextView
                     android:id="@+id/aqiTitleTv"
-                    android:layout_width="96dp"
+                    android:layout_width="77dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="78dp"
-                    android:layout_marginTop="108dp"
+                    android:layout_marginStart="63dp"
+                    android:layout_marginTop="87dp"
                     android:fontFamily="@font/pretendardvariable"
                     android:gravity="center"
                     android:text="@string/aqi"
                     android:textColor="@color/white"
-                    android:textSize="12sp" />
+                    android:textSize="12sp"
+                    android:lines="1"
+                    android:ellipsize="end"/>
 
                 <TextView
                     android:id="@+id/aqiContentTv"
-                    android:layout_width="96dp"
+                    android:layout_width="77dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="78dp"
-                    android:layout_marginTop="128dp"
+                    android:layout_marginStart="63dp"
+                    android:layout_marginTop="105dp"
                     android:fontFamily="@font/pretendardvariable"
                     android:gravity="center"
                     android:text="@string/good"
                     android:textColor="@color/progressGood"
-                    android:textSize="28sp"
+                    android:textSize="25sp"
                     android:textStyle="bold"
                     android:visibility="visible" />
 
                 <TextView
                     android:id="@+id/last1hourTv"
                     android:layout_width="wrap_content"
-                    android:layout_height="32dp"
-                    android:layout_marginStart="284dp"
-                    android:layout_marginTop="32dp"
+                    android:layout_height="26dp"
+                    android:layout_marginStart="227dp"
+                    android:layout_marginTop="26dp"
                     android:fontFamily="@font/pretendardvariable"
                     android:gravity="center_vertical"
                     android:text="@string/aqi_1_hour"
@@ -302,13 +304,13 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="top"
-                    android:layout_marginStart="432dp"
-                    android:layout_marginTop="30dp"
-                    android:layout_marginEnd="40dp"
+                    android:layout_marginStart="370dp"
+                    android:layout_marginTop="24dp"
+                    android:layout_marginEnd="32dp"
                     android:gravity="center"
                     android:overScrollMode="never"
-                    android:paddingTop="2dp"
-                    android:paddingBottom="2dp"
+                    android:paddingTop="1.6dp"
+                    android:paddingBottom="1.6dp"
                     android:scrollbars="none">
 
                     <TableRow
@@ -319,20 +321,19 @@
                         <TextView
                             android:id="@+id/category1"
                             android:layout_width="wrap_content"
-                            android:layout_height="34dp"
-
+                            android:layout_height="32dp"
                             android:background="@drawable/category_text_outline"
                             android:fontFamily="@font/pretendardvariable"
                             android:gravity="center"
                             android:text="@string/aqi"
                             android:textColor="@color/white"
-                            android:textSize="12sp" />
+                            android:textSize="13sp" />
 
                         <TextView
                             android:id="@+id/category2"
                             android:layout_width="wrap_content"
-                            android:layout_height="34dp"
-                            android:layout_marginStart="26dp"
+                            android:layout_height="32dp"
+                            android:layout_marginStart="21dp"
                             android:background="@drawable/category_nontext_outline"
                             android:fontFamily="@font/pretendardvariable"
                             android:gravity="center"
@@ -343,8 +344,8 @@
                         <TextView
                             android:id="@+id/category3"
                             android:layout_width="wrap_content"
-                            android:layout_height="34dp"
-                            android:layout_marginStart="26dp"
+                            android:layout_height="32dp"
+                            android:layout_marginStart="21dp"
                             android:background="@drawable/category_nontext_outline"
                             android:fontFamily="@font/pretendardvariable"
                             android:gravity="center"
@@ -355,8 +356,8 @@
                         <TextView
                             android:id="@+id/category4"
                             android:layout_width="wrap_content"
-                            android:layout_height="34dp"
-                            android:layout_marginStart="26dp"
+                            android:layout_height="32dp"
+                            android:layout_marginStart="21dp"
                             android:background="@drawable/category_nontext_outline"
                             android:fontFamily="@font/pretendardvariable"
                             android:gravity="center"
@@ -367,8 +368,8 @@
                         <TextView
                             android:id="@+id/category5"
                             android:layout_width="wrap_content"
-                            android:layout_height="34dp"
-                            android:layout_marginStart="26dp"
+                            android:layout_height="32dp"
+                            android:layout_marginStart="21dp"
                             android:background="@drawable/category_nontext_outline"
                             android:fontFamily="@font/pretendardvariable"
                             android:gravity="center"
@@ -379,8 +380,8 @@
                         <TextView
                             android:id="@+id/category6"
                             android:layout_width="wrap_content"
-                            android:layout_height="34dp"
-                            android:layout_marginStart="26dp"
+                            android:layout_height="32dp"
+                            android:layout_marginStart="21dp"
                             android:background="@drawable/category_nontext_outline"
                             android:fontFamily="@font/pretendardvariable"
                             android:gravity="center"
@@ -395,20 +396,20 @@
                 <com.github.mikephil.charting.charts.LineChart
                     android:id="@+id/virusLineChart"
                     android:layout_width="match_parent"
-                    android:layout_height="215dp"
-                    android:layout_marginStart="283dp"
-                    android:layout_marginTop="84dp"
-                    android:layout_marginEnd="40dp" />
+                    android:layout_height="190dp"
+                    android:layout_marginStart="227dp"
+                    android:layout_marginTop="75dp"
+                    android:layout_marginEnd="32dp" />
             </FrameLayout>
 
             <LinearLayout
                 android:id="@+id/cardLinearLayout"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:layout_marginStart="48dp"
-                android:layout_marginTop="24dp"
-                android:layout_marginEnd="48dp"
-                android:layout_marginBottom="24dp"
+                android:layout_marginStart="38dp"
+                android:layout_marginTop="19dp"
+                android:layout_marginEnd="38dp"
+                android:layout_marginBottom="19dp"
                 android:orientation="horizontal"
                 android:weightSum="1"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -421,7 +422,7 @@
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_marginTop="2dp"
-                    android:layout_marginEnd="10dp"
+                    android:layout_marginEnd="8dp"
                     android:layout_marginBottom="2dp"
                     android:layout_weight="0.2"
                     android:background="@drawable/topframe_outline">
@@ -430,12 +431,12 @@
                         android:id="@+id/listCardPMTitle"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="16dp"
-                        android:layout_marginTop="22dp"
+                        android:layout_marginStart="13dp"
+                        android:layout_marginTop="18dp"
                         android:fontFamily="@font/pretendardvariable"
                         android:text="@string/fine_dust"
                         android:textColor="@color/textColorMain"
-                        android:textSize="19sp" />
+                        android:textSize="17sp" />
 
                     <TextView
                         android:id="@+id/listCardPMLoadingTv"
@@ -448,7 +449,7 @@
                         android:text="@string/loading_data"
                         android:textAllCaps="false"
                         android:textColor="@color/progressGood"
-                        android:textSize="15sp" />
+                        android:textSize="14sp" />
 
 
                     <TextView
@@ -456,12 +457,12 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_below="@+id/listCardPMTitle"
-                        android:layout_marginStart="16dp"
-                        android:layout_marginTop="6dp"
+                        android:layout_marginStart="13dp"
+                        android:layout_marginTop="4dp"
                         android:fontFamily="@font/pretendardvariable"
                         android:text="null"
                         android:textColor="@color/progressGood"
-                        android:textSize="16sp"
+                        android:textSize="14sp"
                         android:visibility="gone" />
 
                     <TextView
@@ -469,14 +470,14 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_below="@+id/listCardPMTitle"
-                        android:layout_marginStart="4dp"
-                        android:layout_marginTop="9dp"
+                        android:layout_marginStart="3dp"
+                        android:layout_marginTop="7dp"
                         android:layout_toEndOf="@+id/listCardPMIndex"
                         android:fontFamily="@font/poppins_medium"
                         android:gravity="center"
                         android:text="ug/㎥"
                         android:textColor="@color/statusUnitText"
-                        android:textSize="12sp"
+                        android:textSize="13sp"
                         android:visibility="gone" />
 
                     <TextView
@@ -487,14 +488,14 @@
                         android:layout_below="@+id/listCardPMUnit"
                         android:layout_alignParentEnd="true"
                         android:layout_alignParentBottom="true"
-                        android:layout_marginEnd="22dp"
-                        android:layout_marginBottom="32dp"
+                        android:layout_marginEnd="18dp"
+                        android:layout_marginBottom="26dp"
                         android:fontFamily="@font/pretendardvariable"
                         android:gravity="bottom"
                         android:text="에러"
                         android:textAllCaps="false"
                         android:textColor="@color/statusUnitText"
-                        android:textSize="36sp"
+                        android:textSize="31sp"
                         android:visibility="gone" />
 
                 </RelativeLayout>
@@ -503,7 +504,7 @@
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_marginTop="2dp"
-                    android:layout_marginEnd="12dp"
+                    android:layout_marginEnd="10dp"
                     android:layout_marginBottom="2dp"
                     android:layout_weight="0.2"
                     android:background="@drawable/topframe_outline">
@@ -512,12 +513,12 @@
                         android:id="@+id/listCardTVOCTitle"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="16dp"
-                        android:layout_marginTop="22dp"
+                        android:layout_marginStart="13dp"
+                        android:layout_marginTop="18dp"
                         android:fontFamily="@font/pretendardvariable"
                         android:text="@string/tvoc"
                         android:textColor="@color/textColorMain"
-                        android:textSize="19sp" />
+                        android:textSize="17sp" />
 
                     <TextView
                         android:id="@+id/listCardTVOCLoadingTv"
@@ -530,19 +531,19 @@
                         android:text="@string/loading_data"
                         android:textAllCaps="false"
                         android:textColor="@color/progressGood"
-                        android:textSize="15sp" />
+                        android:textSize="14sp" />
 
                     <TextView
                         android:id="@+id/listCardTVOCIndex"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_below="@+id/listCardTVOCTitle"
-                        android:layout_marginStart="16dp"
-                        android:layout_marginTop="6dp"
+                        android:layout_marginStart="13dp"
+                        android:layout_marginTop="5dp"
                         android:fontFamily="@font/pretendardvariable"
                         android:text="null"
                         android:textColor="@color/progressGood"
-                        android:textSize="16sp"
+                        android:textSize="14sp"
                         android:visibility="gone" />
 
                     <TextView
@@ -550,14 +551,14 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_below="@+id/listCardTVOCTitle"
-                        android:layout_marginStart="4dp"
-                        android:layout_marginTop="9dp"
+                        android:layout_marginStart="3dp"
+                        android:layout_marginTop="7dp"
                         android:layout_toEndOf="@+id/listCardTVOCIndex"
                         android:fontFamily="@font/poppins_medium"
                         android:gravity="center"
                         android:text="mg/㎥"
                         android:textColor="@color/statusUnitText"
-                        android:textSize="12sp"
+                        android:textSize="13sp"
                         android:visibility="gone" />
 
                     <TextView
@@ -567,14 +568,14 @@
                         android:layout_below="@+id/listCardTVOCUnit"
                         android:layout_alignParentEnd="true"
                         android:layout_alignParentBottom="true"
-                        android:layout_marginEnd="22dp"
-                        android:layout_marginBottom="32dp"
+                        android:layout_marginEnd="18dp"
+                        android:layout_marginBottom="26dp"
                         android:fontFamily="@font/pretendardvariable"
                         android:gravity="bottom"
                         android:text="에러"
                         android:textAllCaps="false"
                         android:textColor="@color/statusUnitText"
-                        android:textSize="36sp"
+                        android:textSize="31sp"
                         android:visibility="gone" />
 
                 </RelativeLayout>
@@ -583,7 +584,7 @@
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_marginTop="2dp"
-                    android:layout_marginEnd="12dp"
+                    android:layout_marginEnd="10dp"
                     android:layout_marginBottom="2dp"
                     android:layout_weight="0.2"
                     android:background="@drawable/topframe_outline">
@@ -592,12 +593,12 @@
                         android:id="@+id/listCardCO2Title"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="16dp"
-                        android:layout_marginTop="22dp"
+                        android:layout_marginStart="13dp"
+                        android:layout_marginTop="18dp"
                         android:fontFamily="@font/pretendardvariable"
                         android:text="@string/co2"
                         android:textColor="@color/textColorMain"
-                        android:textSize="19sp" />
+                        android:textSize="17sp" />
 
                     <TextView
                         android:id="@+id/listCardCO2LoadingTv"
@@ -610,19 +611,19 @@
                         android:text="@string/loading_data"
                         android:textAllCaps="false"
                         android:textColor="@color/progressGood"
-                        android:textSize="15sp" />
+                        android:textSize="14sp" />
 
                     <TextView
                         android:id="@+id/listCardCO2Index"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_below="@+id/listCardCO2Title"
-                        android:layout_marginStart="16dp"
-                        android:layout_marginTop="6dp"
+                        android:layout_marginStart="13dp"
+                        android:layout_marginTop="5dp"
                         android:fontFamily="@font/pretendardvariable"
                         android:text="null"
                         android:textColor="@color/progressGood"
-                        android:textSize="16sp"
+                        android:textSize="14sp"
                         android:visibility="gone" />
 
                     <TextView
@@ -630,14 +631,14 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_below="@+id/listCardCO2Title"
-                        android:layout_marginStart="4dp"
-                        android:layout_marginTop="9dp"
+                        android:layout_marginStart="3dp"
+                        android:layout_marginTop="7dp"
                         android:layout_toEndOf="@+id/listCardCO2Index"
                         android:fontFamily="@font/poppins_medium"
                         android:gravity="center"
                         android:text="ppm"
                         android:textColor="@color/statusUnitText"
-                        android:textSize="12sp"
+                        android:textSize="13sp"
                         android:visibility="gone" />
 
                     <TextView
@@ -647,14 +648,14 @@
                         android:layout_below="@+id/listCardCO2Unit"
                         android:layout_alignParentEnd="true"
                         android:layout_alignParentBottom="true"
-                        android:layout_marginEnd="22dp"
-                        android:layout_marginBottom="32dp"
+                        android:layout_marginEnd="18dp"
+                        android:layout_marginBottom="26dp"
                         android:fontFamily="@font/pretendardvariable"
                         android:gravity="bottom"
                         android:text="에러"
                         android:textAllCaps="false"
                         android:textColor="@color/statusUnitText"
-                        android:textSize="36sp"
+                        android:textSize="31sp"
                         android:visibility="gone" />
 
                 </RelativeLayout>
@@ -663,7 +664,7 @@
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_marginTop="2dp"
-                    android:layout_marginEnd="12dp"
+                    android:layout_marginEnd="10dp"
                     android:layout_marginBottom="2dp"
                     android:layout_weight="0.2"
                     android:background="@drawable/topframe_outline">
@@ -672,12 +673,12 @@
                         android:id="@+id/listCardCOTitle"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="16dp"
-                        android:layout_marginTop="22dp"
+                        android:layout_marginStart="13dp"
+                        android:layout_marginTop="18dp"
                         android:fontFamily="@font/pretendardvariable"
                         android:text="@string/co"
                         android:textColor="@color/textColorMain"
-                        android:textSize="19sp" />
+                        android:textSize="17sp" />
 
                     <TextView
                         android:id="@+id/listCardCOLoadingTv"
@@ -690,19 +691,19 @@
                         android:text="@string/loading_data"
                         android:textAllCaps="false"
                         android:textColor="@color/progressGood"
-                        android:textSize="15sp" />
+                        android:textSize="14sp" />
 
                     <TextView
                         android:id="@+id/listCardCOIndex"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_below="@+id/listCardCOTitle"
-                        android:layout_marginStart="16dp"
-                        android:layout_marginTop="6dp"
+                        android:layout_marginStart="13dp"
+                        android:layout_marginTop="5dp"
                         android:fontFamily="@font/pretendardvariable"
                         android:text="null"
                         android:textColor="@color/progressGood"
-                        android:textSize="16sp"
+                        android:textSize="14sp"
                         android:visibility="gone" />
 
                     <TextView
@@ -710,14 +711,14 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_below="@+id/listCardCOTitle"
-                        android:layout_marginStart="6dp"
-                        android:layout_marginTop="9dp"
+                        android:layout_marginStart="5dp"
+                        android:layout_marginTop="7dp"
                         android:layout_toEndOf="@+id/listCardCOIndex"
                         android:fontFamily="@font/poppins_medium"
                         android:gravity="center"
                         android:text="ppm"
                         android:textColor="@color/statusUnitText"
-                        android:textSize="12sp"
+                        android:textSize="13sp"
                         android:visibility="gone" />
 
                     <TextView
@@ -727,14 +728,14 @@
                         android:layout_below="@+id/listCardCOUnit"
                         android:layout_alignParentEnd="true"
                         android:layout_alignParentBottom="true"
-                        android:layout_marginEnd="22dp"
-                        android:layout_marginBottom="32dp"
+                        android:layout_marginEnd="18dp"
+                        android:layout_marginBottom="26dp"
                         android:fontFamily="@font/pretendardvariable"
                         android:gravity="bottom"
                         android:text="에러"
                         android:textAllCaps="false"
                         android:textColor="@color/statusUnitText"
-                        android:textSize="36sp"
+                        android:textSize="31sp"
                         android:visibility="gone" />
 
                 </RelativeLayout>
@@ -751,12 +752,12 @@
                         android:id="@+id/listCardVIRUSTitle"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="13dp"
+                        android:layout_marginStart="10dp"
                         android:layout_marginTop="18dp"
                         android:fontFamily="@font/pretendardvariable"
                         android:text="@string/virus"
                         android:textColor="@color/textColorMain"
-                        android:textSize="15sp" />
+                        android:textSize="17sp" />
 
                     <TextView
                         android:id="@+id/listCardVIRUSLoadingTv"
@@ -769,19 +770,19 @@
                         android:text="@string/loading_data"
                         android:textAllCaps="false"
                         android:textColor="@color/progressGood"
-                        android:textSize="15sp" />
+                        android:textSize="14sp" />
 
                     <TextView
                         android:id="@+id/listCardVIRUSIndex"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_below="@+id/listCardVIRUSTitle"
-                        android:layout_marginStart="22dp"
-                        android:layout_marginTop="5dp"
+                        android:layout_marginStart="18dp"
+                        android:layout_marginTop="4dp"
                         android:fontFamily="@font/pretendardvariable"
                         android:text="123"
                         android:textColor="@color/statusUnitText"
-                        android:textSize="16sp"
+                        android:textSize="14sp"
                         android:visibility="gone" />
 
                     <TextView
@@ -791,14 +792,14 @@
                         android:layout_below="@+id/listCardVIRUSIndex"
                         android:layout_alignParentEnd="true"
                         android:layout_alignParentBottom="true"
-                        android:layout_marginEnd="22dp"
-                        android:layout_marginBottom="32dp"
+                        android:layout_marginEnd="18dp"
+                        android:layout_marginBottom="26dp"
                         android:fontFamily="@font/pretendardvariable"
                         android:gravity="bottom"
                         android:text="@string/error"
                         android:textAllCaps="false"
                         android:textColor="@color/statusUnitText"
-                        android:textSize="36sp"
+                        android:textSize="31sp"
                         android:visibility="gone" />
                 </RelativeLayout>
             </LinearLayout>

@@ -8,13 +8,13 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/black">
+        android:background="@drawable/bg_image">
 
         <RelativeLayout
             android:id="@+id/langLeftLayout"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:layout_marginStart="76dp"
+            android:layout_marginStart="95dp"
             android:background="#15FFFFFF"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -22,48 +22,48 @@
 
             <ImageView
                 android:id="@+id/langTopLangIconIv"
-                android:layout_width="35dp"
-                android:layout_height="35dp"
-                android:layout_marginStart="31dp"
-                android:layout_marginTop="192dp"
+                android:layout_width="43dp"
+                android:layout_height="45dp"
+                android:layout_marginStart="38dp"
+                android:layout_marginTop="240dp"
                 android:src="@drawable/lang_icon_w" />
 
             <TextView
                 android:id="@+id/langTopLangTitleTv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="11dp"
-                android:layout_marginTop="191dp"
-                android:layout_marginEnd="37dp"
+                android:layout_marginStart="14dp"
+                android:layout_marginTop="238dp"
+                android:layout_marginEnd="46dp"
                 android:layout_toEndOf="@+id/langTopLangIconIv"
                 android:fontFamily="@font/pretendardvariable"
                 android:text="@string/select_lang"
                 android:textAllCaps="false"
                 android:textColor="@color/white"
-                android:textSize="17sp" />
+                android:textSize="20sp" />
 
             <TextView
                 android:id="@+id/langTopLangContentTv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/langTopLangTitleTv"
-                android:layout_marginStart="11dp"
-                android:layout_marginTop="5dp"
-                android:layout_marginEnd="37dp"
+                android:layout_marginStart="14dp"
+                android:layout_marginTop="6dp"
+                android:layout_marginEnd="46dp"
                 android:layout_toEndOf="@+id/langTopLangIconIv"
                 android:fontFamily="@font/pretendardvariable"
                 android:text="@string/please_select_lang_main"
                 android:textAllCaps="false"
                 android:textColor="@color/statusUnitText"
-                android:textSize="14sp" />
+                android:textSize="15sp" />
 
             <ImageView
                 android:id="@+id/langTopConnIconIv"
-                android:layout_width="35dp"
-                android:layout_height="35dp"
+                android:layout_width="43dp"
+                android:layout_height="45dp"
                 android:layout_below="@+id/langTopLangIconIv"
-                android:layout_marginStart="31dp"
-                android:layout_marginTop="46dp"
+                android:layout_marginStart="38dp"
+                android:layout_marginTop="57dp"
                 android:src="@drawable/conn_icon_b" />
 
             <TextView
@@ -71,47 +71,47 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/langTopLangContentTv"
-                android:layout_marginStart="11dp"
-                android:layout_marginTop="37dp"
-                android:layout_marginEnd="37dp"
+                android:layout_marginStart="14dp"
+                android:layout_marginTop="46dp"
+                android:layout_marginEnd="46dp"
                 android:layout_toEndOf="@+id/langTopConnIconIv"
                 android:fontFamily="@font/pretendardvariable"
                 android:text="@string/connect_device"
                 android:textAllCaps="false"
                 android:textColor="@color/statusUnitText"
-                android:textSize="17sp" />
+                android:textSize="20sp" />
 
             <TextView
                 android:id="@+id/langTopConnContentTv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/langTopConnTitleTv"
-                android:layout_marginStart="14dp"
-                android:layout_marginTop="5dp"
-                android:layout_marginEnd="37dp"
+                android:layout_marginStart="17dp"
+                android:layout_marginTop="6dp"
+                android:layout_marginEnd="46dp"
                 android:layout_toEndOf="@+id/langTopLangIconIv"
                 android:fontFamily="@font/pretendardvariable"
                 android:text="@string/please_select_device"
                 android:textAllCaps="false"
                 android:textColor="@color/statusUnitText"
-                android:textSize="14sp" />
+                android:textSize="15sp" />
 
         </RelativeLayout>
 
         <View
             android:layout_width="3dp"
-            android:layout_height="80dp"
-            android:layout_marginTop="265dp"
+            android:layout_height="100dp"
+            android:layout_marginTop="280dp"
             android:background="@color/white"
             app:layout_constraintStart_toEndOf="@+id/langLeftLayout"
             app:layout_constraintTop_toTopOf="parent" />
 
         <ImageView
             android:id="@+id/langKorIconIv"
-            android:layout_width="88dp"
-            android:layout_height="88dp"
-            android:layout_marginStart="155dp"
-            android:layout_marginTop="195dp"
+            android:layout_width="110dp"
+            android:layout_height="110dp"
+            android:layout_marginStart="194dp"
+            android:layout_marginTop="243dp"
             android:src="@drawable/kor_image"
             app:layout_constraintStart_toEndOf="@+id/langLeftLayout"
             app:layout_constraintTop_toTopOf="parent" />
@@ -120,21 +120,21 @@
             android:id="@+id/langKorTitleTv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="12dp"
             android:fontFamily="@font/pretendardvariable"
             android:text="@string/korean_lang"
             android:textAllCaps="false"
             android:textColor="@color/white"
-            android:textSize="18sp"
+            android:textSize="21sp"
             app:layout_constraintEnd_toEndOf="@+id/langKorIconIv"
             app:layout_constraintStart_toStartOf="@+id/langKorIconIv"
             app:layout_constraintTop_toBottomOf="@+id/langKorIconIv" />
 
         <ImageView
             android:id="@+id/langEngIconIv"
-            android:layout_width="88dp"
-            android:layout_height="88dp"
-            android:layout_marginStart="44dp"
+            android:layout_width="110dp"
+            android:layout_height="110dp"
+            android:layout_marginStart="55dp"
             android:src="@drawable/eng_image"
             app:layout_constraintBottom_toBottomOf="@+id/langKorIconIv"
             app:layout_constraintStart_toEndOf="@+id/langKorIconIv"
@@ -148,7 +148,7 @@
             android:text="@string/eng_lang"
             android:textAllCaps="false"
             android:textColor="@color/white"
-            android:textSize="18sp"
+            android:textSize="21sp"
             app:layout_constraintBottom_toBottomOf="@+id/langKorTitleTv"
             app:layout_constraintEnd_toEndOf="@+id/langEngIconIv"
             app:layout_constraintStart_toStartOf="@+id/langEngIconIv"
@@ -156,15 +156,15 @@
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/langOkTv"
-            android:layout_width="207dp"
-            android:layout_height="40dp"
-            android:layout_marginTop="88dp"
+            android:layout_width="258dp"
+            android:layout_height="49dp"
+            android:layout_marginTop="112dp"
             android:background="@drawable/lang_ok_b"
             android:fontFamily="@font/pretendardvariable"
             android:gravity="center"
             android:text="@string/ok"
             android:textColor="@color/statusUnitText"
-            android:textSize="18sp"
+            android:textSize="20sp"
             app:layout_constraintEnd_toEndOf="@+id/langEngIconIv"
             app:layout_constraintStart_toStartOf="@+id/langKorIconIv"
             app:layout_constraintTop_toBottomOf="@+id/langKorTitleTv" />

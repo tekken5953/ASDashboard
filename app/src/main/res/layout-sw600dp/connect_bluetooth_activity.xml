@@ -8,7 +8,7 @@
         android:id="@+id/mainLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/black">
+        android:background="@drawable/bg_image">
 
         <ProgressBar
             android:id="@+id/loadingParingPb"
@@ -33,10 +33,10 @@
 
             <ImageView
                 android:id="@+id/connTopBackIv"
-                android:layout_width="22dp"
-                android:layout_height="22dp"
-                android:layout_marginStart="26dp"
-                android:layout_marginTop="26dp"
+                android:layout_width="27dp"
+                android:layout_height="27dp"
+                android:layout_marginStart="32dp"
+                android:layout_marginTop="32dp"
                 android:background="@drawable/ripple_round"
                 android:padding="3dp"
                 android:src="@drawable/back"
@@ -47,7 +47,7 @@
                 android:id="@+id/connLeftLayout"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:layout_marginStart="76dp"
+                android:layout_marginStart="95dp"
                 android:background="#15FFFFFF"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -55,10 +55,10 @@
 
                 <ImageView
                     android:id="@+id/connTopLangIconIv"
-                    android:layout_width="39dp"
-                    android:layout_height="39dp"
-                    android:layout_marginStart="29dp"
-                    android:layout_marginTop="192dp"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:layout_marginStart="36dp"
+                    android:layout_marginTop="240dp"
                     android:onClick="onClick"
                     android:src="@drawable/lang_icon_b" />
 
@@ -66,40 +66,40 @@
                     android:id="@+id/connTopLangTitleTv"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="11dp"
-                    android:layout_marginTop="190dp"
-                    android:layout_marginEnd="26dp"
+                    android:layout_marginStart="14dp"
+                    android:layout_marginTop="238dp"
+                    android:layout_marginEnd="32dp"
                     android:layout_toEndOf="@+id/connTopLangIconIv"
                     android:fontFamily="@font/pretendardvariable"
                     android:onClick="onClick"
                     android:text="@string/select_lang"
                     android:textAllCaps="false"
                     android:textColor="@color/statusUnitText"
-                    android:textSize="17sp" />
+                    android:textSize="20sp" />
 
                 <TextView
                     android:id="@+id/connTopLangContentTv"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/connTopLangTitleTv"
-                    android:layout_marginStart="11dp"
-                    android:layout_marginTop="5dp"
-                    android:layout_marginEnd="26dp"
+                    android:layout_marginStart="14dp"
+                    android:layout_marginTop="6dp"
+                    android:layout_marginEnd="32dp"
                     android:layout_toEndOf="@+id/connTopLangIconIv"
                     android:fontFamily="@font/pretendardvariable"
                     android:onClick="onClick"
                     android:text="@string/please_select_lang_main"
                     android:textAllCaps="false"
                     android:textColor="@color/statusUnitText"
-                    android:textSize="14sp" />
+                    android:textSize="15sp" />
 
                 <ImageView
                     android:id="@+id/connTopConnIconIv"
-                    android:layout_width="39dp"
-                    android:layout_height="39dp"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
                     android:layout_below="@+id/connTopLangContentTv"
-                    android:layout_marginStart="29dp"
-                    android:layout_marginTop="46dp"
+                    android:layout_marginStart="36dp"
+                    android:layout_marginTop="57dp"
                     android:src="@drawable/conn_icon_w" />
 
                 <TextView
@@ -107,30 +107,30 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/connTopLangContentTv"
-                    android:layout_marginStart="11dp"
-                    android:layout_marginTop="46dp"
-                    android:layout_marginEnd="26dp"
+                    android:layout_marginStart="14dp"
+                    android:layout_marginTop="57dp"
+                    android:layout_marginEnd="32dp"
                     android:layout_toEndOf="@+id/connTopConnIconIv"
                     android:fontFamily="@font/pretendardvariable"
                     android:text="@string/connect_device"
                     android:textAllCaps="false"
                     android:textColor="@color/white"
-                    android:textSize="17sp" />
+                    android:textSize="20sp" />
 
                 <TextView
                     android:id="@+id/connTopConnContentTv"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/connTopConnTitleTv"
-                    android:layout_marginStart="11dp"
-                    android:layout_marginTop="5dp"
-                    android:layout_marginEnd="26dp"
+                    android:layout_marginStart="14dp"
+                    android:layout_marginTop="6dp"
+                    android:layout_marginEnd="32dp"
                     android:layout_toEndOf="@+id/connTopLangIconIv"
                     android:fontFamily="@font/pretendardvariable"
                     android:text="@string/please_select_device"
                     android:textAllCaps="false"
                     android:textColor="@color/statusUnitText"
-                    android:textSize="14sp" />
+                    android:textSize="15sp" />
 
             </RelativeLayout>
 
@@ -138,21 +138,21 @@
                 android:id="@+id/connConnectedDeviceTv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="42dp"
-                android:layout_marginBottom="26dp"
+                android:layout_marginStart="52dp"
+                android:layout_marginBottom="32dp"
                 android:fontFamily="@font/pretendardvariable"
                 android:text="@string/connected_device"
                 android:textAllCaps="false"
                 android:textColor="@color/white"
-                android:textSize="18sp"
+                android:textSize="21sp"
                 app:layout_constraintBottom_toTopOf="@+id/connPairedDeviceRv"
                 app:layout_constraintStart_toEndOf="@+id/connLeftLayout" />
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/connPairedDeviceRv"
                 android:layout_width="wrap_content"
-                android:layout_height="256dp"
-                android:layout_marginBottom="13dp"
+                android:layout_height="320dp"
+                android:layout_marginBottom="16dp"
                 android:orientation="vertical"
                 android:overScrollMode="never"
                 android:scrollbars="none"
@@ -169,23 +169,23 @@
                 android:id="@+id/connConnectableDeviceTv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="51dp"
-                android:layout_marginEnd="61dp"
-                android:layout_marginBottom="26dp"
+                android:layout_marginStart="64dp"
+                android:layout_marginEnd="76dp"
+                android:layout_marginBottom="32dp"
                 android:fontFamily="@font/pretendardvariable"
                 android:text="@string/connectable_device"
                 android:textAllCaps="false"
                 android:textColor="@color/white"
-                android:textSize="18sp"
+                android:textSize="21sp"
                 app:layout_constraintBottom_toTopOf="@+id/connConnectableRv"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/connConnectedDeviceTv" />
 
             <ImageView
                 android:id="@+id/connRefreshIv"
-                android:layout_width="21dp"
-                android:layout_height="21dp"
-                android:layout_marginStart="8dp"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:layout_marginStart="10dp"
                 android:background="@drawable/ripple_round"
                 android:descendantFocusability="blocksDescendants"
                 android:padding="3dp"
@@ -198,11 +198,11 @@
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/connConnectableRv"
                 android:layout_width="wrap_content"
-                android:layout_height="256dp"
-                android:layout_marginBottom="13dp"
+                android:layout_height="320dp"
+                android:layout_marginBottom="16dp"
                 android:orientation="vertical"
                 android:overScrollMode="never"
-                android:padding="3dp"
+                android:padding="4dp"
                 android:scrollbarFadeDuration="0"
                 android:scrollbars="vertical"
                 android:splitMotionEvents="false"
@@ -215,15 +215,15 @@
 
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/connOkTv"
-                android:layout_width="207dp"
-                android:layout_height="40dp"
-                android:layout_marginTop="38dp"
+                android:layout_width="258dp"
+                android:layout_height="49dp"
+                android:layout_marginTop="44dp"
                 android:background="@drawable/lang_ok_b"
                 android:fontFamily="@font/pretendardvariable"
                 android:gravity="center"
                 android:text="@string/ok"
                 android:textColor="@color/statusUnitText"
-                android:textSize="18sp"
+                android:textSize="21sp"
                 app:layout_constraintEnd_toStartOf="@+id/connConnectableDeviceTv"
                 app:layout_constraintStart_toEndOf="@+id/connConnectedDeviceTv"
                 app:layout_constraintTop_toBottomOf="@+id/connConnectableRv" />
