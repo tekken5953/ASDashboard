@@ -83,7 +83,7 @@
             <TextView
                 android:id="@+id/humidTv"
                 android:layout_width="wrap_content"
-                android:layout_height="19dp"
+                android:layout_height="wrap_content"
                 android:fontFamily="@font/pretendardvariable"
                 android:gravity="center"
                 android:text="null"
@@ -95,11 +95,12 @@
 
             <TextView
                 android:id="@+id/humidUnitTv"
-                android:layout_width="27dp"
-                android:layout_height="19dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_marginEnd="58dp"
                 android:fontFamily="@font/pretendardvariable"
                 android:gravity="center"
+                android:layout_marginStart="3dp"
                 android:text="%"
                 android:textColor="@color/textColorMain"
                 android:textSize="16sp"
@@ -200,40 +201,40 @@
 
                         <TextView
                             android:layout_width="wrap_content"
-                            android:layout_height="13dp"
+                            android:layout_height="wrap_content"
                             android:layout_weight="0.17"
                             android:fontFamily="@font/pretendardvariable"
-                            android:gravity="start"
+                            android:gravity="start|top"
                             android:text="0"
                             android:textColor="@color/white"
                             android:textSize="13sp" />
 
                         <TextView
                             android:layout_width="wrap_content"
-                            android:layout_height="13dp"
+                            android:layout_height="wrap_content"
                             android:layout_weight="0.17"
                             android:fontFamily="@font/pretendardvariable"
-                            android:gravity="start"
+                            android:gravity="start|top"
                             android:text="51"
                             android:textColor="@color/white"
                             android:textSize="13sp" />
 
                         <TextView
                             android:layout_width="wrap_content"
-                            android:layout_height="13dp"
+                            android:layout_height="wrap_content"
                             android:layout_weight="0.5"
                             android:fontFamily="@font/pretendardvariable"
-                            android:gravity="start"
+                            android:gravity="start|top"
                             android:text="101"
                             android:textColor="@color/white"
                             android:textSize="13sp" />
 
                         <TextView
                             android:layout_width="wrap_content"
-                            android:layout_height="13dp"
+                            android:layout_height="wrap_content"
                             android:layout_weight="0.16"
                             android:fontFamily="@font/pretendardvariable"
-                            android:gravity="start"
+                            android:gravity="start|top"
                             android:text="251"
                             android:textColor="@color/white"
                             android:textSize="13sp" />
@@ -620,6 +621,8 @@
                         android:layout_marginTop="8dp"
                         android:fontFamily="@font/pretendardvariable"
                         android:text="null"
+                        android:ellipsize="end"
+                        android:lines="1"
                         android:textColor="@color/progressGood"
                         android:textSize="20sp"
                         android:visibility="gone" />

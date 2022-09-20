@@ -55,13 +55,26 @@
         android:layout_marginStart="17dp"
         android:fontFamily="@font/pretendardvariable"
         android:gravity="center"
-        android:text="@string/power_off"
+        android:text="@string/power"
         android:textAllCaps="false"
         android:textColor="@color/white"
         android:textSize="30sp"
         app:layout_constraintBottom_toBottomOf="@+id/sideMenuPowerIv"
         app:layout_constraintStart_toEndOf="@+id/sideMenuPowerIv"
         app:layout_constraintTop_toTopOf="@+id/sideMenuPowerIv" />
+
+<!--    <TextView-->
+<!--        android:id="@+id/getCurrentPowerTv"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:text="@string/get_power_on"-->
+<!--        android:textSize="22sp"-->
+<!--        android:textColor="@android:color/holo_green_light"-->
+<!--        app:layout_constraintTop_toBottomOf="@+id/sideMenuPowerOffTv"-->
+<!--        app:layout_constraintBottom_toTopOf="@+id/sideMenuLine1"-->
+<!--        app:layout_constraintStart_toStartOf="@+id/sideMenuPowerIv"-->
+<!--        android:layout_marginStart="21sp"-->
+<!--        android:fontFamily="@font/pretendardvariable"/>-->
 
     <View
         android:id="@+id/sideMenuLine1"

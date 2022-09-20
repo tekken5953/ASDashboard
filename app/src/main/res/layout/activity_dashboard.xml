@@ -14,7 +14,7 @@
         android:id="@+id/dashboardMainLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/black">
+        android:background="@drawable/bg_image">
 
         <ProgressBar
             android:id="@+id/loadingPb"
@@ -95,12 +95,13 @@
 
             <TextView
                 android:id="@+id/humidUnitTv"
-                android:layout_width="18dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="46dp"
                 android:fontFamily="@font/pretendardvariable"
                 android:gravity="center"
                 android:text="%"
+                android:layout_marginStart="3dp"
                 android:textColor="@color/textColorMain"
                 android:textSize="14sp"
                 app:layout_constraintBottom_toBottomOf="@+id/currentTimeTv"
@@ -203,7 +204,7 @@
                             android:layout_height="wrap_content"
                             android:layout_weight="0.17"
                             android:fontFamily="@font/pretendardvariable"
-                            android:gravity="start"
+                            android:gravity="start|top"
                             android:text="0"
                             android:textColor="@color/white"
                             android:textSize="12sp" />
@@ -213,7 +214,7 @@
                             android:layout_height="wrap_content"
                             android:layout_weight="0.17"
                             android:fontFamily="@font/pretendardvariable"
-                            android:gravity="start"
+                            android:gravity="start|top"
                             android:text="51"
                             android:textColor="@color/white"
                             android:textSize="12sp" />
@@ -223,7 +224,7 @@
                             android:layout_height="wrap_content"
                             android:layout_weight="0.5"
                             android:fontFamily="@font/pretendardvariable"
-                            android:gravity="start"
+                            android:gravity="start|top"
                             android:text="101"
                             android:textColor="@color/white"
                             android:textSize="12sp" />
@@ -233,7 +234,7 @@
                             android:layout_height="wrap_content"
                             android:layout_weight="0.16"
                             android:fontFamily="@font/pretendardvariable"
-                            android:gravity="start"
+                            android:gravity="start|top"
                             android:text="251"
                             android:textColor="@color/white"
                             android:textSize="12sp" />
@@ -622,6 +623,8 @@
                         android:layout_marginTop="5dp"
                         android:fontFamily="@font/pretendardvariable"
                         android:text="null"
+                        android:ellipsize="end"
+                        android:lines="1"
                         android:textColor="@color/progressGood"
                         android:textSize="14sp"
                         android:visibility="gone" />

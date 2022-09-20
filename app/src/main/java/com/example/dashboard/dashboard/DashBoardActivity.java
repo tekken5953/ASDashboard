@@ -23,6 +23,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.Color;
+import android.media.Image;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -131,7 +132,7 @@ public class DashBoardActivity extends AppCompatActivity {
 
     @Override
     protected void onDestroy() {
-        Log.d(TAG_BTThread, "onDestroy");
+        Log.i(TAG_BTThread, "onDestroy");
         super.onDestroy();
 
         if (data_timerTask != null)
@@ -154,7 +155,7 @@ public class DashBoardActivity extends AppCompatActivity {
 
     @Override
     protected void onResume() {
-        Log.d(TAG_BTThread, "onResume");
+        Log.i(TAG_BTThread, "onResume");
         super.onResume();
         outerClass.FullScreenMode(context);
     }
@@ -162,7 +163,7 @@ public class DashBoardActivity extends AppCompatActivity {
     @SuppressLint("NotifyDataSetChanged")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        Log.d(TAG_BTThread, "onCreate");
+        Log.i(TAG_BTThread, "onCreate");
         super.onCreate(savedInstanceState);
         binding = DataBindingUtil.setContentView(DashBoardActivity.this, R.layout.activity_dashboard);
         viewModel = new ViewModelProvider(DashBoardActivity.this).get(BluetoothThread.DataShareViewModel.class);
@@ -239,7 +240,7 @@ public class DashBoardActivity extends AppCompatActivity {
     @SuppressLint("MissingPermission")
     @Override
     public void onWindowFocusChanged(boolean hasFocus) {
-        Log.d(TAG_BTThread, "onWindowFocusChanged");
+        Log.i(TAG_BTThread, "onWindowFocusChanged");
         if (hasFocus) {
 
             outerClass.FullScreenMode(context);
@@ -371,12 +372,10 @@ public class DashBoardActivity extends AppCompatActivity {
             CompletableFuture.runAsync(() -> {
                 deviceType = Arrays.toString(body.getCharArray("47"));
 
-                Log.d(TAG_BTThread, "Device Type is " + deviceType);
+                Log.i(TAG_BTThread, "Device Type is " + deviceType);
 
                 System.out.println("Device Type : " + Arrays.toString(body.getCharArray("47")));
             }).thenAcceptAsync(b -> {
-                // DeviceFragment.DEVICE_TYPE_MINI
-                if (deviceType.equals("[T, I]")) {
 
                     bluetoothThread.writeHex(makeFrame(
                             new byte[]{REQUEST_INDIVIDUAL_STATE},
@@ -402,27 +401,27 @@ public class DashBoardActivity extends AppCompatActivity {
                             },
                             bluetoothThread.getSequence()
                     ));
-                }
+
             });
         }
 
         // S/N
         if (body.containsKey("48")) {
             serialNumber = new String(body.getCharArray("48"));
-            Log.d(TAG_BTThread, "Serial Number is " + serialNumber);
+            Log.i(TAG_BTThread, "Serial Number is " + serialNumber);
         }
 
         // 설치날짜
         if (body.containsKey("46")) {
             setup_date = body.getInt("46");
             setUpDateStr = setup_date + "";
-            Log.d(TAG_BTThread, "SetUp Date is " + setup_date + "");
+            Log.i(TAG_BTThread, "SetUp Date is " + setup_date + "");
         }
 
         // 현재 풍량 정보
         if (body.containsKey("3A")) {
             current_fan_byte = body.getByte("3A");
-            Log.d(TAG_BTThread, "Current Fan is " + current_fan_byte);
+            Log.i(TAG_BTThread, "Current Fan is " + current_fan_byte);
         }
 
         // 온도
@@ -568,14 +567,16 @@ public class DashBoardActivity extends AppCompatActivity {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        // 어플 강제종료
+                        if (bluetoothThread.getDeviceName().startsWith("BS_M")) {
+                            // 어플 강제종료
 //                        android.os.Process.killProcess(android.os.Process.myPid());
-                        Toast.makeText(context, getString(R.string.exit_complete), Toast.LENGTH_SHORT).show();
-                        // 어플 재시작
-                        finishAffinity();
-                        Intent intent = new Intent(DashBoardActivity.this, LanguageSelectActivity.class);
-                        startActivity(intent);
-                        System.exit(0);
+                            Toast.makeText(context, getString(R.string.exit_complete), Toast.LENGTH_SHORT).show();
+                            // 어플 재시작
+                            finishAffinity();
+                            Intent intent = new Intent(DashBoardActivity.this, LanguageSelectActivity.class);
+                            startActivity(intent);
+                            System.exit(0);
+                        }
                     }
                 });
             }
@@ -585,16 +586,16 @@ public class DashBoardActivity extends AppCompatActivity {
             if (fan_control_byte != 0x00) {
                 if (fan_control_byte == 0x01) {
                     bluetoothThread.writeHex(makeFrame(new byte[]{REQUEST_CONTROL}, generateTag((byte) 0x3A, new byte[]{0x01}), bluetoothThread.getSequence()));
-                    Log.d(TAG_BTThread, "Fan 수면 단계");
+                    Log.i(TAG_BTThread, "Fan 수면 단계");
                 } else if (fan_control_byte == 0x02) {
                     bluetoothThread.writeHex(makeFrame(new byte[]{REQUEST_CONTROL}, generateTag((byte) 0x3A, new byte[]{0x02}), bluetoothThread.getSequence()));
-                    Log.d(TAG_BTThread, "Fan 약 단계");
+                    Log.i(TAG_BTThread, "Fan 약 단계");
                 } else if (fan_control_byte == 0x03) {
                     bluetoothThread.writeHex(makeFrame(new byte[]{REQUEST_CONTROL}, generateTag((byte) 0x3A, new byte[]{0x03}), bluetoothThread.getSequence()));
-                    Log.d(TAG_BTThread, "Fan 강 단계");
+                    Log.i(TAG_BTThread, "Fan 강 단계");
                 } else if (fan_control_byte == 0x04) {
                     bluetoothThread.writeHex(makeFrame(new byte[]{REQUEST_CONTROL}, generateTag((byte) 0x3A, new byte[]{0x04}), bluetoothThread.getSequence()));
-                    Log.d(TAG_BTThread, "Fan 터보 단계");
+                    Log.i(TAG_BTThread, "Fan 터보 단계");
                 }
             } else {
                 Log.e(TAG_BTThread, "Error 발생");
@@ -643,8 +644,8 @@ public class DashBoardActivity extends AppCompatActivity {
                     binding.dashboardMainLayout.setEnabled(true);
                     // 모델명을 불러옵니다
                     modelName = bluetoothThread.getDeviceName();
-                    Log.d(TAG_BTThread, "Bluetooth Socket is Connected");
-                    Log.d(TAG_BTThread, "setDevice by : " + bluetoothThread.getDeviceName());
+                    Log.i(TAG_BTThread, "Bluetooth Socket is Connected");
+                    Log.i(TAG_BTThread, "setDevice by : " + bluetoothThread.getDeviceName());
 
                     // 최초 데이터인 모듈 설치날짜와 모델명을 API 를 통해 스레드에 요청합니다
 //                                센서 장착 여부 및 GPS 정보 요청
@@ -666,8 +667,8 @@ public class DashBoardActivity extends AppCompatActivity {
                 @Override
                 public void onDisconnectedEvent() {
                     binding.dashboardMainLayout.setEnabled(false);
-                    Log.d(TAG_BTThread, "Bluetooth Socket is Disconnected");
-                    Log.d(TAG_BTThread, "Running : " + bluetoothThread.isRunning());
+                    Log.i(TAG_BTThread, "Bluetooth Socket is Disconnected");
+                    Log.i(TAG_BTThread, "Running : " + bluetoothThread.isRunning());
 
                     runOnUiThread(new Runnable() {
                         @Override
@@ -694,11 +695,11 @@ public class DashBoardActivity extends AppCompatActivity {
 
             if (bluetoothThread.isConnected()) {
                 bluetoothThread.start();
-                Log.d(TAG_BTThread, "BluetoothThread is Run");
+                Log.i(TAG_BTThread, "BluetoothThread is Run");
 
                 try {
                     regDataListener(dataScheduler);
-                    Log.d(TAG_BTThread, "Loop Data Request");
+                    Log.i(TAG_BTThread, "Loop Data Request");
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
@@ -889,7 +890,7 @@ public class DashBoardActivity extends AppCompatActivity {
         filter.addAction(FAN_CONTROL_COMPLETE);
         registerReceiver(mReceiver, filter);
 
-        Log.d(TAG_BTThread, "Add Side Menu Complete");
+        Log.i(TAG_BTThread, "Add Side Menu Complete");
         sidebar = new SideBarCustomView(context);
 
         binding.viewSildebar.addView(sidebar);
@@ -963,6 +964,7 @@ public class DashBoardActivity extends AppCompatActivity {
                 builder.setView(view);
                 final AlertDialog alertDialog = builder.create();
                 final TextView dialog_ok = view.findViewById(R.id.sidedialogOkTv);
+                final TextView dialog_msg = view.findViewById(R.id.sideDialogContextTv);
                 final TextView dialog_cancel = view.findViewById(R.id.sidedialogCancelTv);
 
                 dialog_ok.setOnClickListener(new View.OnClickListener() {
@@ -1080,6 +1082,25 @@ public class DashBoardActivity extends AppCompatActivity {
     private void showMenu() {
         outerClass.CallVibrate(context, 10);
         isMenuShow = true;
+
+        if (bluetoothThread.isRunning()) {
+            // 모델명을 불러옵니다
+            modelName = bluetoothThread.getDeviceName();
+            Log.i(TAG_BTThread, "setDevice by : " + bluetoothThread.getDeviceName());
+
+            // 최초 데이터인 모듈 설치날짜와 모델명을 API 를 통해 스레드에 요청합니다
+//                                센서 장착 여부 및 GPS 정보 요청
+            bluetoothThread.writeHex(makeFrame(
+                    new byte[]{REQUEST_INDIVIDUAL_STATE},
+                    new byte[]{
+                            0x46, 0x00, 0x00, // 모듈설치날짜
+                            0x47, 0x00, 0x00,  // 모델명
+                            0x48, 0x00, 0x00,  // S/N
+                            0x3A, 0x00, 0x00  // 현재바람세기
+                    },
+                    bluetoothThread.getSequence()
+            ));
+        }
 
         Animation slide = AnimationUtils.loadAnimation(context, R.anim.sidebar_show);
         binding.viewSildebar.startAnimation(slide);
@@ -1490,13 +1511,13 @@ public class DashBoardActivity extends AppCompatActivity {
 
     private void SetFinalLocale() {
         if (SharedPreferenceManager.getString(context, "final").equals("en")) {
-            Log.d(TAG_BTThread, "Language is ENGLISH");
+            Log.i(TAG_BTThread, "Language is ENGLISH");
             outerClass.setLocaleToEnglish(context);
         } else if (SharedPreferenceManager.getString(context, "final").equals("ko")) {
-            Log.d(TAG_BTThread, "Language is KOREAN");
+            Log.i(TAG_BTThread, "Language is KOREAN");
             outerClass.setLocaleToKorea(context);
         } else {
-            Log.d(TAG_BTThread, "Language is DEFAULT");
+            Log.i(TAG_BTThread, "Language is DEFAULT");
             outerClass.setLocaleToKorea(context);
         }
     }

@@ -136,13 +136,6 @@ public class ConnectDeviceActivity extends AppCompatActivity {
         noBondedList = new ArrayList<>();
         bondedList = new ArrayList<>();
 
-        DisplayMetrics metrics = new DisplayMetrics();
-        getWindowManager().getDefaultDisplay().getMetrics(metrics);
-        float scaleFactor = metrics.density;
-        float widthDp = metrics.widthPixels / scaleFactor;
-        float heightDp = metrics.heightPixels / scaleFactor;
-        Log.d("sizeDp",">>> size.x : " + widthDp + ", size.y : " + heightDp );
-
         // 블루투스 어댑터를 초기화합니다
         bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
 
@@ -491,6 +484,7 @@ public class ConnectDeviceActivity extends AppCompatActivity {
 
         if (!bluetoothAdapter.isDiscovering()) {
             bluetoothAdapter.startDiscovery();
+            binding.connRefreshIv.setVisibility(View.VISIBLE);
             Log.d("Discovery", "Start Discovery");
         }
 

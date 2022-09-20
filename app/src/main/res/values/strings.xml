@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">BS-Dashboard</string>
+    <string name="app_name">AS-Dashboard</string>
     <string name="good">좋음</string>
     <string name="normal">보통</string>
     <string name="bad">나쁨</string>
@@ -53,6 +53,8 @@
     <string name="no_data_error">그래프를 그리는 도중 오류가 발생했습니다</string>
     <string name="settings">설정</string>
     <string name="power_off">전원 끄기</string>
+    <string name="power_on">전원 켜기</string>
+    <string name="power">전원</string>
     <string name="fan_control">풍량 조절</string>
     <string name="fan_first">1단</string>
     <string name="fan_second">2단</string>
@@ -60,13 +62,14 @@
     <string name="fan_fourth">4단</string>
     <string name="product_info">제품 정보</string>
     <string name="product_type">제품명</string>
-    <string name="bio_sentinel_100">Bio Sentinel-100</string>
+    <string name="bio_sentinel_100">Air Sentinel-100</string>
     <string name="serial_num">시리얼 번호</string>
     <string name="setup_date">설치 날짜</string>
     <string name="company_name">에어시그널(주)</string>
     <string name="information">고객센터 031–756–1251</string>
     <string name="web_site">http://www.airsignal.kr</string>
-    <string name="ask_turn_off">전원을 끄시겠습니까?</string>
+    <string name="ask_turn_off">전원상태를 변경하시겠습니까?</string>
+    <string name="ask_turn_on">전원을 켜시겠습니까?</string>
     <string name="already_connected">이미 연결된 디바이스 입니다</string>
     <string name="exit_complete">장치를 종료했습니다</string>
     <string name="fail_to_change">변경에 실패했습니다</string>
@@ -78,4 +81,6 @@
     <string name="loading_data">데이터를 불러오고 있습니다</string>
     <string name="light_error">일시적인 오류입니다. 다시 접속해주세요</string>
     <string name="unknown_error">예기치 못한 에러가 발생했습니다\n복구중입니다</string>
+    <string name="get_power_on">현재 상태 : 켜짐</string>
+    <string name="get_power_off">현재 상태 : 꺼짐</string>
 </resources>

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">BS-Dashboard</string>
+    <string name="app_name">AS-Dashboard</string>
     <string name="good">Good</string>
     <string name="normal">Normal</string>
     <string name="bad">Bad</string>
@@ -53,6 +53,8 @@
     <string name="no_data_error">An error occurred while drawing the graph</string>
     <string name="settings">Settings</string>
     <string name="power_off">Power Off</string>
+    <string name="power_on">Power On</string>
+    <string name="power">Power</string>
     <string name="fan_control">Air Volume Control</string>
     <string name="fan_first">1st</string>
     <string name="fan_second">2nd</string>
@@ -60,13 +62,14 @@
     <string name="fan_fourth">4th</string>
     <string name="product_info">Product Info</string>
     <string name="product_type">Product Type</string>
-    <string name="bio_sentinel_100">Bio Sentinel-100</string>
+    <string name="bio_sentinel_100">Air Sentinel-100</string>
     <string name="serial_num">Serial Number</string>
     <string name="setup_date">SetUp Date</string>
     <string name="company_name">AirSignal Corp.</string>
     <string name="information">Call 031–756–1251</string>
     <string name="web_site">http://www.airsignal.kr</string>
-    <string name="ask_turn_off">Turn Off the Mini?</string>
+    <string name="ask_turn_off">Change the Power State?</string>
+    <string name="ask_turn_on">Turn On the AS-100?</string>
     <string name="already_connected">Already Connected Device</string>
     <string name="exit_complete">Device has been shut down</string>
     <string name="fail_to_change">Fail to changes</string>
@@ -78,4 +81,6 @@
     <string name="loading_data">Loading Data</string>
     <string name="light_error">Temporary error. Please connect again</string>
     <string name="unknown_error">An unexpected error has occurred\nRecovering</string>
+    <string name="get_power_on">Current Power : On</string>
+    <string name="get_power_off">Current Power : Off</string>
 </resources>
