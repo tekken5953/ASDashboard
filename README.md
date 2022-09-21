@@ -16,3 +16,6 @@ Airsignal BS DashBoard
 
 </br><h1>블루투스 체크</h1></br>
 ![블루투스 체크](https://user-images.githubusercontent.com/52855326/191411709-cae4f183-578a-47a3-8b7f-b20d403f7491.png)
+
+</br><h1>바이러스 지수 계산</h1></br>
+![바이러스 계산](https://user-images.githubusercontent.com/52855326/191629041-ea85da33-bd84-465a-a6b6-96ec5ab16731.png)
