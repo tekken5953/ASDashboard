@@ -21,10 +21,12 @@
     <string name="error">에러</string>
     <string name="day">오전</string>
     <string name="night">오후</string>
+    <string name="mqtt_connect_btn">연결</string>
+    <string name="mqtt_error_get_user_id">유저 정보를 받아오는데 실패했습니다.\n데이터 전송이 일시적으로 중단되었습니다</string>
     <string name="not_paring">연결된 디바이스 없음</string>
     <string name="no_bluetooth_device">해당 기기는 블루투스를 지원하지 않습니다</string>
     <string name="caution_title">경고</string>
-    <string name="caution_message">장치와의 연결이 끊어졌습니다.\n 전원을 확인 후 다시 접속해주세요</string>
+    <string name="caution_message">장치와의 연결이 끊어졌습니다.\n다시 연결 해 주세요</string>
     <string name="reconnect_bt_msg">블루투스 연결이 끊어졌습니다.\n다시 블루투스에 연결하시겠습니까?</string>
     <string name="reconnect_bt_ok">연결</string>
     <string name="caution_ok">확인</string>
@@ -42,7 +44,7 @@
     <string name="connectable_device">사용 가능한 디바이스</string>
     <string name="complete_select_lang">선택하신 언어로 적용되었습니다</string>
     <string name="skip_lang_msg">언어를 자동으로 설정하였습니다</string>
-    <string name="connect">연결하기</string>
+    <string name="connect">등록하기</string>
     <string name="exit_app_title">종료</string>
     <string name="exit_app_message">대쉬보드를 종료하시겠습니까?</string>
     <string name="exit_app_yes">예</string>
@@ -83,4 +85,23 @@
     <string name="unknown_error">예기치 못한 에러가 발생했습니다\n복구중입니다</string>
     <string name="get_power_on">현재 상태 : 켜짐</string>
     <string name="get_power_off">현재 상태 : 꺼짐</string>
+    <string name="refresh_device">검색</string>
+    <string name="perm_title">AS DashBoard는 다음 권한을 필요로 합니다</string>
+    <string name="perm_essential">필수 권한</string>
+    <string name="perm_selectable">선택 권한</string>
+    <string name="perm_gps_title">위치 권한</string>
+    <string name="perm_gps_content">위치정보를 불러올 때 필요합니다</string>
+    <string name="perm_bt_title">블루투스 권한</string>
+    <string name="perm_bt_content">장치 스캔 및 연결 시 필요합니다\n</string>
+    <string name="perm_wifi_title">와이파이 권한</string>
+    <string name="perm_wifi_content">데이터 전송 및 수신에 필요합니다</string>
+    <string name="perm_accept">승인</string>
+    <string name="perm_deny">거부</string>
+    <string name="mqtt">Mqtt</string>
+    <string name="mqtt_deny">데이터 전송을 거부합니다</string>
+    <string name="mqtt_accept">데이터 전송을 허용합니다</string>
+    <string name="mqtt_caution_msg">인터넷에 연결하거나 인터넷 사용 체크를 해제하여 주십시오</string>
+    <string name="mqtt_connect">인터넷에 연결되었습니다</string>
+    <string name="mqtt_wifi_reconnect_s">인터넷 연결복구 성공</string>
+    <string name="mqtt_wifi_reconnect_f">인터넷 연결복구 실패</string>
 </resources>

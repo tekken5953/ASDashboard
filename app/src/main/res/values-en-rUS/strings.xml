@@ -28,7 +28,7 @@
     <string name="caution_back">Back</string>
     <string name="caution_message">The Connection has been lost\nPlease check the Device and reconnect</string>
     <string name="reconnect_bt_msg">Disconnected to Bluetooth\nRetry to Connect Device?</string>
-    <string name="reconnect_bt_ok">연결</string>
+    <string name="reconnect_bt_ok">Connect</string>
     <string name="caution_ok">OK</string>
     <string name="select_lang">01 Select Language</string>
     <string name="connect_device">02 Connect Device</string>
@@ -42,7 +42,7 @@
     <string name="connectable_device">Device List</string>
     <string name="complete_select_lang">Language Setting is Complete</string>
     <string name="skip_lang_msg">Language Set to Automatic </string>
-    <string name="connect">Connect</string>
+    <string name="connect">Pairing</string>
     <string name="exit_app_title">Exit</string>
     <string name="exit_app_message">Do you want to Exit this App?</string>
     <string name="exit_app_yes">Yes</string>
@@ -74,7 +74,7 @@
     <string name="exit_complete">Device has been shut down</string>
     <string name="fail_to_change">Fail to changes</string>
     <string name="retry_please">Please try again</string>
-    <string name="unpairing_title">UnParing</string>
+    <string name="unpairing_title">UnPairing</string>
     <string name="unpairing_msg"> will be Unpaired</string>
     <string name="unpairing_ok_btn">Unpair</string>
     <string name="unpairing_cancel_btn">Cancel</string>
@@ -83,4 +83,25 @@
     <string name="unknown_error">An unexpected error has occurred\nRecovering</string>
     <string name="get_power_on">Current Power : On</string>
     <string name="get_power_off">Current Power : Off</string>
+    <string name="refresh_device">Search</string>
+    <string name="perm_title">AS DashBoard is need a few Permissions for use</string>
+    <string name="perm_essential">Essential</string>
+    <string name="perm_selectable">Selectable</string>
+    <string name="perm_gps_title">GPS</string>
+    <string name="perm_gps_content">Need to Load your GPS</string>
+    <string name="perm_bt_title">Bluetooth</string>
+    <string name="perm_bt_content">Need to Scan device and Connect</string>
+    <string name="perm_wifi_title">Wifi</string>
+    <string name="perm_wifi_content">Need to Save &amp; Load Data</string>
+    <string name="perm_accept">Accept</string>
+    <string name="perm_deny">Deny</string>
+    <string name="mqtt">Mqtt</string>
+    <string name="mqtt_deny">Refuse to send data</string>
+    <string name="mqtt_accept">Allow data transmission</string>
+    <string name="mqtt_caution_msg">Please connect to the Internet \nor turn off the Internet usage check</string>
+    <string name="mqtt_connect">Connected to the Internet</string>
+    <string name="mqtt_connect_btn">Connect</string>
+    <string name="mqtt_error_get_user_id">Fail to Get Device Data..\nPausing Request</string>
+    <string name="mqtt_wifi_reconnect_s">Success to Reconnect Internet</string>
+    <string name="mqtt_wifi_reconnect_f">Fail to Reconnect Internet</string>
 </resources>

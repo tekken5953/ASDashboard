@@ -14,18 +14,17 @@
             android:id="@+id/langLeftLayout"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:layout_marginStart="76dp"
             android:background="#15FFFFFF"
+            android:gravity="center"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
             <ImageView
                 android:id="@+id/langTopLangIconIv"
-                android:layout_width="35dp"
-                android:layout_height="35dp"
+                android:layout_width="@dimen/menuIconConnSize"
+                android:layout_height="@dimen/menuIconConnSize"
                 android:layout_marginStart="31dp"
-                android:layout_marginTop="192dp"
                 android:src="@drawable/lang_icon_w" />
 
             <TextView
@@ -33,14 +32,13 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="11dp"
-                android:layout_marginTop="191dp"
                 android:layout_marginEnd="37dp"
                 android:layout_toEndOf="@+id/langTopLangIconIv"
                 android:fontFamily="@font/pretendardvariable"
                 android:text="@string/select_lang"
                 android:textAllCaps="false"
                 android:textColor="@color/white"
-                android:textSize="17sp" />
+                android:textSize="@dimen/textDashH2.5" />
 
             <TextView
                 android:id="@+id/langTopLangContentTv"
@@ -59,11 +57,11 @@
 
             <ImageView
                 android:id="@+id/langTopConnIconIv"
-                android:layout_width="35dp"
-                android:layout_height="35dp"
+                android:layout_width="@dimen/menuIconConnSize"
+                android:layout_height="@dimen/menuIconConnSize"
                 android:layout_below="@+id/langTopLangIconIv"
                 android:layout_marginStart="31dp"
-                android:layout_marginTop="46dp"
+                android:layout_marginTop="@dimen/tapDashX5"
                 android:src="@drawable/conn_icon_b" />
 
             <TextView
@@ -72,14 +70,14 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/langTopLangContentTv"
                 android:layout_marginStart="11dp"
-                android:layout_marginTop="37dp"
+                android:layout_marginTop="@dimen/tapDashX5"
                 android:layout_marginEnd="37dp"
                 android:layout_toEndOf="@+id/langTopConnIconIv"
                 android:fontFamily="@font/pretendardvariable"
                 android:text="@string/connect_device"
                 android:textAllCaps="false"
                 android:textColor="@color/statusUnitText"
-                android:textSize="17sp" />
+                android:textSize="@dimen/textDashH2.5" />
 
             <TextView
                 android:id="@+id/langTopConnContentTv"
@@ -98,45 +96,38 @@
 
         </RelativeLayout>
 
-        <View
-            android:layout_width="3dp"
-            android:layout_height="80dp"
-            android:layout_marginTop="265dp"
-            android:background="@color/white"
-            app:layout_constraintStart_toEndOf="@+id/langLeftLayout"
-            app:layout_constraintTop_toTopOf="parent" />
-
         <ImageView
             android:id="@+id/langKorIconIv"
-            android:layout_width="88dp"
-            android:layout_height="88dp"
-            android:layout_marginStart="155dp"
-            android:layout_marginTop="195dp"
+            android:layout_width="@dimen/flagLangSize"
+            android:layout_height="@dimen/flagLangSize"
+            android:layout_marginBottom="@dimen/tapDashX4"
             android:src="@drawable/kor_image"
-            app:layout_constraintStart_toEndOf="@+id/langLeftLayout"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/langOkTv"
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
             android:id="@+id/langKorTitleTv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="@dimen/tapDashX1.5"
             android:fontFamily="@font/pretendardvariable"
             android:text="@string/korean_lang"
             android:textAllCaps="false"
             android:textColor="@color/white"
-            android:textSize="18sp"
+            android:textSize="@dimen/textDashH2.5"
             app:layout_constraintEnd_toEndOf="@+id/langKorIconIv"
             app:layout_constraintStart_toStartOf="@+id/langKorIconIv"
             app:layout_constraintTop_toBottomOf="@+id/langKorIconIv" />
 
         <ImageView
             android:id="@+id/langEngIconIv"
-            android:layout_width="88dp"
-            android:layout_height="88dp"
-            android:layout_marginStart="44dp"
+            android:layout_width="@dimen/flagLangSize"
+            android:layout_height="@dimen/flagLangSize"
+            android:layout_marginStart="50dp"
             android:src="@drawable/eng_image"
             app:layout_constraintBottom_toBottomOf="@+id/langKorIconIv"
+            app:layout_constraintEnd_toEndOf="@+id/langOkTv"
             app:layout_constraintStart_toEndOf="@+id/langKorIconIv"
             app:layout_constraintTop_toTopOf="@+id/langKorIconIv" />
 
@@ -148,7 +139,7 @@
             android:text="@string/eng_lang"
             android:textAllCaps="false"
             android:textColor="@color/white"
-            android:textSize="18sp"
+            android:textSize="@dimen/textDashH2.5"
             app:layout_constraintBottom_toBottomOf="@+id/langKorTitleTv"
             app:layout_constraintEnd_toEndOf="@+id/langEngIconIv"
             app:layout_constraintStart_toStartOf="@+id/langEngIconIv"
@@ -156,17 +147,17 @@
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/langOkTv"
-            android:layout_width="207dp"
-            android:layout_height="40dp"
-            android:layout_marginTop="88dp"
+            android:layout_width="@dimen/btnOkLangWidth"
+            android:layout_height="@dimen/okBtnHeight"
             android:background="@drawable/lang_ok_b"
             android:fontFamily="@font/pretendardvariable"
             android:gravity="center"
             android:text="@string/ok"
             android:textColor="@color/statusUnitText"
-            android:textSize="18sp"
-            app:layout_constraintEnd_toEndOf="@+id/langEngIconIv"
-            app:layout_constraintStart_toStartOf="@+id/langKorIconIv"
+            android:textSize="@dimen/textDashH2.5"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/langLeftLayout"
             app:layout_constraintTop_toBottomOf="@+id/langKorTitleTv" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>

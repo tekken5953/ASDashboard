@@ -1,0 +1,232 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/bg_image"
+    tools:context=".PermissionActivity">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginStart="@dimen/guidePermSide"
+        android:layout_marginTop="@dimen/guidePermTop"
+        android:layout_marginEnd="@dimen/guidePermSide"
+        android:layout_marginBottom="@dimen/guidePermTop"
+        android:background="@drawable/topframe_outline">
+
+        <TextView
+            android:id="@+id/permissionTitleTx"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/tapDashX3"
+            android:fontFamily="@font/poppins_medium"
+            android:text="@string/perm_title"
+            android:textAllCaps="false"
+            android:textColor="@color/white"
+            android:textSize="@dimen/textDashH3"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/essentialTx"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/tapDashX1"
+            android:fontFamily="@font/pretendardvariable"
+            android:text="@string/perm_essential"
+            android:textAllCaps="false"
+            android:textColor="@color/white"
+            android:textSize="@dimen/textDashH3"
+            app:layout_constraintBottom_toTopOf="@+id/permissionGPStr"
+            app:layout_constraintEnd_toEndOf="@+id/permissionBTtr"
+            app:layout_constraintStart_toStartOf="@+id/permissionGPStr" />
+
+        <TextView
+            android:id="@+id/nonEssentialTx"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/tapDashX1"
+            android:fontFamily="@font/pretendardvariable"
+            android:text="@string/perm_selectable"
+            android:textAllCaps="false"
+            android:textColor="@color/white"
+            android:textSize="@dimen/textDashH3"
+            app:layout_constraintBottom_toBottomOf="@+id/essentialTx"
+            app:layout_constraintEnd_toEndOf="@+id/permissionWIFItr"
+            app:layout_constraintStart_toStartOf="@+id/permissionWIFItr"
+            app:layout_constraintTop_toTopOf="@+id/essentialTx" />
+
+        <LinearLayout
+            android:id="@+id/permissionGPStr"
+            android:layout_width="@dimen/itemPermWidth"
+            android:layout_height="@dimen/itemPermHeight"
+            android:layout_marginStart="@dimen/itemPermGuide"
+            android:background="@drawable/permission_outline"
+            android:gravity="center"
+            android:orientation="vertical"
+            app:layout_constraintBottom_toTopOf="@+id/permissionBottomTr"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/permissionTitleTx">
+
+            <ImageView
+                android:layout_width="@dimen/itemIconPermSize"
+                android:layout_height="@dimen/itemIconPermSize"
+                android:background="@drawable/permission_icon_outline"
+                android:src="@drawable/gps"
+                app:tint="@color/white" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="@dimen/tapDashX1.5"
+                android:fontFamily="@font/pretendardvariable"
+                android:text="@string/perm_gps_title"
+                android:textAllCaps="false"
+                android:textColor="@color/white"
+                android:textSize="@dimen/textDashH2" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/tapDashX0.5"
+                android:fontFamily="@font/pretendardvariable"
+                android:gravity="center"
+                android:padding="@dimen/itemPermPadding"
+                android:text="@string/perm_gps_content"
+                android:textAllCaps="false"
+                android:textColor="@color/white"
+                android:textSize="@dimen/textDashH2" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/permissionBTtr"
+            android:layout_width="@dimen/itemPermWidth"
+            android:layout_height="@dimen/itemPermHeight"
+            android:layout_marginStart="@dimen/tapDashX3"
+            android:background="@drawable/permission_outline"
+            android:gravity="center"
+            android:orientation="vertical"
+            app:layout_constraintBottom_toBottomOf="@+id/permissionGPStr"
+            app:layout_constraintStart_toEndOf="@+id/permissionGPStr"
+            app:layout_constraintTop_toTopOf="@+id/permissionGPStr">
+
+            <ImageView
+                android:layout_width="@dimen/itemIconPermSize"
+                android:layout_height="@dimen/itemIconPermSize"
+                android:background="@drawable/permission_icon_outline"
+                android:src="@drawable/bluetooth"
+                app:tint="@color/white" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="@dimen/tapDashX1.5"
+                android:fontFamily="@font/pretendardvariable"
+                android:text="@string/perm_bt_title"
+                android:textAllCaps="false"
+                android:textColor="@color/white"
+                android:textSize="@dimen/textDashH2" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/tapDashX0.5"
+                android:fontFamily="@font/pretendardvariable"
+                android:gravity="center"
+                android:padding="@dimen/itemPermPadding"
+                android:text="@string/perm_bt_content"
+                android:textAllCaps="false"
+                android:textColor="@color/white"
+                android:textSize="@dimen/textDashH2" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/permissionWIFItr"
+            android:layout_width="@dimen/itemPermWidth"
+            android:layout_height="@dimen/itemPermHeight"
+            android:layout_marginEnd="@dimen/itemPermGuide"
+            android:background="@drawable/permission_outline"
+            android:gravity="center"
+            android:orientation="vertical"
+            app:layout_constraintBottom_toBottomOf="@+id/permissionGPStr"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/permissionGPStr">
+
+            <ImageView
+                android:layout_width="@dimen/itemIconPermSize"
+                android:layout_height="@dimen/itemIconPermSize"
+                android:background="@drawable/permission_icon_outline"
+                android:src="@drawable/wifi"
+                app:tint="@color/white" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="@dimen/tapDashX1.5"
+                android:fontFamily="@font/pretendardvariable"
+                android:text="@string/perm_wifi_title"
+                android:textAllCaps="false"
+                android:textColor="@color/white"
+                android:textSize="@dimen/textDashH2" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/tapDashX0.5"
+                android:fontFamily="@font/pretendardvariable"
+                android:gravity="center"
+                android:padding="@dimen/itemPermPadding"
+                android:text="@string/perm_wifi_content"
+                android:textAllCaps="false"
+                android:textColor="@color/white"
+                android:textSize="@dimen/textDashH2" />
+
+        </LinearLayout>
+
+        <TableRow
+            android:id="@+id/permissionBottomTr"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/tapDashX3"
+            android:gravity="center"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent">
+
+            <TextView
+                android:id="@+id/denyTx"
+                android:layout_width="@dimen/itemIconPermSize"
+                android:layout_height="@dimen/guidePermTop"
+                android:fontFamily="@font/pretendardvariable"
+                android:gravity="center"
+                android:text="@string/perm_deny"
+                android:textAllCaps="false"
+                android:textColor="@color/white"
+                android:textSize="@dimen/textDashH3"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/grantTx"
+                android:layout_width="@dimen/itemIconPermSize"
+                android:layout_height="@dimen/guidePermTop"
+                android:layout_marginStart="@dimen/guidePermSide"
+                android:fontFamily="@font/pretendardvariable"
+                android:gravity="center"
+                android:text="@string/perm_accept"
+                android:textAllCaps="false"
+                android:textColor="@color/white"
+                android:textSize="@dimen/textDashH3"
+                android:textStyle="bold" />
+        </TableRow>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</LinearLayout>

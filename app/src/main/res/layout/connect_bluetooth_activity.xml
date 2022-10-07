@@ -33,10 +33,10 @@
 
             <ImageView
                 android:id="@+id/connTopBackIv"
-                android:layout_width="22dp"
-                android:layout_height="22dp"
-                android:layout_marginStart="26dp"
-                android:layout_marginTop="26dp"
+                android:layout_width="@dimen/iconDashSize"
+                android:layout_height="@dimen/iconDashSize"
+                android:layout_marginStart="@dimen/iconDashSize"
+                android:layout_marginTop="@dimen/iconDashSize"
                 android:background="@drawable/ripple_round"
                 android:padding="3dp"
                 android:src="@drawable/back"
@@ -47,18 +47,17 @@
                 android:id="@+id/connLeftLayout"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:layout_marginStart="76dp"
                 android:background="#15FFFFFF"
+                android:gravity="center"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent">
 
                 <ImageView
                     android:id="@+id/connTopLangIconIv"
-                    android:layout_width="39dp"
-                    android:layout_height="39dp"
-                    android:layout_marginStart="29dp"
-                    android:layout_marginTop="192dp"
+                    android:layout_width="@dimen/menuIconConnSize"
+                    android:layout_height="@dimen/menuIconConnSize"
+                    android:layout_marginStart="@dimen/tapDashX2.5"
                     android:onClick="onClick"
                     android:src="@drawable/lang_icon_b" />
 
@@ -66,40 +65,39 @@
                     android:id="@+id/connTopLangTitleTv"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="11dp"
-                    android:layout_marginTop="190dp"
-                    android:layout_marginEnd="26dp"
+                    android:layout_marginStart="@dimen/tapDashX1"
+                    android:layout_marginEnd="@dimen/tapDashX2.5"
                     android:layout_toEndOf="@+id/connTopLangIconIv"
                     android:fontFamily="@font/pretendardvariable"
                     android:onClick="onClick"
                     android:text="@string/select_lang"
                     android:textAllCaps="false"
                     android:textColor="@color/statusUnitText"
-                    android:textSize="17sp" />
+                    android:textSize="@dimen/textDashH2.5" />
 
                 <TextView
                     android:id="@+id/connTopLangContentTv"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/connTopLangTitleTv"
-                    android:layout_marginStart="11dp"
+                    android:layout_marginStart="@dimen/tapDashX1"
                     android:layout_marginTop="5dp"
-                    android:layout_marginEnd="26dp"
+                    android:layout_marginEnd="@dimen/tapDashX2.5"
                     android:layout_toEndOf="@+id/connTopLangIconIv"
                     android:fontFamily="@font/pretendardvariable"
                     android:onClick="onClick"
                     android:text="@string/please_select_lang_main"
                     android:textAllCaps="false"
                     android:textColor="@color/statusUnitText"
-                    android:textSize="14sp" />
+                    android:textSize="@dimen/textDashH1" />
 
                 <ImageView
                     android:id="@+id/connTopConnIconIv"
-                    android:layout_width="39dp"
-                    android:layout_height="39dp"
+                    android:layout_width="@dimen/menuIconConnSize"
+                    android:layout_height="@dimen/menuIconConnSize"
                     android:layout_below="@+id/connTopLangContentTv"
-                    android:layout_marginStart="29dp"
-                    android:layout_marginTop="46dp"
+                    android:layout_marginStart="@dimen/tapDashX2.5"
+                    android:layout_marginTop="@dimen/tapDashX5"
                     android:src="@drawable/conn_icon_w" />
 
                 <TextView
@@ -107,30 +105,30 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/connTopLangContentTv"
-                    android:layout_marginStart="11dp"
-                    android:layout_marginTop="46dp"
-                    android:layout_marginEnd="26dp"
+                    android:layout_marginStart="@dimen/tapDashX1"
+                    android:layout_marginTop="@dimen/tapDashX5"
+                    android:layout_marginEnd="@dimen/tapDashX2.5"
                     android:layout_toEndOf="@+id/connTopConnIconIv"
                     android:fontFamily="@font/pretendardvariable"
                     android:text="@string/connect_device"
                     android:textAllCaps="false"
                     android:textColor="@color/white"
-                    android:textSize="17sp" />
+                    android:textSize="@dimen/textDashH2.5" />
 
                 <TextView
                     android:id="@+id/connTopConnContentTv"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/connTopConnTitleTv"
-                    android:layout_marginStart="11dp"
+                    android:layout_marginStart="@dimen/tapDashX1"
                     android:layout_marginTop="5dp"
-                    android:layout_marginEnd="26dp"
+                    android:layout_marginEnd="@dimen/tapDashX2.5"
                     android:layout_toEndOf="@+id/connTopLangIconIv"
                     android:fontFamily="@font/pretendardvariable"
                     android:text="@string/please_select_device"
                     android:textAllCaps="false"
                     android:textColor="@color/statusUnitText"
-                    android:textSize="14sp" />
+                    android:textSize="@dimen/textDashH1" />
 
             </RelativeLayout>
 
@@ -138,21 +136,21 @@
                 android:id="@+id/connConnectedDeviceTv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="42dp"
-                android:layout_marginBottom="26dp"
+                android:layout_marginBottom="@dimen/tapDashX2.5"
                 android:fontFamily="@font/pretendardvariable"
                 android:text="@string/connected_device"
                 android:textAllCaps="false"
                 android:textColor="@color/white"
-                android:textSize="18sp"
+                android:textSize="@dimen/textDashH2.5"
                 app:layout_constraintBottom_toTopOf="@+id/connPairedDeviceRv"
-                app:layout_constraintStart_toEndOf="@+id/connLeftLayout" />
+                app:layout_constraintEnd_toEndOf="@+id/connPairedDeviceRv"
+                app:layout_constraintStart_toStartOf="@+id/connPairedDeviceRv" />
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/connPairedDeviceRv"
                 android:layout_width="wrap_content"
-                android:layout_height="256dp"
-                android:layout_marginBottom="13dp"
+                android:layout_height="@dimen/rvConnHeight"
+                android:layout_marginBottom="@dimen/tapDashX1"
                 android:orientation="vertical"
                 android:overScrollMode="never"
                 android:scrollbars="none"
@@ -160,7 +158,8 @@
                 android:visibility="visible"
                 app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="@+id/connConnectedDeviceTv"
+                app:layout_constraintEnd_toEndOf="@+id/connOkTv"
+                app:layout_constraintStart_toStartOf="@+id/connOkTv"
                 app:layout_constraintTop_toTopOf="parent"
                 app:spanCount="2"
                 tools:listitem="@layout/listitem_recent_device" />
@@ -169,37 +168,33 @@
                 android:id="@+id/connConnectableDeviceTv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="51dp"
-                android:layout_marginEnd="61dp"
-                android:layout_marginBottom="26dp"
                 android:fontFamily="@font/pretendardvariable"
                 android:text="@string/connectable_device"
                 android:textAllCaps="false"
                 android:textColor="@color/white"
-                android:textSize="18sp"
-                app:layout_constraintBottom_toTopOf="@+id/connConnectableRv"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/connConnectedDeviceTv" />
+                android:textSize="@dimen/textDashH2.5"
+                app:layout_constraintBottom_toBottomOf="@+id/connConnectedDeviceTv"
+                app:layout_constraintEnd_toEndOf="@+id/connConnectableRv"
+                app:layout_constraintStart_toStartOf="@+id/connConnectableRv"
+                app:layout_constraintTop_toTopOf="@+id/connConnectedDeviceTv" />
 
-            <ImageView
+            <ProgressBar
                 android:id="@+id/connRefreshIv"
-                android:layout_width="21dp"
-                android:layout_height="21dp"
-                android:layout_marginStart="8dp"
-                android:background="@drawable/ripple_round"
+                android:layout_width="@dimen/iconDashSize"
+                android:layout_height="@dimen/iconDashSize"
                 android:descendantFocusability="blocksDescendants"
                 android:padding="3dp"
-                android:src="@drawable/refresh"
+                android:progressTint="@color/white"
                 android:visibility="visible"
                 app:layout_constraintBottom_toBottomOf="@+id/connConnectableDeviceTv"
-                app:layout_constraintStart_toEndOf="@+id/connConnectableDeviceTv"
+                app:layout_constraintEnd_toEndOf="@+id/connConnectableRv"
                 app:layout_constraintTop_toTopOf="@+id/connConnectableDeviceTv" />
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/connConnectableRv"
                 android:layout_width="wrap_content"
-                android:layout_height="256dp"
-                android:layout_marginBottom="13dp"
+                android:layout_height="@dimen/rvConnHeight"
+                android:layout_marginBottom="@dimen/tapDashX1"
                 android:orientation="vertical"
                 android:overScrollMode="never"
                 android:padding="3dp"
@@ -209,24 +204,43 @@
                 android:visibility="visible"
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="@+id/connConnectableDeviceTv"
+                app:layout_constraintEnd_toEndOf="@+id/connRefreshBtn"
+                app:layout_constraintStart_toStartOf="@+id/connRefreshBtn"
                 app:layout_constraintTop_toTopOf="parent"
                 tools:listitem="@layout/listitem_connectable_rv" />
 
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/connOkTv"
-                android:layout_width="207dp"
-                android:layout_height="40dp"
-                android:layout_marginTop="38dp"
+                android:layout_width="@dimen/okBtnWidth"
+                android:layout_height="@dimen/okBtnHeight"
                 android:background="@drawable/lang_ok_b"
                 android:fontFamily="@font/pretendardvariable"
                 android:gravity="center"
-                android:text="@string/ok"
+                android:text="@string/reconnect_bt_ok"
+                android:textAllCaps="false"
                 android:textColor="@color/statusUnitText"
-                android:textSize="18sp"
-                app:layout_constraintEnd_toStartOf="@+id/connConnectableDeviceTv"
-                app:layout_constraintStart_toEndOf="@+id/connConnectedDeviceTv"
-                app:layout_constraintTop_toBottomOf="@+id/connConnectableRv" />
+                android:textSize="@dimen/textDashH2.5"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/connRefreshBtn"
+                app:layout_constraintStart_toEndOf="@+id/connLeftLayout"
+                app:layout_constraintTop_toBottomOf="@+id/connPairedDeviceRv" />
+
+                <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/connRefreshBtn"
+                    android:layout_width="@dimen/okBtnWidth"
+                    android:layout_height="@dimen/okBtnHeight"
+                    android:textAllCaps="false"
+                    android:background="@drawable/lang_ok_b"
+                    android:fontFamily="@font/pretendardvariable"
+                    android:gravity="center"
+                    android:text="@string/refresh_device"
+                    android:textColor="@color/statusUnitText"
+                    android:textSize="@dimen/textDashH2.5"
+                    app:layout_constraintTop_toTopOf="@+id/connOkTv"
+                    app:layout_constraintBottom_toBottomOf="@id/connOkTv"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/connOkTv"/>
+
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

@@ -23,7 +23,7 @@ public class SplashActivity extends AppCompatActivity {
         OuterClass outerClass = new OuterClass();
         outerClass.FullScreenMode(SplashActivity.this);
 
-        Intent intent = new Intent(SplashActivity.this, LanguageSelectActivity.class);
+        Intent intent = new Intent(SplashActivity.this, PermissionActivity.class);
         startActivity(intent);
         finish();
     }

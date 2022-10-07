@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="iconDashSize">30dp</dimen>
+    <dimen name="guideDashSide">38dp</dimen>
+    <dimen name="guideDashTop">3dp</dimen>
+    <dimen name="iconDashPadding">4dp</dimen>
+
+    <dimen name="textDashH0.25">11sp</dimen>
+    <dimen name="textDashH0.5">12sp</dimen>
+    <dimen name="textDashH1">14sp</dimen>
+    <dimen name="textDashH1.5">15.5sp</dimen>
+    <dimen name="textDashH2">17sp</dimen>
+    <dimen name="textDashH2.5">20sp</dimen>
+    <dimen name="textDashH3">25sp</dimen>
+    <dimen name="textDashH3.5">28sp</dimen>
+    <dimen name="textDashH4">31sp</dimen>
+    <dimen name="textDashH5">33sp</dimen>
+
+    <dimen name="tapDashX0.5">7dp</dimen>
+    <dimen name="tapDashX1">12dp</dimen>
+    <dimen name="tapDashX1.5">18dp</dimen>
+    <dimen name="tapDashX2">24dp</dimen>
+    <dimen name="tapDashX2.5">30dp</dimen>
+    <dimen name="tapDashX3">36dp</dimen>
+    <dimen name="tapDashX4">45dp</dimen>
+    <dimen name="tapDashX5">53dp</dimen>
+    <dimen name="tapDashX5.5">58dp</dimen>
+
+    <dimen name="cqiDashSize">190dp</dimen>
+    <dimen name="barContDashWidth">168dp</dimen>
+    <dimen name="barInDashWidth">158dp</dimen>
+    <dimen name="cqiContentDashWidth">77dp</dimen>
+    <dimen name="graphDashHeight">190dp</dimen>
+    <dimen name="cardDashHeight">235dp</dimen>
+    <dimen name="okBtnHeight">49dp</dimen>
+    <dimen name="okBtnWidth">210dp</dimen>
+    <dimen name="cateDashHeight">34dp</dimen>
+
+    <dimen name="menuIconConnSize">50dp</dimen>
+    <dimen name="rvConnHeight">280dp</dimen>
+    <dimen name="menuConnStart">85dp</dimen>
+    <dimen name="flagLangSize">110dp</dimen>
+
+    <dimen name="iconConnListSize">40dp</dimen>
+    <dimen name="layoutConnListWidth">260dp</dimen>
+    <dimen name="layoutPairListWidth">110dp</dimen>
+    <dimen name="iconPairListSize">65dp</dimen>
+
+    <dimen name="guidePermSide">80dp</dimen>
+    <dimen name="guidePermTop">50dp</dimen>
+    <dimen name="itemPermWidth">250dp</dimen>
+    <dimen name="itemPermHeight">300dp</dimen>
+    <dimen name="itemPermGuide">100dp</dimen>
+    <dimen name="itemPermPadding">15dp</dimen>
+    <dimen name="itemIconPermSize">70dp</dimen>
+
+    <dimen name="lineMenuWidth">220dp</dimen>
+    <dimen name="conFanMenuSize">95dp</dimen>
+    <dimen name="srcMenuSize">340dp</dimen>
+    <dimen name="iconMenuSize">38dp</dimen>
+    <dimen name="guideMenuSide">50dp</dimen>
+    <dimen name="btnOkLangWidth">280dp</dimen>
+
+
+</resources>

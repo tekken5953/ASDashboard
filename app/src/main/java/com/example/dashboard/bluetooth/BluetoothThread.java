@@ -127,7 +127,7 @@ public class BluetoothThread extends Thread {
                 } catch (IOException | NullPointerException e) {
                     Log.e(TAG, "disconnected", e);
                     isConnect = false;
-                    this.closeSocket();
+//                    this.closeSocket();
                 }
             }
         }
@@ -150,6 +150,7 @@ public class BluetoothThread extends Thread {
 
             mConnectedSocketEventListener.onConnectedEvent();
         } catch (IOException e) {
+            System.out.println("Is Running? " + isRunning());
             System.out.println("Connect Socket Error");
             Log.e("BTThread", "Connect Socket Error");
             if (!isRun) {
@@ -194,7 +195,11 @@ public class BluetoothThread extends Thread {
 
         } catch (Exception e) {
             e.printStackTrace();
-            closeSocket();
+            if (isRunning()) {
+                if (!isConnected())
+                    connectSocket();
+            }
+//            closeSocket();
         }
     }
 

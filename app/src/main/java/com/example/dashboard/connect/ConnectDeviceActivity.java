@@ -15,15 +15,12 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.graphics.Point;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
-import android.util.DisplayMetrics;
 import android.util.Log;
-import android.view.Display;
 import android.view.View;
 import android.widget.Toast;
 
@@ -90,17 +87,10 @@ public class ConnectDeviceActivity extends AppCompatActivity {
             unregisterReceiver(connectReceiver);
             bluetoothAdapter.cancelDiscovery();
         }
+
         cList.clear();
         noPairingPosition = 0;
         pList.clear();
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        Log.d(TAG_LIFECYCLE, "On Pause");
-        // 디바이스 스캔이 예기치 못하게 중지되었을 경우 리스트를 새로고침 할 수 있는 이미지를 보여줍니다
-        ShowRefresh();
     }
 
     @Override
@@ -179,8 +169,8 @@ public class ConnectDeviceActivity extends AppCompatActivity {
 
                 } else {
                     Toast.makeText(context, getString(R.string.retry_please), Toast.LENGTH_SHORT).show();
-                    ShowRefresh();
-                    getConnectableDeviceList();
+                    NoDiscovery();
+                    StartDiscovery();
                 }
             }
         });
@@ -198,6 +188,7 @@ public class ConnectDeviceActivity extends AppCompatActivity {
                         Intent intent = new Intent(context, DashBoardActivity.class);
                         // 해당 클릭아이템의 포지션을 인텐트와 함께 전송합니다
                         intent.putExtra("device_position", SELECTED_POSITION);
+
                         startActivity(intent);
                         finish();
                     });
@@ -292,13 +283,14 @@ public class ConnectDeviceActivity extends AppCompatActivity {
         });
 
         // 리스트 새로고침 클릭 시 이벤트리스너
-        binding.connRefreshIv.setOnClickListener(new View.OnClickListener() {
+        binding.connRefreshBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 outerClass.CallVibrate(context, 10);
-                HideRefresh();
+                pList.clear();
                 startCheckBluetooth();
                 getConnectableDeviceList();
+                NoDiscovery();
             }
         });
     }
@@ -318,6 +310,7 @@ public class ConnectDeviceActivity extends AppCompatActivity {
         item.setDevice_img(img);
         item.setDevice_name(name);
         item.setDevice_address(address);
+        HideRefresh();
 
         cList.add(noPairingPosition, item);
     }
@@ -325,19 +318,15 @@ public class ConnectDeviceActivity extends AppCompatActivity {
     // 페어링 된 디바이스 아이템 추가
     private void addPItem(Drawable icon, String name, String address) {
         PairedDeviceItem item = new PairedDeviceItem(icon, name, address);
-
         item.setIcon(icon);
         item.setName(name);
         item.setAddress(address);
-
         pList.add(item);
     }
 
     // 페어링 된 디바이스 불러오기
     private void findPairedDevice() {
-
         pList.clear();
-        bondedList.clear();
         Set<BluetoothDevice> pairedDevice = bluetoothAdapter.getBondedDevices();
         if (!pairedDevice.isEmpty()) {
             for (BluetoothDevice device : pairedDevice) {
@@ -362,13 +351,14 @@ public class ConnectDeviceActivity extends AppCompatActivity {
             String action = intent.getAction();
 
             if (BluetoothDevice.ACTION_FOUND.equals(action)) {
+                ShowRefresh();
                 BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
                 String deviceName = device.getName();
                 // 디바이스가 페어링 되어있지 않다면
                 if (device.getBondState() != BluetoothDevice.BOND_BONDED) {
                     // 이름이 Null 이 아니라면
                     if (deviceName != null) {
-                        Log.d("paringReceiver", noPairingPosition + " : " + deviceName);
+                        Log.d("Discovery", noPairingPosition + " : " + deviceName);
                         if (filterAlreadyAddList(deviceName)) {
                             // 디바이스 이름으로 필터링
                             // 이름이 BS_ 로 시작한다면
@@ -389,7 +379,7 @@ public class ConnectDeviceActivity extends AppCompatActivity {
                                             deviceNameStrRight[1]);
                                     noPairingPosition++;
                                     cAdapter.notifyDataSetChanged();
-                                    Log.d("paringReceiver", "ADD THIS!");
+                                    Log.d("Discovery", "ADD THIS!");
                                 }
                             }
                         }
@@ -446,7 +436,7 @@ public class ConnectDeviceActivity extends AppCompatActivity {
     private boolean filterAlreadyAddList(String name) {
         for (int i = 0; i < noBondedList.size(); i++) {
             if (name.equals(noBondedList.get(i).getName())) {
-                Log.d("paringReceiver", "Already Exist!");
+                Log.d("Discovery", "Already Exist!");
                 return false;
             }
         }
@@ -477,16 +467,10 @@ public class ConnectDeviceActivity extends AppCompatActivity {
     }
 
     private void getConnectableDeviceList() {
+
         cList.clear();
         noPairingPosition = 0;
         noBondedList.clear();
-        Log.d("Discovery", "find one");
-
-        if (!bluetoothAdapter.isDiscovering()) {
-            bluetoothAdapter.startDiscovery();
-            binding.connRefreshIv.setVisibility(View.VISIBLE);
-            Log.d("Discovery", "Start Discovery");
-        }
 
         // ACTION_FOUND 가 호출될 때 마다 데이터를 전송하는 역할을 합니다
         foundFilter.addAction(BluetoothDevice.ACTION_FOUND);
@@ -530,6 +514,29 @@ public class ConnectDeviceActivity extends AppCompatActivity {
         });
     }
 
+    private void StartDiscovery() {
+        bluetoothAdapter.startDiscovery();
+
+        Handler handler = new Handler(Looper.getMainLooper());
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                HideRefresh();
+                bluetoothAdapter.cancelDiscovery();
+                binding.connRefreshBtn.setEnabled(true);
+                binding.connRefreshBtn.setBackgroundDrawable(ResourcesCompat.getDrawable(getResources(), R.drawable.lang_ok_w, null));
+                binding.connRefreshBtn.setTextColor(ResourcesCompat.getColor(getResources(), R.color.white, null));
+            }
+        }, 1000 * 10);
+    }
+
+    private void NoDiscovery() {
+        ShowRefresh();
+        binding.connRefreshBtn.setEnabled(false);
+        binding.connRefreshBtn.setBackgroundDrawable(ResourcesCompat.getDrawable(getResources(), R.drawable.lang_ok_b, null));
+        binding.connRefreshBtn.setTextColor(ResourcesCompat.getColor(getResources(), R.color.statusUnitText, null));
+    }
+
     @Override
     public void onBackPressed() {
         super.onBackPressed();
@@ -569,12 +576,12 @@ public class ConnectDeviceActivity extends AppCompatActivity {
             if (bluetoothAdapter.isEnabled()) {
                 try {
                     if (!bluetoothAdapter.isDiscovering()) {
-                        bluetoothAdapter.startDiscovery();
+                        NoDiscovery();
+                        StartDiscovery();
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
-
             } else {
                 runOnUiThread(new Runnable() {
                     @Override

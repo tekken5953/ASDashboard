@@ -7,10 +7,10 @@
 
     <ImageView
         android:id="@+id/sideMenuCancelIv"
-        android:layout_width="21dp"
-        android:layout_height="21dp"
-        android:layout_marginStart="43dp"
-        android:layout_marginTop="43dp"
+        android:layout_width="@dimen/iconMenuSize"
+        android:layout_height="@dimen/iconMenuSize"
+        android:layout_marginStart="@dimen/guideMenuSide"
+        android:layout_marginTop="@dimen/guideMenuSide"
         android:background="@drawable/ripple_round"
         android:padding="2dp"
         android:src="@drawable/cancel"
@@ -21,14 +21,14 @@
         android:id="@+id/sideMenuTitleTv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="20dp"
+        android:layout_marginStart="@dimen/tapDashX2"
         android:layout_marginBottom="2dp"
         android:fontFamily="@font/pretendardvariable"
         android:gravity="center"
         android:text="@string/settings"
         android:textAllCaps="false"
         android:textColor="@color/white"
-        android:textSize="15sp"
+        android:textSize="@dimen/textDashH3.5"
         app:layout_constraintBottom_toBottomOf="@+id/sideMenuCancelIv"
         app:layout_constraintStart_toEndOf="@+id/sideMenuCancelIv"
         app:layout_constraintTop_toTopOf="@id/sideMenuCancelIv" />
@@ -36,77 +36,74 @@
 
     <ImageView
         android:id="@+id/sideMenuPowerIv"
-        android:layout_width="24dp"
-        android:layout_height="24dp"
-        android:layout_marginStart="82dp"
-        android:layout_marginTop="64dp"
+        android:layout_width="@dimen/iconMenuSize"
+        android:layout_height="@dimen/iconMenuSize"
         android:padding="2dp"
         android:src="@drawable/power_icon"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/sideMenuTitleTv"
+        app:layout_constraintStart_toStartOf="@+id/sideMenuTitleTv"
+        app:layout_constraintTop_toTopOf="@+id/sideMenuProductIv"
         app:tint="@color/side_power_small" />
 
     <TextView
         android:id="@+id/sideMenuPowerOffTv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="11dp"
+        android:layout_marginStart="@dimen/tapDashX1"
         android:layout_marginBottom="2dp"
         android:fontFamily="@font/pretendardvariable"
         android:gravity="center"
         android:text="@string/power"
         android:textAllCaps="false"
         android:textColor="@color/white"
-        android:textSize="21sp"
+        android:textSize="@dimen/textDashH3.5"
         app:layout_constraintBottom_toBottomOf="@+id/sideMenuPowerIv"
         app:layout_constraintStart_toEndOf="@+id/sideMenuPowerIv"
         app:layout_constraintTop_toTopOf="@+id/sideMenuPowerIv" />
 
-<!--    <TextView-->
-<!--        android:id="@+id/getCurrentPowerTv"-->
-<!--        android:layout_width="wrap_content"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:text="@string/get_power_on"-->
-<!--        android:textSize="16sp"-->
-<!--        android:textColor="@android:color/holo_green_light"-->
-<!--        app:layout_constraintTop_toBottomOf="@+id/sideMenuPowerOffTv"-->
-<!--        app:layout_constraintBottom_toTopOf="@+id/sideMenuLine1"-->
-<!--        app:layout_constraintStart_toStartOf="@+id/sideMenuPowerIv"-->
-<!--        android:layout_marginStart="15sp"-->
-<!--        android:fontFamily="@font/pretendardvariable"/>-->
+    <!--    <TextView-->
+    <!--        android:id="@+id/getCurrentPowerTv"-->
+    <!--        android:layout_width="wrap_content"-->
+    <!--        android:layout_height="wrap_content"-->
+    <!--        android:text="@string/get_power_on"-->
+    <!--        android:textSize="16sp"-->
+    <!--        android:textColor="@android:color/holo_green_light"-->
+    <!--        app:layout_constraintTop_toBottomOf="@+id/sideMenuPowerOffTv"-->
+    <!--        app:layout_constraintBottom_toTopOf="@+id/sideMenuLine1"-->
+    <!--        app:layout_constraintStart_toStartOf="@+id/sideMenuPowerIv"-->
+    <!--        android:layout_marginStart="15sp"-->
+    <!--        android:fontFamily="@font/pretendardvariable"/>-->
 
     <View
         android:id="@+id/sideMenuLine1"
-        android:layout_width="190dp"
+        android:layout_width="@dimen/lineMenuWidth"
         android:layout_height="1dp"
-        android:layout_marginTop="73dp"
+        android:layout_marginBottom="@dimen/tapDashX4"
         android:background="@color/side_menu_line"
-        app:layout_constraintStart_toStartOf="@+id/sideMenuPowerIv"
-        app:layout_constraintTop_toBottomOf="@+id/sideMenuPowerIv" />
+        app:layout_constraintBottom_toTopOf="@+id/sideMenuInfoIv"
+        app:layout_constraintStart_toStartOf="@+id/sideMenuPowerIv" />
 
     <ImageView
         android:id="@+id/sideMenuFanIv"
-        android:layout_width="24dp"
-        android:layout_height="24dp"
-        android:layout_marginStart="120dp"
+        android:layout_width="@dimen/iconMenuSize"
+        android:layout_height="@dimen/iconMenuSize"
         android:padding="2dp"
         android:src="@drawable/fan_icon"
         app:layout_constraintBottom_toBottomOf="@+id/sideMenuPowerIv"
-        app:layout_constraintStart_toEndOf="@+id/sideMenuPowerOffTv"
+        app:layout_constraintStart_toStartOf="@+id/sideMenuLine2"
         app:layout_constraintTop_toTopOf="@+id/sideMenuPowerIv" />
 
     <TextView
         android:id="@+id/sideMenuFanControllTv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="11dp"
+        android:layout_marginStart="@dimen/tapDashX1"
         android:layout_marginBottom="2dp"
         android:fontFamily="@font/pretendardvariable"
         android:gravity="center"
         android:text="@string/fan_control"
         android:textAllCaps="false"
         android:textColor="@color/white"
-        android:textSize="21sp"
+        android:textSize="@dimen/textDashH3.5"
         app:layout_constraintBottom_toBottomOf="@+id/sideMenuFanIv"
         app:layout_constraintStart_toEndOf="@+id/sideMenuFanIv"
         app:layout_constraintTop_toTopOf="@+id/sideMenuFanIv" />
@@ -115,97 +112,98 @@
         android:id="@+id/sideMenuTableRow1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="31dp"
         android:columnCount="2"
+        app:layout_constraintBottom_toTopOf="@+id/sideMenuLine2"
         app:layout_constraintEnd_toEndOf="@+id/sideMenuLine2"
         app:layout_constraintStart_toStartOf="@+id/sideMenuLine2"
         app:layout_constraintTop_toBottomOf="@+id/sideMenuFanControllTv">
 
         <TextView
             android:id="@+id/sideMenuFan1Tv"
-            android:layout_width="58dp"
-            android:layout_height="58dp"
+            android:layout_width="@dimen/conFanMenuSize"
+            android:layout_height="@dimen/conFanMenuSize"
             android:background="@drawable/side_menu_nofan_tv_bg"
             android:fontFamily="@font/pretendardvariable"
             android:gravity="center"
             android:text="@string/fan_first"
             android:textAllCaps="false"
             android:textColor="@color/statusUnitText"
-            android:textSize="15sp"/>
+            android:textSize="@dimen/textDashH3" />
 
         <TextView
             android:id="@+id/sideMenuFan2Tv"
-            android:layout_width="58dp"
-            android:layout_height="58dp"
-            android:layout_marginStart="20dp"
+            android:layout_width="@dimen/conFanMenuSize"
+            android:layout_height="@dimen/conFanMenuSize"
+            android:layout_marginStart="@dimen/tapDashX2"
             android:background="@drawable/side_menu_nofan_tv_bg"
             android:fontFamily="@font/pretendardvariable"
             android:gravity="center"
             android:text="@string/fan_second"
             android:textAllCaps="false"
             android:textColor="@color/statusUnitText"
-            android:textSize="15sp" />
+            android:textSize="@dimen/textDashH3" />
 
         <TextView
             android:id="@+id/sideMenuFan3Tv"
-            android:layout_width="58dp"
-            android:layout_height="58dp"
-            android:layout_marginTop="20dp"
+            android:layout_width="@dimen/conFanMenuSize"
+            android:layout_height="@dimen/conFanMenuSize"
+            android:layout_marginTop="@dimen/tapDashX2"
             android:background="@drawable/side_menu_nofan_tv_bg"
             android:fontFamily="@font/pretendardvariable"
             android:gravity="center"
             android:text="@string/fan_third"
             android:textAllCaps="false"
             android:textColor="@color/statusUnitText"
-            android:textSize="15sp" />
+            android:textSize="@dimen/textDashH3" />
 
         <TextView
             android:id="@+id/sideMenuFan4Tv"
-            android:layout_width="58dp"
-            android:layout_height="58dp"
-            android:layout_marginStart="20dp"
-            android:layout_marginTop="20dp"
+            android:layout_width="@dimen/conFanMenuSize"
+            android:layout_height="@dimen/conFanMenuSize"
+            android:layout_marginStart="@dimen/tapDashX2"
+            android:layout_marginTop="@dimen/tapDashX2"
             android:background="@drawable/side_menu_nofan_tv_bg"
             android:fontFamily="@font/pretendardvariable"
             android:gravity="center"
             android:text="@string/fan_fourth"
             android:textAllCaps="false"
             android:textColor="@color/statusUnitText"
-            android:textSize="15sp" />
+            android:textSize="@dimen/textDashH3" />
 
     </GridLayout>
 
     <View
         android:id="@+id/sideMenuLine2"
-        android:layout_width="236dp"
+        android:layout_width="@dimen/lineMenuWidth"
         android:layout_height="1dp"
-        android:layout_marginTop="40dp"
+        android:layout_marginTop="@dimen/tapDashX4"
         android:background="@color/side_menu_line"
-        app:layout_constraintStart_toStartOf="@+id/sideMenuFanIv"
-        app:layout_constraintTop_toBottomOf="@+id/sideMenuTableRow1" />
+        app:layout_constraintBottom_toBottomOf="@+id/sideMenuProductIv"
+        app:layout_constraintEnd_toStartOf="@+id/sideMenuProductIv"
+        app:layout_constraintStart_toEndOf="@+id/sideMenuLine3" />
 
     <ImageView
         android:id="@+id/sideMenuInfoIv"
-        android:layout_width="24dp"
-        android:layout_height="24dp"
-        android:layout_marginTop="30dp"
+        android:layout_width="@dimen/iconMenuSize"
+        android:layout_height="@dimen/iconMenuSize"
         android:src="@drawable/info_icon"
+        app:layout_constraintBottom_toTopOf="@+id/sideMenuLine3"
         app:layout_constraintStart_toStartOf="@+id/sideMenuPowerIv"
-        app:layout_constraintTop_toBottomOf="@+id/sideMenuLine1"
+        app:layout_constraintTop_toBottomOf="@+id/sideMenuPowerIv"
         app:tint="@color/white" />
 
     <TextView
         android:id="@+id/sideMenuInfoTv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="11dp"
+        android:layout_marginStart="@dimen/tapDashX1"
         android:layout_marginBottom="2dp"
         android:fontFamily="@font/pretendardvariable"
         android:gravity="center"
         android:text="@string/product_info"
         android:textAllCaps="false"
         android:textColor="@color/white"
-        android:textSize="21sp"
+        android:textSize="@dimen/textDashH3.5"
         app:layout_constraintBottom_toBottomOf="@+id/sideMenuInfoIv"
         app:layout_constraintStart_toEndOf="@+id/sideMenuInfoIv"
         app:layout_constraintTop_toTopOf="@+id/sideMenuInfoIv" />
@@ -214,10 +212,10 @@
         android:id="@+id/sideMenuTableLayout1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="27dp"
         android:orientation="vertical"
+        app:layout_constraintBottom_toTopOf="@+id/sideMenuLine3"
         app:layout_constraintStart_toStartOf="@+id/sideMenuInfoIv"
-        app:layout_constraintTop_toBottomOf="@+id/sideMenuInfoTv">
+        app:layout_constraintTop_toBottomOf="@+id/sideMenuInfoIv">
 
         <TableRow
             android:layout_width="fill_parent"
@@ -230,24 +228,24 @@
                 android:fontFamily="@font/pretendardvariable"
                 android:text="@string/product_type"
                 android:textColor="@color/statusUnitText"
-                android:textSize="13sp" />
+                android:textSize="@dimen/textDashH2" />
 
             <TextView
                 android:id="@+id/SideMenuProductTv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="35dp"
+                android:layout_marginStart="@dimen/tapDashX3"
                 android:fontFamily="@font/pretendardvariable"
                 android:gravity="start"
                 android:text="@string/bio_sentinel_100"
                 android:textColor="@color/statusUnitText"
-                android:textSize="13sp" />
+                android:textSize="@dimen/textDashH2" />
         </TableRow>
 
         <TableRow
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="@dimen/tapDashX1"
             android:orientation="horizontal">
 
             <TextView
@@ -256,24 +254,24 @@
                 android:fontFamily="@font/pretendardvariable"
                 android:text="@string/serial_num"
                 android:textColor="@color/statusUnitText"
-                android:textSize="13sp" />
+                android:textSize="@dimen/textDashH2" />
 
             <TextView
                 android:id="@+id/sideMenuSerialNumTv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="35dp"
+                android:layout_marginStart="@dimen/tapDashX3"
                 android:fontFamily="@font/pretendardvariable"
                 android:gravity="start"
                 android:text="TIA0001565"
                 android:textColor="@color/statusUnitText"
-                android:textSize="13sp" />
+                android:textSize="@dimen/textDashH2" />
         </TableRow>
 
         <TableRow
             android:layout_width="fill_parent"
-            android:layout_height="15dp"
-            android:layout_marginTop="10dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/tapDashX1"
             android:orientation="horizontal">
 
             <TextView
@@ -282,59 +280,59 @@
                 android:fontFamily="@font/pretendardvariable"
                 android:text="@string/setup_date"
                 android:textColor="@color/statusUnitText"
-                android:textSize="13sp" />
+                android:textSize="@dimen/textDashH2" />
 
             <TextView
                 android:id="@+id/sideMenuSetUpDateTv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="35dp"
+                android:layout_marginStart="@dimen/tapDashX3"
                 android:fontFamily="@font/pretendardvariable"
                 android:gravity="start"
                 android:text="2022-07-05"
                 android:textColor="@color/statusUnitText"
-                android:textSize="13sp" />
+                android:textSize="@dimen/textDashH2" />
         </TableRow>
     </TableLayout>
 
     <View
         android:id="@+id/sideMenuLine3"
-        android:layout_width="190dp"
+        android:layout_width="@dimen/lineMenuWidth"
         android:layout_height="1dp"
-        android:layout_marginTop="27dp"
+        android:layout_marginTop="@dimen/tapDashX2.5"
         android:background="@color/side_menu_line"
+        app:layout_constraintBottom_toBottomOf="@+id/sideMenuLine2"
         app:layout_constraintEnd_toEndOf="@+id/sideMenuLine1"
-        app:layout_constraintStart_toStartOf="@+id/sideMenuLine1"
-        app:layout_constraintTop_toBottomOf="@+id/sideMenuTableLayout1" />
+        app:layout_constraintStart_toStartOf="@+id/sideMenuLine1" />
 
     <ImageView
         android:id="@+id/sideMenuProductIv"
-        android:layout_width="226dp"
-        android:layout_height="226dp"
-        android:layout_marginTop="13dp"
-        android:layout_marginEnd="60dp"
+        android:layout_width="@dimen/srcMenuSize"
+        android:layout_height="@dimen/srcMenuSize"
+        android:layout_marginEnd="@dimen/tapDashX5"
         android:alpha="0.85"
         android:src="@drawable/side_m"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/sideMenuFanControllTv" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <ImageView
         android:id="@+id/sideMenuLogoIv"
-        android:layout_width="40dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="56dp"
+        android:layout_marginBottom="@dimen/tapDashX0.5"
         android:src="@drawable/as_logo"
-        app:layout_constraintStart_toStartOf="@+id/sideMenuCancelIv"
-        app:layout_constraintTop_toBottomOf="@+id/sideMenuLine3" />
+        app:layout_constraintBottom_toTopOf="@+id/sideMenuTableRow2"
+        app:layout_constraintStart_toStartOf="@+id/sideMenuCancelIv" />
 
     <TableRow
         android:id="@+id/sideMenuTableRow2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
+        android:layout_marginBottom="@dimen/tapDashX3"
         android:orientation="horizontal"
-        app:layout_constraintStart_toStartOf="@+id/sideMenuLogoIv"
-        app:layout_constraintTop_toBottomOf="@+id/sideMenuLogoIv">
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/sideMenuLogoIv">
 
         <TextView
             android:layout_width="wrap_content"
@@ -343,7 +341,7 @@
             android:text="@string/company_name"
             android:textAllCaps="false"
             android:textColor="@color/statusUnitText"
-            android:textSize="12sp" />
+            android:textSize="@dimen/textDashH2" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -353,7 +351,7 @@
             android:text="@string/information"
             android:textAllCaps="false"
             android:textColor="@color/statusUnitText"
-            android:textSize="12sp" />
+            android:textSize="@dimen/textDashH2" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -363,6 +361,6 @@
             android:text="@string/web_site"
             android:textAllCaps="false"
             android:textColor="@color/statusUnitText"
-            android:textSize="12sp" />
+            android:textSize="@dimen/textDashH2" />
     </TableRow>
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,19 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="112dp"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:background="?android:attr/selectableItemBackground"
-    android:padding="1dp"
-    android:layout_marginEnd="8dp"
-    android:layout_marginTop="8dp">
+    android:layout_marginEnd="@dimen/tapDashX1.5"
+    android:gravity="center_horizontal"
+    android:layout_marginBottom="@dimen/tapDashX1.5"
+    android:background="@drawable/connectable_rv_bg"
+    android:padding="1dp">
 
     <ImageView
         android:id="@+id/listItemRecentIconIv"
-        android:layout_width="60dp"
-        android:layout_height="60dp"
+        android:layout_width="@dimen/iconPairListSize"
+        android:layout_height="@dimen/iconPairListSize"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="@dimen/tapDashX1"
+        android:layout_marginStart="@dimen/tapDashX2"
+        android:layout_marginEnd="@dimen/tapDashX2"
         android:src="@drawable/side_m" />
 
     <TextView
@@ -28,7 +30,7 @@
         android:text="BS-100"
         android:textAllCaps="false"
         android:textColor="@color/white"
-        android:textSize="12sp" />
+        android:textSize="@dimen/textDashH1" />
 
     <TextView
         android:id="@+id/listItemRecentNumberTv"
@@ -37,12 +39,12 @@
         android:layout_below="@+id/listItemRecentTitleTv"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="4dp"
-        android:layout_marginBottom="6dp"
+        android:layout_marginBottom="@dimen/tapDashX0.5"
         android:fontFamily="@font/pretendardvariable"
         android:gravity="center"
         android:text="(1505)"
         android:textAllCaps="false"
         android:textColor="@color/statusUnitText"
-        android:textSize="12sp" />
+        android:textSize="13sp" />
 
 </RelativeLayout>

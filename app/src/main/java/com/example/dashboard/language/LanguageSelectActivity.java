@@ -8,9 +8,12 @@ package com.example.dashboard.language;
 
 import android.Manifest;
 import android.app.Activity;
+import android.content.Context;
 import android.os.Bundle;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -48,9 +51,6 @@ public class LanguageSelectActivity extends AppCompatActivity {
         setContentView(v);
 
         context = LanguageSelectActivity.this;
-
-        // 블루투스 퍼미션 체크 다이얼로그를 출력합니다
-        checkBTPermissions();
 
         // SharedPreference 로 부터 최종 설정 된 언어와 언어선택 스킵 여부를 불러옵니다
         FINAL_LANGUAGE = SharedPreferenceManager.getString(context, "final");
@@ -192,17 +192,5 @@ public class LanguageSelectActivity extends AppCompatActivity {
         binding.langOkTv.setEnabled(false);
         binding.langOkTv.setBackground(AppCompatResources.getDrawable(context, R.drawable.lang_ok_b));
         binding.langOkTv.setTextColor(ResourcesCompat.getColor(getResources(), R.color.statusUnitText, null));
-    }
-
-    // 블루투스 퍼미션을 체크합니다
-    private void checkBTPermissions() {
-        // ref) https://it-recording.tistory.com/15
-        int permissionCheck = context.checkSelfPermission("Manifest.permission.ACCESS_FINE_LOCATION");
-        permissionCheck += context.checkSelfPermission("Manifest.permission.ACCESS_FINE_LOCATION");
-        if (permissionCheck != 0) {
-            context.requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION}, 1001);
-        } else {
-            Log.d("checkPermission", "No need to check permissions. SDK version < LOLLIPOP");
-        }
     }
 }
