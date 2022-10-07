@@ -1,5 +1,6 @@
 # BsDashboard
 Airsignal BS DashBoard
+Recent Edit : 2022-10-07 (Mqtt로 Web Server 데이터 전송 기능 추가 & 일부 UI 개선 & 안정성 추가)
 
 </br><h1>언어 선택 화면</h1></br>
 ![Screenshot_20220816-153626](https://user-images.githubusercontent.com/52855326/191404420-24679741-fa25-46d8-b248-88d09181436f.png)
