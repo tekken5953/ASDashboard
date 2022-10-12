@@ -61,5 +61,5 @@
     <dimen name="guideMenuSide">50dp</dimen>
     <dimen name="btnOkLangWidth">280dp</dimen>
 
-
+    <dimen name="guideDialogSide">15dp</dimen>
 </resources>

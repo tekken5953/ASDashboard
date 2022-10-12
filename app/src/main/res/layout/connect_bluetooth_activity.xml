@@ -186,8 +186,9 @@
                 android:padding="3dp"
                 android:progressTint="@color/white"
                 android:visibility="visible"
+                android:layout_marginStart="3dp"
+                app:layout_constraintStart_toEndOf="@+id/connConnectableDeviceTv"
                 app:layout_constraintBottom_toBottomOf="@+id/connConnectableDeviceTv"
-                app:layout_constraintEnd_toEndOf="@+id/connConnectableRv"
                 app:layout_constraintTop_toTopOf="@+id/connConnectableDeviceTv" />
 
             <androidx.recyclerview.widget.RecyclerView

@@ -2,6 +2,8 @@
  * 에어시그널 태블릿 대쉬보드 (사용자용)
  * 개발자 LeeJaeYoung (jy5953@airsignal.kr)
  * 개발시작 2022-06-20
+ * 1차 배포수준 개발 종료 : 2022-09-10
+ * 1차 업데이트 종료 - MQTT 추가 : 2022-10-11
  */
 
 package com.example.dashboard.dashboard;
@@ -23,6 +25,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.Color;
+import android.graphics.Typeface;
 import android.net.ConnectivityManager;
 import android.net.Network;
 import android.net.NetworkInfo;
@@ -37,6 +40,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -60,6 +64,7 @@ import com.example.dashboard.SharedPreferenceManager;
 import com.example.dashboard.bluetooth.BluetoothAPI;
 import com.example.dashboard.bluetooth.BluetoothThread;
 import com.example.dashboard.bluetooth.VirusFormulaClass;
+import com.example.dashboard.connect.ConnectDeviceActivity;
 import com.example.dashboard.databinding.ActivityDashboardBinding;
 import com.example.dashboard.language.LanguageSelectActivity;
 import com.example.dashboard.ui.SegmentedProgressBar;
@@ -72,6 +77,9 @@ import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
 import com.github.mikephil.charting.formatter.IndexAxisValueFormatter;
 import com.google.android.material.snackbar.Snackbar;
+import com.rahman.dialog.Activity.SmartDialog;
+import com.rahman.dialog.ListenerCallBack.SmartDialogClickListener;
+import com.rahman.dialog.Utilities.SmartDialogBuilder;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -149,7 +157,7 @@ public class DashBoardActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         Log.i(TAG_LifeCycle, "onDestroy");
-        super.onDestroy();
+
 
         if (data_timerTask != null)
             data_timerTask.cancel();
@@ -159,8 +167,13 @@ public class DashBoardActivity extends AppCompatActivity {
 
         drawGraphClass.reDrawChart();
 
-        if (mqtt.isConnected())
-            mqtt.disconnect();
+        if (bluetoothThread.isConnected())
+            bluetoothThread.closeSocket();
+
+        if (bluetoothThread.isRunning())
+            bluetoothThread.interrupt();
+
+        super.onDestroy();
     }
 
     @Override
@@ -329,6 +342,7 @@ public class DashBoardActivity extends AppCompatActivity {
                     if (command.equals("82")) {
                         processControlBody(body);
                     } else if (command.equals("83")) {
+                        HideLoading();
                         if (!isConnected && binding.dashWifiSwitch.isChecked()) {
                             try {
                                 mqtt.connect();
@@ -683,6 +697,7 @@ public class DashBoardActivity extends AppCompatActivity {
             jsonMeasure.put("ValidTH", body.getByte("0F"));
         }
 
+        //CQI 데이터 불러오고 그래프 그리기
         if (pm_float != null && co_float != null) {
             runOnUiThread(new Runnable() {
                 @Override
@@ -815,6 +830,12 @@ public class DashBoardActivity extends AppCompatActivity {
                             },
                             bluetoothThread.getSequence()
                     ));
+
+                    if (mqtt != null && !mqtt.isConnected()) {
+                        mqtt.connect();
+                        binding.dashWifiSwitch.setChecked(true);
+                        Toast.makeText(context, "통신이 복구되어 Mqtt를 재연결합니다", Toast.LENGTH_SHORT).show();
+                    }
                 }
             });
 
@@ -831,8 +852,32 @@ public class DashBoardActivity extends AppCompatActivity {
                         public void run() {
                             if (bluetoothThread.isRunning()) {
                                 bluetoothThread.connectSocket();
+                                if (mqtt != null && mqtt.isConnected()) {
+                                    mqtt.disconnect();
+                                    binding.dashWifiSwitch.setChecked(false);
+                                    Toast.makeText(context, "통신이 불확실하여 Mqtt를 종료합니다", Toast.LENGTH_SHORT).show();
+                                }
                             } else {
-                                outerClass.GoToConnectFromDashboard(context);
+                                Handler handler = new Handler(Looper.getMainLooper());
+                                handler.postDelayed(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        try {
+                                            StartLoading();
+                                            bluetoothThread.connectSocket();
+                                            bluetoothThread.start();
+                                            regDataListener(dataScheduler);
+                                            Log.i(TAG_BTThread, "Loop Data Request");
+                                            if (SharedPreferenceManager.getString(context,"mqtt").equals("true")){
+                                                if (mqtt != null && !mqtt.isConnected())
+                                                    mqtt.connect();
+                                            }
+                                        } catch (InterruptedException e) {
+                                            e.printStackTrace();
+                                        }
+                                    }
+                                }, 2000);
+//                                outerClass.GoToConnectFromDashboard(context);
                             }
                             HideLoading();
                         }
@@ -841,7 +886,8 @@ public class DashBoardActivity extends AppCompatActivity {
             });
 
             // 소켓을 연결합니다
-            bluetoothThread.connectSocket();
+            if (!bluetoothThread.isConnected())
+                bluetoothThread.connectSocket();
 
             try {
                 Thread.sleep(1000);
@@ -1398,6 +1444,9 @@ public class DashBoardActivity extends AppCompatActivity {
             binding.virusLineChart.setExtraOffsets(15f, 7f, 15f, 7f); // 차트 Padding 설정
             binding.virusLineChart.setNoDataText(getString(R.string.no_data_text));
             binding.virusLineChart.getAxisRight().setEnabled(false); // 라인차트 오른쪽 데이터 비활성화
+            binding.virusLineChart.setClickable(false); // 클릭 이벤트 차단
+            binding.virusLineChart.setTouchEnabled(false); // 터치 이벤트 차단
+            binding.virusLineChart.setEnabled(false);
 
             // Y축
             YAxis yAxis = binding.virusLineChart.getAxisLeft();
@@ -1413,7 +1462,6 @@ public class DashBoardActivity extends AppCompatActivity {
             yAxis.setDrawAxisLine(false); // AxisLine 표시
 
             legend.setEnabled(false); // 범례 비활성화
-
 
             binding.virusLineChart.setData(lineData); // 라인차트 데이터 설정
         }
@@ -1544,27 +1592,26 @@ public class DashBoardActivity extends AppCompatActivity {
     }
 
     // 현재 시간기준으로 그래프의 X축 라벨을 포맷합니다
-    private String chartTimeDivider(ArrayList<String> arrayList, int count) {
+    private String chartTimeDivider(ArrayList<String> arrayList, int mCount) {
         try {
             @SuppressLint("SimpleDateFormat") SimpleDateFormat simpleDateFormat = new SimpleDateFormat("hh:mm");
             CHART_MADE_TIME = System.currentTimeMillis();
             long lArray;
-            if (count == 0) {
+            if (mCount == 0) {
                 lArray = CHART_MADE_TIME - (10 * 60 * 1000);
-                arrayList.add(count + 1, simpleDateFormat.format(lArray));
-                return arrayList.get(count + 1);
-            } else if (count == 1) {
+                arrayList.add(mCount + 1, simpleDateFormat.format(lArray));
+                return arrayList.get(mCount + 1);
+            } else if (mCount == 1) {
                 lArray = CHART_MADE_TIME;
-                arrayList.add(count + 1, simpleDateFormat.format(lArray));
-                return arrayList.get(count + 1);
+                arrayList.add(mCount + 1, simpleDateFormat.format(lArray));
+                return arrayList.get(mCount + 1);
             } else {
-                lArray = CHART_MADE_TIME + ((long) (count - 1) * 10 * 60 * 1000);
-                arrayList.add(count + 1, simpleDateFormat.format(lArray));
-                return arrayList.get(count + 1);
+                lArray = CHART_MADE_TIME + ((long) (mCount - 1) * 10 * 60 * 1000);
+                arrayList.add(mCount + 1, simpleDateFormat.format(lArray));
+                return arrayList.get(mCount + 1);
             }
         } catch (IndexOutOfBoundsException | NullPointerException e) {
             Log.e(TAG_BTThread, "IndexOutOfBoundsException : " + e);
-            arrayList.clear();
         }
         return " ";
     }
@@ -1689,11 +1736,19 @@ public class DashBoardActivity extends AppCompatActivity {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (buttonView.isChecked()) {
+                    if (mqtt != null && !mqtt.isConnected()) {
+                        mqtt.connect();
+                    }
+
                     Log.d(TAG_MQTT, "Accept Request Data");
                     SharedPreferenceManager.setString(context, "usingWifi", "true");
                     buttonView.setTextColor(ResourcesCompat.getColor(getResources(), R.color.progressNormal, null));
                     Snackbar.make(binding.topFrameLayout, R.string.mqtt_accept, Snackbar.LENGTH_SHORT).show();
                 } else {
+                    if (mqtt != null && mqtt.isConnected()) {
+                        mqtt.disconnect();
+                    }
+
                     Log.d(TAG_MQTT, "Deny Request Data");
                     SharedPreferenceManager.setString(context, "usingWifi", "false");
                     buttonView.setTextColor(ResourcesCompat.getColor(getResources(), R.color.statusUnitText, null));
@@ -1837,41 +1892,33 @@ public class DashBoardActivity extends AppCompatActivity {
     //  앱 종료 메시지 창 띄우기
     @Override
     public void onBackPressed() {
-        final AlertDialog.Builder builder = new AlertDialog.Builder(context);
-        builder.setTitle(getString(R.string.exit_app_title));
-        builder.setMessage(getString(R.string.exit_app_message));
-        builder.setPositiveButton(getString(R.string.exit_app_yes), new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                if (bluetoothThread.isConnected()) {
-                    bluetoothThread.closeSocket();
-                }
-
-                if (bluetoothThread.isInterrupted()) {
-                    bluetoothThread.interrupt();
-                }
-                dialog.dismiss();
-                DashBoardActivity.super.onBackPressed();
-            }
-        });
-        builder.setNegativeButton(getString(R.string.exit_app_no), new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                try {
-                    if (!bluetoothThread.isInterrupted()) {
-                        bluetoothThread.start();
+        final SmartDialogBuilder builder = new SmartDialogBuilder(context)
+                .setTitle(getString(R.string.dialog_title))
+                .setSubTitle(getString(R.string.dialog_subtitle))
+                .setCancalable(true)
+                .setNegativeButtonHide(false)
+                .setPositiveButton(getString(R.string.exit_app_title), new SmartDialogClickListener() {
+                    @Override
+                    public void onClick(SmartDialog smartDialog) {
+                        smartDialog.dismiss();
+                        DashBoardActivity.super.onBackPressed();
                     }
+                })
+                .setNegativeButton(getString(R.string.dialog_conn), new SmartDialogClickListener() {
+                    @Override
+                    public void onClick(SmartDialog smartDialog) {
+                        smartDialog.dismiss();
 
-                    if (!bluetoothThread.isConnected()) {
-                        bluetoothThread.connectSocket();
+                        if (bluetoothThread.isConnected())
+                            bluetoothThread.closeSocket();
+                        if (bluetoothThread.isRunning())
+                            bluetoothThread.interrupt();
+
+                        Intent intent = new Intent(DashBoardActivity.this, LanguageSelectActivity.class);
+                        startActivity(intent);
+                        finish();
                     }
-                } catch (IllegalThreadStateException e) {
-                    e.printStackTrace();
-                }
-
-                dialog.dismiss();
-            }
-        });
-        builder.show();
+                });
+        builder.build().show();
     }
 }

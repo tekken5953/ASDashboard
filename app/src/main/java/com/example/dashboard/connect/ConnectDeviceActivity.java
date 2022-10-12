@@ -29,6 +29,7 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.res.ResourcesCompat;
 
+import com.example.dashboard.OnSingleClickListener;
 import com.example.dashboard.OuterClass;
 import com.example.dashboard.R;
 import com.example.dashboard.SharedPreferenceManager;
@@ -80,17 +81,7 @@ public class ConnectDeviceActivity extends AppCompatActivity {
     protected void onDestroy() {
         super.onDestroy();
         Log.d(TAG_LIFECYCLE, "On Destroy");
-        // 액티비티의 LifeCycle 이 종료 될 때 어댑터를 초기화 하고
-        // 등록된 리시버를 해제합니다
-        // 디바이스 스캔 작업도 취소합니다
-        if (bluetoothAdapter.isDiscovering()) {
-            unregisterReceiver(connectReceiver);
-            bluetoothAdapter.cancelDiscovery();
-        }
-
-        cList.clear();
-        noPairingPosition = 0;
-        pList.clear();
+        DestroyActivity();
     }
 
     @Override
@@ -176,19 +167,22 @@ public class ConnectDeviceActivity extends AppCompatActivity {
         });
 
         // 확인 버튼 클릭시 이벤트 리스너입니다
-        binding.connOkTv.setOnClickListener(new View.OnClickListener() {
+        binding.connOkTv.setOnClickListener(new OnSingleClickListener() {
             @Override
-            public void onClick(View v) {
+            public void onSingleClick(View v) {
                 if (binding.connOkTv.isEnabled()) {
                     CompletableFuture.runAsync(() -> {
                         outerClass.CallVibrate(context, 10);
                         visibleProgress();
                     }).thenAccept(result -> {
+                        if (bluetoothThread.isConnected())
+                            bluetoothThread.closeSocket();
+                        if (bluetoothThread.isRunning())
+                            bluetoothThread.interrupt();
                         // 대쉬보드 화면으로 이동합니다
                         Intent intent = new Intent(context, DashBoardActivity.class);
                         // 해당 클릭아이템의 포지션을 인텐트와 함께 전송합니다
                         intent.putExtra("device_position", SELECTED_POSITION);
-
                         startActivity(intent);
                         finish();
                     });
@@ -283,9 +277,9 @@ public class ConnectDeviceActivity extends AppCompatActivity {
         });
 
         // 리스트 새로고침 클릭 시 이벤트리스너
-        binding.connRefreshBtn.setOnClickListener(new View.OnClickListener() {
+        binding.connRefreshBtn.setOnClickListener(new OnSingleClickListener() {
             @Override
-            public void onClick(View v) {
+            public void onSingleClick(View v) {
                 outerClass.CallVibrate(context, 10);
                 pList.clear();
                 startCheckBluetooth();
@@ -295,12 +289,41 @@ public class ConnectDeviceActivity extends AppCompatActivity {
         });
     }
 
+    private void DestroyActivity() {
+        // 액티비티의 LifeCycle 이 종료 될 때 어댑터를 초기화 하고
+        // 등록된 리시버를 해제합니다
+        // 디바이스 스캔 작업도 취소합니다
+        if (bluetoothAdapter.isDiscovering()) {
+            unregisterReceiver(connectReceiver);
+            bluetoothAdapter.cancelDiscovery();
+        }
+
+        if (bluetoothThread.isRunning())
+            bluetoothThread.interrupt();
+        if (bluetoothThread.isConnected())
+            bluetoothThread.closeSocket();
+
+        cList.clear();
+        noPairingPosition = 0;
+        pList.clear();
+    }
+
     private void ShowRefresh() {
-        binding.connRefreshIv.setVisibility(View.VISIBLE);
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                binding.connRefreshIv.setVisibility(View.VISIBLE);
+            }
+        });
     }
 
     private void HideRefresh() {
-        binding.connRefreshIv.setVisibility(View.GONE);
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                binding.connRefreshIv.setVisibility(View.GONE);
+            }
+        });
     }
 
     // 연결 가능한 아이템 추가
@@ -455,15 +478,26 @@ public class ConnectDeviceActivity extends AppCompatActivity {
     }
 
     private void goneProgress() {
-        binding.loadingParingPb.setVisibility(View.GONE);
-        binding.connMainLayout.setAlpha(1f);
-        binding.mainLayout.setEnabled(true);
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                binding.loadingParingPb.setVisibility(View.GONE);
+                binding.connMainLayout.setAlpha(1f);
+                binding.mainLayout.setEnabled(true);
+            }
+        });
+
     }
 
     private void SetOkBtnEnable() {
-        binding.connOkTv.setEnabled(true);
-        binding.connOkTv.setBackgroundDrawable(ResourcesCompat.getDrawable(getResources(), R.drawable.lang_ok_w, null));
-        binding.connOkTv.setTextColor(ResourcesCompat.getColor(getResources(), R.color.white, null));
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                binding.connOkTv.setEnabled(true);
+                binding.connOkTv.setBackgroundDrawable(ResourcesCompat.getDrawable(getResources(), R.drawable.lang_ok_w, null));
+                binding.connOkTv.setTextColor(ResourcesCompat.getColor(getResources(), R.color.white, null));
+            }
+        });
     }
 
     private void getConnectableDeviceList() {
@@ -515,6 +549,7 @@ public class ConnectDeviceActivity extends AppCompatActivity {
     }
 
     private void StartDiscovery() {
+
         bluetoothAdapter.startDiscovery();
 
         Handler handler = new Handler(Looper.getMainLooper());

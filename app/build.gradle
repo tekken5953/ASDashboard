@@ -73,4 +73,7 @@ dependencies {
     implementation 'org.eclipse.paho:org.eclipse.paho.android.service:1.1.1' // MQTT Service
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
 
+    //Custom Dialog
+    implementation 'com.github.TecOrb-Developers:SmartAlertDialog:v1.0'
+
 }

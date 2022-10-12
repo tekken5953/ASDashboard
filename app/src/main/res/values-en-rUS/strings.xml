@@ -104,4 +104,7 @@
     <string name="mqtt_error_get_user_id">Fail to Get Device Data..\nPausing Request</string>
     <string name="mqtt_wifi_reconnect_s">Success to Reconnect Internet</string>
     <string name="mqtt_wifi_reconnect_f">Fail to Reconnect Internet</string>
+    <string name="dialog_subtitle">Do you really want to Exit this app?</string>
+    <string name="dialog_title">Exit Dashboard</string>
+    <string name="dialog_conn">Connect Other Device</string>
 </resources>

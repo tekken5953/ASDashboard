@@ -103,4 +103,7 @@
     <string name="mqtt_error_get_user_id">유저 정보를 받아오는데 실패했습니다.\n데이터 전송이 일시적으로 중단되었습니다</string>
     <string name="mqtt_wifi_reconnect_s">인터넷 연결복구 성공</string>
     <string name="mqtt_wifi_reconnect_f">인터넷 연결복구 실패</string>
+    <string name="dialog_subtitle">정말로 앱을 종료하시겠습니까?</string>
+    <string name="dialog_title">대시보드 종료</string>
+    <string name="dialog_conn">다른기기에 연결</string>
 </resources>
