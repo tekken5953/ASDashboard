@@ -211,6 +211,7 @@
                 android:textAllCaps="false"
                 android:textColor="@color/white"
                 android:textSize="@dimen/textDashH3"
+                android:background="@drawable/ripple_round"
                 android:textStyle="bold" />
 
             <TextView
@@ -224,6 +225,7 @@
                 android:textAllCaps="false"
                 android:textColor="@color/white"
                 android:textSize="@dimen/textDashH3"
+                android:background="@drawable/ripple_round"
                 android:textStyle="bold" />
         </TableRow>
 

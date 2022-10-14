@@ -5,6 +5,7 @@
     tools:context=".dashboard.DashBoardActivity">
 
     <data>
+
         <variable
             name="viewModel"
             type="com.example.dashboard.bluetooth.BluetoothThread.DataShareViewModel" />
@@ -52,8 +53,8 @@
 
             <ImageView
                 android:id="@+id/hambugerMenuIv"
-                android:layout_width="@dimen/iconDashSize"
-                android:layout_height="@dimen/iconDashSize"
+                android:layout_width="35dp"
+                android:layout_height="35dp"
                 android:layout_marginStart="@dimen/guideDashSide"
                 android:layout_marginTop="@dimen/guideDashTop"
                 android:background="@drawable/ripple_round"
@@ -61,147 +62,168 @@
                 android:onClick="onClick"
                 android:padding="2dp"
                 android:visibility="visible"
-                app:layout_constraintBottom_toBottomOf="@+id/currentTimeTv"
+                app:layout_constraintBottom_toTopOf="@+id/topFrameLayout"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/currentTimeTv"
+                app:layout_constraintTop_toTopOf="parent"
                 app:srcCompat="@drawable/menu_icon" />
 
-            <ImageView
-                android:id="@+id/dashBtIcon"
-                android:layout_width="22dp"
-                android:layout_height="22dp"
-                android:layout_marginStart="@dimen/tapDashX1.5"
-                android:src="@drawable/bluetooth"
-                android:visibility="visible"
+            <TextView
+                android:id="@+id/dashTempTitleTx"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/tapDashX1"
+                android:fontFamily="@font/pretendardvariable"
+                android:gravity="center"
+                android:text="@string/temp"
+                android:textColor="@color/textColorMain"
+                android:textSize="@dimen/textDashH1"
                 app:layout_constraintBottom_toBottomOf="@+id/hambugerMenuIv"
                 app:layout_constraintStart_toEndOf="@+id/hambugerMenuIv"
-                app:layout_constraintTop_toTopOf="@+id/hambugerMenuIv"
-                app:tint="@color/statusUnitText" />
-
-            <ImageView
-                android:id="@+id/dashWifiIcon"
-                android:layout_width="22dp"
-                android:layout_height="22dp"
-                android:layout_marginStart="@dimen/tapDashX0.5"
-                android:src="@drawable/wifi"
-                android:visibility="visible"
-                app:layout_constraintBottom_toBottomOf="@+id/dashBtIcon"
-                app:layout_constraintStart_toEndOf="@+id/dashBtIcon"
-                app:layout_constraintTop_toTopOf="@+id/dashBtIcon"
-                app:tint="@color/statusUnitText" />
-
-            <androidx.appcompat.widget.SwitchCompat
-                android:id="@+id/dashWifiSwitch"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/tapDashX1.5"
-                android:text="@string/mqtt"
-                android:textAllCaps="false"
-                android:textStyle="bold"
-                android:textColor="@color/statusUnitText"
-                android:checked="false"
-                app:layout_constraintBottom_toBottomOf="@+id/dashWifiIcon"
-                app:layout_constraintStart_toEndOf="@+id/dashWifiIcon"
-                app:layout_constraintTop_toTopOf="@+id/dashWifiIcon" />
-
-            <TextClock
-                android:id="@+id/currentTimeTv"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/tapDashX2"
-                android:layout_marginEnd="@dimen/guideDashSide"
-                android:format24Hour="a hh:mm"
-                android:gravity="center"
-                android:text="time"
-                android:textColor="@color/white"
-                android:textSize="@dimen/textDashH1"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="@+id/hambugerMenuIv" />
 
             <TextView
-                android:id="@+id/humidTv"
+                android:id="@+id/tempTv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="3dp"
+                android:layout_marginStart="@dimen/tapDashX1"
                 android:fontFamily="@font/pretendardvariable"
                 android:gravity="center"
                 android:text="null"
                 android:textColor="@color/textColorMain"
                 android:textSize="@dimen/textDashH1"
-                app:layout_constraintBottom_toBottomOf="@+id/humidUnitTv"
-                app:layout_constraintEnd_toStartOf="@id/humidUnitTv"
-                app:layout_constraintTop_toTopOf="@id/humidUnitTv" />
+                app:layout_constraintBottom_toBottomOf="@+id/dashTempTitleTx"
+                app:layout_constraintStart_toEndOf="@+id/dashTempTitleTx"
+                app:layout_constraintTop_toTopOf="@+id/dashTempTitleTx" />
+
+            <TextView
+                android:id="@+id/tempUnitTv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="3dp"
+                android:fontFamily="@font/pretendardvariable"
+                android:gravity="center"
+                android:text="℃"
+                android:textColor="@color/textColorMain"
+                android:textSize="@dimen/textDashH1"
+                app:layout_constraintBottom_toBottomOf="@+id/dashTempTitleTx"
+                app:layout_constraintStart_toEndOf="@+id/tempTv"
+                app:layout_constraintTop_toTopOf="@+id/dashTempTitleTx" />
+
+            <TextView
+                android:id="@+id/humidIndexTv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/tapDashX1.5"
+                android:fontFamily="@font/pretendardvariable"
+                android:gravity="center"
+                android:text="@string/humid"
+                android:textColor="@color/textColorMain"
+                android:textSize="@dimen/textDashH1"
+                app:layout_constraintBottom_toBottomOf="@+id/dashTempTitleTx"
+                app:layout_constraintStart_toEndOf="@+id/tempUnitTv"
+                app:layout_constraintTop_toTopOf="@+id/dashTempTitleTx" />
+
+            <TextView
+                android:id="@+id/humidTv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/tapDashX1"
+                android:fontFamily="@font/pretendardvariable"
+                android:gravity="center"
+                android:text="null"
+                android:textColor="@color/textColorMain"
+                android:textSize="@dimen/textDashH1"
+                app:layout_constraintBottom_toBottomOf="@+id/humidIndexTv"
+                app:layout_constraintStart_toEndOf="@id/humidIndexTv"
+                app:layout_constraintTop_toTopOf="@id/humidIndexTv" />
 
             <TextView
                 android:id="@+id/humidUnitTv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="3dp"
-                android:layout_marginEnd="@dimen/tapDashX3"
                 android:fontFamily="@font/pretendardvariable"
                 android:gravity="center"
                 android:text="%"
                 android:textColor="@color/textColorMain"
                 android:textSize="@dimen/textDashH1"
-                app:layout_constraintBottom_toBottomOf="@+id/currentTimeTv"
-                app:layout_constraintEnd_toStartOf="@+id/currentTimeTv"
-                app:layout_constraintTop_toTopOf="@+id/currentTimeTv" />
+                app:layout_constraintBottom_toBottomOf="@+id/humidTv"
+                app:layout_constraintStart_toEndOf="@+id/humidTv"
+                app:layout_constraintTop_toTopOf="@+id/humidTv" />
 
-            <TextView
-                android:id="@+id/humidIndexTv"
+            <androidx.appcompat.widget.SwitchCompat
+                android:id="@+id/dashWifiSwitch"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="@dimen/tapDashX1"
-                android:fontFamily="@font/pretendardvariable"
-                android:gravity="center"
-                android:text="@string/humid"
-                android:textColor="@color/textColorMain"
-                android:textSize="@dimen/textDashH1"
-                app:layout_constraintBottom_toBottomOf="@+id/humidUnitTv"
-                app:layout_constraintEnd_toStartOf="@+id/humidTv"
-                app:layout_constraintTop_toTopOf="@+id/humidUnitTv" />
+                android:checked="false"
+                android:text="@string/mqtt"
+                android:textAllCaps="false"
+                android:textColor="@color/statusUnitText"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toBottomOf="@+id/dashBatteryTx"
+                app:layout_constraintEnd_toStartOf="@+id/dashWifiIcon"
+                app:layout_constraintTop_toTopOf="@+id/dashBatteryTx" />
 
-            <TextView
-                android:id="@+id/tempUnitTv"
+            <TextClock
+                android:id="@+id/currentTimeTv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="@dimen/tapDashX3"
                 android:fontFamily="@font/pretendardvariable"
+                android:format24Hour="a hh:mm"
                 android:gravity="center"
-                android:text="℃"
-                android:textColor="@color/textColorMain"
+                android:text="time"
+                android:textColor="@color/white"
                 android:textSize="@dimen/textDashH1"
-                app:layout_constraintBottom_toBottomOf="@+id/currentTimeTv"
-                app:layout_constraintEnd_toStartOf="@+id/humidIndexTv"
-                app:layout_constraintTop_toTopOf="@+id/currentTimeTv" />
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/tempTv"
+                app:layout_constraintBottom_toBottomOf="@+id/tempTv"/>
 
-            <TextView
-                android:id="@+id/tempTv"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="3dp"
-                android:fontFamily="@font/pretendardvariable"
-                android:gravity="center"
-                android:text="null"
-                android:textColor="@color/textColorMain"
-                android:textSize="@dimen/textDashH1"
-                app:layout_constraintBottom_toBottomOf="@+id/tempUnitTv"
-                app:layout_constraintEnd_toStartOf="@+id/tempUnitTv"
-                app:layout_constraintTop_toTopOf="@+id/tempUnitTv" />
+            <ImageView
+                android:id="@+id/dashWifiIcon"
+                android:layout_width="22dp"
+                android:layout_height="22dp"
+                android:layout_marginEnd="@dimen/tapDashX0.5"
+                android:src="@drawable/wifi"
+                android:visibility="visible"
+                app:layout_constraintBottom_toBottomOf="@+id/dashBtIcon"
+                app:layout_constraintEnd_toStartOf="@+id/dashBtIcon"
+                app:layout_constraintTop_toTopOf="@+id/dashBtIcon"
+                app:tint="@color/statusUnitText" />
 
-            <TextView
-                android:id="@+id/textView6"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+            <ImageView
+                android:id="@+id/dashBtIcon"
+                android:layout_width="22dp"
+                android:layout_height="22dp"
                 android:layout_marginEnd="@dimen/tapDashX1"
-                android:fontFamily="@font/pretendardvariable"
-                android:gravity="center"
-                android:text="@string/temp"
-                android:textColor="@color/textColorMain"
+                android:src="@drawable/bluetooth"
+                android:visibility="visible"
+                app:layout_constraintBottom_toBottomOf="@+id/dashBatteryIv"
+                app:layout_constraintEnd_toStartOf="@+id/dashBatteryTx"
+                app:layout_constraintTop_toTopOf="@+id/dashBatteryIv"
+                app:tint="@color/statusUnitText" />
+
+            <TextView
+                android:id="@+id/dashBatteryTx"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="0%"
+                android:textColor="@color/white"
                 android:textSize="@dimen/textDashH1"
-                app:layout_constraintBottom_toBottomOf="@+id/tempUnitTv"
-                app:layout_constraintEnd_toStartOf="@+id/tempTv"
-                app:layout_constraintTop_toTopOf="@+id/tempUnitTv" />
+                app:layout_constraintBottom_toBottomOf="@+id/hambugerMenuIv"
+                app:layout_constraintEnd_toStartOf="@+id/dashBatteryIv"
+                app:layout_constraintTop_toTopOf="@+id/hambugerMenuIv" />
+
+            <ImageView
+                android:id="@+id/dashBatteryIv"
+                android:layout_width="24dp"
+                android:layout_height="23dp"
+                android:src="@drawable/battery_full"
+                app:layout_constraintBottom_toBottomOf="@+id/hambugerMenuIv"
+                app:layout_constraintEnd_toEndOf="@+id/topFrameLayout"
+                app:layout_constraintTop_toTopOf="@+id/hambugerMenuIv"
+                app:tint="@color/white" />
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/topFrameLayout"
@@ -214,7 +236,7 @@
                 app:layout_constraintBottom_toTopOf="@+id/cardLinearLayout"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textView6">
+                app:layout_constraintTop_toBottomOf="@+id/dashTempTitleTx">
 
                 <ImageView
                     android:id="@+id/apiCircleChartPb"

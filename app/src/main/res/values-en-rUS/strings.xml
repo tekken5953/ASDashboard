@@ -107,4 +107,5 @@
     <string name="dialog_subtitle">Do you really want to Exit this app?</string>
     <string name="dialog_title">Exit Dashboard</string>
     <string name="dialog_conn">Connect Other Device</string>
+    <string name="fail_count">The Connection has been lost\nPlease check the Device and reconnect</string>
 </resources>

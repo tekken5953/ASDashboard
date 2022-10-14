@@ -74,6 +74,7 @@ dependencies {
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
 
     //Custom Dialog
+    //https://android-arsenal.com/details/1/7802
     implementation 'com.github.TecOrb-Developers:SmartAlertDialog:v1.0'
 
 }

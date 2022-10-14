@@ -127,7 +127,7 @@
             android:gravity="center"
             android:text="@string/fan_first"
             android:textAllCaps="false"
-            android:textColor="@color/statusUnitText"
+            android:textColor="@color/side_0.8_white"
             android:textSize="@dimen/textDashH3" />
 
         <TextView
@@ -140,7 +140,7 @@
             android:gravity="center"
             android:text="@string/fan_second"
             android:textAllCaps="false"
-            android:textColor="@color/statusUnitText"
+            android:textColor="@color/side_0.8_white"
             android:textSize="@dimen/textDashH3" />
 
         <TextView
@@ -153,7 +153,7 @@
             android:gravity="center"
             android:text="@string/fan_third"
             android:textAllCaps="false"
-            android:textColor="@color/statusUnitText"
+            android:textColor="@color/side_0.8_white"
             android:textSize="@dimen/textDashH3" />
 
         <TextView
@@ -167,7 +167,7 @@
             android:gravity="center"
             android:text="@string/fan_fourth"
             android:textAllCaps="false"
-            android:textColor="@color/statusUnitText"
+            android:textColor="@color/side_0.8_white"
             android:textSize="@dimen/textDashH3" />
 
     </GridLayout>
@@ -227,7 +227,7 @@
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/pretendardvariable"
                 android:text="@string/product_type"
-                android:textColor="@color/statusUnitText"
+                android:textColor="@color/side_0.8_white"
                 android:textSize="@dimen/textDashH2" />
 
             <TextView
@@ -238,7 +238,7 @@
                 android:fontFamily="@font/pretendardvariable"
                 android:gravity="start"
                 android:text="@string/bio_sentinel_100"
-                android:textColor="@color/statusUnitText"
+                android:textColor="@color/side_0.8_white"
                 android:textSize="@dimen/textDashH2" />
         </TableRow>
 
@@ -253,7 +253,7 @@
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/pretendardvariable"
                 android:text="@string/serial_num"
-                android:textColor="@color/statusUnitText"
+                android:textColor="@color/side_0.8_white"
                 android:textSize="@dimen/textDashH2" />
 
             <TextView
@@ -264,7 +264,7 @@
                 android:fontFamily="@font/pretendardvariable"
                 android:gravity="start"
                 android:text="TIA0001565"
-                android:textColor="@color/statusUnitText"
+                android:textColor="@color/side_0.8_white"
                 android:textSize="@dimen/textDashH2" />
         </TableRow>
 
@@ -279,7 +279,7 @@
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/pretendardvariable"
                 android:text="@string/setup_date"
-                android:textColor="@color/statusUnitText"
+                android:textColor="@color/side_0.8_white"
                 android:textSize="@dimen/textDashH2" />
 
             <TextView
@@ -290,7 +290,7 @@
                 android:fontFamily="@font/pretendardvariable"
                 android:gravity="start"
                 android:text="2022-07-05"
-                android:textColor="@color/statusUnitText"
+                android:textColor="@color/side_0.8_white"
                 android:textSize="@dimen/textDashH2" />
         </TableRow>
     </TableLayout>
@@ -340,7 +340,7 @@
             android:fontFamily="@font/pretendardvariable"
             android:text="@string/company_name"
             android:textAllCaps="false"
-            android:textColor="@color/statusUnitText"
+            android:textColor="@color/side_0.8_white"
             android:textSize="@dimen/textDashH2" />
 
         <TextView
@@ -350,7 +350,7 @@
             android:fontFamily="@font/pretendardvariable"
             android:text="@string/information"
             android:textAllCaps="false"
-            android:textColor="@color/statusUnitText"
+            android:textColor="@color/side_0.8_white"
             android:textSize="@dimen/textDashH2" />
 
         <TextView
@@ -360,7 +360,7 @@
             android:fontFamily="@font/pretendardvariable"
             android:text="@string/web_site"
             android:textAllCaps="false"
-            android:textColor="@color/statusUnitText"
+            android:textColor="@color/side_0.8_white"
             android:textSize="@dimen/textDashH2" />
     </TableRow>
 </androidx.constraintlayout.widget.ConstraintLayout>
