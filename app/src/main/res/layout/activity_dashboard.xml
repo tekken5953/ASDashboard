@@ -53,8 +53,8 @@
 
             <ImageView
                 android:id="@+id/hambugerMenuIv"
-                android:layout_width="35dp"
-                android:layout_height="35dp"
+                android:layout_width="@dimen/tapDashX3"
+                android:layout_height="@dimen/tapDashX3"
                 android:layout_marginStart="@dimen/guideDashSide"
                 android:layout_marginTop="@dimen/guideDashTop"
                 android:background="@drawable/ripple_round"
@@ -76,7 +76,7 @@
                 android:gravity="center"
                 android:text="@string/temp"
                 android:textColor="@color/textColorMain"
-                android:textSize="@dimen/textDashH1"
+                android:textSize="@dimen/textDashH1.5"
                 app:layout_constraintBottom_toBottomOf="@+id/hambugerMenuIv"
                 app:layout_constraintStart_toEndOf="@+id/hambugerMenuIv"
                 app:layout_constraintTop_toTopOf="@+id/hambugerMenuIv" />
@@ -90,7 +90,7 @@
                 android:gravity="center"
                 android:text="null"
                 android:textColor="@color/textColorMain"
-                android:textSize="@dimen/textDashH1"
+                android:textSize="@dimen/textDashH1.5"
                 app:layout_constraintBottom_toBottomOf="@+id/dashTempTitleTx"
                 app:layout_constraintStart_toEndOf="@+id/dashTempTitleTx"
                 app:layout_constraintTop_toTopOf="@+id/dashTempTitleTx" />
@@ -104,7 +104,7 @@
                 android:gravity="center"
                 android:text="℃"
                 android:textColor="@color/textColorMain"
-                android:textSize="@dimen/textDashH1"
+                android:textSize="@dimen/textDashH1.5"
                 app:layout_constraintBottom_toBottomOf="@+id/dashTempTitleTx"
                 app:layout_constraintStart_toEndOf="@+id/tempTv"
                 app:layout_constraintTop_toTopOf="@+id/dashTempTitleTx" />
@@ -118,7 +118,7 @@
                 android:gravity="center"
                 android:text="@string/humid"
                 android:textColor="@color/textColorMain"
-                android:textSize="@dimen/textDashH1"
+                android:textSize="@dimen/textDashH1.5"
                 app:layout_constraintBottom_toBottomOf="@+id/dashTempTitleTx"
                 app:layout_constraintStart_toEndOf="@+id/tempUnitTv"
                 app:layout_constraintTop_toTopOf="@+id/dashTempTitleTx" />
@@ -132,7 +132,7 @@
                 android:gravity="center"
                 android:text="null"
                 android:textColor="@color/textColorMain"
-                android:textSize="@dimen/textDashH1"
+                android:textSize="@dimen/textDashH1.5"
                 app:layout_constraintBottom_toBottomOf="@+id/humidIndexTv"
                 app:layout_constraintStart_toEndOf="@id/humidIndexTv"
                 app:layout_constraintTop_toTopOf="@id/humidIndexTv" />
@@ -146,7 +146,7 @@
                 android:gravity="center"
                 android:text="%"
                 android:textColor="@color/textColorMain"
-                android:textSize="@dimen/textDashH1"
+                android:textSize="@dimen/textDashH1.5"
                 app:layout_constraintBottom_toBottomOf="@+id/humidTv"
                 app:layout_constraintStart_toEndOf="@+id/humidTv"
                 app:layout_constraintTop_toTopOf="@+id/humidTv" />
@@ -174,16 +174,16 @@
                 android:gravity="center"
                 android:text="time"
                 android:textColor="@color/white"
-                android:textSize="@dimen/textDashH1"
-                app:layout_constraintStart_toStartOf="parent"
+                android:textSize="@dimen/textDashH1.5"
+                app:layout_constraintBottom_toBottomOf="@+id/tempTv"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/tempTv"
-                app:layout_constraintBottom_toBottomOf="@+id/tempTv"/>
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/tempTv" />
 
             <ImageView
                 android:id="@+id/dashWifiIcon"
-                android:layout_width="22dp"
-                android:layout_height="22dp"
+                android:layout_width="@dimen/tapDashX2"
+                android:layout_height="@dimen/tapDashX2"
                 android:layout_marginEnd="@dimen/tapDashX0.5"
                 android:src="@drawable/wifi"
                 android:visibility="visible"
@@ -194,8 +194,8 @@
 
             <ImageView
                 android:id="@+id/dashBtIcon"
-                android:layout_width="22dp"
-                android:layout_height="22dp"
+                android:layout_width="@dimen/tapDashX2"
+                android:layout_height="@dimen/tapDashX2"
                 android:layout_marginEnd="@dimen/tapDashX1"
                 android:src="@drawable/bluetooth"
                 android:visibility="visible"
@@ -217,8 +217,8 @@
 
             <ImageView
                 android:id="@+id/dashBatteryIv"
-                android:layout_width="24dp"
-                android:layout_height="23dp"
+                android:layout_width="@dimen/dashBatteryWidth"
+                android:layout_height="@dimen/dashBatteryHeight"
                 android:src="@drawable/battery_full"
                 app:layout_constraintBottom_toBottomOf="@+id/hambugerMenuIv"
                 app:layout_constraintEnd_toEndOf="@+id/topFrameLayout"
@@ -555,7 +555,7 @@
                         android:layout_height="wrap_content"
                         android:layout_below="@+id/listCardPMTitle"
                         android:layout_marginStart="@dimen/tapDashX1"
-                        android:layout_marginTop="6dp"
+                        android:layout_marginTop="@dimen/tapDashX0.5"
                         android:layout_toEndOf="@+id/listCardPMIndex"
                         android:fontFamily="@font/pretendardvariable"
                         android:gravity="center"
@@ -638,7 +638,7 @@
                         android:layout_height="wrap_content"
                         android:layout_below="@+id/listCardTVOCTitle"
                         android:layout_marginStart="@dimen/tapDashX1"
-                        android:layout_marginTop="6dp"
+                        android:layout_marginTop="@dimen/tapDashX0.5"
                         android:layout_toEndOf="@+id/listCardTVOCIndex"
                         android:fontFamily="@font/pretendardvariable"
                         android:gravity="center"
@@ -721,7 +721,7 @@
                         android:layout_height="wrap_content"
                         android:layout_below="@+id/listCardCO2Title"
                         android:layout_marginStart="@dimen/tapDashX1"
-                        android:layout_marginTop="6dp"
+                        android:layout_marginTop="@dimen/tapDashX0.5"
                         android:layout_toEndOf="@+id/listCardCO2Index"
                         android:fontFamily="@font/pretendardvariable"
                         android:gravity="center"
@@ -804,7 +804,7 @@
                         android:layout_height="wrap_content"
                         android:layout_below="@+id/listCardCOTitle"
                         android:layout_marginStart="@dimen/tapDashX1"
-                        android:layout_marginTop="6dp"
+                        android:layout_marginTop="@dimen/tapDashX0.5"
                         android:layout_toEndOf="@+id/listCardCOIndex"
                         android:fontFamily="@font/pretendardvariable"
                         android:gravity="center"

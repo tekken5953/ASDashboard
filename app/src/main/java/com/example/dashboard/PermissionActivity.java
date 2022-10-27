@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
@@ -20,12 +21,16 @@ import com.example.dashboard.language.LanguageSelectActivity;
 public class PermissionActivity extends AppCompatActivity {
     String[] permissionUnder31 = {Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_WIFI_STATE,
             Manifest.permission.INTERNET};
-    String[] permissionAbove31 = {Manifest.permission.BLUETOOTH_ADMIN, Manifest.permission.BLUETOOTH_ADVERTISE,
-            Manifest.permission.BLUETOOTH_CONNECT, Manifest.permission.BLUETOOTH_SCAN,
-            Manifest.permission.ACCESS_WIFI_STATE, Manifest.permission.INTERNET};
+    String[] permissionAbove31 = {
+            Manifest.permission.BLUETOOTH_ADVERTISE, Manifest.permission.BLUETOOTH_ADMIN,
+            Manifest.permission.BLUETOOTH_CONNECT, Manifest.permission.BLUETOOTH_SCAN, Manifest.permission.ACCESS_FINE_LOCATION,
+            Manifest.permission.ACCESS_WIFI_STATE, Manifest.permission.INTERNET
+    };
 
     static final int REQUEST_UP_PERMISSIONS = 2;
     static final int REQUEST_DOWN_PERMISSIONS = 1;
+
+    final String TAG_PERMISSIONS = "tag_permissions";
 
     TextView grant, deny;
 
@@ -36,29 +41,33 @@ public class PermissionActivity extends AppCompatActivity {
 
         grant = findViewById(R.id.grantTx);
 
-        bleInitialize();
-
         deny = findViewById(R.id.denyTx);
 
         deny.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                finish();
             }
         });
+
+        bleInitialize();
     }
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         if (requestCode == REQUEST_UP_PERMISSIONS) {
-            if (grantResults.length != 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED
+            if (grantResults.length != 0
+                    && grantResults[0] == PackageManager.PERMISSION_GRANTED
                     && grantResults[1] == PackageManager.PERMISSION_GRANTED
                     && grantResults[2] == PackageManager.PERMISSION_GRANTED
                     && grantResults[3] == PackageManager.PERMISSION_GRANTED
+                    && grantResults[4] == PackageManager.PERMISSION_GRANTED
             ) {
-                if (grantResults[4] == PackageManager.PERMISSION_GRANTED
-                        && grantResults[5] == PackageManager.PERMISSION_GRANTED) {
+                Log.d(TAG_PERMISSIONS, "Up -> result[0,1,2,3,4]");
+                if (grantResults[5] == PackageManager.PERMISSION_GRANTED
+                        && grantResults[6] == PackageManager.PERMISSION_GRANTED) {
+                    Log.d(TAG_PERMISSIONS, "Up -> result[5,6]");
                     Intent intent = new Intent(PermissionActivity.this, LanguageSelectActivity.class);
                     startActivity(intent);
                     finish();
@@ -85,6 +94,7 @@ public class PermissionActivity extends AppCompatActivity {
             }
         } else if (requestCode == REQUEST_DOWN_PERMISSIONS) {
             if (grantResults.length != 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                Log.d(TAG_PERMISSIONS, "Down -> result[0]");
                 Intent intent = new Intent(PermissionActivity.this, LanguageSelectActivity.class);
                 startActivity(intent);
                 finish();
@@ -92,6 +102,7 @@ public class PermissionActivity extends AppCompatActivity {
 
             if (grantResults[1] == PackageManager.PERMISSION_GRANTED
                     && grantResults[2] == PackageManager.PERMISSION_GRANTED) {
+                Log.i(TAG_PERMISSIONS, "Down -> result[1,2]");
                 Intent intent = new Intent(PermissionActivity.this, LanguageSelectActivity.class);
                 startActivity(intent);
                 finish();
@@ -121,36 +132,44 @@ public class PermissionActivity extends AppCompatActivity {
     private void bleInitialize() {
         // 런타임 권한 확인
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-            if (checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED ||
-                    checkSelfPermission(Manifest.permission.BLUETOOTH_SCAN) != PackageManager.PERMISSION_GRANTED ||
-                    checkSelfPermission(Manifest.permission.BLUETOOTH_CONNECT) != PackageManager.PERMISSION_GRANTED
-                    || checkSelfPermission(Manifest.permission.ACCESS_WIFI_STATE) != PackageManager.PERMISSION_GRANTED
-                    || checkSelfPermission(Manifest.permission.INTERNET) != PackageManager.PERMISSION_GRANTED) {
+            Log.i(TAG_PERMISSIONS, "admin : " + checkSelfPermission(Manifest.permission.BLUETOOTH_ADMIN) +
+                    "\nadvertise : " + checkSelfPermission(Manifest.permission.BLUETOOTH_ADVERTISE) +
+                    "\nscan : " + checkSelfPermission(Manifest.permission.BLUETOOTH_SCAN) +
+                    "\nconnect : " + checkSelfPermission(Manifest.permission.BLUETOOTH_CONNECT) +
+                    "\nfine_location : " + checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) +
+                    "\nBuild Version : " + Build.VERSION.SDK_INT);
+            if (
+                    checkSelfPermission(Manifest.permission.BLUETOOTH_ADMIN) == PackageManager.PERMISSION_GRANTED &&
+                            checkSelfPermission(Manifest.permission.BLUETOOTH_ADVERTISE) == PackageManager.PERMISSION_GRANTED &&
+                            checkSelfPermission(Manifest.permission.BLUETOOTH_SCAN) == PackageManager.PERMISSION_GRANTED &&
+                            checkSelfPermission(Manifest.permission.BLUETOOTH_CONNECT) == PackageManager.PERMISSION_GRANTED &&
+                            checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED
+            ) {
+                Intent intent = new Intent(PermissionActivity.this, LanguageSelectActivity.class);
+                startActivity(intent);
+                finish();
+            } else {
                 grant.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         requestBlePermissions();
                     }
                 });
-            } else {
-                Intent intent = new Intent(PermissionActivity.this, LanguageSelectActivity.class);
-                startActivity(intent);
-                finish();
             }
         } else {
-            if (checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
-                    || checkSelfPermission(Manifest.permission.ACCESS_WIFI_STATE) != PackageManager.PERMISSION_GRANTED
-                    || checkSelfPermission(Manifest.permission.INTERNET) != PackageManager.PERMISSION_GRANTED) {
+            if (checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED
+                    && checkSelfPermission(Manifest.permission.ACCESS_WIFI_STATE) == PackageManager.PERMISSION_GRANTED
+                    && checkSelfPermission(Manifest.permission.INTERNET) == PackageManager.PERMISSION_GRANTED) {
+                Intent intent = new Intent(PermissionActivity.this, LanguageSelectActivity.class);
+                startActivity(intent);
+                finish();
+            } else {
                 grant.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         requestBlePermissions();
                     }
                 });
-            } else {
-                Intent intent = new Intent(PermissionActivity.this, LanguageSelectActivity.class);
-                startActivity(intent);
-                finish();
             }
         }
     }

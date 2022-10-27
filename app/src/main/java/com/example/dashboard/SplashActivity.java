@@ -8,10 +8,11 @@ package com.example.dashboard;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.dashboard.language.LanguageSelectActivity;
 
 public class SplashActivity extends AppCompatActivity {
 
@@ -23,8 +24,16 @@ public class SplashActivity extends AppCompatActivity {
         OuterClass outerClass = new OuterClass();
         outerClass.FullScreenMode(SplashActivity.this);
 
-        Intent intent = new Intent(SplashActivity.this, PermissionActivity.class);
-        startActivity(intent);
-        finish();
+        Handler handler = new Handler(Looper.getMainLooper());
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                Intent intent = new Intent(SplashActivity.this, PermissionActivity.class);
+                startActivity(intent);
+                finish();
+            }
+        }, 2000);
+
+
     }
 }

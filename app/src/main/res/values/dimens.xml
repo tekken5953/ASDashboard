@@ -33,7 +33,7 @@
     <dimen name="graphDashHeight">190dp</dimen>
     <dimen name="cardDashHeight">235dp</dimen>
     <dimen name="okBtnHeight">49dp</dimen>
-    <dimen name="okBtnWidth">210dp</dimen>
+    <dimen name="okBtnWidth">200dp</dimen>
     <dimen name="cateDashHeight">34dp</dimen>
 
     <dimen name="menuIconConnSize">50dp</dimen>
@@ -46,10 +46,10 @@
     <dimen name="layoutPairListWidth">110dp</dimen>
     <dimen name="iconPairListSize">65dp</dimen>
 
-    <dimen name="guidePermSide">80dp</dimen>
+    <dimen name="guidePermSide">60dp</dimen>
     <dimen name="guidePermTop">50dp</dimen>
-    <dimen name="itemPermWidth">250dp</dimen>
-    <dimen name="itemPermHeight">300dp</dimen>
+    <dimen name="itemPermWidth">220dp</dimen>
+    <dimen name="itemPermHeight">270dp</dimen>
     <dimen name="itemPermGuide">100dp</dimen>
     <dimen name="itemPermPadding">15dp</dimen>
     <dimen name="itemIconPermSize">70dp</dimen>
@@ -62,4 +62,6 @@
     <dimen name="btnOkLangWidth">280dp</dimen>
 
     <dimen name="guideDialogSide">15dp</dimen>
+    <dimen name="dashBatteryWidth">23dp</dimen>
+    <dimen name="dashBatteryHeight">24dp</dimen>
 </resources>

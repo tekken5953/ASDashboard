@@ -3,7 +3,6 @@ package com.example.dashboard;
 import android.content.Context;
 import android.util.Log;
 
-import org.eclipse.paho.android.service.MqttAndroidClient;
 import org.eclipse.paho.client.mqttv3.DisconnectedBufferOptions;
 import org.eclipse.paho.client.mqttv3.IMqttActionListener;
 import org.eclipse.paho.client.mqttv3.IMqttAsyncClient;
@@ -15,6 +14,9 @@ import org.eclipse.paho.client.mqttv3.MqttException;
 import org.eclipse.paho.client.mqttv3.MqttMessage;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import info.mqtt.android.service.Ack;
+import info.mqtt.android.service.MqttAndroidClient;
 
 public class Mqtt {
     public static final String MQTT_GET_DEVICE = "getDevice";
@@ -86,7 +88,8 @@ public class Mqtt {
         thread = new Thread(new Runnable() {
             @Override
             public void run() {
-                mqttClient = new MqttAndroidClient(context, "tcp://" + server_address + MQTT_PORT, device_id);
+//                mqttClient = new MqttAndroidClient(context, "tcp://" + server_address + MQTT_PORT, device_id);
+                mqttClient = new MqttAndroidClient(context, "tcp://" + server_address + MQTT_PORT, device_id, Ack.AUTO_ACK);
 
                 try {
                     token = mqttClient.connect(getMqttConnectionOption());

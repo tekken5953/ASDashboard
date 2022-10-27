@@ -8,7 +8,7 @@ android {
     compileSdk 32
 
     defaultConfig {
-        applicationId "com.example.dashboard"
+        applicationId "app.airsignal.dashboard.AS_Dashboard"
         minSdk 24
         targetSdk 31
         versionCode 1
@@ -55,7 +55,11 @@ dependencies {
 
     //Mqtt Library
     implementation 'org.eclipse.paho:org.eclipse.paho.client.mqttv3:1.2.5'
-    implementation 'org.eclipse.paho:org.eclipse.paho.android.service:1.1.1'
+//    implementation 'org.eclipse.paho:org.eclipse.paho.android.service:1.1.1'
+    //new mqtt library that supports android 12
+    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
+    implementation 'com.github.hannesa2:paho.mqtt.android:3.3.5'
+
 
     //Kotlin
     implementation "androidx.core:core-ktx:1.8.0"
@@ -68,13 +72,7 @@ dependencies {
     implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:2.5.0"
     implementation "androidx.lifecycle:lifecycle-livedata-ktx:2.5.0"
 
-    //MQTT
-    implementation 'org.eclipse.paho:org.eclipse.paho.client.mqttv3:1.2.5'   // MQTT
-    implementation 'org.eclipse.paho:org.eclipse.paho.android.service:1.1.1' // MQTT Service
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
 
-    //Custom Dialog
-    //https://android-arsenal.com/details/1/7802
-    implementation 'com.github.TecOrb-Developers:SmartAlertDialog:v1.0'
 
 }

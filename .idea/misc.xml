@@ -110,8 +110,13 @@
         <entry key="..\:/Users/USER/StudioProjects/BsDashboard/app/src/main/res/drawable/battery_4.xml" value="0.196" />
         <entry key="..\:/Users/USER/StudioProjects/BsDashboard/app/src/main/res/drawable/battery_5.xml" value="0.196" />
         <entry key="..\:/Users/USER/StudioProjects/BsDashboard/app/src/main/res/drawable/battery_6.xml" value="0.196" />
+        <entry key="..\:/Users/USER/StudioProjects/BsDashboard/app/src/main/res/drawable/battery_caution.xml" value="0.219" />
+        <entry key="..\:/Users/USER/StudioProjects/BsDashboard/app/src/main/res/drawable/battery_charging.xml" value="0.219" />
+        <entry key="..\:/Users/USER/StudioProjects/BsDashboard/app/src/main/res/drawable/battery_empty.xml" value="0.219" />
+        <entry key="..\:/Users/USER/StudioProjects/BsDashboard/app/src/main/res/drawable/battery_full.xml" value="0.219" />
         <entry key="..\:/Users/USER/StudioProjects/BsDashboard/app/src/main/res/drawable/category_nontext_outline.xml" value="0.2215" />
         <entry key="..\:/Users/USER/StudioProjects/BsDashboard/app/src/main/res/drawable/category_text_outline.xml" value="0.2215" />
+        <entry key="..\:/Users/USER/StudioProjects/BsDashboard/app/src/main/res/drawable/connectable_rv_bg.xml" value="0.219" />
         <entry key="..\:/Users/USER/StudioProjects/BsDashboard/app/src/main/res/drawable/dialog_outline.xml" value="0.2215" />
         <entry key="..\:/Users/USER/StudioProjects/BsDashboard/app/src/main/res/drawable/gps.xml" value="0.1235" />
         <entry key="..\:/Users/USER/StudioProjects/BsDashboard/app/src/main/res/drawable/lang_ok_b.xml" value="0.231" />
@@ -147,14 +152,14 @@
         <entry key="..\:/Users/USER/StudioProjects/BsDashboard/app/src/main/res/layout-sw840dp/sidemenu_dialog.xml" value="0.1" />
         <entry key="..\:/Users/USER/StudioProjects/BsDashboard/app/src/main/res/layout-sw840dp/splash_acitivty.xml" value="0.1" />
         <entry key="..\:/Users/USER/StudioProjects/BsDashboard/app/src/main/res/layout-sw840dp/splash_activity.xml" value="0.1" />
-        <entry key="..\:/Users/USER/StudioProjects/BsDashboard/app/src/main/res/layout/activity_dashboard.xml" value="0.136" />
-        <entry key="..\:/Users/USER/StudioProjects/BsDashboard/app/src/main/res/layout/connect_bluetooth_activity.xml" value="0.176" />
-        <entry key="..\:/Users/USER/StudioProjects/BsDashboard/app/src/main/res/layout/dialog_backpress.xml" value="0.12682291666666667" />
+        <entry key="..\:/Users/USER/StudioProjects/BsDashboard/app/src/main/res/layout/activity_dashboard.xml" value="0.10208333333333333" />
+        <entry key="..\:/Users/USER/StudioProjects/BsDashboard/app/src/main/res/layout/connect_bluetooth_activity.xml" value="0.20820863616930313" />
+        <entry key="..\:/Users/USER/StudioProjects/BsDashboard/app/src/main/res/layout/dialog_backpress.xml" value="0.10400000000000001" />
         <entry key="..\:/Users/USER/StudioProjects/BsDashboard/app/src/main/res/layout/language_select_activity.xml" value="0.152" />
         <entry key="..\:/Users/USER/StudioProjects/BsDashboard/app/src/main/res/layout/listitem_connectable_rv.xml" value="0.264" />
         <entry key="..\:/Users/USER/StudioProjects/BsDashboard/app/src/main/res/layout/listitem_recent_device.xml" value="0.25364583333333335" />
         <entry key="..\:/Users/USER/StudioProjects/BsDashboard/app/src/main/res/layout/permission_permission.xml" value="0.152" />
-        <entry key="..\:/Users/USER/StudioProjects/BsDashboard/app/src/main/res/layout/sidemenu.xml" value="0.2" />
+        <entry key="..\:/Users/USER/StudioProjects/BsDashboard/app/src/main/res/layout/sidemenu.xml" value="0.136" />
         <entry key="..\:/Users/USER/StudioProjects/BsDashboard/app/src/main/res/layout/sidemenu_dialog.xml" value="0.2" />
         <entry key="..\:/Users/USER/StudioProjects/BsDashboard/app/src/main/res/layout/splash_activity.xml" value="0.136" />
         <entry key="..\:/Users/USER/StudioProjects/BsDashboard/app/src/main/res/layout/yes_act.xml" value="0.152" />

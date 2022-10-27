@@ -6,16 +6,14 @@
 
 package com.example.dashboard.language;
 
-import android.Manifest;
 import android.app.Activity;
-import android.content.Context;
+import android.content.DialogInterface;
 import android.os.Bundle;
-import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.View;
-import android.view.WindowManager;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.content.res.AppCompatResources;
 import androidx.core.content.res.ResourcesCompat;
@@ -192,5 +190,27 @@ public class LanguageSelectActivity extends AppCompatActivity {
         binding.langOkTv.setEnabled(false);
         binding.langOkTv.setBackground(AppCompatResources.getDrawable(context, R.drawable.lang_ok_b));
         binding.langOkTv.setTextColor(ResourcesCompat.getColor(getResources(), R.color.statusUnitText, null));
+    }
+
+    @Override
+    public void onBackPressed() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        AlertDialog alertDialog = builder.create();
+        alertDialog.setTitle(getString(R.string.exit_app_title));
+        alertDialog.setMessage(getString(R.string.exit_app_message));
+        alertDialog.setIcon(R.drawable.icon);
+        alertDialog.setButton(DialogInterface.BUTTON_POSITIVE, getString(R.string.exit_app_yes), new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                finish();
+            }
+        });
+        alertDialog.setButton(DialogInterface.BUTTON_NEGATIVE, getString(R.string.exit_app_no), new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                alertDialog.dismiss();
+            }
+        });
+        alertDialog.show();
     }
 }

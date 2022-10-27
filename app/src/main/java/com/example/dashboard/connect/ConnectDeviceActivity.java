@@ -46,25 +46,19 @@ import java.util.concurrent.CompletableFuture;
 @SuppressLint({"MissingPermission", "NotifyDataSetChanged"})
 public class ConnectDeviceActivity extends AppCompatActivity {
     ConnectBluetoothActivityBinding binding;
-
+    Activity context = ConnectDeviceActivity.this;
     final String TAG_LIFECYCLE = "ConnectLifeCycle";
 
-    int SELECTED_POSITION = -1;
-
-    Activity context = ConnectDeviceActivity.this;
     ArrayList<ConnectRecyclerItem> cList = new ArrayList<>();
     ArrayList<PairedDeviceItem> pList = new ArrayList<>();
     ConnectRecyclerAdapter cAdapter;
     PairedDeviceAdapter pAdapter;
 
     BluetoothAdapter bluetoothAdapter;
-
     BluetoothThread bluetoothThread;
 
-    String[] deviceNameStrLeft, deviceNameStrRight;
     int noPairingPosition = 0;
-
-    IntentFilter foundFilter = new IntentFilter();
+    int SELECTED_POSITION = -1;
 
     OuterClass outerClass = new OuterClass();
 
@@ -183,6 +177,9 @@ public class ConnectDeviceActivity extends AppCompatActivity {
                         Intent intent = new Intent(context, DashBoardActivity.class);
                         // 해당 클릭아이템의 포지션을 인텐트와 함께 전송합니다
                         intent.putExtra("device_position", SELECTED_POSITION);
+                        String s = bondedList.get(SELECTED_POSITION).getName().split(" ")[1];
+                        intent.putExtra("userCode",s.substring(1,s.length()-1));
+                        Log.d("BTThread","Address is " + s.substring(1,s.length()-1));
                         startActivity(intent);
                         finish();
                     });
@@ -234,7 +231,7 @@ public class ConnectDeviceActivity extends AppCompatActivity {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 try {
-                                    deviceNameStrLeft = bt.getName().split(" ");
+//                                    String[] deviceNameStrLeft = bt.getName().split(" ");
 
                                     // 페어링 취소 메서드 호출
                                     Method m = bt.getClass().getMethod("removeBond", (Class[]) null);
@@ -355,7 +352,8 @@ public class ConnectDeviceActivity extends AppCompatActivity {
             for (BluetoothDevice device : pairedDevice) {
                 bondedList.add(device);
                 if (device.getName().contains(" ")) {
-                    deviceNameStrLeft = device.getName().split(" ");
+
+                    String[] deviceNameStrLeft = device.getName().split(" ");
                     addPItem(filteringImage(deviceNameStrLeft[0]),
                             deviceNameStrLeft[0],
                             deviceNameStrLeft[1]);
@@ -391,7 +389,7 @@ public class ConnectDeviceActivity extends AppCompatActivity {
                                 if (deviceName.contains(" ")) {
 
                                     // 공백으로 구분
-                                    deviceNameStrRight = deviceName.split(" ");
+                                    String[] deviceNameStrRight = deviceName.split(" ");
 
                                     // 페어링 되지 않은 디바이스 리스트에 저장
                                     noBondedList.add(noPairingPosition, device);
@@ -506,6 +504,8 @@ public class ConnectDeviceActivity extends AppCompatActivity {
         noPairingPosition = 0;
         noBondedList.clear();
 
+        IntentFilter foundFilter = new IntentFilter();
+
         // ACTION_FOUND 가 호출될 때 마다 데이터를 전송하는 역할을 합니다
         foundFilter.addAction(BluetoothDevice.ACTION_FOUND);
         // 디바이스와 페어링 작업이 요청 될 때 마다 호출됩니다
@@ -574,10 +574,10 @@ public class ConnectDeviceActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        super.onBackPressed();
         final AlertDialog.Builder builder = new AlertDialog.Builder(context);
         builder.setTitle(getString(R.string.exit_app_title));
         builder.setMessage(getString(R.string.exit_app_message));
+        builder.setIcon(R.drawable.icon);
         builder.setPositiveButton(getString(R.string.exit_app_yes), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
@@ -603,7 +603,6 @@ public class ConnectDeviceActivity extends AppCompatActivity {
     }
 
     // 블루투스 연결 및 사용가능 여부 확인
-    @SuppressLint("MissingPermission")
     private void startCheckBluetooth() {
         if (bluetoothAdapter == null) {
             Toast.makeText(this, getString(R.string.no_bluetooth_device), Toast.LENGTH_SHORT).show();
