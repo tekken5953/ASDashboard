@@ -19,34 +19,34 @@ import info.mqtt.android.service.Ack;
 import info.mqtt.android.service.MqttAndroidClient;
 
 public class Mqtt {
-    public static final String MQTT_GET_DEVICE = "getDevice";
-    public static final String MQTT_GET_MEASURE = "getMeasure";
-    public static final String MQTT_GET_LIBRARY = "getLibrary";
-    public static final String MQTT_GET_STATUS_FAN = "getStatusFan";
-    public static final String MQTT_GET_STATUS_LED = "getStatusLED";
-    public static final String MQTT_GET_DATA_REPORT = "getDataReport";
-    public static final String MQTT_GET_MODE = "getMode";
-    public static final String MQTT_GET_MANUAL_TIME = "getManualTime";
+//    public static final String MQTT_GET_DEVICE = "getDevice";
+//    public static final String MQTT_GET_MEASURE = "getMeasure";
+//    public static final String MQTT_GET_LIBRARY = "getLibrary";
+//    public static final String MQTT_GET_STATUS_FAN = "getStatusFan";
+//    public static final String MQTT_GET_STATUS_LED = "getStatusLED";
+//    public static final String MQTT_GET_DATA_REPORT = "getDataReport";
+//    public static final String MQTT_GET_MODE = "getMode";
+//    public static final String MQTT_GET_MANUAL_TIME = "getManualTime";
+//
+//    public static final String MQTT_SYS_REBOOT = "sysReboot";
+//    public static final String MQTT_SET_DEVICE = "setDevice";
+//    public static final String MQTT_SET_FAN = "setFan";
+//    public static final String MQTT_SET_DATA_REPORT = "setDataReport";
+//    public static final String MQTT_SET_MODE = "setMode";
+//    public static final String MQTT_SET_POWER = "setPower";
+//    public static final String MQTT_SET_MANUAL_TIME = "setManualTime";
 
-    public static final String MQTT_SYS_REBOOT = "sysReboot";
-    public static final String MQTT_SET_DEVICE = "setDevice";
-    public static final String MQTT_SET_FAN = "setFan";
-    public static final String MQTT_SET_DATA_REPORT = "setDataReport";
-    public static final String MQTT_SET_MODE = "setMode";
-    public static final String MQTT_SET_POWER = "setPower";
-    public static final String MQTT_SET_MANUAL_TIME = "setManualTime";
-
-    private static final String MQTT_ADDRESS = "ascloud.kr"; // ascloud.kr
-    private static final String MQTT_ADDRESS_SUB = "192.168.0.54";
-    private static final String MQTT_ADDRESS_ADMIN = "192.168.0.69";
-    private static final String MQTT_PORT = ":1883";
+    private final String MQTT_ADDRESS = "ascloud.kr"; // ascloud.kr
+    private final String MQTT_ADDRESS_SUB = "192.168.0.54";
+//    private final String MQTT_ADDRESS_ADMIN = "192.168.0.69";
+    private final String MQTT_PORT = ":1883";
 
     private final String MQTT_TOPIC_BASE = "/nodes/envi/";
     private final String MQTT_TOPIC_MEASURE = "measured";
     private final String MQTT_TOPIC_MAINT_REQ = "maint_req";
     private final String MQTT_TOPIC_MAINT_RES = "maint_res";
     private final String MQTT_TOPIC_STATUS = "status";
-    private final String MQTT_WIFI_STATUS = "wifiConnected";
+//    private final String MQTT_WIFI_STATUS = "wifiConnected";
 
     // 이벤트
     private mqttRequestReceiveListener mMqttRequestReceiveListener;

@@ -5,7 +5,6 @@
     tools:context=".dashboard.DashBoardActivity">
 
     <data>
-
         <variable
             name="viewModel"
             type="com.example.dashboard.bluetooth.BluetoothThread.DataShareViewModel" />

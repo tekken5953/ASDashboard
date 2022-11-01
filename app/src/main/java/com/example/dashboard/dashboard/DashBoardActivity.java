@@ -56,10 +56,10 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.dashboard.Mqtt;
-import com.example.dashboard.OnSingleClickListener;
-import com.example.dashboard.OuterClass;
+import com.example.dashboard.utils.OnSingleClickListener;
+import com.example.dashboard.utils.OuterClass;
 import com.example.dashboard.R;
-import com.example.dashboard.SharedPreferenceManager;
+import com.example.dashboard.utils.SharedPreferenceManager;
 import com.example.dashboard.bluetooth.BluetoothAPI;
 import com.example.dashboard.bluetooth.BluetoothThread;
 import com.example.dashboard.bluetooth.VirusFormulaClass;
@@ -67,6 +67,8 @@ import com.example.dashboard.databinding.ActivityDashboardBinding;
 import com.example.dashboard.language.LanguageSelectActivity;
 import com.example.dashboard.ui.SegmentedProgressBar;
 import com.example.dashboard.ui.SideBarCustomView;
+import com.example.dashboard.utils.SnackBarUtils;
+import com.example.dashboard.utils.ToastUtils;
 import com.github.mikephil.charting.components.Legend;
 import com.github.mikephil.charting.components.XAxis;
 import com.github.mikephil.charting.components.YAxis;
@@ -141,6 +143,8 @@ public class DashBoardActivity extends AppCompatActivity {
     private boolean isConnected = false;
     ConnectivityManager manager;
     float batteryPct = -1;
+    ToastUtils toastUtils = new ToastUtils();
+    SnackBarUtils snackBarUtils = new SnackBarUtils();
 
     @Override
     protected void onDestroy() {
@@ -344,10 +348,10 @@ public class DashBoardActivity extends AppCompatActivity {
                         if (!isConnected && binding.dashWifiSwitch.isChecked()) {
                             try {
                                 mqtt.connect();
-                                Snackbar.make(binding.idMain, getString(R.string.mqtt_wifi_reconnect_s), Snackbar.LENGTH_SHORT).show();
+                                snackBarUtils.makeSnack(binding.idMain,context,getString(R.string.mqtt_wifi_reconnect_s));
                             } catch (NullPointerException e) {
                                 e.printStackTrace();
-                                Snackbar.make(binding.idMain, getString(R.string.mqtt_wifi_reconnect_f), Snackbar.LENGTH_SHORT).show();
+                                snackBarUtils.makeSnack(binding.idMain,context,getString(R.string.mqtt_wifi_reconnect_f));
                             }
                         }
                         if (jsonMeasure.length() != 0 && userCode != null) {
@@ -395,7 +399,7 @@ public class DashBoardActivity extends AppCompatActivity {
     @SuppressLint("MissingPermission")
     public void startCheckBluetooth() {
         if (bluetoothAdapter == null) {
-            Toast.makeText(this, getString(R.string.no_bluetooth_device), Toast.LENGTH_SHORT).show();
+            toastUtils.shortMessage(context,getString(R.string.no_bluetooth_device));
             binding.dashBtIcon.setColorFilter(ResourcesCompat.getColor(getResources(), R.color.statusUnitText, null));
         } else {
             if (bluetoothAdapter.isEnabled()) {
@@ -735,7 +739,7 @@ public class DashBoardActivity extends AppCompatActivity {
                         if (bluetoothThread.getDeviceName().startsWith("BS_M")) {
                             // 어플 강제종료
 //                        android.os.Process.killProcess(android.os.Process.myPid());
-                            Toast.makeText(context, getString(R.string.exit_complete), Toast.LENGTH_SHORT).show();
+                            toastUtils.shortMessage(context,getString(R.string.exit_complete));
                             // 어플 재시작
                             finishAffinity();
                             Intent intent = new Intent(DashBoardActivity.this, LanguageSelectActivity.class);
@@ -779,7 +783,7 @@ public class DashBoardActivity extends AppCompatActivity {
 
 //                        Toast.makeText(this, "성공적으로 변경했습니다.", Toast.LENGTH_SHORT).show();
                     } else {
-                        Toast.makeText(this, getString(R.string.fail_to_change), Toast.LENGTH_SHORT).show();
+                        toastUtils.shortMessage(context,getString(R.string.fail_to_change));
                     }
                 }
             } catch (NullPointerException | ClassCastException e) {
@@ -851,9 +855,7 @@ public class DashBoardActivity extends AppCompatActivity {
                                 bluetoothThread.connectSocket();
                             } else {
                                 if (failCount == 2) {
-                                    Snackbar.make(binding.idMain,
-                                            getString(R.string.fail_count),
-                                            Snackbar.LENGTH_SHORT).show();
+                                    snackBarUtils.makeSnack(binding.idMain,context,getString(R.string.fail_count));
                                     outerClass.GoToLanguageFromConnect(context);
                                 } else {
                                     failCount++;
@@ -1683,7 +1685,7 @@ public class DashBoardActivity extends AppCompatActivity {
                     Log.d(TAG_MQTT, "Accept Request Data");
                     SharedPreferenceManager.setString(context, "usingWifi", "true");
                     buttonView.setTextColor(ResourcesCompat.getColor(getResources(), R.color.progressNormal, null));
-                    Snackbar.make(binding.idMain, R.string.mqtt_accept, Snackbar.LENGTH_SHORT).show();
+                    snackBarUtils.makeSnack(binding.idMain,context,getString(R.string.mqtt_accept));
                 } else {
                     if (mqtt != null && bluetoothThread != null && bluetoothThread.isConnected()) {
                         if (mqtt.isConnected())
@@ -1692,7 +1694,7 @@ public class DashBoardActivity extends AppCompatActivity {
                     Log.d(TAG_MQTT, "Deny Request Data");
                     SharedPreferenceManager.setString(context, "usingWifi", "false");
                     buttonView.setTextColor(ResourcesCompat.getColor(getResources(), R.color.statusUnitText, null));
-                    Snackbar.make(binding.idMain, R.string.mqtt_deny, Snackbar.LENGTH_SHORT).show();
+                    snackBarUtils.makeSnack(binding.idMain,context,getString(R.string.mqtt_deny));
                 }
             }
         });
@@ -1870,7 +1872,7 @@ public class DashBoardActivity extends AppCompatActivity {
                     mqtt.connect();
                     Log.d(TAG_MQTT, "Mqtt is Connected");
                 } else {
-                    Toast.makeText(context, getString(R.string.mqtt_error_get_user_id), Toast.LENGTH_SHORT).show();
+                    toastUtils.shortMessage(context,getString(R.string.mqtt_error_get_user_id));
                     CompletableFuture.runAsync(() -> {
                         SharedPreferenceManager.setString(context, "usingWifi", "false");
                     }).thenAcceptAsync(b -> {

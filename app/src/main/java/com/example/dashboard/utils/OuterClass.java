@@ -1,4 +1,4 @@
-package com.example.dashboard;
+package com.example.dashboard.utils;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
@@ -15,6 +15,7 @@ import android.widget.TextView;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.content.res.AppCompatResources;
 
+import com.example.dashboard.R;
 import com.example.dashboard.connect.ConnectDeviceActivity;
 import com.example.dashboard.language.LanguageSelectActivity;
 

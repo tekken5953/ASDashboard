@@ -18,10 +18,11 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.content.res.AppCompatResources;
 import androidx.core.content.res.ResourcesCompat;
 
-import com.example.dashboard.OuterClass;
+import com.example.dashboard.utils.OuterClass;
 import com.example.dashboard.R;
-import com.example.dashboard.SharedPreferenceManager;
+import com.example.dashboard.utils.SharedPreferenceManager;
 import com.example.dashboard.databinding.LanguageSelectActivityBinding;
+import com.example.dashboard.utils.ToastUtils;
 
 public class LanguageSelectActivity extends AppCompatActivity {
     LanguageSelectActivityBinding binding;
@@ -33,6 +34,7 @@ public class LanguageSelectActivity extends AppCompatActivity {
     OuterClass outerClass = new OuterClass();
 
     Activity context;
+    ToastUtils toastUtils = new ToastUtils();
 
     @Override
     protected void onResume() {
@@ -85,7 +87,7 @@ public class LanguageSelectActivity extends AppCompatActivity {
             } else {
                 outerClass.setLocaleToEnglish(context);
             }
-            Toast.makeText(context, getString(R.string.skip_lang_msg), Toast.LENGTH_SHORT).show();
+            toastUtils.shortMessage(context,getString(R.string.skip_lang_msg));
             // 현재 액티비티를 스킵하고 디바이스 연결 화면으로 넘어갑니다
             outerClass.GoToConnectFromLang(context);
         }
@@ -150,7 +152,7 @@ public class LanguageSelectActivity extends AppCompatActivity {
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                Toast.makeText(context, getString(R.string.complete_select_lang), Toast.LENGTH_SHORT).show();
+                toastUtils.shortMessage(context,getString(R.string.complete_select_lang));
                 outerClass.GoToConnectFromLang(context);
             }
         });

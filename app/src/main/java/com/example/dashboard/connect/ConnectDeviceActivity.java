@@ -29,13 +29,14 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.res.ResourcesCompat;
 
-import com.example.dashboard.OnSingleClickListener;
-import com.example.dashboard.OuterClass;
+import com.example.dashboard.utils.OnSingleClickListener;
+import com.example.dashboard.utils.OuterClass;
 import com.example.dashboard.R;
-import com.example.dashboard.SharedPreferenceManager;
+import com.example.dashboard.utils.SharedPreferenceManager;
 import com.example.dashboard.bluetooth.BluetoothThread;
 import com.example.dashboard.dashboard.DashBoardActivity;
 import com.example.dashboard.databinding.ConnectBluetoothActivityBinding;
+import com.example.dashboard.utils.ToastUtils;
 
 import java.lang.reflect.Method;
 import java.util.ArrayList;
@@ -64,6 +65,8 @@ public class ConnectDeviceActivity extends AppCompatActivity {
 
     ArrayList<BluetoothDevice> noBondedList;
     ArrayList<BluetoothDevice> bondedList;
+
+    ToastUtils toastUtils = new ToastUtils();
 
     @Override
     protected void onResume() {
@@ -153,7 +156,7 @@ public class ConnectDeviceActivity extends AppCompatActivity {
                     }).start();
 
                 } else {
-                    Toast.makeText(context, getString(R.string.retry_please), Toast.LENGTH_SHORT).show();
+                    toastUtils.shortMessage(context,getString(R.string.retry_please));
                     NoDiscovery();
                     StartDiscovery();
                 }
@@ -605,7 +608,7 @@ public class ConnectDeviceActivity extends AppCompatActivity {
     // 블루투스 연결 및 사용가능 여부 확인
     private void startCheckBluetooth() {
         if (bluetoothAdapter == null) {
-            Toast.makeText(this, getString(R.string.no_bluetooth_device), Toast.LENGTH_SHORT).show();
+            toastUtils.shortMessage(context,getString(R.string.no_bluetooth_device));
         } else {
             if (bluetoothAdapter.isEnabled()) {
                 try {

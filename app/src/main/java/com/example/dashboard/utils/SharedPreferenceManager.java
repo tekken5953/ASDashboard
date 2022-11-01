@@ -1,4 +1,4 @@
-package com.example.dashboard;
+package com.example.dashboard.utils;
 
 import android.content.Context;
 import android.content.SharedPreferences;
