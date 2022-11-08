@@ -1,4 +1,4 @@
-package com.example.dashboard;
+package com.example.dashboard.bluetooth;
 
 import android.content.Context;
 import android.util.Log;

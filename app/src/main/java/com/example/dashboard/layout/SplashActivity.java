@@ -4,7 +4,7 @@
  * 개발시작 2022-06-20
  */
 
-package com.example.dashboard;
+package com.example.dashboard.layout;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
@@ -14,6 +14,7 @@ import android.os.Looper;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.dashboard.R;
 import com.example.dashboard.utils.OuterClass;
 
 

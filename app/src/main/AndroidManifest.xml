@@ -31,13 +31,13 @@
         android:theme="@style/Theme.Dashboard"
         tools:targetApi="s">
         <activity
-            android:name=".PermissionActivity"
+            android:name=".layout.PermissionActivity"
             android:exported="false"
-            android:screenOrientation="landscape" />
+            android:screenOrientation="sensorLandscape" />
         <activity
-            android:name=".SplashActivity"
+            android:name=".layout.SplashActivity"
             android:exported="true"
-            android:screenOrientation="landscape"
+            android:screenOrientation="sensorLandscape"
             android:theme="@style/SplashTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -46,21 +46,21 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".connect.ConnectDeviceActivity"
+            android:name=".layout.ConnectDeviceActivity"
             android:exported="false"
-            android:screenOrientation="landscape" />
+            android:screenOrientation="sensorLandscape" />
         <activity
-            android:name=".language.LanguageSelectActivity"
+            android:name=".layout.LanguageSelectActivity"
             android:exported="false"
-            android:screenOrientation="landscape" />
+            android:screenOrientation="sensorLandscape" />
         <activity
-            android:name=".dashboard.DashBoardActivity"
+            android:name=".layout.DashBoardActivity"
             android:exported="false"
             android:largeHeap="true"
-            android:screenOrientation="landscape" />
+            android:screenOrientation="sensorLandscape" />
 
         <receiver
-            android:name=".dashboard.DashBoardActivity$PowerConnectionReceiver"
+            android:name=".layout.DashBoardActivity$PowerConnectionReceiver"
             android:exported="true"
             tools:ignore="Instantiatable">
             <intent-filter>

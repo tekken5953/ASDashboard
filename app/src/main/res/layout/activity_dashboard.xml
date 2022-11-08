@@ -2,9 +2,10 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context=".dashboard.DashBoardActivity">
+    tools:context=".layout.DashBoardActivity">
 
     <data>
+
         <variable
             name="viewModel"
             type="com.example.dashboard.bluetooth.BluetoothThread.DataShareViewModel" />
@@ -169,8 +170,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/pretendardvariable"
-                android:format24Hour="a hh:mm"
+                android:format24Hour="HH:mm"
                 android:gravity="center"
+                android:includeFontPadding="false"
                 android:text="time"
                 android:textColor="@color/white"
                 android:textSize="@dimen/textDashH1.5"
@@ -236,6 +238,32 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/dashTempTitleTx">
+
+                <!--                <EditText-->
+                <!--                    android:id="@+id/dashTestEdit"-->
+                <!--                    android:layout_width="180dp"-->
+                <!--                    android:layout_height="wrap_content"-->
+                <!--                    android:layout_marginTop="@dimen/tapDashX2"-->
+                <!--                    android:backgroundTint="@color/white"-->
+                <!--                    android:gravity="center"-->
+                <!--                    android:inputType="number"-->
+                <!--                    android:hint="CO2값 입력"-->
+                <!--                    android:textColor="@color/white"-->
+                <!--                    android:textColorHint="@color/sidemenu_gray"-->
+                <!--                    app:layout_constraintEnd_toEndOf="parent"-->
+                <!--                    app:layout_constraintStart_toStartOf="parent"-->
+                <!--                    app:layout_constraintTop_toTopOf="parent" />-->
+
+                <!--                <Button-->
+                <!--                    android:id="@+id/dashTestBtn"-->
+                <!--                    android:layout_width="wrap_content"-->
+                <!--                    android:layout_height="wrap_content"-->
+                <!--                    android:layout_marginStart="5dp"-->
+                <!--                    android:text="OK"-->
+                <!--                    app:layout_constraintBottom_toBottomOf="@+id/dashTestEdit"-->
+                <!--                    app:layout_constraintStart_toEndOf="@+id/dashTestEdit"-->
+                <!--                    app:layout_constraintTop_toTopOf="@+id/dashTestEdit" />-->
+
 
                 <ImageView
                     android:id="@+id/apiCircleChartPb"
@@ -345,7 +373,7 @@
 
                 <TextView
                     android:id="@+id/aqiContentTv"
-                    android:layout_width="@dimen/cqiContentDashWidth"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/tapDashX1"
                     android:fontFamily="@font/pretendardvariable"
@@ -530,6 +558,7 @@
                         android:ellipsize="end"
                         android:fontFamily="@font/pretendardvariable"
                         android:lines="1"
+                        android:visibility="visible"
                         android:text="@string/loading_data"
                         android:textAllCaps="false"
                         android:textColor="@color/progressGood"
@@ -542,6 +571,7 @@
                         android:layout_below="@+id/listCardPMTitle"
                         android:layout_marginStart="@dimen/tapDashX1.5"
                         android:layout_marginTop="@dimen/iconDashPadding"
+                        android:includeFontPadding="false"
                         android:fontFamily="@font/pretendardvariable"
                         android:text="null"
                         android:textColor="@color/progressGood"
@@ -554,11 +584,12 @@
                         android:layout_height="wrap_content"
                         android:layout_below="@+id/listCardPMTitle"
                         android:layout_marginStart="@dimen/tapDashX1"
-                        android:layout_marginTop="@dimen/tapDashX0.5"
+                        android:layout_alignTop="@+id/listCardPMIndex"
                         android:layout_toEndOf="@+id/listCardPMIndex"
                         android:fontFamily="@font/pretendardvariable"
                         android:gravity="center"
                         android:text="ug/㎥"
+                        android:includeFontPadding="false"
                         android:textColor="@color/statusUnitText"
                         android:textSize="@dimen/textDashH1.5"
                         android:visibility="gone" />
@@ -625,6 +656,7 @@
                         android:layout_below="@+id/listCardTVOCTitle"
                         android:layout_marginStart="@dimen/tapDashX1.5"
                         android:layout_marginTop="@dimen/iconDashPadding"
+                        android:includeFontPadding="false"
                         android:fontFamily="@font/pretendardvariable"
                         android:text="null"
                         android:textColor="@color/progressGood"
@@ -637,13 +669,14 @@
                         android:layout_height="wrap_content"
                         android:layout_below="@+id/listCardTVOCTitle"
                         android:layout_marginStart="@dimen/tapDashX1"
-                        android:layout_marginTop="@dimen/tapDashX0.5"
+                        android:layout_alignTop="@+id/listCardTVOCIndex"
                         android:layout_toEndOf="@+id/listCardTVOCIndex"
                         android:fontFamily="@font/pretendardvariable"
                         android:gravity="center"
                         android:text="mg/㎥"
+                        android:includeFontPadding="false"
                         android:textColor="@color/statusUnitText"
-                        android:textSize="@dimen/textDashH1"
+                        android:textSize="@dimen/textDashH1.5"
                         android:visibility="gone" />
 
                     <TextView
@@ -699,7 +732,8 @@
                         android:text="@string/loading_data"
                         android:textAllCaps="false"
                         android:textColor="@color/progressGood"
-                        android:textSize="@dimen/textDashH1" />
+                        android:textSize="@dimen/textDashH1"
+                        android:visibility="visible" />
 
                     <TextView
                         android:id="@+id/listCardCO2Index"
@@ -709,6 +743,7 @@
                         android:layout_marginStart="@dimen/tapDashX1.5"
                         android:layout_marginTop="@dimen/iconDashPadding"
                         android:fontFamily="@font/pretendardvariable"
+                        android:includeFontPadding="false"
                         android:text="null"
                         android:textColor="@color/progressGood"
                         android:textSize="@dimen/textDashH2"
@@ -720,11 +755,13 @@
                         android:layout_height="wrap_content"
                         android:layout_below="@+id/listCardCO2Title"
                         android:layout_marginStart="@dimen/tapDashX1"
-                        android:layout_marginTop="@dimen/tapDashX0.5"
+                        android:layout_alignTop="@+id/listCardCO2Index"
+                        android:layout_alignBottom="@+id/listCardCO2Index"
                         android:layout_toEndOf="@+id/listCardCO2Index"
                         android:fontFamily="@font/pretendardvariable"
                         android:gravity="center"
                         android:text="ppm"
+                        android:includeFontPadding="false"
                         android:textColor="@color/statusUnitText"
                         android:textSize="@dimen/textDashH1.5"
                         android:visibility="gone" />
@@ -791,6 +828,7 @@
                         android:layout_below="@+id/listCardCOTitle"
                         android:layout_marginStart="@dimen/tapDashX1.5"
                         android:layout_marginTop="@dimen/iconDashPadding"
+                        android:includeFontPadding="false"
                         android:fontFamily="@font/pretendardvariable"
                         android:text="null"
                         android:textColor="@color/progressGood"
@@ -803,11 +841,12 @@
                         android:layout_height="wrap_content"
                         android:layout_below="@+id/listCardCOTitle"
                         android:layout_marginStart="@dimen/tapDashX1"
-                        android:layout_marginTop="@dimen/tapDashX0.5"
+                        android:layout_alignTop="@+id/listCardCOIndex"
                         android:layout_toEndOf="@+id/listCardCOIndex"
                         android:fontFamily="@font/pretendardvariable"
                         android:gravity="center"
                         android:text="ppm"
+                        android:includeFontPadding="false"
                         android:textColor="@color/statusUnitText"
                         android:textSize="@dimen/textDashH1.5"
                         android:visibility="gone" />
@@ -873,6 +912,7 @@
                         android:layout_below="@+id/listCardVIRUSTitle"
                         android:layout_marginStart="@dimen/tapDashX1.5"
                         android:layout_marginTop="@dimen/iconDashPadding"
+                        android:includeFontPadding="false"
                         android:fontFamily="@font/pretendardvariable"
                         android:text="123"
                         android:textColor="@color/statusUnitText"

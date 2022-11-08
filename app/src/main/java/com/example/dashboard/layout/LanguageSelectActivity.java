@@ -4,14 +4,13 @@
  * 개발시작 2022-06-20
  */
 
-package com.example.dashboard.language;
+package com.example.dashboard.layout;
 
 import android.app.Activity;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;

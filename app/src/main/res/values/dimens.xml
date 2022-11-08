@@ -3,7 +3,7 @@
     <dimen name="iconDashSize">30dp</dimen>
     <dimen name="guideDashSide">38dp</dimen>
     <dimen name="guideDashTop">3dp</dimen>
-    <dimen name="iconDashPadding">4dp</dimen>
+    <dimen name="iconDashPadding">10dp</dimen>
 
     <dimen name="textDashH0.25">11sp</dimen>
     <dimen name="textDashH0.5">12sp</dimen>
@@ -64,4 +64,5 @@
     <dimen name="guideDialogSide">15dp</dimen>
     <dimen name="dashBatteryWidth">23dp</dimen>
     <dimen name="dashBatteryHeight">24dp</dimen>
+
 </resources>

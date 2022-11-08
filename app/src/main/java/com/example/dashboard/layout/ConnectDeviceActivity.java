@@ -4,7 +4,7 @@
  * 개발시작 2022-06-20
  */
 
-package com.example.dashboard.connect;
+package com.example.dashboard.layout;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
@@ -22,20 +22,22 @@ import android.os.Handler;
 import android.os.Looper;
 import android.util.Log;
 import android.view.View;
-import android.widget.Toast;
 
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.res.ResourcesCompat;
 
+import com.example.dashboard.R;
+import com.example.dashboard.adapter.ConnectRecyclerAdapter;
+import com.example.dashboard.adapter.PairedDeviceAdapter;
+import com.example.dashboard.bluetooth.BluetoothThread;
+import com.example.dashboard.databinding.ConnectBluetoothActivityBinding;
+import com.example.dashboard.model.ConnectRecyclerItem;
+import com.example.dashboard.model.PairedDeviceItem;
 import com.example.dashboard.utils.OnSingleClickListener;
 import com.example.dashboard.utils.OuterClass;
-import com.example.dashboard.R;
 import com.example.dashboard.utils.SharedPreferenceManager;
-import com.example.dashboard.bluetooth.BluetoothThread;
-import com.example.dashboard.dashboard.DashBoardActivity;
-import com.example.dashboard.databinding.ConnectBluetoothActivityBinding;
 import com.example.dashboard.utils.ToastUtils;
 
 import java.lang.reflect.Method;
@@ -180,9 +182,13 @@ public class ConnectDeviceActivity extends AppCompatActivity {
                         Intent intent = new Intent(context, DashBoardActivity.class);
                         // 해당 클릭아이템의 포지션을 인텐트와 함께 전송합니다
                         intent.putExtra("device_position", SELECTED_POSITION);
-                        String s = bondedList.get(SELECTED_POSITION).getName().split(" ")[1];
-                        intent.putExtra("userCode",s.substring(1,s.length()-1));
-                        Log.d("BTThread","Address is " + s.substring(1,s.length()-1));
+                        if (bondedList.get(SELECTED_POSITION).getName().contains(" ")) {
+                            String s = bondedList.get(SELECTED_POSITION).getName().split(" ")[1];
+                            intent.putExtra("userCode",s.substring(1,s.length()-1));
+                            Log.d("BTThread","Address is " + s.substring(1,s.length()-1));
+                        } else {
+                            intent.putExtra("userCode","NA");
+                        }
                         startActivity(intent);
                         finish();
                     });
@@ -552,7 +558,6 @@ public class ConnectDeviceActivity extends AppCompatActivity {
     }
 
     private void StartDiscovery() {
-
         bluetoothAdapter.startDiscovery();
 
         Handler handler = new Handler(Looper.getMainLooper());

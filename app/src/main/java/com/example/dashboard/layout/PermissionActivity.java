@@ -1,4 +1,4 @@
-package com.example.dashboard;
+package com.example.dashboard.layout;
 
 import android.Manifest;
 import android.content.DialogInterface;
@@ -14,7 +14,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.dashboard.language.LanguageSelectActivity;
+import com.example.dashboard.R;
 
 //https://ddangeun.tistory.com/158
 //https://full-stack.tistory.com/entry/Android-Permission-%EA%B6%8C%ED%95%9C-1-%EC%8B%9C%EC%8A%A4%ED%85%9C-%EA%B6%8C%ED%95%9C-feat-Bluetooth

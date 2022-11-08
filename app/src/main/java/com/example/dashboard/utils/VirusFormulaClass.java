@@ -1,4 +1,4 @@
-package com.example.dashboard.bluetooth;
+package com.example.dashboard.utils;
 
 /**     AQI 값 범위 별 구간
  *

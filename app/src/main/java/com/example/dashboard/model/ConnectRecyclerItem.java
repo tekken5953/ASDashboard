@@ -1,4 +1,4 @@
-package com.example.dashboard.connect;
+package com.example.dashboard.model;
 
 import android.graphics.drawable.Drawable;
 

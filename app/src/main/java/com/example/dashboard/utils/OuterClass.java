@@ -16,8 +16,8 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.content.res.AppCompatResources;
 
 import com.example.dashboard.R;
-import com.example.dashboard.connect.ConnectDeviceActivity;
-import com.example.dashboard.language.LanguageSelectActivity;
+import com.example.dashboard.layout.ConnectDeviceActivity;
+import com.example.dashboard.layout.LanguageSelectActivity;
 
 import java.util.Locale;
 
@@ -37,7 +37,7 @@ public class OuterClass {
                 after = activity.getString(R.string.bad);
                 break;
             case "3":
-                after = activity.getString(R.string.baddest);
+                after = activity.getString(R.string.very_bad);
                 break;
             case "공기질 통합지수":
                 after = activity.getString(R.string.aqi);
