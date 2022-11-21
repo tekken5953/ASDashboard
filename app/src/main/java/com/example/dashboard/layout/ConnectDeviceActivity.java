@@ -35,9 +35,9 @@ import com.example.dashboard.bluetooth.BluetoothThread;
 import com.example.dashboard.databinding.ConnectBluetoothActivityBinding;
 import com.example.dashboard.model.ConnectRecyclerItem;
 import com.example.dashboard.model.PairedDeviceItem;
-import com.example.dashboard.utils.OnSingleClickListener;
-import com.example.dashboard.utils.OuterClass;
-import com.example.dashboard.utils.SharedPreferenceManager;
+import com.example.dashboard.OnSingleClickListener;
+import com.example.dashboard.OuterClass;
+import com.example.dashboard.SharedPreferenceManager;
 import com.example.dashboard.utils.ToastUtils;
 
 import java.lang.reflect.Method;
@@ -64,11 +64,10 @@ public class ConnectDeviceActivity extends AppCompatActivity {
     int SELECTED_POSITION = -1;
 
     OuterClass outerClass = new OuterClass();
+    ToastUtils toastUtils = new ToastUtils();
 
     ArrayList<BluetoothDevice> noBondedList;
     ArrayList<BluetoothDevice> bondedList;
-
-    ToastUtils toastUtils = new ToastUtils();
 
     @Override
     protected void onResume() {

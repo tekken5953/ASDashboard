@@ -17,9 +17,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.content.res.AppCompatResources;
 import androidx.core.content.res.ResourcesCompat;
 
-import com.example.dashboard.utils.OuterClass;
+import com.example.dashboard.OuterClass;
 import com.example.dashboard.R;
-import com.example.dashboard.utils.SharedPreferenceManager;
+import com.example.dashboard.SharedPreferenceManager;
 import com.example.dashboard.databinding.LanguageSelectActivityBinding;
 import com.example.dashboard.utils.ToastUtils;
 
@@ -28,11 +28,9 @@ public class LanguageSelectActivity extends AppCompatActivity {
 
     boolean FLAG_KOR_SELECTED = false;
     boolean FLAG_ENG_SELECTED = false;
-    String FINAL_LANGUAGE = null;
-    String SKIP_SELECT_LANGUAGE = null;
-    OuterClass outerClass = new OuterClass();
 
-    Activity context;
+    Activity context = LanguageSelectActivity.this;;
+    OuterClass outerClass = new OuterClass();
     ToastUtils toastUtils = new ToastUtils();
 
     @Override
@@ -49,11 +47,9 @@ public class LanguageSelectActivity extends AppCompatActivity {
         View v = binding.getRoot();
         setContentView(v);
 
-        context = LanguageSelectActivity.this;
-
         // SharedPreference 로 부터 최종 설정 된 언어와 언어선택 스킵 여부를 불러옵니다
-        FINAL_LANGUAGE = SharedPreferenceManager.getString(context, "final");
-        SKIP_SELECT_LANGUAGE = SharedPreferenceManager.getString(context, "skip_lang");
+        String FINAL_LANGUAGE = SharedPreferenceManager.getString(context, "final");
+        String SKIP_SELECT_LANGUAGE = SharedPreferenceManager.getString(context, "skip_lang");
 
         // 미 선택 된 이미지의 Capacity 설정 입니다
         binding.langKorIconIv.setImageAlpha(76);

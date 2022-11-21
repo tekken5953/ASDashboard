@@ -15,12 +15,11 @@ import android.os.Looper;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.dashboard.R;
-import com.example.dashboard.utils.OuterClass;
+import com.example.dashboard.OuterClass;
 
 
 @SuppressLint("CustomSplashScreen")
 public class SplashActivity extends AppCompatActivity {
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -38,7 +37,5 @@ public class SplashActivity extends AppCompatActivity {
                 finish();
             }
         }, 2000);
-
-
     }
 }

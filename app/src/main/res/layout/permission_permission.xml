@@ -202,26 +202,13 @@
             app:layout_constraintStart_toStartOf="parent">
 
             <TextView
-                android:id="@+id/denyTx"
-                android:layout_width="@dimen/itemIconPermSize"
-                android:layout_height="@dimen/guidePermTop"
-                android:fontFamily="@font/pretendardvariable"
-                android:gravity="center"
-                android:text="@string/perm_deny"
-                android:textAllCaps="false"
-                android:textColor="@color/white"
-                android:textSize="@dimen/textDashH3"
-                android:background="@drawable/ripple_round"
-                android:textStyle="bold" />
-
-            <TextView
                 android:id="@+id/grantTx"
                 android:layout_width="@dimen/itemIconPermSize"
                 android:layout_height="@dimen/guidePermTop"
                 android:layout_marginStart="@dimen/guidePermSide"
                 android:fontFamily="@font/pretendardvariable"
                 android:gravity="center"
-                android:text="@string/perm_accept"
+                android:text="@string/ok"
                 android:textAllCaps="false"
                 android:textColor="@color/white"
                 android:textSize="@dimen/textDashH3"

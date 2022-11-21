@@ -15,4 +15,12 @@ public class ToastUtils {
         };
         context.runOnUiThread(r);
     }
+
+    public void cancelToast(Activity context) {
+        if (toast != null) {
+            context.runOnUiThread(() -> {
+                toast.cancel();
+            });
+        }
+    }
 }

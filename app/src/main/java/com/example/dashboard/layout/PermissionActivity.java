@@ -27,30 +27,19 @@ public class PermissionActivity extends AppCompatActivity {
             Manifest.permission.ACCESS_WIFI_STATE, Manifest.permission.INTERNET
     };
 
-    static final int REQUEST_UP_PERMISSIONS = 2;
-    static final int REQUEST_DOWN_PERMISSIONS = 1;
+    final int REQUEST_UP_PERMISSIONS = 2;
+    final int REQUEST_DOWN_PERMISSIONS = 1;
 
     final String TAG_PERMISSIONS = "tag_permissions";
-
-    TextView grant, deny;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.permission_permission);
 
-        grant = findViewById(R.id.grantTx);
+        TextView grant = findViewById(R.id.grantTx);
 
-        deny = findViewById(R.id.denyTx);
-
-        deny.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-            }
-        });
-
-        bleInitialize();
+        bleInitialize(grant);
     }
 
     @Override
@@ -129,7 +118,7 @@ public class PermissionActivity extends AppCompatActivity {
         }
     }
 
-    private void bleInitialize() {
+    private void bleInitialize(TextView tv) {
         // 런타임 권한 확인
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
             Log.i(TAG_PERMISSIONS, "admin : " + checkSelfPermission(Manifest.permission.BLUETOOTH_ADMIN) +
@@ -149,7 +138,7 @@ public class PermissionActivity extends AppCompatActivity {
                 startActivity(intent);
                 finish();
             } else {
-                grant.setOnClickListener(new View.OnClickListener() {
+                tv.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         requestBlePermissions();
@@ -164,7 +153,7 @@ public class PermissionActivity extends AppCompatActivity {
                 startActivity(intent);
                 finish();
             } else {
-                grant.setOnClickListener(new View.OnClickListener() {
+                tv.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         requestBlePermissions();

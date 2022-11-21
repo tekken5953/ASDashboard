@@ -26,7 +26,7 @@
     <dimen name="tapDashX5">53dp</dimen>
     <dimen name="tapDashX5.5">58dp</dimen>
 
-    <dimen name="cqiDashSize">190dp</dimen>
+    <dimen name="cqiDashSize">200dp</dimen>
     <dimen name="barContDashWidth">168dp</dimen>
     <dimen name="barInDashWidth">158dp</dimen>
     <dimen name="cqiContentDashWidth">77dp</dimen>
