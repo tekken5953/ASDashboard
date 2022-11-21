@@ -439,7 +439,6 @@
                 app:layout_constraintTop_toBottomOf="@+id/topFrameLayout">
 
                 <RelativeLayout style="@style/BottomCardContainer">
-
                     <TextView
                         android:id="@+id/listCardPMTitle"
                         style="@style/BottomCardTitle"
@@ -470,7 +469,6 @@
                 </RelativeLayout>
 
                 <RelativeLayout style="@style/BottomCardContainer">
-
                     <TextView
                         android:id="@+id/listCardTVOCTitle"
                         style="@style/BottomCardTitle"
@@ -501,7 +499,6 @@
                 </RelativeLayout>
 
                 <RelativeLayout style="@style/BottomCardContainer">
-
                     <TextView
                         android:id="@+id/listCardCO2Title"
                         style="@style/BottomCardTitle"
@@ -534,7 +531,6 @@
                 </RelativeLayout>
 
                 <RelativeLayout style="@style/BottomCardContainer">
-
                     <TextView
                         android:id="@+id/listCardCOTitle"
                         style="@style/BottomCardTitle"
@@ -566,7 +562,6 @@
                 </RelativeLayout>
 
                 <RelativeLayout style="@style/BottomCardContainer">
-
                     <TextView
                         android:id="@+id/listCardVIRUSTitle"
                         style="@style/BottomCardTitle"
