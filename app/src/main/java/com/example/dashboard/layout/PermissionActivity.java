@@ -108,12 +108,7 @@ public class PermissionActivity extends AppCompatActivity {
                         finish();
                     }
                 });
-                alertDialog.setButton(DialogInterface.BUTTON_NEGATIVE, "돌아가기", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        alertDialog.dismiss();
-                    }
-                });
+                alertDialog.setButton(DialogInterface.BUTTON_NEGATIVE, "돌아가기", (dialog, which) -> alertDialog.dismiss());
             }
         }
     }
@@ -138,12 +133,7 @@ public class PermissionActivity extends AppCompatActivity {
                 startActivity(intent);
                 finish();
             } else {
-                tv.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        requestBlePermissions();
-                    }
-                });
+                tv.setOnClickListener(v -> requestBlePermissions());
             }
         } else {
             if (checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED
@@ -153,12 +143,7 @@ public class PermissionActivity extends AppCompatActivity {
                 startActivity(intent);
                 finish();
             } else {
-                tv.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        requestBlePermissions();
-                    }
-                });
+                tv.setOnClickListener(v -> requestBlePermissions());
             }
         }
     }

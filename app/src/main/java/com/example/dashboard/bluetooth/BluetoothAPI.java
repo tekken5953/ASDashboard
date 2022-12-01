@@ -12,20 +12,8 @@ import java.util.ArrayList;
 public class BluetoothAPI {
     public static final byte[] STX = {(byte) 0xFF, (byte) 0xFF, (byte) 0xFF, (byte) 0xFF};
     public static final byte[] ETX = {(byte) 0xFE, (byte) 0xFE, (byte) 0xFE, (byte) 0xFE};
-
-//    public static final byte REQUEST_INDIVIDUAL_STATE = (byte) 0x01;
-//    public static final byte RESPONSE_INDIVIDUAL_STATE = (byte) 0x81;
-//    public static final byte REQUEST_ALL_STATE = (byte) 0x03;
-//    public static final byte RESPONSE_ALL_STATE = (byte) 0x83;
-//    public static final byte REQUEST_CONTROL = (byte) 0x02;
-//    public static final byte RESPONSE_CONTROL = (byte) 0x82;
-//    public static final byte CALL_EVENTS = (byte) 0x84;
-
     public static final int SENSOR_EQUIP_COUNT = 13;
-//    public static final int SENSOR_TOTAL_COUNT = 15;
-
     private static final int BYTE_UNSIGNED_SHORT = 2;
-//    private static final int BYTE_INTEGER = 4;
     private static final int BYTE_DOUBLE = 8;
     private static final int MAX_BUFFER = 1024;
 
@@ -449,65 +437,5 @@ public class BluetoothAPI {
         display.getRealSize(size);
         return size;
     }
-
-    public static int[] getStandardSize(Activity activity) {
-        Point ScreenSize = getScreenSize(activity);
-        float density = activity.getResources().getDisplayMetrics().density;
-
-        int standardSize_x = (int) (ScreenSize.x / density);
-        int standardSize_y = (int) (ScreenSize.y / density);
-
-        return new int[]{standardSize_x, standardSize_y};
-    }
-
-
-    public static int getDeviceType(char[] type) {
-        int deviceType;
-        switch (String.valueOf(type)) {
-            case "SI":
-//                deviceType = SI : BIO-Sentinel 100
-                deviceType = 1;
-                break;
-            case "PI":
-//                deviceType = PI : BIO-Sentinel 200
-                deviceType = 2;
-                break;
-            case "TI":
-//                deviceType = TI : BIO-Sentinel Mini
-                deviceType = 3;
-                break;
-            case "MI":
-//                deviceType = MI : BIO-Sentinel 300
-                deviceType = 4;
-                break;
-            default:
-//                deviceType = DeviceFragment.DEVICE_TYPE_ERROR;
-                deviceType = 5;
-                break;
-        }
-        return deviceType;
-    }
-//
-//    public static int getDeviceType(char[] type) {
-//        int deviceType;
-//        switch (String.valueOf(type)) {
-//            case "SI":
-//                deviceType = DeviceFragment.DEVICE_TYPE_S;
-//                break;
-//            case "PI":
-//                deviceType = DeviceFragment.DEVICE_TYPE_S_PLUS;
-//                break;
-//            case "TI":
-//                deviceType = DeviceFragment.DEVICE_TYPE_MINI;
-//                break;
-//            case "MI":
-//                deviceType = DeviceFragment.DEVICE_TYPE_PRO;
-//                break;
-//            default:
-//                deviceType = DeviceFragment.DEVICE_TYPE_ERROR;
-//                break;
-//        }
-//        return deviceType;
-//    }
 }
 

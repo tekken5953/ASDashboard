@@ -61,12 +61,8 @@
 
         <LinearLayout
             android:id="@+id/permissionGPStr"
-            android:layout_width="@dimen/itemPermWidth"
-            android:layout_height="@dimen/itemPermHeight"
             android:layout_marginStart="@dimen/itemPermGuide"
-            android:background="@drawable/permission_outline"
-            android:gravity="center"
-            android:orientation="vertical"
+            style="@style/PermissionCard"
             app:layout_constraintBottom_toTopOf="@+id/permissionBottomTr"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/permissionTitleTx">
@@ -105,12 +101,8 @@
 
         <LinearLayout
             android:id="@+id/permissionBTtr"
-            android:layout_width="@dimen/itemPermWidth"
-            android:layout_height="@dimen/itemPermHeight"
             android:layout_marginStart="@dimen/tapDashX3"
-            android:background="@drawable/permission_outline"
-            android:gravity="center"
-            android:orientation="vertical"
+            style="@style/PermissionCard"
             app:layout_constraintBottom_toBottomOf="@+id/permissionGPStr"
             app:layout_constraintStart_toEndOf="@+id/permissionGPStr"
             app:layout_constraintTop_toTopOf="@+id/permissionGPStr">
@@ -149,12 +141,8 @@
 
         <LinearLayout
             android:id="@+id/permissionWIFItr"
-            android:layout_width="@dimen/itemPermWidth"
-            android:layout_height="@dimen/itemPermHeight"
             android:layout_marginEnd="@dimen/itemPermGuide"
-            android:background="@drawable/permission_outline"
-            android:gravity="center"
-            android:orientation="vertical"
+            style="@style/PermissionCard"
             app:layout_constraintBottom_toBottomOf="@+id/permissionGPStr"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="@+id/permissionGPStr">

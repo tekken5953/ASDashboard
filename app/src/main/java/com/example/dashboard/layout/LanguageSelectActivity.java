@@ -100,41 +100,32 @@ public class LanguageSelectActivity extends AppCompatActivity {
             outerClass.FullScreenMode(LanguageSelectActivity.this);
 
             // 한국어 이미지를 클릭 하였을 경우
-            binding.langKorIconIv.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    SelectedKoreaFlag();
-                    // current 라는 현재 선택 된 언어를 SharedPreference 에 저장합니다
-                    SharedPreferenceManager.setString(context, "current", "ko");
-                }
+            binding.langKorIconIv.setOnClickListener(v -> {
+                SelectedKoreaFlag();
+                // current 라는 현재 선택 된 언어를 SharedPreference 에 저장합니다
+                SharedPreferenceManager.setString(context, "current", "ko");
             });
 
             // 영어 이미지를 클릭 하였을 경우
-            binding.langEngIconIv.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    SelectedEnglishFlag();
-                    // current 라는 현재 선택 된 언어를 SharedPreference 에 저장합니다
-                    SharedPreferenceManager.setString(context, "current", "en");
-                }
+            binding.langEngIconIv.setOnClickListener(v -> {
+                SelectedEnglishFlag();
+                // current 라는 현재 선택 된 언어를 SharedPreference 에 저장합니다
+                SharedPreferenceManager.setString(context, "current", "en");
             });
 
             // 확인 버튼을 눌렀을 경우 이벤트 리스너
-            binding.langOkTv.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (binding.langOkTv.isEnabled()) {
-                        outerClass.CallVibrate(context, 10);
-                        // 현재 선택된 언어를 불러옵니다
-                        // 그 언어를 바탕으로 국가를 설정하고 현재 선택된 언어를 최종 언어로 변경하여 저장합니다
-                        // 디바이스 연결 화면으로 이동합니다
-                        if (SharedPreferenceManager.getString(context, "current").equals("en")) {
-                            outerClass.setLocaleToEnglish(context);
-                            SetCurrentToFinal();
-                        } else if (SharedPreferenceManager.getString(context, "current").equals("ko")) {
-                            outerClass.setLocaleToKorea(context);
-                            SetCurrentToFinal();
-                        }
+            binding.langOkTv.setOnClickListener(v -> {
+                if (binding.langOkTv.isEnabled()) {
+                    outerClass.CallVibrate(context, 10);
+                    // 현재 선택된 언어를 불러옵니다
+                    // 그 언어를 바탕으로 국가를 설정하고 현재 선택된 언어를 최종 언어로 변경하여 저장합니다
+                    // 디바이스 연결 화면으로 이동합니다
+                    if (SharedPreferenceManager.getString(context, "current").equals("en")) {
+                        outerClass.setLocaleToEnglish(context);
+                        SetCurrentToFinal();
+                    } else if (SharedPreferenceManager.getString(context, "current").equals("ko")) {
+                        outerClass.setLocaleToKorea(context);
+                        SetCurrentToFinal();
                     }
                 }
             });
@@ -147,7 +138,7 @@ public class LanguageSelectActivity extends AppCompatActivity {
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                toastUtils.shortMessage(context,getString(R.string.complete_select_lang));
+//                toastUtils.shortMessage(context,getString(R.string.complete_select_lang));
                 outerClass.GoToConnectFromLang(context);
             }
         });
@@ -196,18 +187,8 @@ public class LanguageSelectActivity extends AppCompatActivity {
         alertDialog.setTitle(getString(R.string.exit_app_title));
         alertDialog.setMessage(getString(R.string.exit_app_message));
         alertDialog.setIcon(R.drawable.icon);
-        alertDialog.setButton(DialogInterface.BUTTON_POSITIVE, getString(R.string.exit_app_yes), new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                finish();
-            }
-        });
-        alertDialog.setButton(DialogInterface.BUTTON_NEGATIVE, getString(R.string.exit_app_no), new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                alertDialog.dismiss();
-            }
-        });
+        alertDialog.setButton(DialogInterface.BUTTON_POSITIVE, getString(R.string.exit_app_yes), (dialog, which) -> finish());
+        alertDialog.setButton(DialogInterface.BUTTON_NEGATIVE, getString(R.string.exit_app_no), (dialog, which) -> alertDialog.dismiss());
         alertDialog.show();
     }
 }

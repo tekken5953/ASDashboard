@@ -88,7 +88,6 @@ public class BluetoothThread extends Thread {
                         // 버퍼 초기화
                         readBufferPosition = 0;
                         readBuffer = new byte[1024];
-//                        packetBytes = null;
 
                         e.printStackTrace();
 
@@ -135,7 +134,6 @@ public class BluetoothThread extends Thread {
 
     @SuppressLint("MissingPermission")
     public void connectSocket() {
-        //mBluetoothAdapter.cancelDiscovery();
         try {
             mBluetoothSocket = mBluetoothDevice.createInsecureRfcommSocketToServiceRecord(uuid);
             mBluetoothSocket.connect();

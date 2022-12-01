@@ -54,19 +54,20 @@ import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.example.dashboard.OnSingleClickListener;
+import com.example.dashboard.OuterClass;
 import com.example.dashboard.R;
+import com.example.dashboard.SharedPreferenceManager;
 import com.example.dashboard.bluetooth.BluetoothAPI;
 import com.example.dashboard.bluetooth.BluetoothThread;
 import com.example.dashboard.bluetooth.Mqtt;
 import com.example.dashboard.databinding.ActivityDashboardBinding;
-import com.example.dashboard.ui.SegmentedProgressBar;
-import com.example.dashboard.ui.SideBarCustomView;
-import com.example.dashboard.OnSingleClickListener;
-import com.example.dashboard.OuterClass;
-import com.example.dashboard.SharedPreferenceManager;
 import com.example.dashboard.utils.SnackBarUtils;
 import com.example.dashboard.utils.ToastUtils;
 import com.example.dashboard.utils.VirusFormulaClass;
+import com.example.dashboard.view.AsTextView;
+import com.example.dashboard.view.SegmentedProgressBar;
+import com.example.dashboard.view.SideBarCustomView;
 import com.github.mikephil.charting.components.Legend;
 import com.github.mikephil.charting.components.XAxis;
 import com.github.mikephil.charting.components.YAxis;
@@ -136,6 +137,7 @@ public class DashBoardActivity extends AppCompatActivity {
     private boolean isConnected = false;
     ConnectivityManager manager;
     float batteryPct = -1;
+    AsTextView pmGrade,coGrade,co2Grade,tvocGrade,virusGrade,cqiGrade;
 
     @Override
     protected void onDestroy() {
@@ -286,6 +288,13 @@ public class DashBoardActivity extends AppCompatActivity {
         binding.listCardVIRUSIndex.setVisibility(View.GONE);
         binding.listCardVIRUSOCGrade.setVisibility(View.GONE);
         binding.virusLineChart.setNoDataText(getString(R.string.no_data_text));
+        pmGrade = binding.listCardPMGrade;
+        tvocGrade = binding.listCardTVOCGrade;
+        coGrade = binding.listCardCOGrade;
+        co2Grade = binding.listCardCO2Grade;
+        virusGrade = binding.listCardVIRUSOCGrade;
+        cqiGrade = binding.aqiContentTv;
+
 
         SetSwitchState();
 
@@ -614,9 +623,9 @@ public class DashBoardActivity extends AppCompatActivity {
             // 0 ~ 150
             if (pm_float != null && pm_float >= 0f && pm_float <= 100f) {
                 jsonMeasure.put("PM2P5lvl", body.getByte("0A"));
-                binding.listCardPMGrade.setText(pm_grade);
+                pmGrade.setGradeText(pm_grade);
                 CardItemTextColor(pm_grade, binding.listCardPMTitle, binding.listCardPMUnit,
-                        binding.listCardPMGrade, binding.listCardPMIndex, binding.listCardPMLoadingTv);
+                        binding.listCardPMIndex, binding.listCardPMLoadingTv);
             }
         }
 
@@ -625,9 +634,9 @@ public class DashBoardActivity extends AppCompatActivity {
             String tvoc_grade = String.valueOf(body.getByte("22"));
             // 0 ~ 5
             if (body.getByte("20") == 1 && tvoc_float != null && tvoc_float >= 0f && tvoc_float <= 3f) {
-                binding.listCardTVOCGrade.setText(tvoc_grade);
+                tvocGrade.setGradeText(tvoc_grade);
                 CardItemTextColor(tvoc_grade, binding.listCardTVOCTitle, binding.listCardTVOCUnit,
-                        binding.listCardTVOCGrade, binding.listCardTVOCIndex, binding.listCardTVOCLoadingTv);
+                         binding.listCardTVOCIndex, binding.listCardTVOCLoadingTv);
                 jsonMeasure.put("TVOClvl", body.getByte("22"));
             }
         }
@@ -655,9 +664,9 @@ public class DashBoardActivity extends AppCompatActivity {
             String co_grade = body.getByte("1C") + "";
             // 0 ~ 18
             if (body.getByte("1A") == 1 && co_float != null && co_float >= 0f && co_float <= 15f) {
-                binding.listCardCOGrade.setText(outerClass.translateData(co_grade, context));
+                coGrade.setGradeText(co_grade);
                 CardItemTextColor(co_grade, binding.listCardCOTitle, binding.listCardCOUnit,
-                        binding.listCardCOGrade, binding.listCardCOIndex, binding.listCardCOLoadingTv);
+                       binding.listCardCOIndex, binding.listCardCOLoadingTv);
                 jsonMeasure.put("COlvl", body.getByte("1C"));
             }
         }
@@ -667,9 +676,9 @@ public class DashBoardActivity extends AppCompatActivity {
             String co2_grade = body.getByte("1F") + "";
             // 0 ~ 2500
             if (body.getByte("1D") == 1 && co2_float != null && Math.round(co2_float) >= 0 && Math.round(co2_float) <= 2000) {
-                binding.listCardCO2Grade.setText(outerClass.translateData(co2_grade, context));
+                co2Grade.setGradeText(co2_grade);
                 CardItemTextColor(co2_grade, binding.listCardCO2Title, binding.listCardCO2Unit,
-                        binding.listCardCO2Grade, binding.listCardCO2Index, binding.listCardCO2LoadingTv);
+                       binding.listCardCO2Index, binding.listCardCO2LoadingTv);
                 jsonMeasure.put("CO2lvl", body.getByte("1F"));
             }
         }
@@ -724,7 +733,7 @@ public class DashBoardActivity extends AppCompatActivity {
                     if (bluetoothThread.getDeviceName().startsWith("BS_M")) {
                         // 어플 강제종료
 //                        android.os.Process.killProcess(android.os.Process.myPid());
-                        toastUtils.shortMessage(context, getString(R.string.exit_complete));
+//                        toastUtils.shortMessage(context, getString(R.string.exit_complete));
                         // 어플 재시작
                         finishAffinity();
                         Intent intent = new Intent(DashBoardActivity.this, LanguageSelectActivity.class);
@@ -954,23 +963,22 @@ public class DashBoardActivity extends AppCompatActivity {
                 // 바이러스 지수에 따라 데이터 표시하기
                 switch (virusIndex) {
                     case "0":
-                        CardItemTextColor("0", binding.listCardVIRUSTitle, null,
-                                binding.listCardVIRUSOCGrade, binding.listCardVIRUSIndex, binding.listCardVIRUSLoadingTv);
+                        CardItemTextColor("0", binding.listCardVIRUSTitle, null, binding.listCardVIRUSIndex, binding.listCardVIRUSLoadingTv);
                         break;
                     case "1":
-                        CardItemTextColor("1", binding.listCardVIRUSTitle, null, binding.listCardVIRUSOCGrade,
+                        CardItemTextColor("1", binding.listCardVIRUSTitle, null,
                                 binding.listCardVIRUSIndex, binding.listCardVIRUSLoadingTv);
                         break;
                     case "2":
-                        CardItemTextColor("2", binding.listCardVIRUSTitle, null, binding.listCardVIRUSOCGrade,
+                        CardItemTextColor("2", binding.listCardVIRUSTitle, null,
                                 binding.listCardVIRUSIndex, binding.listCardVIRUSLoadingTv);
                         break;
                     case "3":
-                        CardItemTextColor("3", binding.listCardVIRUSTitle, null, binding.listCardVIRUSOCGrade,
+                        CardItemTextColor("3", binding.listCardVIRUSTitle, null,
                                 binding.listCardVIRUSIndex, binding.listCardVIRUSLoadingTv);
                         break;
                     default:
-                        CardItemTextColor("4", binding.listCardVIRUSTitle, null, binding.listCardVIRUSOCGrade,
+                        CardItemTextColor("4", binding.listCardVIRUSTitle, null,
                                 binding.listCardVIRUSIndex, binding.listCardVIRUSLoadingTv);
                         break;
                 }
@@ -996,23 +1004,8 @@ public class DashBoardActivity extends AppCompatActivity {
         jsonMeasure.put("CAIlvl", Integer.parseInt(cqiGradeValue));
 
         //  CQI 등급을 불러오고 표시하기
-        switch (cqiGradeValue) {
-            case "0":
-                CqiGradeChange("0", binding.aqiContentTv, binding.aqiCurrentArrow);
-                break;
-            case "1":
-                CqiGradeChange("1", binding.aqiContentTv, binding.aqiCurrentArrow);
-                break;
-            case "2":
-                CqiGradeChange("2", binding.aqiContentTv, binding.aqiCurrentArrow);
-                break;
-            case "3":
-                CqiGradeChange("3", binding.aqiContentTv, binding.aqiCurrentArrow);
-                break;
-            default:
-                CqiGradeChange("4", binding.aqiContentTv, binding.aqiCurrentArrow);
-                break;
-        }
+        binding.aqiCurrentArrow.setVisibility(View.VISIBLE);
+        cqiGrade.setGradeText(cqiGradeValue);
     }
 
     //AQI Index 별 차트 이동거리를 계산합니다
@@ -1036,26 +1029,21 @@ public class DashBoardActivity extends AppCompatActivity {
         binding.aqiCurrentArrow.setText(String.valueOf(cqiNumber));
 
         if (cqiNumber < 51) {
-            binding.apiCircleChartPb.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.signal_good, null));
-            binding.aqiContentTv.setText(getResources().getString(R.string.good));
-            binding.aqiContentTv.setTextColor(ResourcesCompat.getColor(getResources(), R.color.progressGood, null));
-            binding.aqiCurrentArrow.setTextColor(ResourcesCompat.getColor(getResources(), R.color.progressGood, null));
+            moveBarChartResult(R.drawable.signal_good,R.string.good,R.color.progressGood);
         } else if (cqiNumber < 101) {
-            binding.apiCircleChartPb.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.signal_normal, null));
-            binding.aqiContentTv.setText(getResources().getString(R.string.normal));
-            binding.aqiContentTv.setTextColor(ResourcesCompat.getColor(getResources(), R.color.progressNormal, null));
-            binding.aqiCurrentArrow.setTextColor(ResourcesCompat.getColor(getResources(), R.color.progressNormal, null));
+            moveBarChartResult(R.drawable.signal_normal,R.string.normal,R.color.progressNormal);
         } else if (cqiNumber < 251) {
-            binding.apiCircleChartPb.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.signal_bad, null));
-            binding.aqiContentTv.setText(getResources().getString(R.string.bad));
-            binding.aqiContentTv.setTextColor(ResourcesCompat.getColor(getResources(), R.color.progressBad, null));
-            binding.aqiCurrentArrow.setTextColor(ResourcesCompat.getColor(getResources(), R.color.progressBad, null));
+            moveBarChartResult(R.drawable.signal_bad,R.string.bad,R.color.progressBad);
         } else {
-            binding.apiCircleChartPb.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.signal_verybad, null));
-            binding.aqiContentTv.setText(getResources().getString(R.string.cqi_baddest));
-            binding.aqiContentTv.setTextColor(ResourcesCompat.getColor(getResources(), R.color.progressWorst, null));
-            binding.aqiCurrentArrow.setTextColor(ResourcesCompat.getColor(getResources(), R.color.progressWorst, null));
+            moveBarChartResult(R.drawable.signal_verybad,R.string.cqi_baddest,R.color.progressWorst);
         }
+    }
+
+    private void moveBarChartResult(int drawable, int text, int color) {
+        binding.apiCircleChartPb.setBackground(ResourcesCompat.getDrawable(getResources(), drawable, null));
+        binding.aqiContentTv.setText(getResources().getString(text));
+        binding.aqiContentTv.setTextColor(ResourcesCompat.getColor(getResources(),color, null));
+        binding.aqiCurrentArrow.setTextColor(ResourcesCompat.getColor(getResources(), color, null));
     }
 
     // 햄버거 메뉴 추가
@@ -1534,37 +1522,6 @@ public class DashBoardActivity extends AppCompatActivity {
         return " ";
     }
 
-
-    // CQI 등급 변경
-    private void CqiGradeChange(String s1, TextView cqi, TextView arrow) {
-        cqi.setVisibility(View.VISIBLE);
-        arrow.setVisibility(View.VISIBLE);
-        if (s1.equals("4")) {
-            cqi.setTextColor(ResourcesCompat.getColor(getResources(), R.color.statusUnitText, null));
-            cqi.setText(getString(R.string.error));
-            cqi.setTextSize(20);
-        } else {
-            switch (s1) {
-                case "0":
-                    cqi.setTextColor(ResourcesCompat.getColor(getResources(), R.color.progressGood, null));
-                    cqi.setText(getString(R.string.good));
-                    break;
-                case "1":
-                    cqi.setTextColor(ResourcesCompat.getColor(getResources(), R.color.progressNormal, null));
-                    cqi.setText(getString(R.string.normal));
-                    break;
-                case "2":
-                    cqi.setTextColor(ResourcesCompat.getColor(getResources(), R.color.progressBad, null));
-                    cqi.setText(getString(R.string.bad));
-                    break;
-                case "3":
-                    cqi.setTextColor(ResourcesCompat.getColor(getResources(), R.color.progressWorst, null));
-                    cqi.setText(getString(R.string.cqi_baddest));
-                    break;
-            }
-        }
-    }
-
     //인터넷 연결 상태 체크
     private void isWifiLinked() {
         NetworkRequest.Builder builder = new NetworkRequest.Builder();
@@ -1805,10 +1762,10 @@ public class DashBoardActivity extends AppCompatActivity {
     }
 
     // 하단 아이템 텍스트, 컬러 설정
-    private void CardItemTextColor(String titleStr, TextView title, TextView unit, TextView grade, TextView index, TextView loading) {
+    private void CardItemTextColor(String titleStr, TextView title, TextView unit,TextView index, TextView loading) {
         if (unit != null)
             unit.setVisibility(View.VISIBLE);
-        grade.setVisibility(View.VISIBLE);
+
         index.setVisibility(View.VISIBLE);
         title.setVisibility(View.VISIBLE);
 
@@ -1817,29 +1774,19 @@ public class DashBoardActivity extends AppCompatActivity {
 
         switch (titleStr) {
             case "0":
-                grade.setTextColor(ResourcesCompat.getColor(getResources(), R.color.progressGood, null));
                 index.setTextColor(ResourcesCompat.getColor(getResources(), R.color.progressGood, null));
-                grade.setText(getString(R.string.good));
                 break;
             case "1":
-                grade.setTextColor(ResourcesCompat.getColor(getResources(), R.color.progressNormal, null));
                 index.setTextColor(ResourcesCompat.getColor(getResources(), R.color.progressNormal, null));
-                grade.setText(getString(R.string.normal));
                 break;
             case "2":
-                grade.setTextColor(ResourcesCompat.getColor(getResources(), R.color.progressBad, null));
                 index.setTextColor(ResourcesCompat.getColor(getResources(), R.color.progressBad, null));
-                grade.setText(getString(R.string.bad));
                 break;
             case "3":
-                grade.setTextColor(ResourcesCompat.getColor(getResources(), R.color.progressWorst, null));
                 index.setTextColor(ResourcesCompat.getColor(getResources(), R.color.progressWorst, null));
-                grade.setText(getString(R.string.very_bad));
                 break;
             case "4":
-                grade.setTextColor(ResourcesCompat.getColor(getResources(), R.color.statusUnitText, null));
                 index.setTextColor(ResourcesCompat.getColor(getResources(), R.color.statusUnitText, null));
-                grade.setText(getString(R.string.error));
         }
     }
 
@@ -1893,6 +1840,7 @@ public class DashBoardActivity extends AppCompatActivity {
             alertDialog.setButton(DialogInterface.BUTTON_NEGATIVE, getString(R.string.dialog_conn), (dialog, which) -> {
                 alertDialog.dismiss();
                 Intent intent = new Intent(DashBoardActivity.this, LanguageSelectActivity.class);
+                toastUtils.cancelToast(context);
                 startActivity(intent);
                 finish();
             });

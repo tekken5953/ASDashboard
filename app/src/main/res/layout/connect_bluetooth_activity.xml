@@ -211,6 +211,22 @@
                 app:shimmer_recycler_item_count="6"
                 app:shimmer_recycler_layout="@layout/listitem_connectable_placeholder"/>
 
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/empty_list"
+                android:textColor="@color/white"
+                android:textStyle="italic"
+                android:lines="1"
+                android:ellipsize="end"
+                app:layout_constraintEnd_toEndOf="@+id/connRefreshBtn"
+                app:layout_constraintStart_toStartOf="@+id/connRefreshBtn"
+                app:layout_constraintTop_toTopOf="@+id/connConnectableRv"
+                android:layout_marginTop="10dp"
+                android:visibility="gone"
+                android:id="@+id/emptyConnectList"/>
+
+
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/connOkTv"
                 android:layout_width="@dimen/okBtnWidth"

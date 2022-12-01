@@ -19,23 +19,6 @@ import info.mqtt.android.service.Ack;
 import info.mqtt.android.service.MqttAndroidClient;
 
 public class Mqtt {
-//    public static final String MQTT_GET_DEVICE = "getDevice";
-//    public static final String MQTT_GET_MEASURE = "getMeasure";
-//    public static final String MQTT_GET_LIBRARY = "getLibrary";
-//    public static final String MQTT_GET_STATUS_FAN = "getStatusFan";
-//    public static final String MQTT_GET_STATUS_LED = "getStatusLED";
-//    public static final String MQTT_GET_DATA_REPORT = "getDataReport";
-//    public static final String MQTT_GET_MODE = "getMode";
-//    public static final String MQTT_GET_MANUAL_TIME = "getManualTime";
-//
-//    public static final String MQTT_SYS_REBOOT = "sysReboot";
-//    public static final String MQTT_SET_DEVICE = "setDevice";
-//    public static final String MQTT_SET_FAN = "setFan";
-//    public static final String MQTT_SET_DATA_REPORT = "setDataReport";
-//    public static final String MQTT_SET_MODE = "setMode";
-//    public static final String MQTT_SET_POWER = "setPower";
-//    public static final String MQTT_SET_MANUAL_TIME = "setManualTime";
-
     private final String MQTT_ADDRESS = "ascloud.kr"; // ascloud.kr
     private final String MQTT_ADDRESS_SUB = "192.168.0.54";
 //    private final String MQTT_ADDRESS_ADMIN = "192.168.0.69";
@@ -46,7 +29,6 @@ public class Mqtt {
     private final String MQTT_TOPIC_MAINT_REQ = "maint_req";
     private final String MQTT_TOPIC_MAINT_RES = "maint_res";
     private final String MQTT_TOPIC_STATUS = "status";
-//    private final String MQTT_WIFI_STATUS = "wifiConnected";
 
     // 이벤트
     private mqttRequestReceiveListener mMqttRequestReceiveListener;
@@ -65,12 +47,10 @@ public class Mqtt {
     public Mqtt(Context context, String device_id) {
         this.context = context;
         this.device_id = device_id;
-//    this.device_id = MqttClient.generateClientId();
         errCnt = 0;
     }
 
     public void connect() {
-//    clientConnect(MQTT_ADDRESS_ADMIN);
         clientConnect(MQTT_ADDRESS);
         topic_base = MQTT_TOPIC_BASE + device_id + "/";
     }
@@ -88,7 +68,6 @@ public class Mqtt {
         thread = new Thread(new Runnable() {
             @Override
             public void run() {
-//                mqttClient = new MqttAndroidClient(context, "tcp://" + server_address + MQTT_PORT, device_id);
                 mqttClient = new MqttAndroidClient(context, "tcp://" + server_address + MQTT_PORT, device_id, Ack.AUTO_ACK);
 
                 try {
@@ -130,7 +109,6 @@ public class Mqtt {
 
         try {
             JSONObject jsonMessage = new JSONObject(strMessage);
-
             // 키 추출해서 커맨드 뽑아내기
             jsonMessage.keys();
         } catch (JSONException e) {
@@ -226,7 +204,6 @@ public class Mqtt {
             public void connectionLost(Throwable cause) {
 //        Toast.makeText(context, "MQTT 연결 실패", Toast.LENGTH_SHORT).show();
                 System.out.println("MQTT Connection Lost :(");
-                //System.out.println(cause.toString());
             }
 
             @Override

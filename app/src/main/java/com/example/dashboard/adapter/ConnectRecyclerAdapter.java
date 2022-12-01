@@ -78,15 +78,12 @@ public class ConnectRecyclerAdapter extends RecyclerView.Adapter<ConnectRecycler
         ViewHolder(final View itemView) {
             super(itemView);
 
-            itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    int position = getAdapterPosition();
+            itemView.setOnClickListener(v -> {
+                int position = getBindingAdapterPosition();
 
-                    if (position != RecyclerView.NO_POSITION) {
-                        if (mListener != null) {
-                            mListener.onItemClick(v, position);
-                        }
+                if (position != RecyclerView.NO_POSITION) {
+                    if (mListener != null) {
+                        mListener.onItemClick(v, position);
                     }
                 }
             });
