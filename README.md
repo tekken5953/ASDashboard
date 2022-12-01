@@ -1,4 +1,7 @@
 # BsDashboard
+<img src="https://img.shields.io/badge/github-181717?style=for-the-badge&logo=github&logoColor=white">
+<img src="https://img.shields.io/badge/java-007396?style=for-the-badge&logo=java&logoColor=white">
+<img src="https://img.shields.io/badge/java-007396?style=for-the-badge&logo=android&logoColor=white">
 Airsignal BS DashBoard</br>
 Recent Edit : 2022-10-07 (Mqtt로 Web Server 데이터 전송 기능 추가 & 일부 UI 개선 & 안정성 추가)
               2022-11-01 (Serial Number 없는 장치로 연결시 에러나는 현상 해결 -> N/A로 대체)
