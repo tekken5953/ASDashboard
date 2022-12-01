@@ -15,12 +15,11 @@ import android.os.Looper;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.dashboard.R;
-import com.example.dashboard.utils.OuterClass;
+import com.example.dashboard.OuterClass;
 
 
 @SuppressLint("CustomSplashScreen")
 public class SplashActivity extends AppCompatActivity {
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -30,15 +29,10 @@ public class SplashActivity extends AppCompatActivity {
         outerClass.FullScreenMode(SplashActivity.this);
 
         Handler handler = new Handler(Looper.getMainLooper());
-        handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                Intent intent = new Intent(SplashActivity.this, PermissionActivity.class);
-                startActivity(intent);
-                finish();
-            }
+        handler.postDelayed(() -> {
+            Intent intent = new Intent(SplashActivity.this, PermissionActivity.class);
+            startActivity(intent);
+            finish();
         }, 2000);
-
-
     }
 }

@@ -7,6 +7,7 @@
 package com.example.dashboard.adapter;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,6 +15,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.core.content.SharedPreferencesKt;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.dashboard.R;
@@ -91,31 +93,25 @@ public class PairedDeviceAdapter extends RecyclerView.Adapter<PairedDeviceAdapte
         ViewHolder(final View itemView) {
             super(itemView);
 
-            itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    int position = getBindingAdapterPosition();
+            itemView.setOnClickListener(v -> {
+                int position = getBindingAdapterPosition();
 
-                    if (position != RecyclerView.NO_POSITION) {
-                        if (mListener != null) {
-                            mListener.onItemClick(v, position);
-                        }
+                if (position != RecyclerView.NO_POSITION) {
+                    if (mListener != null) {
+                        mListener.onItemClick(v, position);
                     }
                 }
             });
 
-            itemView.setOnLongClickListener(new View.OnLongClickListener() {
-                @Override
-                public boolean onLongClick(View v) {
-                    int position = getBindingAdapterPosition();
+            itemView.setOnLongClickListener(v -> {
+                int position = getBindingAdapterPosition();
 
-                    if (position != RecyclerView.NO_POSITION) {
-                        if (longClickListener != null) {
-                            longClickListener.onItemLongClick(v, position);
-                        }
+                if (position != RecyclerView.NO_POSITION) {
+                    if (longClickListener != null) {
+                        longClickListener.onItemLongClick(v, position);
                     }
-                    return false;
                 }
+                return false;
             });
 
             // 뷰 객체에 대한 참조. (hold strong reference)

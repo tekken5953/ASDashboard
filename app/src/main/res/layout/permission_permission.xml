@@ -61,12 +61,8 @@
 
         <LinearLayout
             android:id="@+id/permissionGPStr"
-            android:layout_width="@dimen/itemPermWidth"
-            android:layout_height="@dimen/itemPermHeight"
             android:layout_marginStart="@dimen/itemPermGuide"
-            android:background="@drawable/permission_outline"
-            android:gravity="center"
-            android:orientation="vertical"
+            style="@style/PermissionCard"
             app:layout_constraintBottom_toTopOf="@+id/permissionBottomTr"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/permissionTitleTx">
@@ -105,12 +101,8 @@
 
         <LinearLayout
             android:id="@+id/permissionBTtr"
-            android:layout_width="@dimen/itemPermWidth"
-            android:layout_height="@dimen/itemPermHeight"
             android:layout_marginStart="@dimen/tapDashX3"
-            android:background="@drawable/permission_outline"
-            android:gravity="center"
-            android:orientation="vertical"
+            style="@style/PermissionCard"
             app:layout_constraintBottom_toBottomOf="@+id/permissionGPStr"
             app:layout_constraintStart_toEndOf="@+id/permissionGPStr"
             app:layout_constraintTop_toTopOf="@+id/permissionGPStr">
@@ -149,12 +141,8 @@
 
         <LinearLayout
             android:id="@+id/permissionWIFItr"
-            android:layout_width="@dimen/itemPermWidth"
-            android:layout_height="@dimen/itemPermHeight"
             android:layout_marginEnd="@dimen/itemPermGuide"
-            android:background="@drawable/permission_outline"
-            android:gravity="center"
-            android:orientation="vertical"
+            style="@style/PermissionCard"
             app:layout_constraintBottom_toBottomOf="@+id/permissionGPStr"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="@+id/permissionGPStr">
@@ -202,26 +190,13 @@
             app:layout_constraintStart_toStartOf="parent">
 
             <TextView
-                android:id="@+id/denyTx"
-                android:layout_width="@dimen/itemIconPermSize"
-                android:layout_height="@dimen/guidePermTop"
-                android:fontFamily="@font/pretendardvariable"
-                android:gravity="center"
-                android:text="@string/perm_deny"
-                android:textAllCaps="false"
-                android:textColor="@color/white"
-                android:textSize="@dimen/textDashH3"
-                android:background="@drawable/ripple_round"
-                android:textStyle="bold" />
-
-            <TextView
                 android:id="@+id/grantTx"
                 android:layout_width="@dimen/itemIconPermSize"
                 android:layout_height="@dimen/guidePermTop"
                 android:layout_marginStart="@dimen/guidePermSide"
                 android:fontFamily="@font/pretendardvariable"
                 android:gravity="center"
-                android:text="@string/perm_accept"
+                android:text="@string/ok"
                 android:textAllCaps="false"
                 android:textColor="@color/white"
                 android:textSize="@dimen/textDashH3"

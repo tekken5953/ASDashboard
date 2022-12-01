@@ -1,4 +1,4 @@
-package com.example.dashboard.utils;
+package com.example.dashboard;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
@@ -126,6 +126,13 @@ public class OuterClass {
         context.getResources().updateConfiguration(configuration, context.getResources().getDisplayMetrics());
     }
 
+    // 국가를 영어권으로 설정합니다
+    public void setLocaleToEnglish(Context context) {
+        Configuration configuration = new Configuration();
+        configuration.setLocale(Locale.ENGLISH);
+        context.getResources().updateConfiguration(configuration, context.getResources().getDisplayMetrics());
+    }
+
     // 블루투스 연결이 끊어졌을 경우 재연결을 시도합니다
     public void IfBluetoothIsNull(Activity activity, BluetoothAdapter adapter) {
         if (!adapter.isEnabled()) {
@@ -141,22 +148,12 @@ public class OuterClass {
                             Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
                             activity.startActivity(enableBtIntent);
                         }
-                    }).setNegativeButton(activity.getString(R.string.caution_back), new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            if (activity.getClass().getSimpleName().equals("DashBoardActivity"))
-                                GoToConnectFromLang(activity);
-                            else if (activity.getClass().getSimpleName().equals("ConnectDeviceActivity"))
-                                android.os.Process.killProcess(android.os.Process.myPid());
-                        }
+                    }).setNegativeButton(activity.getString(R.string.caution_back), (dialog, which) -> {
+                        if (activity.getClass().getSimpleName().equals("DashBoardActivity"))
+                            GoToConnectFromLang(activity);
+                        else if (activity.getClass().getSimpleName().equals("ConnectDeviceActivity"))
+                            android.os.Process.killProcess(android.os.Process.myPid());
                     }).setCancelable(false).show();
         }
-    }
-
-    // 국가를 영어권으로 설정합니다
-    public void setLocaleToEnglish(Context context) {
-        Configuration configuration = new Configuration();
-        configuration.setLocale(Locale.ENGLISH);
-        context.getResources().updateConfiguration(configuration, context.getResources().getDisplayMetrics());
     }
 }

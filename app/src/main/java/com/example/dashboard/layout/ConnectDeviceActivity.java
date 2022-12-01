@@ -12,7 +12,6 @@ import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.content.BroadcastReceiver;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.drawable.Drawable;
@@ -28,16 +27,16 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.res.ResourcesCompat;
 
+import com.example.dashboard.OnSingleClickListener;
+import com.example.dashboard.OuterClass;
 import com.example.dashboard.R;
+import com.example.dashboard.SharedPreferenceManager;
 import com.example.dashboard.adapter.ConnectRecyclerAdapter;
 import com.example.dashboard.adapter.PairedDeviceAdapter;
 import com.example.dashboard.bluetooth.BluetoothThread;
 import com.example.dashboard.databinding.ConnectBluetoothActivityBinding;
 import com.example.dashboard.model.ConnectRecyclerItem;
 import com.example.dashboard.model.PairedDeviceItem;
-import com.example.dashboard.utils.OnSingleClickListener;
-import com.example.dashboard.utils.OuterClass;
-import com.example.dashboard.utils.SharedPreferenceManager;
 import com.example.dashboard.utils.ToastUtils;
 
 import java.lang.reflect.Method;
@@ -64,11 +63,10 @@ public class ConnectDeviceActivity extends AppCompatActivity {
     int SELECTED_POSITION = -1;
 
     OuterClass outerClass = new OuterClass();
+    ToastUtils toastUtils = new ToastUtils();
 
     ArrayList<BluetoothDevice> noBondedList;
     ArrayList<BluetoothDevice> bondedList;
-
-    ToastUtils toastUtils = new ToastUtils();
 
     @Override
     protected void onResume() {
@@ -115,11 +113,10 @@ public class ConnectDeviceActivity extends AppCompatActivity {
         binding.connOkTv.setTextColor(ResourcesCompat.getColor(getResources(), R.color.statusUnitText, null));
         noBondedList = new ArrayList<>();
         bondedList = new ArrayList<>();
+        binding.connConnectableRv.showShimmer();
 
         // 블루투스 어댑터를 초기화합니다
         bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
-
-        HideRefresh();
 
         Intent intent = getIntent();
         if (intent.getExtras().getString("dialog").equals("yes")) {
@@ -127,41 +124,30 @@ public class ConnectDeviceActivity extends AppCompatActivity {
         }
 
         // 연결 가능한 디바이스의 리스트를 클릭했을 경우의 이벤트 리스너
-        cAdapter.setOnItemClickListener(new ConnectRecyclerAdapter.OnItemClickListener() {
-            @Override
-            public void onItemClick(View v, int position) {
-                // https://ghj1001020.tistory.com/291
-                // ProgressView 를 보여주고 레이아웃의 명암을 낮춥니다
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        visibleProgress();
+        cAdapter.setOnItemClickListener((v, position) -> {
+            // https://ghj1001020.tistory.com/291
+            // ProgressView 를 보여주고 레이아웃의 명암을 낮춥니다
+            runOnUiThread(this::visibleProgress);
+
+            // 선택한 아이템의 디바이스를 페어링하는 핸들러입니다
+            if (position < cAdapter.getItemCount()) {
+
+                // 선택한 디바이스 페어링 요청
+                BluetoothDevice device = noBondedList.get(position);
+
+                // 페어링 다이얼로그 호출
+                new Thread(() -> {
+                    try {
+                        device.createBond();
+                    } catch (Exception e) {
+                        e.printStackTrace();
                     }
-                });
+                }).start();
 
-                // 선택한 아이템의 디바이스를 페어링하는 핸들러입니다
-                if (position < cAdapter.getItemCount()) {
-
-                    // 선택한 디바이스 페어링 요청
-                    BluetoothDevice device = noBondedList.get(position);
-
-                    // 페어링 다이얼로그 호출
-                    new Thread(new Runnable() {
-                        @Override
-                        public void run() {
-                            try {
-                                device.createBond();
-                            } catch (Exception e) {
-                                e.printStackTrace();
-                            }
-                        }
-                    }).start();
-
-                } else {
-                    toastUtils.shortMessage(context,getString(R.string.retry_please));
-                    NoDiscovery();
-                    StartDiscovery();
-                }
+            } else {
+                toastUtils.shortMessage(context, getString(R.string.retry_please));
+                NoDiscovery();
+                StartDiscovery();
             }
         });
 
@@ -184,10 +170,10 @@ public class ConnectDeviceActivity extends AppCompatActivity {
                         intent.putExtra("device_position", SELECTED_POSITION);
                         if (bondedList.get(SELECTED_POSITION).getName().contains(" ")) {
                             String s = bondedList.get(SELECTED_POSITION).getName().split(" ")[1];
-                            intent.putExtra("userCode",s.substring(1,s.length()-1));
-                            Log.d("BTThread","Address is " + s.substring(1,s.length()-1));
+                            intent.putExtra("userCode", s.substring(1, s.length() - 1));
+                            Log.d("BTThread", "Address is " + s.substring(1, s.length() - 1));
                         } else {
-                            intent.putExtra("userCode","NA");
+                            intent.putExtra("userCode", "NA");
                         }
                         startActivity(intent);
                         finish();
@@ -197,89 +183,67 @@ public class ConnectDeviceActivity extends AppCompatActivity {
         });
 
         // 페어링 된 리스트 아이템 클릭 시 이벤트 리스너
-        pAdapter.setOnItemClickListener(new PairedDeviceAdapter.OnItemClickListener() {
-            @Override
-            public void onItemClick(View v, int position) {
-                // 포지션에 따라 아이템의 명암과 색상을 변경합니다
-                if (SELECTED_POSITION == -1) {
-                    v.setAlpha(1f);
-                    SELECTED_POSITION = position;
-                    SetOkBtnEnable();
-                } else if (SELECTED_POSITION == position) {
-                    // 이미 선택 된 아이템을 다시 클릭 했을 경우
-                    // 아무 작업도 진행하지 않습니다
-                } else {
-                    for (int i = 0; i < pAdapter.getItemCount(); i++) {
-                        View otherView = Objects.requireNonNull(binding.connPairedDeviceRv.getLayoutManager()).findViewByPosition(i);
-                        if (otherView != v) {
-                            if (otherView != null) {
-                                otherView.setAlpha(0.5f);
-                            }
+        pAdapter.setOnItemClickListener((v, position) -> {
+            // 포지션에 따라 아이템의 명암과 색상을 변경합니다
+            if (SELECTED_POSITION == -1) {
+                v.setAlpha(1f);
+                SELECTED_POSITION = position;
+                SetOkBtnEnable();
+            } else if (SELECTED_POSITION == position) {
+                // 이미 선택 된 아이템을 다시 클릭 했을 경우
+                // 아무 작업도 진행하지 않습니다
+            } else {
+                for (int i = 0; i < pAdapter.getItemCount(); i++) {
+                    View otherView = Objects.requireNonNull(binding.connPairedDeviceRv.getLayoutManager()).findViewByPosition(i);
+                    if (otherView != v) {
+                        if (otherView != null) {
+                            otherView.setAlpha(0.5f);
                         }
                     }
-                    v.setAlpha(1f);
-                    SELECTED_POSITION = position;
                 }
+                v.setAlpha(1f);
+                SELECTED_POSITION = position;
             }
         });
 
         // 페어링 된 아이템을 길게 클릭 했을 경우 페어링을 취소하는 이벤트리스너
-        pAdapter.setOnItemLongClickListener(new PairedDeviceAdapter.OnItemLongClickListener() {
-            @Override
-            public void onItemLongClick(View v, int position) {
-                // 페어링 된 아이템을 모두 불러옵니다
-                Set<BluetoothDevice> pairedDevices = bluetoothAdapter.getBondedDevices();
-                for (BluetoothDevice bt : pairedDevices) {
-                    if (bt.getName().equals(pList.get(position).getName() + " " + pList.get(position).getAddress())) {
+        pAdapter.setOnItemLongClickListener((v, position) -> {
+            // 페어링 된 아이템을 모두 불러옵니다
+            Set<BluetoothDevice> pairedDevices = bluetoothAdapter.getBondedDevices();
+            for (BluetoothDevice bt : pairedDevices) {
+                if (bt.getName().equals(pList.get(position).getName() + " " + pList.get(position).getAddress())) {
 
-                        // 페어링 취소 여부를 확인하는 다이얼로그
-                        final AlertDialog.Builder builder = new AlertDialog.Builder(context);
-                        builder.setTitle(getString(R.string.unpairing_title));
-                        builder.setMessage(bt.getName() + getString(R.string.unpairing_msg));
-                        builder.setPositiveButton(getString(R.string.unpairing_ok_btn), new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                try {
-//                                    String[] deviceNameStrLeft = bt.getName().split(" ");
+                    // 페어링 취소 여부를 확인하는 다이얼로그
+                    final AlertDialog.Builder builder = new AlertDialog.Builder(context);
+                    builder.setTitle(getString(R.string.unpairing_title));
+                    builder.setMessage(bt.getName() + getString(R.string.unpairing_msg));
+                    builder.setPositiveButton(getString(R.string.unpairing_ok_btn), (dialog, which) -> {
+                        try {
+                            // 페어링 취소 메서드 호출
+                            Method m = bt.getClass().getMethod("removeBond", (Class[]) null);
+                            m.invoke(bt, (Object[]) null);
 
-                                    // 페어링 취소 메서드 호출
-                                    Method m = bt.getClass().getMethod("removeBond", (Class[]) null);
-                                    m.invoke(bt, (Object[]) null);
+                            // 확인 클릭 시 다이얼로그를 종료
+                            runOnUiThread(dialog::dismiss);
 
-                                    runOnUiThread(new Runnable() {
-                                        @Override
-                                        public void run() {
-                                            // 확인 클릭 시 다이얼로그를 종료
-                                            dialog.dismiss();
-                                        }
-                                    });
-
-                                } catch (Exception e) {
-                                    e.printStackTrace();
-                                }
-                            }
-                        });
-                        builder.setNegativeButton(getString(R.string.unpairing_cancel_btn), new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                dialog.dismiss();
-                                getConnectableDeviceList();
-                            }
-                        });
-                        builder.show();
-                    }
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    });
+                    builder.setNegativeButton(getString(R.string.unpairing_cancel_btn), (dialog, which) -> {
+                        dialog.dismiss();
+                        getConnectableDeviceList();
+                    });
+                    builder.show();
                 }
             }
         });
 
         // 뒤로가기 버튼을 클릭하면 언어설정 스킵을 no로 변경하고 이동합니다
-        binding.connTopBackIv.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                outerClass.CallVibrate(context, 10);
-                SharedPreferenceManager.setString(context, "skip_lang", "no");
-                outerClass.GoToLanguageFromConnect(context);
-            }
+        binding.connTopBackIv.setOnClickListener(v -> {
+            outerClass.CallVibrate(context, 10);
+            SharedPreferenceManager.setString(context, "skip_lang", "no");
+            outerClass.GoToLanguageFromConnect(context);
         });
 
         // 리스트 새로고침 클릭 시 이벤트리스너
@@ -288,8 +252,10 @@ public class ConnectDeviceActivity extends AppCompatActivity {
             public void onSingleClick(View v) {
                 outerClass.CallVibrate(context, 10);
                 pList.clear();
+                binding.connConnectableRv.showShimmer();
                 startCheckBluetooth();
                 getConnectableDeviceList();
+                ShowRefresh();
                 NoDiscovery();
             }
         });
@@ -315,21 +281,11 @@ public class ConnectDeviceActivity extends AppCompatActivity {
     }
 
     private void ShowRefresh() {
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                binding.connRefreshIv.setVisibility(View.VISIBLE);
-            }
-        });
+        runOnUiThread(() -> binding.connRefreshIv.setVisibility(View.VISIBLE));
     }
 
     private void HideRefresh() {
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                binding.connRefreshIv.setVisibility(View.GONE);
-            }
-        });
+        runOnUiThread(() -> binding.connRefreshIv.setVisibility(View.GONE));
     }
 
     // 연결 가능한 아이템 추가
@@ -339,8 +295,8 @@ public class ConnectDeviceActivity extends AppCompatActivity {
         item.setDevice_img(img);
         item.setDevice_name(name);
         item.setDevice_address(address);
-        HideRefresh();
 
+        binding.connConnectableRv.hideShimmer();
         cList.add(noPairingPosition, item);
     }
 
@@ -361,7 +317,6 @@ public class ConnectDeviceActivity extends AppCompatActivity {
             for (BluetoothDevice device : pairedDevice) {
                 bondedList.add(device);
                 if (device.getName().contains(" ")) {
-
                     String[] deviceNameStrLeft = device.getName().split(" ");
                     addPItem(filteringImage(deviceNameStrLeft[0]),
                             deviceNameStrLeft[0],
@@ -381,7 +336,6 @@ public class ConnectDeviceActivity extends AppCompatActivity {
             String action = intent.getAction();
 
             if (BluetoothDevice.ACTION_FOUND.equals(action)) {
-                ShowRefresh();
                 BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
                 String deviceName = device.getName();
                 // 디바이스가 페어링 되어있지 않다면
@@ -419,18 +373,12 @@ public class ConnectDeviceActivity extends AppCompatActivity {
 
             if (action.equals(BluetoothDevice.ACTION_BOND_STATE_CHANGED)) {
                 try {
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            Handler handler = new Handler(Looper.getMainLooper());
-                            handler.postDelayed(new Runnable() {
-                                @Override
-                                public void run() {
-                                    goneProgress();
-                                    getConnectableDeviceList();
-                                }
-                            }, 1000);
-                        }
+                    runOnUiThread(() -> {
+                        Handler handler = new Handler(Looper.getMainLooper());
+                        handler.postDelayed(() -> {
+                            goneProgress();
+                            getConnectableDeviceList();
+                        }, 1000);
                     });
                 } catch (IndexOutOfBoundsException e) {
                     e.printStackTrace();
@@ -474,47 +422,36 @@ public class ConnectDeviceActivity extends AppCompatActivity {
     }
 
     private void visibleProgress() {
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                binding.loadingParingPb.setVisibility(View.VISIBLE);
-                binding.connMainLayout.setAlpha(0.3f);
-                binding.mainLayout.setEnabled(false);
-            }
+        runOnUiThread(() -> {
+            binding.loadingParingPb.setVisibility(View.VISIBLE);
+            binding.connMainLayout.setAlpha(0.3f);
+            binding.mainLayout.setEnabled(false);
         });
     }
 
     private void goneProgress() {
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                binding.loadingParingPb.setVisibility(View.GONE);
-                binding.connMainLayout.setAlpha(1f);
-                binding.mainLayout.setEnabled(true);
-            }
+        runOnUiThread(() -> {
+            binding.loadingParingPb.setVisibility(View.GONE);
+            binding.connMainLayout.setAlpha(1f);
+            binding.mainLayout.setEnabled(true);
         });
 
     }
 
     private void SetOkBtnEnable() {
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                binding.connOkTv.setEnabled(true);
-                binding.connOkTv.setBackgroundDrawable(ResourcesCompat.getDrawable(getResources(), R.drawable.lang_ok_w, null));
-                binding.connOkTv.setTextColor(ResourcesCompat.getColor(getResources(), R.color.white, null));
-            }
+        runOnUiThread(() -> {
+            binding.connOkTv.setEnabled(true);
+            binding.connOkTv.setBackgroundDrawable(ResourcesCompat.getDrawable(getResources(), R.drawable.lang_ok_w, null));
+            binding.connOkTv.setTextColor(ResourcesCompat.getColor(getResources(), R.color.white, null));
         });
     }
 
     private void getConnectableDeviceList() {
-
         cList.clear();
         noPairingPosition = 0;
         noBondedList.clear();
 
         IntentFilter foundFilter = new IntentFilter();
-
         // ACTION_FOUND 가 호출될 때 마다 데이터를 전송하는 역할을 합니다
         foundFilter.addAction(BluetoothDevice.ACTION_FOUND);
         // 디바이스와 페어링 작업이 요청 될 때 마다 호출됩니다
@@ -525,56 +462,47 @@ public class ConnectDeviceActivity extends AppCompatActivity {
         // 페어링 디바이스 리스트를 다시그립니다
         findPairedDevice();
 
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                if (binding.loadingParingPb.getVisibility() == View.VISIBLE) {
-                    goneProgress();
-                }
+        runOnUiThread(() -> {
+            if (binding.loadingParingPb.getVisibility() == View.VISIBLE) {
+                goneProgress();
             }
         });
     }
 
     // 블루투스 연결 끊김 시 디바이스 연결 액티비티로 전환
     private void DisconnectBTDialog() {
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                // 장치와의 연결이 끊어짐을 알리고 디바이스 연결 화면으로 돌아갑니다
-                final AlertDialog.Builder builder = new AlertDialog.Builder(context);
-                builder.create();
-                builder.setTitle(getString(R.string.caution_title));
-                builder.setMessage(getString(R.string.caution_message));
-                builder.setPositiveButton(getString(R.string.caution_ok), new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.dismiss();
-                    }
-                });
-                if (!context.isDestroyed())
-                    builder.show();
-            }
+        runOnUiThread(() -> {
+            // 장치와의 연결이 끊어짐을 알리고 디바이스 연결 화면으로 돌아갑니다
+            final AlertDialog.Builder builder = new AlertDialog.Builder(context);
+            builder.create();
+            builder.setTitle(getString(R.string.caution_title));
+            builder.setMessage(getString(R.string.caution_message));
+            builder.setPositiveButton(getString(R.string.caution_ok), (dialog, which) -> dialog.dismiss());
+            if (!context.isDestroyed())
+                builder.show();
         });
     }
 
     private void StartDiscovery() {
         bluetoothAdapter.startDiscovery();
+        if (binding.emptyConnectList.getVisibility() == View.VISIBLE)
+            binding.emptyConnectList.setVisibility(View.GONE);
 
         Handler handler = new Handler(Looper.getMainLooper());
-        handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                HideRefresh();
-                bluetoothAdapter.cancelDiscovery();
-                binding.connRefreshBtn.setEnabled(true);
-                binding.connRefreshBtn.setBackgroundDrawable(ResourcesCompat.getDrawable(getResources(), R.drawable.lang_ok_w, null));
-                binding.connRefreshBtn.setTextColor(ResourcesCompat.getColor(getResources(), R.color.white, null));
-            }
+        handler.postDelayed(() -> {
+            HideRefresh();
+            if (binding.connConnectableRv.isShimmerShowing())
+                binding.connConnectableRv.hideShimmer();
+            if (cAdapter.getItemCount() == 0)
+                binding.emptyConnectList.setVisibility(View.VISIBLE);
+            bluetoothAdapter.cancelDiscovery();
+            binding.connRefreshBtn.setEnabled(true);
+            binding.connRefreshBtn.setBackgroundDrawable(ResourcesCompat.getDrawable(getResources(), R.drawable.lang_ok_w, null));
+            binding.connRefreshBtn.setTextColor(ResourcesCompat.getColor(getResources(), R.color.white, null));
         }, 1000 * 10);
     }
 
     private void NoDiscovery() {
-        ShowRefresh();
         binding.connRefreshBtn.setEnabled(false);
         binding.connRefreshBtn.setBackgroundDrawable(ResourcesCompat.getDrawable(getResources(), R.drawable.lang_ok_b, null));
         binding.connRefreshBtn.setTextColor(ResourcesCompat.getColor(getResources(), R.color.statusUnitText, null));
@@ -586,26 +514,18 @@ public class ConnectDeviceActivity extends AppCompatActivity {
         builder.setTitle(getString(R.string.exit_app_title));
         builder.setMessage(getString(R.string.exit_app_message));
         builder.setIcon(R.drawable.icon);
-        builder.setPositiveButton(getString(R.string.exit_app_yes), new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                if (bluetoothThread.isConnected()) {
-                    bluetoothThread.closeSocket();
-                }
+        builder.setPositiveButton(getString(R.string.exit_app_yes), (dialog, which) -> {
+            if (bluetoothThread.isConnected()) {
+                bluetoothThread.closeSocket();
+            }
 
-                if (bluetoothThread.isInterrupted()) {
-                    bluetoothThread.interrupt();
-                }
-                dialog.dismiss();
-                ConnectDeviceActivity.super.onBackPressed();
+            if (bluetoothThread.isInterrupted()) {
+                bluetoothThread.interrupt();
             }
+            dialog.dismiss();
+            ConnectDeviceActivity.super.onBackPressed();
         });
-        builder.setNegativeButton(getString(R.string.exit_app_no), new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.dismiss();
-            }
-        });
+        builder.setNegativeButton(getString(R.string.exit_app_no), (dialog, which) -> dialog.dismiss());
         if (!context.isDestroyed())
             builder.show();
     }
@@ -613,7 +533,7 @@ public class ConnectDeviceActivity extends AppCompatActivity {
     // 블루투스 연결 및 사용가능 여부 확인
     private void startCheckBluetooth() {
         if (bluetoothAdapter == null) {
-            toastUtils.shortMessage(context,getString(R.string.no_bluetooth_device));
+            toastUtils.shortMessage(context, getString(R.string.no_bluetooth_device));
         } else {
             if (bluetoothAdapter.isEnabled()) {
                 try {
@@ -625,12 +545,9 @@ public class ConnectDeviceActivity extends AppCompatActivity {
                     e.printStackTrace();
                 }
             } else {
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        //븥루투스가 꺼져있음
-                        outerClass.IfBluetoothIsNull(context, bluetoothAdapter);
-                    }
+                runOnUiThread(() -> {
+                    //븥루투스가 꺼져있음
+                    outerClass.IfBluetoothIsNull(context, bluetoothAdapter);
                 });
             }
         }

@@ -9,10 +9,18 @@ public class ToastUtils {
     public void shortMessage(Activity context, final String message) {
         toast = new Toast(context);
         Runnable r = () -> {
-            toast.cancel();
+            cancelToast(context);
             toast = Toast.makeText(context, message, Toast.LENGTH_SHORT);
             toast.show();
         };
         context.runOnUiThread(r);
+    }
+
+    public void cancelToast(Activity context) {
+        if (toast != null) {
+            context.runOnUiThread(() -> {
+                toast.cancel();
+            });
+        }
     }
 }

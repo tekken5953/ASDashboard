@@ -5,7 +5,6 @@
     tools:context=".layout.DashBoardActivity">
 
     <data>
-
         <variable
             name="viewModel"
             type="com.example.dashboard.bluetooth.BluetoothThread.DataShareViewModel" />
@@ -170,7 +169,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/pretendardvariable"
-                android:format24Hour="HH:mm"
+                android:format24Hour="yyyyMMdd HH:mm"
                 android:gravity="center"
                 android:includeFontPadding="false"
                 android:text="time"
@@ -239,32 +238,6 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/dashTempTitleTx">
 
-                <!--                <EditText-->
-                <!--                    android:id="@+id/dashTestEdit"-->
-                <!--                    android:layout_width="180dp"-->
-                <!--                    android:layout_height="wrap_content"-->
-                <!--                    android:layout_marginTop="@dimen/tapDashX2"-->
-                <!--                    android:backgroundTint="@color/white"-->
-                <!--                    android:gravity="center"-->
-                <!--                    android:inputType="number"-->
-                <!--                    android:hint="CO2값 입력"-->
-                <!--                    android:textColor="@color/white"-->
-                <!--                    android:textColorHint="@color/sidemenu_gray"-->
-                <!--                    app:layout_constraintEnd_toEndOf="parent"-->
-                <!--                    app:layout_constraintStart_toStartOf="parent"-->
-                <!--                    app:layout_constraintTop_toTopOf="parent" />-->
-
-                <!--                <Button-->
-                <!--                    android:id="@+id/dashTestBtn"-->
-                <!--                    android:layout_width="wrap_content"-->
-                <!--                    android:layout_height="wrap_content"-->
-                <!--                    android:layout_marginStart="5dp"-->
-                <!--                    android:text="OK"-->
-                <!--                    app:layout_constraintBottom_toBottomOf="@+id/dashTestEdit"-->
-                <!--                    app:layout_constraintStart_toEndOf="@+id/dashTestEdit"-->
-                <!--                    app:layout_constraintTop_toTopOf="@+id/dashTestEdit" />-->
-
-
                 <ImageView
                     android:id="@+id/apiCircleChartPb"
                     android:layout_width="@dimen/cqiDashSize"
@@ -298,47 +271,27 @@
                         android:weightSum="1">
 
                         <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
+                            style="@style/DashLinearGraph"
                             android:layout_weight="0.17"
-                            android:fontFamily="@font/pretendardvariable"
-                            android:gravity="start|top"
-                            android:text="0"
-                            android:textColor="@color/white"
-                            android:textSize="@dimen/textDashH0.5" />
+                            android:text="0" />
 
                         <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
+                            style="@style/DashLinearGraph"
                             android:layout_weight="0.17"
-                            android:fontFamily="@font/pretendardvariable"
-                            android:gravity="start|top"
-                            android:text="51"
-                            android:textColor="@color/white"
-                            android:textSize="@dimen/textDashH0.5" />
+                            android:text="51" />
 
                         <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
                             android:layout_weight="0.5"
-                            android:fontFamily="@font/pretendardvariable"
-                            android:gravity="start|top"
                             android:text="101"
-                            android:textColor="@color/white"
-                            android:textSize="@dimen/textDashH0.5" />
+                            style="@style/DashLinearGraph"/>
 
                         <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
+                            style="@style/DashLinearGraph"
                             android:layout_weight="0.16"
-                            android:fontFamily="@font/pretendardvariable"
-                            android:gravity="start|top"
-                            android:text="251"
-                            android:textColor="@color/white"
-                            android:textSize="@dimen/textDashH0.5" />
+                            android:text="251" />
                     </TableRow>
 
-                    <com.example.dashboard.ui.SegmentedProgressBar
+                    <com.example.dashboard.view.SegmentedProgressBar
                         android:id="@+id/aqiBarChartPb"
                         android:layout_width="@dimen/barInDashWidth"
                         android:layout_height="@dimen/tapDashX1"
@@ -371,7 +324,7 @@
                     app:layout_constraintEnd_toEndOf="@+id/aqiContentTv"
                     app:layout_constraintStart_toStartOf="@+id/aqiContentTv" />
 
-                <TextView
+                <com.example.dashboard.view.AsTextView
                     android:id="@+id/aqiContentTv"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -425,74 +378,32 @@
 
                         <TextView
                             android:id="@+id/category1"
-                            android:layout_width="wrap_content"
-                            android:layout_height="@dimen/cateDashHeight"
-                            android:background="@drawable/category_text_outline"
-                            android:fontFamily="@font/pretendardvariable"
-                            android:gravity="center"
-                            android:text="@string/aqi"
-                            android:textColor="@color/white"
-                            android:textSize="@dimen/textDashH1" />
+                            style="@style/CategoryItemSelect" />
 
                         <TextView
                             android:id="@+id/category2"
-                            android:layout_width="wrap_content"
-                            android:layout_height="@dimen/cateDashHeight"
-                            android:layout_marginStart="@dimen/iconDashSize"
-                            android:background="@drawable/category_nontext_outline"
-                            android:fontFamily="@font/pretendardvariable"
-                            android:gravity="center"
-                            android:text="@string/fine_dust"
-                            android:textColor="@color/lineChartCategoryNonSelectText"
-                            android:textSize="@dimen/textDashH1" />
+                            style="@style/CategoryItemNoSelect"
+                            android:text="@string/fine_dust" />
 
                         <TextView
                             android:id="@+id/category3"
-                            android:layout_width="wrap_content"
-                            android:layout_height="@dimen/cateDashHeight"
-                            android:layout_marginStart="@dimen/iconDashSize"
-                            android:background="@drawable/category_nontext_outline"
-                            android:fontFamily="@font/pretendardvariable"
-                            android:gravity="center"
-                            android:text="@string/tvoc"
-                            android:textColor="@color/lineChartCategoryNonSelectText"
-                            android:textSize="@dimen/textDashH1" />
+                            style="@style/CategoryItemNoSelect"
+                            android:text="@string/tvoc" />
 
                         <TextView
                             android:id="@+id/category4"
-                            android:layout_width="wrap_content"
-                            android:layout_height="@dimen/cateDashHeight"
-                            android:layout_marginStart="@dimen/iconDashSize"
-                            android:background="@drawable/category_nontext_outline"
-                            android:fontFamily="@font/pretendardvariable"
-                            android:gravity="center"
-                            android:text="@string/co2"
-                            android:textColor="@color/lineChartCategoryNonSelectText"
-                            android:textSize="@dimen/textDashH1" />
+                            style="@style/CategoryItemNoSelect"
+                            android:text="@string/co2" />
 
                         <TextView
                             android:id="@+id/category5"
-                            android:layout_width="wrap_content"
-                            android:layout_height="@dimen/cateDashHeight"
-                            android:layout_marginStart="@dimen/iconDashSize"
-                            android:background="@drawable/category_nontext_outline"
-                            android:fontFamily="@font/pretendardvariable"
-                            android:gravity="center"
-                            android:text="@string/co"
-                            android:textColor="@color/lineChartCategoryNonSelectText"
-                            android:textSize="@dimen/textDashH1" />
+                            style="@style/CategoryItemNoSelect"
+                            android:text="@string/co" />
 
                         <TextView
                             android:id="@+id/category6"
-                            android:layout_width="wrap_content"
-                            android:layout_height="@dimen/cateDashHeight"
-                            android:layout_marginStart="@dimen/iconDashSize"
-                            android:background="@drawable/category_nontext_outline"
-                            android:fontFamily="@font/pretendardvariable"
-                            android:gravity="center"
-                            android:text="@string/virus"
-                            android:textColor="@color/lineChartCategoryNonSelectText"
-                            android:textSize="@dimen/textDashH1" />
+                            style="@style/CategoryItemNoSelect"
+                            android:text="@string/virus" />
 
                     </TableRow>
 
@@ -527,414 +438,148 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/topFrameLayout">
 
-                <RelativeLayout
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="2dp"
-                    android:layout_marginEnd="@dimen/tapDashX0.5"
-                    android:layout_marginBottom="2dp"
-                    android:layout_weight="0.2"
-                    android:background="@drawable/topframe_outline">
-
+                <RelativeLayout style="@style/BottomCardContainer">
                     <TextView
                         android:id="@+id/listCardPMTitle"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="@dimen/tapDashX1.5"
-                        android:layout_marginTop="@dimen/tapDashX1.5"
-                        android:fontFamily="@font/pretendardvariable"
-                        android:text="@string/fine_dust"
-                        android:textColor="@color/textColorMain"
-                        android:textSize="@dimen/textDashH2"
-                        android:visibility="gone" />
+                        style="@style/BottomCardTitle"
+                        android:text="@string/fine_dust" />
 
                     <TextView
                         android:id="@+id/listCardPMLoadingTv"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_centerInParent="true"
-                        android:layout_marginTop="@dimen/tapDashX5"
-                        android:layout_marginBottom="@dimen/tapDashX5"
-                        android:ellipsize="end"
-                        android:fontFamily="@font/pretendardvariable"
-                        android:lines="1"
-                        android:visibility="visible"
-                        android:text="@string/loading_data"
-                        android:textAllCaps="false"
-                        android:textColor="@color/progressGood"
-                        android:textSize="@dimen/textDashH1" />
+                        style="@style/BottomCardLoading" />
 
                     <TextView
                         android:id="@+id/listCardPMIndex"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_below="@+id/listCardPMTitle"
-                        android:layout_marginStart="@dimen/tapDashX1.5"
-                        android:layout_marginTop="@dimen/iconDashPadding"
-                        android:includeFontPadding="false"
-                        android:fontFamily="@font/pretendardvariable"
-                        android:text="null"
-                        android:textColor="@color/progressGood"
-                        android:textSize="@dimen/textDashH2"
-                        android:visibility="gone" />
+                        style="@style/BottomCardIndex"
+                        android:layout_below="@+id/listCardPMTitle" />
 
                     <TextView
                         android:id="@+id/listCardPMUnit"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        style="@style/BottomCardUnit"
                         android:layout_below="@+id/listCardPMTitle"
-                        android:layout_marginStart="@dimen/tapDashX1"
                         android:layout_alignTop="@+id/listCardPMIndex"
                         android:layout_toEndOf="@+id/listCardPMIndex"
-                        android:fontFamily="@font/pretendardvariable"
-                        android:gravity="center"
-                        android:text="ug/㎥"
-                        android:includeFontPadding="false"
-                        android:textColor="@color/statusUnitText"
-                        android:textSize="@dimen/textDashH1.5"
-                        android:visibility="gone" />
+                        android:text="ug/㎥" />
 
-                    <TextView
+                    <com.example.dashboard.view.AsTextView
                         android:id="@+id/listCardPMGrade"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_below="@+id/listCardPMUnit"
-                        android:layout_alignParentEnd="true"
-                        android:layout_marginTop="@dimen/tapDashX5.5"
-                        android:layout_marginEnd="@dimen/tapDashX1.5"
-                        android:layout_marginBottom="@dimen/tapDashX1.5"
-                        android:fontFamily="@font/pretendardvariable"
-                        android:gravity="bottom"
-                        android:text="에러"
-                        android:textAllCaps="false"
-                        android:textColor="@color/statusUnitText"
-                        android:textSize="@dimen/textDashH5"
-                        android:visibility="gone" />
+                        style="@style/BottomCardGrade"
+                        android:layout_below="@+id/listCardPMUnit" />
 
                 </RelativeLayout>
 
-                <RelativeLayout
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="2dp"
-                    android:layout_marginEnd="@dimen/tapDashX0.5"
-                    android:layout_marginBottom="2dp"
-                    android:layout_weight="0.2"
-                    android:background="@drawable/topframe_outline">
-
+                <RelativeLayout style="@style/BottomCardContainer">
                     <TextView
                         android:id="@+id/listCardTVOCTitle"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="@dimen/tapDashX1.5"
-                        android:layout_marginTop="@dimen/tapDashX1.5"
-                        android:fontFamily="@font/pretendardvariable"
-                        android:text="@string/tvoc"
-                        android:textColor="@color/textColorMain"
-                        android:textSize="@dimen/textDashH2"
-                        android:visibility="gone" />
+                        style="@style/BottomCardTitle"
+                        android:text="@string/tvoc" />
 
                     <TextView
                         android:id="@+id/listCardTVOCLoadingTv"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_centerInParent="true"
-                        android:layout_marginTop="@dimen/tapDashX5"
-                        android:layout_marginBottom="@dimen/tapDashX5"
-                        android:ellipsize="end"
-                        android:fontFamily="@font/pretendardvariable"
-                        android:lines="1"
-                        android:text="@string/loading_data"
-                        android:textAllCaps="false"
-                        android:textColor="@color/progressGood"
-                        android:textSize="@dimen/textDashH1" />
+                        style="@style/BottomCardLoading" />
 
                     <TextView
                         android:id="@+id/listCardTVOCIndex"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_below="@+id/listCardTVOCTitle"
-                        android:layout_marginStart="@dimen/tapDashX1.5"
-                        android:layout_marginTop="@dimen/iconDashPadding"
-                        android:includeFontPadding="false"
-                        android:fontFamily="@font/pretendardvariable"
-                        android:text="null"
-                        android:textColor="@color/progressGood"
-                        android:textSize="@dimen/textDashH2"
-                        android:visibility="gone" />
+                        style="@style/BottomCardIndex"
+                        android:layout_below="@+id/listCardTVOCTitle" />
 
                     <TextView
                         android:id="@+id/listCardTVOCUnit"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        style="@style/BottomCardUnit"
                         android:layout_below="@+id/listCardTVOCTitle"
-                        android:layout_marginStart="@dimen/tapDashX1"
                         android:layout_alignTop="@+id/listCardTVOCIndex"
                         android:layout_toEndOf="@+id/listCardTVOCIndex"
-                        android:fontFamily="@font/pretendardvariable"
-                        android:gravity="center"
-                        android:text="mg/㎥"
-                        android:includeFontPadding="false"
-                        android:textColor="@color/statusUnitText"
-                        android:textSize="@dimen/textDashH1.5"
-                        android:visibility="gone" />
+                        android:text="mg/㎥" />
 
-                    <TextView
+                    <com.example.dashboard.view.AsTextView
                         android:id="@+id/listCardTVOCGrade"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_below="@+id/listCardTVOCUnit"
-                        android:layout_alignParentEnd="true"
-                        android:layout_marginTop="@dimen/tapDashX5.5"
-                        android:layout_marginEnd="@dimen/tapDashX1.5"
-                        android:layout_marginBottom="@dimen/tapDashX1.5"
-                        android:fontFamily="@font/pretendardvariable"
-                        android:gravity="bottom"
-                        android:text="에러"
-                        android:textAllCaps="false"
-                        android:textColor="@color/statusUnitText"
-                        android:textSize="@dimen/textDashH5"
-                        android:visibility="gone" />
+                        style="@style/BottomCardGrade"
+                        android:layout_below="@+id/listCardTVOCUnit" />
 
                 </RelativeLayout>
 
-                <RelativeLayout
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_marginTop="2dp"
-                    android:layout_marginEnd="@dimen/tapDashX0.5"
-                    android:layout_marginBottom="2dp"
-                    android:layout_weight="0.2"
-                    android:background="@drawable/topframe_outline">
-
+                <RelativeLayout style="@style/BottomCardContainer">
                     <TextView
                         android:id="@+id/listCardCO2Title"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="@dimen/tapDashX1.5"
-                        android:layout_marginTop="@dimen/tapDashX1.5"
-                        android:fontFamily="@font/pretendardvariable"
-                        android:text="@string/co2"
-                        android:textColor="@color/textColorMain"
-                        android:textSize="@dimen/textDashH2"
-                        android:visibility="gone" />
+                        style="@style/BottomCardTitle"
+                        android:text="@string/co2" />
 
                     <TextView
                         android:id="@+id/listCardCO2LoadingTv"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_centerInParent="true"
-                        android:layout_marginTop="@dimen/tapDashX5"
-                        android:layout_marginBottom="@dimen/tapDashX5"
-                        android:ellipsize="end"
-                        android:fontFamily="@font/pretendardvariable"
-                        android:lines="1"
-                        android:text="@string/loading_data"
-                        android:textAllCaps="false"
-                        android:textColor="@color/progressGood"
-                        android:textSize="@dimen/textDashH1"
-                        android:visibility="visible" />
+                        style="@style/BottomCardLoading" />
 
                     <TextView
                         android:id="@+id/listCardCO2Index"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_below="@+id/listCardCO2Title"
-                        android:layout_marginStart="@dimen/tapDashX1.5"
-                        android:layout_marginTop="@dimen/iconDashPadding"
-                        android:fontFamily="@font/pretendardvariable"
-                        android:includeFontPadding="false"
-                        android:text="null"
-                        android:textColor="@color/progressGood"
-                        android:textSize="@dimen/textDashH2"
-                        android:visibility="gone" />
+
+                        style="@style/BottomCardIndex"
+                        android:layout_below="@+id/listCardCO2Title" />
 
                     <TextView
                         android:id="@+id/listCardCO2Unit"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        style="@style/BottomCardUnit"
                         android:layout_below="@+id/listCardCO2Title"
-                        android:layout_marginStart="@dimen/tapDashX1"
                         android:layout_alignTop="@+id/listCardCO2Index"
                         android:layout_alignBottom="@+id/listCardCO2Index"
                         android:layout_toEndOf="@+id/listCardCO2Index"
-                        android:fontFamily="@font/pretendardvariable"
-                        android:gravity="center"
-                        android:text="ppm"
-                        android:includeFontPadding="false"
-                        android:textColor="@color/statusUnitText"
-                        android:textSize="@dimen/textDashH1.5"
-                        android:visibility="gone" />
+                        android:text="ppm" />
 
-                    <TextView
+                    <com.example.dashboard.view.AsTextView
                         android:id="@+id/listCardCO2Grade"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_below="@+id/listCardCO2Unit"
-                        android:layout_alignParentEnd="true"
-                        android:layout_marginTop="@dimen/tapDashX5.5"
-                        android:layout_marginEnd="@dimen/tapDashX1.5"
-                        android:layout_marginBottom="@dimen/tapDashX1.5"
-                        android:fontFamily="@font/pretendardvariable"
-                        android:gravity="bottom"
-                        android:text="에러"
-                        android:textAllCaps="false"
-                        android:textColor="@color/statusUnitText"
-                        android:textSize="@dimen/textDashH5"
-                        android:visibility="gone" />
+                        style="@style/BottomCardGrade"
+                        android:layout_below="@+id/listCardCO2Unit" />
 
                 </RelativeLayout>
 
-                <RelativeLayout
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_marginTop="2dp"
-                    android:layout_marginEnd="@dimen/tapDashX0.5"
-                    android:layout_marginBottom="2dp"
-                    android:layout_weight="0.2"
-                    android:background="@drawable/topframe_outline">
-
+                <RelativeLayout style="@style/BottomCardContainer">
                     <TextView
                         android:id="@+id/listCardCOTitle"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="@dimen/tapDashX1.5"
-                        android:layout_marginTop="@dimen/tapDashX1.5"
-                        android:fontFamily="@font/pretendardvariable"
-                        android:text="@string/co"
-                        android:textColor="@color/textColorMain"
-                        android:textSize="@dimen/textDashH2"
-                        android:visibility="gone" />
+                        style="@style/BottomCardTitle"
+                        android:text="@string/co" />
 
                     <TextView
                         android:id="@+id/listCardCOLoadingTv"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_centerInParent="true"
-                        android:layout_marginTop="@dimen/tapDashX5"
-                        android:layout_marginBottom="@dimen/tapDashX5"
-                        android:ellipsize="end"
-                        android:fontFamily="@font/pretendardvariable"
-                        android:lines="1"
-                        android:text="@string/loading_data"
-                        android:textAllCaps="false"
-                        android:textColor="@color/progressGood"
-                        android:textSize="@dimen/textDashH1" />
+                        style="@style/BottomCardLoading" />
 
                     <TextView
                         android:id="@+id/listCardCOIndex"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_below="@+id/listCardCOTitle"
-                        android:layout_marginStart="@dimen/tapDashX1.5"
-                        android:layout_marginTop="@dimen/iconDashPadding"
-                        android:includeFontPadding="false"
-                        android:fontFamily="@font/pretendardvariable"
-                        android:text="null"
-                        android:textColor="@color/progressGood"
-                        android:textSize="@dimen/textDashH2"
-                        android:visibility="gone" />
+
+                        style="@style/BottomCardIndex"
+                        android:layout_below="@+id/listCardCOTitle" />
 
                     <TextView
                         android:id="@+id/listCardCOUnit"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        style="@style/BottomCardUnit"
                         android:layout_below="@+id/listCardCOTitle"
-                        android:layout_marginStart="@dimen/tapDashX1"
                         android:layout_alignTop="@+id/listCardCOIndex"
                         android:layout_toEndOf="@+id/listCardCOIndex"
-                        android:fontFamily="@font/pretendardvariable"
-                        android:gravity="center"
-                        android:text="ppm"
-                        android:includeFontPadding="false"
-                        android:textColor="@color/statusUnitText"
-                        android:textSize="@dimen/textDashH1.5"
-                        android:visibility="gone" />
+                        android:text="ppm" />
 
-                    <TextView
+                    <com.example.dashboard.view.AsTextView
                         android:id="@+id/listCardCOGrade"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_below="@+id/listCardCOUnit"
-                        android:layout_alignParentEnd="true"
-                        android:layout_marginTop="@dimen/tapDashX5.5"
-                        android:layout_marginEnd="@dimen/tapDashX1.5"
-                        android:layout_marginBottom="@dimen/tapDashX1.5"
-                        android:fontFamily="@font/pretendardvariable"
-                        android:gravity="bottom"
-                        android:text="에러"
-                        android:textAllCaps="false"
-                        android:textColor="@color/statusUnitText"
-                        android:textSize="@dimen/textDashH5"
-                        android:visibility="gone" />
+                        style="@style/BottomCardGrade"
+                        android:layout_below="@+id/listCardCOUnit" />
 
                 </RelativeLayout>
 
-                <RelativeLayout
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_marginTop="2dp"
-                    android:layout_marginBottom="2dp"
-                    android:layout_weight="0.2"
-                    android:background="@drawable/topframe_outline">
-
+                <RelativeLayout style="@style/BottomCardContainer">
                     <TextView
                         android:id="@+id/listCardVIRUSTitle"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="@dimen/tapDashX1.5"
-                        android:layout_marginTop="@dimen/tapDashX1.5"
-                        android:fontFamily="@font/pretendardvariable"
-                        android:text="@string/virus"
-                        android:textColor="@color/textColorMain"
-                        android:textSize="@dimen/textDashH2"
-                        android:visibility="gone" />
+                        style="@style/BottomCardTitle"
+                        android:text="@string/virus" />
 
                     <TextView
                         android:id="@+id/listCardVIRUSLoadingTv"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_centerInParent="true"
-                        android:layout_marginTop="@dimen/tapDashX5"
-                        android:layout_marginBottom="@dimen/tapDashX5"
-                        android:ellipsize="end"
-                        android:fontFamily="@font/pretendardvariable"
-                        android:lines="1"
-                        android:text="@string/loading_data"
-                        android:textAllCaps="false"
-                        android:textColor="@color/progressGood"
-                        android:textSize="@dimen/textDashH1" />
+                        style="@style/BottomCardLoading" />
 
                     <TextView
                         android:id="@+id/listCardVIRUSIndex"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_below="@+id/listCardVIRUSTitle"
-                        android:layout_marginStart="@dimen/tapDashX1.5"
-                        android:layout_marginTop="@dimen/iconDashPadding"
-                        android:includeFontPadding="false"
-                        android:fontFamily="@font/pretendardvariable"
-                        android:text="123"
-                        android:textColor="@color/statusUnitText"
-                        android:textSize="@dimen/textDashH2"
-                        android:visibility="gone" />
+                        style="@style/BottomCardIndex"
+                        android:layout_below="@+id/listCardVIRUSTitle" />
 
-                    <TextView
+                    <com.example.dashboard.view.AsTextView
                         android:id="@+id/listCardVIRUSOCGrade"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_below="@+id/listCardVIRUSIndex"
-                        android:layout_alignParentEnd="true"
-                        android:layout_marginTop="@dimen/tapDashX5.5"
-                        android:layout_marginEnd="@dimen/tapDashX1.5"
-                        android:layout_marginBottom="@dimen/tapDashX1.5"
-                        android:fontFamily="@font/pretendardvariable"
-                        android:gravity="bottom"
-                        android:text="@string/error"
-                        android:textAllCaps="false"
-                        android:textColor="@color/statusUnitText"
-                        android:textSize="@dimen/textDashH5"
-                        android:visibility="gone" />
+                        style="@style/BottomCardGrade"
+                        android:layout_below="@+id/listCardVIRUSIndex" />
                 </RelativeLayout>
             </LinearLayout>
         </androidx.constraintlayout.widget.ConstraintLayout>

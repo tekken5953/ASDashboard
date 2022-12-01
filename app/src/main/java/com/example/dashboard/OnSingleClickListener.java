@@ -1,4 +1,4 @@
-package com.example.dashboard.utils;
+package com.example.dashboard;
 
 import android.os.SystemClock;
 import android.view.View;

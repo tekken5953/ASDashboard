@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="wrap_content"
+    android:layout_width="250dp"
     android:layout_height="wrap_content"
-    android:minWidth="250dp"
     android:layout_marginBottom="@dimen/tapDashX1.5"
     android:background="@drawable/connectable_rv_bg"
     android:padding="1dp">
@@ -12,8 +11,7 @@
         android:layout_width="@dimen/iconConnListSize"
         android:layout_height="@dimen/iconConnListSize"
         android:layout_centerVertical="true"
-        android:layout_marginStart="@dimen/tapDashX1"
-        android:src="@drawable/side_100" />
+        android:layout_marginStart="@dimen/tapDashX1"/>
 
     <TextView
         android:id="@+id/listItemConnDeviceTitleTv"
@@ -23,7 +21,7 @@
         android:layout_marginTop="@dimen/tapDashX1"
         android:layout_toEndOf="@+id/listItemConnDeviceImageIv"
         android:fontFamily="@font/pretendardvariable"
-        android:text="BS_100"
+        android:text=""
         android:textColor="@color/white"
         android:textSize="@dimen/textDashH1" />
 
@@ -37,7 +35,7 @@
         android:layout_marginBottom="@dimen/tapDashX1"
         android:layout_toEndOf="@+id/listItemConnDeviceImageIv"
         android:fontFamily="@font/pretendardvariable"
-        android:text="TIA0001505"
+        android:text=""
         android:textAllCaps="false"
         android:textColor="@color/statusUnitText"
         android:textSize="@dimen/textDashH1" />
@@ -51,7 +49,7 @@
         android:layout_marginEnd="@dimen/tapDashX1.5"
         android:layout_toEndOf="@+id/listItemConnDeviceAddressTv"
         android:fontFamily="@font/pretendardvariable"
-        android:text="@string/connect"
+        android:text=""
         android:textAllCaps="false"
         android:textColor="@color/white"
         android:textSize="@dimen/textDashH1" />

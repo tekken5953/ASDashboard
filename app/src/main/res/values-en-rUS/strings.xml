@@ -108,4 +108,6 @@
     <string name="dialog_title">Exit Dashboard</string>
     <string name="dialog_conn">Connect Other Device</string>
     <string name="fail_count">The Connection has been lost\nPlease check the Device and reconnect</string>
+    <string name="time_zone">dd/MM/yyyy HH:mm</string>
+    <string name="empty_list">Fail to find device</string>
 </resources>
