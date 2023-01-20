@@ -65,7 +65,6 @@ import com.example.dashboard.databinding.ActivityDashboardBinding;
 import com.example.dashboard.utils.SnackBarUtils;
 import com.example.dashboard.utils.ToastUtils;
 import com.example.dashboard.utils.VirusFormulaClass;
-import com.example.dashboard.view.AsTextView;
 import com.example.dashboard.view.SegmentedProgressBar;
 import com.example.dashboard.view.SideBarCustomView;
 import com.github.mikephil.charting.components.Legend;
@@ -137,7 +136,6 @@ public class DashBoardActivity extends AppCompatActivity {
     private boolean isConnected = false;
     ConnectivityManager manager;
     float batteryPct = -1;
-    AsTextView pmGrade,coGrade,co2Grade,tvocGrade,virusGrade,cqiGrade;
 
     @Override
     protected void onDestroy() {
@@ -286,17 +284,19 @@ public class DashBoardActivity extends AppCompatActivity {
         isWifiLinked();
         checkWifiState();
         binding.listCardVIRUSIndex.setVisibility(View.GONE);
-        binding.listCardVIRUSOCGrade.setVisibility(View.GONE);
         binding.virusLineChart.setNoDataText(getString(R.string.no_data_text));
-        pmGrade = binding.listCardPMGrade;
-        tvocGrade = binding.listCardTVOCGrade;
-        coGrade = binding.listCardCOGrade;
-        co2Grade = binding.listCardCO2Grade;
-        virusGrade = binding.listCardVIRUSOCGrade;
-        cqiGrade = binding.aqiContentTv;
-
 
         SetSwitchState();
+        CardItemTextColor(binding.listCardCO2Title, binding.listCardCO2Unit,
+                binding.listCardCO2Index, binding.listCardCO2LoadingTv);
+        CardItemTextColor(binding.listCardPMTitle, binding.listCardPMUnit,
+                binding.listCardPMIndex, binding.listCardPMLoadingTv);
+        CardItemTextColor(binding.listCardTVOCTitle, binding.listCardTVOCUnit,
+                binding.listCardTVOCIndex, binding.listCardTVOCLoadingTv);
+        CardItemTextColor(binding.listCardCOTitle, binding.listCardCOUnit,
+                binding.listCardCOIndex, binding.listCardCOLoadingTv);
+        CardItemTextColor(binding.listCardVIRUSTitle, null, binding.listCardVIRUSIndex, binding.listCardVIRUSLoadingTv);
+
 
         // 사이드 메뉴의 클릭 이벤트를 등록합니다
         binding.hambugerMenuIv.setOnClickListener(this::onClick);
@@ -500,7 +500,6 @@ public class DashBoardActivity extends AppCompatActivity {
             String sensorMeasureStr = body.getString("35");
             StringBuilder sb = new StringBuilder(sensorMeasureStr);
             String reverseSensor = sb.reverse().toString();
-            Log.d(TAG_MQTT, reverseSensor);
             int sensorMeasure = Integer.parseInt(reverseSensor, 2);
             jsonSensor.put("response", "getMeasure");
             jsonSensor.put("MeasureChk", sensorMeasure);
@@ -562,7 +561,7 @@ public class DashBoardActivity extends AppCompatActivity {
             // 0 ~ 150
             if (i >= 0 && i <= 100) {
                 pm_float = Float.parseFloat(pm_str);
-                binding.listCardPMIndex.setText(String.valueOf(i));
+                binding.listCardPMIndex.setIndexTextAsInt(pm_float);
                 jsonMeasure.put("PM2P5val", i);
             }
         }
@@ -578,7 +577,7 @@ public class DashBoardActivity extends AppCompatActivity {
             // 0 ~ 5
             if (body.getByte("20") == 1 && Float.parseFloat(tvoc_str) >= 0f && Float.parseFloat(tvoc_str) <= 3f) {
                 tvoc_float = Float.parseFloat(tvoc_str);
-                binding.listCardTVOCIndex.setText(tvoc_str);
+                binding.listCardTVOCIndex.setIndexTextAsInt(tvoc_float);
                 jsonMeasure.put("TVOCval", tvoc_float);
             }
         }
@@ -594,7 +593,7 @@ public class DashBoardActivity extends AppCompatActivity {
             // 0 ~ 18
             if (body.getByte("1A") == 1 && Float.parseFloat(co_str) >= 0f && Float.parseFloat(co_str) <= 50) {
                 co_float = Float.parseFloat(co_str);
-                binding.listCardCOIndex.setText(co_str);
+                binding.listCardCOIndex.setIndexTextAsInt(co_float);
                 jsonMeasure.put("COval", co_float);
             }
         }
@@ -610,9 +609,7 @@ public class DashBoardActivity extends AppCompatActivity {
             // 0 ~ 2500
             if (body.getByte("1D") == 1 && Float.parseFloat(co2_str) >= 0 && Float.parseFloat(co2_str) <= 1999) {
                 co2_float = Float.parseFloat(co2_str);
-                StringBuilder s = new StringBuilder();
-                s.append(Math.round(co2_float));
-                binding.listCardCO2Index.setText(s);
+                binding.listCardCO2Index.setIndexTextAsInt(co2_float);
                 jsonMeasure.put("CO2val", co2_float);
             }
         }
@@ -623,9 +620,7 @@ public class DashBoardActivity extends AppCompatActivity {
             // 0 ~ 150
             if (pm_float != null && pm_float >= 0f && pm_float <= 100f) {
                 jsonMeasure.put("PM2P5lvl", body.getByte("0A"));
-                pmGrade.setGradeText(pm_grade);
-                CardItemTextColor(pm_grade, binding.listCardPMTitle, binding.listCardPMUnit,
-                        binding.listCardPMIndex, binding.listCardPMLoadingTv);
+                binding.listCardPMGrade.setGradeText(pm_grade);
             }
         }
 
@@ -634,9 +629,7 @@ public class DashBoardActivity extends AppCompatActivity {
             String tvoc_grade = String.valueOf(body.getByte("22"));
             // 0 ~ 5
             if (body.getByte("20") == 1 && tvoc_float != null && tvoc_float >= 0f && tvoc_float <= 3f) {
-                tvocGrade.setGradeText(tvoc_grade);
-                CardItemTextColor(tvoc_grade, binding.listCardTVOCTitle, binding.listCardTVOCUnit,
-                         binding.listCardTVOCIndex, binding.listCardTVOCLoadingTv);
+                binding.listCardTVOCGrade.setGradeText(tvoc_grade);
                 jsonMeasure.put("TVOClvl", body.getByte("22"));
             }
         }
@@ -664,9 +657,7 @@ public class DashBoardActivity extends AppCompatActivity {
             String co_grade = body.getByte("1C") + "";
             // 0 ~ 18
             if (body.getByte("1A") == 1 && co_float != null && co_float >= 0f && co_float <= 15f) {
-                coGrade.setGradeText(co_grade);
-                CardItemTextColor(co_grade, binding.listCardCOTitle, binding.listCardCOUnit,
-                       binding.listCardCOIndex, binding.listCardCOLoadingTv);
+                binding.listCardCOGrade.setGradeText(co_grade);
                 jsonMeasure.put("COlvl", body.getByte("1C"));
             }
         }
@@ -676,9 +667,7 @@ public class DashBoardActivity extends AppCompatActivity {
             String co2_grade = body.getByte("1F") + "";
             // 0 ~ 2500
             if (body.getByte("1D") == 1 && co2_float != null && Math.round(co2_float) >= 0 && Math.round(co2_float) <= 2000) {
-                co2Grade.setGradeText(co2_grade);
-                CardItemTextColor(co2_grade, binding.listCardCO2Title, binding.listCardCO2Unit,
-                       binding.listCardCO2Index, binding.listCardCO2LoadingTv);
+                binding.listCardCO2Grade.setGradeText(co2_grade);
                 jsonMeasure.put("CO2lvl", body.getByte("1F"));
             }
         }
@@ -951,37 +940,18 @@ public class DashBoardActivity extends AppCompatActivity {
 
             // 바이러스 지수 불러오기
             virusValue = virusFormulaClass.GetVirusValue(pm_aqi_short, temp_float, humid_float, co2_float, tvoc_float);
-            String virusIndex = virusFormulaClass.GetVirusIndex(pm_aqi_short, temp_float, humid_float, co2_float, tvoc_float);
+            String virusGrade = virusFormulaClass.GetVirusGrade(pm_aqi_short, temp_float, humid_float, co2_float, tvoc_float);
 
             try {
-                binding.listCardVIRUSIndex.setText(String.valueOf(virusValue));
+                binding.listCardVIRUSIndex.setIndexTextAsInt(virusValue);
+                binding.listCardVIRUSOCGrade.setGradeText(virusGrade);
                 jsonMeasure.put("Virusval", virusValue);
-                jsonMeasure.put("Viruslvl", Integer.parseInt(virusIndex));
+                jsonMeasure.put("Viruslvl", Integer.parseInt(virusGrade));
 
                 HideLoading();
 
                 // 바이러스 지수에 따라 데이터 표시하기
-                switch (virusIndex) {
-                    case "0":
-                        CardItemTextColor("0", binding.listCardVIRUSTitle, null, binding.listCardVIRUSIndex, binding.listCardVIRUSLoadingTv);
-                        break;
-                    case "1":
-                        CardItemTextColor("1", binding.listCardVIRUSTitle, null,
-                                binding.listCardVIRUSIndex, binding.listCardVIRUSLoadingTv);
-                        break;
-                    case "2":
-                        CardItemTextColor("2", binding.listCardVIRUSTitle, null,
-                                binding.listCardVIRUSIndex, binding.listCardVIRUSLoadingTv);
-                        break;
-                    case "3":
-                        CardItemTextColor("3", binding.listCardVIRUSTitle, null,
-                                binding.listCardVIRUSIndex, binding.listCardVIRUSLoadingTv);
-                        break;
-                    default:
-                        CardItemTextColor("4", binding.listCardVIRUSTitle, null,
-                                binding.listCardVIRUSIndex, binding.listCardVIRUSLoadingTv);
-                        break;
-                }
+                binding.listCardVIRUSOCGrade.setGradeText(virusGrade);
             } catch (NullPointerException | JSONException e) {
                 e.printStackTrace();
                 binding.listCardVIRUSOCGrade.setVisibility(View.GONE);
@@ -997,15 +967,28 @@ public class DashBoardActivity extends AppCompatActivity {
         cqiIndex = cqiIndexValue;
 
         String cqiGradeValue = virusFormulaClass.GetCQIGrade(pm_float, co_float);
-        binding.aqiContentTv.setText(cqiGradeValue);
+        binding.aqiContentTv.setGradeText(cqiGradeValue);
         moveBarChart(cqiIndexValue);
+
+        if (cqiGradeValue.equals("0"))
+            binding.apiCircleChartPb.setImageDrawable(ResourcesCompat.getDrawable(getResources(), R.drawable.signal_good, null));
+        else if (cqiGradeValue.equals("1"))
+            binding.apiCircleChartPb.setImageDrawable(ResourcesCompat.getDrawable(getResources(), R.drawable.signal_normal, null));
+        else if (cqiGradeValue.equals("2"))
+            binding.apiCircleChartPb.setImageDrawable(ResourcesCompat.getDrawable(getResources(), R.drawable.signal_bad, null));
+        else if (cqiGradeValue.equals("3"))
+            binding.apiCircleChartPb.setImageDrawable(ResourcesCompat.getDrawable(getResources(), R.drawable.signal_verybad, null));
+        else {
+            binding.apiCircleChartPb.setImageDrawable(ResourcesCompat.getDrawable(getResources(), R.drawable.signal_good, null));
+        }
 
         jsonMeasure.put("CAIval", cqiIndexValue);
         jsonMeasure.put("CAIlvl", Integer.parseInt(cqiGradeValue));
 
         //  CQI 등급을 불러오고 표시하기
         binding.aqiCurrentArrow.setVisibility(View.VISIBLE);
-        cqiGrade.setGradeText(cqiGradeValue);
+
+
     }
 
     //AQI Index 별 차트 이동거리를 계산합니다
@@ -1026,24 +1009,8 @@ public class DashBoardActivity extends AppCompatActivity {
         }
 
         binding.aqiCurrentArrow.setLayoutParams(params);
-        binding.aqiCurrentArrow.setText(String.valueOf(cqiNumber));
+        binding.aqiCurrentArrow.setIndexTextAsInt(cqiNumber);
 
-        if (cqiNumber < 51) {
-            moveBarChartResult(R.drawable.signal_good,R.string.good,R.color.progressGood);
-        } else if (cqiNumber < 101) {
-            moveBarChartResult(R.drawable.signal_normal,R.string.normal,R.color.progressNormal);
-        } else if (cqiNumber < 251) {
-            moveBarChartResult(R.drawable.signal_bad,R.string.bad,R.color.progressBad);
-        } else {
-            moveBarChartResult(R.drawable.signal_verybad,R.string.cqi_baddest,R.color.progressWorst);
-        }
-    }
-
-    private void moveBarChartResult(int drawable, int text, int color) {
-        binding.apiCircleChartPb.setBackground(ResourcesCompat.getDrawable(getResources(), drawable, null));
-        binding.aqiContentTv.setText(getResources().getString(text));
-        binding.aqiContentTv.setTextColor(ResourcesCompat.getColor(getResources(),color, null));
-        binding.aqiCurrentArrow.setTextColor(ResourcesCompat.getColor(getResources(), color, null));
     }
 
     // 햄버거 메뉴 추가
@@ -1326,7 +1293,6 @@ public class DashBoardActivity extends AppCompatActivity {
             drawGraphClass.drawFirstEntry(300, "cqi");
             ChartTimerTask(300, "cqi");
             addSideView();
-            StartMqtt();
         }), 1000);
     }
 
@@ -1533,7 +1499,7 @@ public class DashBoardActivity extends AppCompatActivity {
                 binding.dashWifiIcon.setColorFilter(ResourcesCompat.getColor(getResources(), R.color.white, null));
                 binding.dashWifiSwitch.setChecked(true);
                 isConnected = true;
-                mqtt = new Mqtt(context, userCode);
+                StartMqtt();
             }
 
             @Override
@@ -1746,12 +1712,13 @@ public class DashBoardActivity extends AppCompatActivity {
                 if (userCode != null) {
                     mqtt = new Mqtt(context, userCode);
                     mqtt.connect();
-                    Log.d(TAG_MQTT, "Mqtt is Connected");
                 } else {
                     toastUtils.shortMessage(context, getString(R.string.mqtt_error_get_user_id));
-                    CompletableFuture.runAsync(() ->
-                            SharedPreferenceManager.setString(context, "usingWifi", "false"))
-                            .thenAcceptAsync(b -> SetSwitchState());
+                    CompletableFuture.runAsync(() -> {
+                        SharedPreferenceManager.setString(context, "usingWifi", "false");
+                    }).thenAcceptAsync(b -> {
+                        SetSwitchState();
+                    });
                 }
             } else {
                 Log.d(TAG_MQTT, "Mqtt is Already Connected");
@@ -1762,7 +1729,7 @@ public class DashBoardActivity extends AppCompatActivity {
     }
 
     // 하단 아이템 텍스트, 컬러 설정
-    private void CardItemTextColor(String titleStr, TextView title, TextView unit,TextView index, TextView loading) {
+    private void CardItemTextColor(TextView title, TextView unit, TextView index, TextView loading) {
         if (unit != null)
             unit.setVisibility(View.VISIBLE);
 
@@ -1771,23 +1738,6 @@ public class DashBoardActivity extends AppCompatActivity {
 
         if (loading.getVisibility() == View.VISIBLE)
             loading.setVisibility(View.GONE);
-
-        switch (titleStr) {
-            case "0":
-                index.setTextColor(ResourcesCompat.getColor(getResources(), R.color.progressGood, null));
-                break;
-            case "1":
-                index.setTextColor(ResourcesCompat.getColor(getResources(), R.color.progressNormal, null));
-                break;
-            case "2":
-                index.setTextColor(ResourcesCompat.getColor(getResources(), R.color.progressBad, null));
-                break;
-            case "3":
-                index.setTextColor(ResourcesCompat.getColor(getResources(), R.color.progressWorst, null));
-                break;
-            case "4":
-                index.setTextColor(ResourcesCompat.getColor(getResources(), R.color.statusUnitText, null));
-        }
     }
 
     private void SetFinalLocale() {
