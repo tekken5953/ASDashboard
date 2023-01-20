@@ -485,16 +485,12 @@ public class ConnectDeviceActivity extends AppCompatActivity {
 
     private void StartDiscovery() {
         bluetoothAdapter.startDiscovery();
-        if (binding.emptyConnectList.getVisibility() == View.VISIBLE)
-            binding.emptyConnectList.setVisibility(View.GONE);
 
         Handler handler = new Handler(Looper.getMainLooper());
         handler.postDelayed(() -> {
             HideRefresh();
             if (binding.connConnectableRv.isShimmerShowing())
                 binding.connConnectableRv.hideShimmer();
-            if (cAdapter.getItemCount() == 0)
-                binding.emptyConnectList.setVisibility(View.VISIBLE);
             bluetoothAdapter.cancelDiscovery();
             binding.connRefreshBtn.setEnabled(true);
             binding.connRefreshBtn.setBackgroundDrawable(ResourcesCompat.getDrawable(getResources(), R.drawable.lang_ok_w, null));

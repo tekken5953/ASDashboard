@@ -297,13 +297,13 @@
                         android:layout_height="@dimen/tapDashX1"
                         android:layout_gravity="end" />
 
-                    <TextView
+                    <com.aslib.AsTextView
                         android:id="@+id/aqiCurrentArrow"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/pretendardvariable"
                         android:gravity="center"
-                        android:text="0"
+                        app:sort="cqi"
                         android:textColor="@color/progressText"
                         android:textSize="@dimen/textDashH1"
                         android:visibility="visible"
@@ -324,14 +324,14 @@
                     app:layout_constraintEnd_toEndOf="@+id/aqiContentTv"
                     app:layout_constraintStart_toStartOf="@+id/aqiContentTv" />
 
-                <com.example.dashboard.view.AsTextView
+                <com.aslib.AsTextView
                     android:id="@+id/aqiContentTv"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/tapDashX1"
                     android:fontFamily="@font/pretendardvariable"
                     android:gravity="center"
-                    android:text="@string/good"
+                    app:sort="grade"
                     android:textColor="@color/progressGood"
                     android:textSize="@dimen/textDashH3"
                     android:textStyle="bold"
@@ -448,9 +448,10 @@
                         android:id="@+id/listCardPMLoadingTv"
                         style="@style/BottomCardLoading" />
 
-                    <TextView
+                    <com.aslib.AsTextView
                         android:id="@+id/listCardPMIndex"
                         style="@style/BottomCardIndex"
+                        app:sort="pm"
                         android:layout_below="@+id/listCardPMTitle" />
 
                     <TextView
@@ -461,9 +462,10 @@
                         android:layout_toEndOf="@+id/listCardPMIndex"
                         android:text="ug/㎥" />
 
-                    <com.example.dashboard.view.AsTextView
+                    <com.aslib.AsTextView
                         android:id="@+id/listCardPMGrade"
                         style="@style/BottomCardGrade"
+                        app:sort="grade"
                         android:layout_below="@+id/listCardPMUnit" />
 
                 </RelativeLayout>
@@ -478,9 +480,10 @@
                         android:id="@+id/listCardTVOCLoadingTv"
                         style="@style/BottomCardLoading" />
 
-                    <TextView
+                    <com.aslib.AsTextView
                         android:id="@+id/listCardTVOCIndex"
                         style="@style/BottomCardIndex"
+                        app:sort="tvoc"
                         android:layout_below="@+id/listCardTVOCTitle" />
 
                     <TextView
@@ -491,9 +494,10 @@
                         android:layout_toEndOf="@+id/listCardTVOCIndex"
                         android:text="mg/㎥" />
 
-                    <com.example.dashboard.view.AsTextView
+                    <com.aslib.AsTextView
                         android:id="@+id/listCardTVOCGrade"
                         style="@style/BottomCardGrade"
+                        app:sort="grade"
                         android:layout_below="@+id/listCardTVOCUnit" />
 
                 </RelativeLayout>
@@ -508,9 +512,9 @@
                         android:id="@+id/listCardCO2LoadingTv"
                         style="@style/BottomCardLoading" />
 
-                    <TextView
+                    <com.aslib.AsTextView
                         android:id="@+id/listCardCO2Index"
-
+                        app:sort="co2"
                         style="@style/BottomCardIndex"
                         android:layout_below="@+id/listCardCO2Title" />
 
@@ -523,9 +527,10 @@
                         android:layout_toEndOf="@+id/listCardCO2Index"
                         android:text="ppm" />
 
-                    <com.example.dashboard.view.AsTextView
+                    <com.aslib.AsTextView
                         android:id="@+id/listCardCO2Grade"
                         style="@style/BottomCardGrade"
+                        app:sort="grade"
                         android:layout_below="@+id/listCardCO2Unit" />
 
                 </RelativeLayout>
@@ -540,10 +545,10 @@
                         android:id="@+id/listCardCOLoadingTv"
                         style="@style/BottomCardLoading" />
 
-                    <TextView
+                    <com.aslib.AsTextView
                         android:id="@+id/listCardCOIndex"
-
                         style="@style/BottomCardIndex"
+                        app:sort="co"
                         android:layout_below="@+id/listCardCOTitle" />
 
                     <TextView
@@ -554,9 +559,10 @@
                         android:layout_toEndOf="@+id/listCardCOIndex"
                         android:text="ppm" />
 
-                    <com.example.dashboard.view.AsTextView
+                    <com.aslib.AsTextView
                         android:id="@+id/listCardCOGrade"
                         style="@style/BottomCardGrade"
+                        app:sort="grade"
                         android:layout_below="@+id/listCardCOUnit" />
 
                 </RelativeLayout>
@@ -571,14 +577,16 @@
                         android:id="@+id/listCardVIRUSLoadingTv"
                         style="@style/BottomCardLoading" />
 
-                    <TextView
+                    <com.aslib.AsTextView
                         android:id="@+id/listCardVIRUSIndex"
                         style="@style/BottomCardIndex"
+                        app:sort="virus"
                         android:layout_below="@+id/listCardVIRUSTitle" />
 
-                    <com.example.dashboard.view.AsTextView
+                    <com.aslib.AsTextView
                         android:id="@+id/listCardVIRUSOCGrade"
                         style="@style/BottomCardGrade"
+                        app:sort="grade"
                         android:layout_below="@+id/listCardVIRUSIndex" />
                 </RelativeLayout>
             </LinearLayout>

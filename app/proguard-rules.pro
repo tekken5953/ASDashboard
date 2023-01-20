@@ -19,3 +19,14 @@
 # If you keep the line number information, uncomment this to
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
+
+
+#https://greensky0026.tistory.com/230 proguard 설정
+
+-keep class com.example.dashboard.**{ *; }
+-dontwarn com.facebook.shimmer.**
+-dontwarn com.todkars:shimmer-recyclerview.**
+-dontwarn com.github.tekken5953:AsCustomText.**
+-keepattributes SourceFile,LineNumberTable
+-renamesourcefileattribute SourceFile
+-dontwarn javax.annotation.**
