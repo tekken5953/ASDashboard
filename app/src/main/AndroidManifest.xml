@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    package="com.example.dashboard">
+    package="com.example.asdashboard">
 
     <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission android:name="android.permission.VIBRATE" />
@@ -31,11 +31,11 @@
         android:theme="@style/Theme.Dashboard"
         tools:targetApi="s">
         <activity
-            android:name=".layout.PermissionActivity"
+            android:name="com.example.asdashboard.layout.PermissionActivity"
             android:exported="false"
             android:screenOrientation="sensorLandscape" />
         <activity
-            android:name=".layout.SplashActivity"
+            android:name="com.example.asdashboard.layout.SplashActivity"
             android:exported="true"
             android:screenOrientation="sensorLandscape"
             android:theme="@style/SplashTheme">
@@ -46,21 +46,21 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".layout.ConnectDeviceActivity"
+            android:name="com.example.asdashboard.layout.ConnectDeviceActivity"
             android:exported="false"
             android:screenOrientation="sensorLandscape" />
         <activity
-            android:name=".layout.LanguageSelectActivity"
+            android:name="com.example.asdashboard.layout.LanguageSelectActivity"
             android:exported="false"
             android:screenOrientation="sensorLandscape" />
         <activity
-            android:name=".layout.DashBoardActivity"
+            android:name="com.example.asdashboard.layout.DashBoardActivity"
             android:exported="false"
             android:largeHeap="true"
             android:screenOrientation="sensorLandscape" />
 
         <receiver
-            android:name=".layout.DashBoardActivity$PowerConnectionReceiver"
+            android:name="com.example.asdashboard.layout.DashBoardActivity$PowerConnectionReceiver"
             android:exported="true"
             tools:ignore="Instantiatable">
             <intent-filter>
