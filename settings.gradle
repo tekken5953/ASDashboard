@@ -19,3 +19,4 @@ dependencyResolutionManagement {
 }
 rootProject.name = "Dashboard"
 include ':app'
+include ':as_textview'

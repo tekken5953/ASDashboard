@@ -7,14 +7,14 @@
  * 2차 업데이트 종료 - 코드 리팩토링 : 2022-11-17
  */
 
-package com.example.asdashboard.layout;
+package com.example.dashboard.layout;
 
-import static com.example.asdashboard.bluetooth.BluetoothAPI.analyzedControlBody;
-import static com.example.asdashboard.bluetooth.BluetoothAPI.analyzedRequestBody;
-import static com.example.asdashboard.bluetooth.BluetoothAPI.byteArrayToHexString;
-import static com.example.asdashboard.bluetooth.BluetoothAPI.generateTag;
-import static com.example.asdashboard.bluetooth.BluetoothAPI.makeFrame;
-import static com.example.asdashboard.bluetooth.BluetoothAPI.separatedFrame;
+import static com.example.dashboard.bluetooth.BluetoothAPI.analyzedControlBody;
+import static com.example.dashboard.bluetooth.BluetoothAPI.analyzedRequestBody;
+import static com.example.dashboard.bluetooth.BluetoothAPI.byteArrayToHexString;
+import static com.example.dashboard.bluetooth.BluetoothAPI.generateTag;
+import static com.example.dashboard.bluetooth.BluetoothAPI.makeFrame;
+import static com.example.dashboard.bluetooth.BluetoothAPI.separatedFrame;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
@@ -54,19 +54,20 @@ import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
-import com.aslib.AsTextView;
-import com.example.asdashboard.OnSingleClickListener;
-import com.example.asdashboard.OuterClass;
-import com.example.asdashboard.SharedPreferenceManager;
-import com.example.asdashboard.bluetooth.BluetoothAPI;
-import com.example.asdashboard.bluetooth.BluetoothThread;
-import com.example.asdashboard.bluetooth.Mqtt;
-import com.example.asdashboard.utils.SnackBarUtils;
-import com.example.asdashboard.utils.ToastUtils;
-import com.example.asdashboard.utils.VirusFormulaClass;
-import com.example.asdashboard.view.SegmentedProgressBar;
-import com.example.asdashboard.view.SideBarCustomView;
-import com.example.asdashboard.R;
+import com.example.dashboard.OnSingleClickListener;
+import com.example.dashboard.OuterClass;
+import com.example.dashboard.R;
+import com.example.dashboard.SharedPreferenceManager;
+import com.example.dashboard.bluetooth.BluetoothAPI;
+import com.example.dashboard.bluetooth.BluetoothThread;
+import com.example.dashboard.bluetooth.Mqtt;
+import com.example.dashboard.databinding.ActivityDashboardBinding;
+import com.example.dashboard.utils.SnackBarUtils;
+import com.example.dashboard.utils.ToastUtils;
+import com.example.dashboard.utils.VirusFormulaClass;
+import com.example.dashboard.view.AsTextView;
+import com.example.dashboard.view.SegmentedProgressBar;
+import com.example.dashboard.view.SideBarCustomView;
 import com.github.mikephil.charting.components.Legend;
 import com.github.mikephil.charting.components.XAxis;
 import com.github.mikephil.charting.components.YAxis;
@@ -89,7 +90,7 @@ import java.util.concurrent.CompletableFuture;
 
 public class DashBoardActivity extends AppCompatActivity {
 
-    com.example.asdashboard.databinding.ActivityDashboardBinding binding;
+    ActivityDashboardBinding binding;
 
     Activity context = DashBoardActivity.this;
 
@@ -136,8 +137,7 @@ public class DashBoardActivity extends AppCompatActivity {
     private boolean isConnected = false;
     ConnectivityManager manager;
     float batteryPct = -1;
-    AsTextView pmGrade, coGrade, co2Grade, tvocGrade, virusGrade, cqiGrade;
-    WifiManager wifiManager;
+    AsTextView pmGrade,coGrade,co2Grade,tvocGrade,virusGrade,cqiGrade;
 
     @Override
     protected void onDestroy() {
@@ -295,6 +295,7 @@ public class DashBoardActivity extends AppCompatActivity {
         virusGrade = binding.listCardVIRUSOCGrade;
         cqiGrade = binding.aqiContentTv;
 
+
         SetSwitchState();
 
         // 사이드 메뉴의 클릭 이벤트를 등록합니다
@@ -352,8 +353,6 @@ public class DashBoardActivity extends AppCompatActivity {
                             e.printStackTrace();
                             snackBarUtils.makeSnack(binding.idMain, context, getString(R.string.mqtt_wifi_reconnect_f));
                         }
-                    } else {
-                        binding.dashWifiSwitch.setChecked(false);
                     }
                     if (jsonMeasure.length() != 0 && userCode != null) {
                         if (binding.dashWifiSwitch.isChecked()) {
@@ -364,7 +363,6 @@ public class DashBoardActivity extends AppCompatActivity {
                                         //측정 데이터 퍼블리시
                                         publishMeasureChk();
                                     } catch (NullPointerException e) {
-                                        checkWifiState();
                                         // 만약 실패하면 2초 후에 다시 보냅니다
                                         Handler handler = new Handler(Looper.getMainLooper());
                                         // 측정 데이터 퍼블리시
@@ -375,10 +373,9 @@ public class DashBoardActivity extends AppCompatActivity {
                                 publishMeasured();
                                 mqttCount++;
                             } catch (NullPointerException e) {
+                                binding.dashWifiSwitch.setChecked(false);
                                 e.printStackTrace();
                             }
-                        } else {
-                            binding.dashWifiSwitch.setChecked(false);
                         }
                     }
                     processRequestBody(body);
@@ -534,7 +531,7 @@ public class DashBoardActivity extends AppCompatActivity {
 
         //PM 유효정보
         if (body.containsKey("01")) {
-            jsonMeasure.put("ValidPM", body.getByte(("01")));
+            jsonMeasure.put("ValildPM", body.getByte(("01")));
         }
 
         //H2 유효정보
@@ -639,14 +636,14 @@ public class DashBoardActivity extends AppCompatActivity {
             if (body.getByte("20") == 1 && tvoc_float != null && tvoc_float >= 0f && tvoc_float <= 3f) {
                 tvocGrade.setGradeText(tvoc_grade);
                 CardItemTextColor(tvoc_grade, binding.listCardTVOCTitle, binding.listCardTVOCUnit,
-                        binding.listCardTVOCIndex, binding.listCardTVOCLoadingTv);
+                         binding.listCardTVOCIndex, binding.listCardTVOCLoadingTv);
                 jsonMeasure.put("TVOClvl", body.getByte("22"));
             }
         }
 
         //NH3 유효정보
         if (body.containsKey("26")) {
-            jsonMeasure.put("ValidNH3", body.getByte("26"));
+            jsonMeasure.put("ValideNH3", body.getByte("26"));
         }
         //NH3 값
         if (body.containsKey("27")) {
@@ -669,7 +666,7 @@ public class DashBoardActivity extends AppCompatActivity {
             if (body.getByte("1A") == 1 && co_float != null && co_float >= 0f && co_float <= 15f) {
                 coGrade.setGradeText(co_grade);
                 CardItemTextColor(co_grade, binding.listCardCOTitle, binding.listCardCOUnit,
-                        binding.listCardCOIndex, binding.listCardCOLoadingTv);
+                       binding.listCardCOIndex, binding.listCardCOLoadingTv);
                 jsonMeasure.put("COlvl", body.getByte("1C"));
             }
         }
@@ -681,7 +678,7 @@ public class DashBoardActivity extends AppCompatActivity {
             if (body.getByte("1D") == 1 && co2_float != null && Math.round(co2_float) >= 0 && Math.round(co2_float) <= 2000) {
                 co2Grade.setGradeText(co2_grade);
                 CardItemTextColor(co2_grade, binding.listCardCO2Title, binding.listCardCO2Unit,
-                        binding.listCardCO2Index, binding.listCardCO2LoadingTv);
+                       binding.listCardCO2Index, binding.listCardCO2LoadingTv);
                 jsonMeasure.put("CO2lvl", body.getByte("1F"));
             }
         }
@@ -955,7 +952,6 @@ public class DashBoardActivity extends AppCompatActivity {
             // 바이러스 지수 불러오기
             virusValue = virusFormulaClass.GetVirusValue(pm_aqi_short, temp_float, humid_float, co2_float, tvoc_float);
             String virusIndex = virusFormulaClass.GetVirusIndex(pm_aqi_short, temp_float, humid_float, co2_float, tvoc_float);
-            binding.listCardVIRUSOCGrade.setGradeText(virusIndex);
 
             try {
                 binding.listCardVIRUSIndex.setText(String.valueOf(virusValue));
@@ -1001,7 +997,7 @@ public class DashBoardActivity extends AppCompatActivity {
         cqiIndex = cqiIndexValue;
 
         String cqiGradeValue = virusFormulaClass.GetCQIGrade(pm_float, co_float);
-        binding.aqiContentTv.setGradeText(cqiGradeValue);
+        binding.aqiContentTv.setText(cqiGradeValue);
         moveBarChart(cqiIndexValue);
 
         jsonMeasure.put("CAIval", cqiIndexValue);
@@ -1033,20 +1029,20 @@ public class DashBoardActivity extends AppCompatActivity {
         binding.aqiCurrentArrow.setText(String.valueOf(cqiNumber));
 
         if (cqiNumber < 51) {
-            moveBarChartResult(R.drawable.signal_good, R.string.good, R.color.progressGood);
+            moveBarChartResult(R.drawable.signal_good,R.string.good,R.color.progressGood);
         } else if (cqiNumber < 101) {
-            moveBarChartResult(R.drawable.signal_normal, R.string.normal, R.color.progressNormal);
+            moveBarChartResult(R.drawable.signal_normal,R.string.normal,R.color.progressNormal);
         } else if (cqiNumber < 251) {
-            moveBarChartResult(R.drawable.signal_bad, R.string.bad, R.color.progressBad);
+            moveBarChartResult(R.drawable.signal_bad,R.string.bad,R.color.progressBad);
         } else {
-            moveBarChartResult(R.drawable.signal_verybad, R.string.cqi_baddest, R.color.progressWorst);
+            moveBarChartResult(R.drawable.signal_verybad,R.string.cqi_baddest,R.color.progressWorst);
         }
     }
 
     private void moveBarChartResult(int drawable, int text, int color) {
         binding.apiCircleChartPb.setBackground(ResourcesCompat.getDrawable(getResources(), drawable, null));
         binding.aqiContentTv.setText(getResources().getString(text));
-        binding.aqiContentTv.setTextColor(ResourcesCompat.getColor(getResources(), color, null));
+        binding.aqiContentTv.setTextColor(ResourcesCompat.getColor(getResources(),color, null));
         binding.aqiCurrentArrow.setTextColor(ResourcesCompat.getColor(getResources(), color, null));
     }
 
@@ -1537,7 +1533,7 @@ public class DashBoardActivity extends AppCompatActivity {
                 binding.dashWifiIcon.setColorFilter(ResourcesCompat.getColor(getResources(), R.color.white, null));
                 binding.dashWifiSwitch.setChecked(true);
                 isConnected = true;
-                StartMqtt();
+                mqtt = new Mqtt(context, userCode);
             }
 
             @Override
@@ -1750,13 +1746,12 @@ public class DashBoardActivity extends AppCompatActivity {
                 if (userCode != null) {
                     mqtt = new Mqtt(context, userCode);
                     mqtt.connect();
+                    Log.d(TAG_MQTT, "Mqtt is Connected");
                 } else {
                     toastUtils.shortMessage(context, getString(R.string.mqtt_error_get_user_id));
-                    CompletableFuture.runAsync(() -> {
-                        SharedPreferenceManager.setString(context, "usingWifi", "false");
-                    }).thenAcceptAsync(b -> {
-                        SetSwitchState();
-                    });
+                    CompletableFuture.runAsync(() ->
+                            SharedPreferenceManager.setString(context, "usingWifi", "false"))
+                            .thenAcceptAsync(b -> SetSwitchState());
                 }
             } else {
                 Log.d(TAG_MQTT, "Mqtt is Already Connected");
@@ -1767,7 +1762,7 @@ public class DashBoardActivity extends AppCompatActivity {
     }
 
     // 하단 아이템 텍스트, 컬러 설정
-    private void CardItemTextColor(String titleStr, TextView title, TextView unit, TextView index, TextView loading) {
+    private void CardItemTextColor(String titleStr, TextView title, TextView unit,TextView index, TextView loading) {
         if (unit != null)
             unit.setVisibility(View.VISIBLE);
 

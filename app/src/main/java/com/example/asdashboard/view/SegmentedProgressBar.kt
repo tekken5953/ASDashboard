@@ -90,7 +90,6 @@ class SegmentedProgressBar(context: Context?, attributeSet: AttributeSet? = null
                 ),
                 strokePaint
             )
-
             filling += width * bar.percentage
         }
     }
@@ -114,7 +113,6 @@ class SegmentedProgressBar(context: Context?, attributeSet: AttributeSet? = null
 
         with(Path()) {
             moveTo(rect.left + tlRadius, rect.top)
-
 
             //setup top border
             lineTo(rect.right - trRadius, rect.top)

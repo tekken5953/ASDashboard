@@ -7,7 +7,7 @@
     <data>
         <variable
             name="viewModel"
-            type="com.example.asdashboard.bluetooth.BluetoothThread.DataShareViewModel" />
+            type="com.example.dashboard.bluetooth.BluetoothThread.DataShareViewModel" />
     </data>
 
     <RelativeLayout
@@ -291,7 +291,7 @@
                             android:text="251" />
                     </TableRow>
 
-                    <com.example.asdashboard.view.SegmentedProgressBar
+                    <com.example.dashboard.view.SegmentedProgressBar
                         android:id="@+id/aqiBarChartPb"
                         android:layout_width="@dimen/barInDashWidth"
                         android:layout_height="@dimen/tapDashX1"
@@ -324,7 +324,7 @@
                     app:layout_constraintEnd_toEndOf="@+id/aqiContentTv"
                     app:layout_constraintStart_toStartOf="@+id/aqiContentTv" />
 
-                <com.aslib.AsTextView
+                <com.example.dashboard.view.AsTextView
                     android:id="@+id/aqiContentTv"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -332,7 +332,6 @@
                     android:fontFamily="@font/pretendardvariable"
                     android:gravity="center"
                     android:text="@string/good"
-                    app:sort="grade"
                     android:textColor="@color/progressGood"
                     android:textSize="@dimen/textDashH3"
                     android:textStyle="bold"
@@ -462,7 +461,7 @@
                         android:layout_toEndOf="@+id/listCardPMIndex"
                         android:text="ug/㎥" />
 
-                    <com.aslib.AsTextView
+                    <com.example.dashboard.view.AsTextView
                         android:id="@+id/listCardPMGrade"
                         style="@style/BottomCardGrade"
                         android:layout_below="@+id/listCardPMUnit" />
@@ -492,7 +491,7 @@
                         android:layout_toEndOf="@+id/listCardTVOCIndex"
                         android:text="mg/㎥" />
 
-                    <com.aslib.AsTextView
+                    <com.example.dashboard.view.AsTextView
                         android:id="@+id/listCardTVOCGrade"
                         style="@style/BottomCardGrade"
                         android:layout_below="@+id/listCardTVOCUnit" />
@@ -524,7 +523,7 @@
                         android:layout_toEndOf="@+id/listCardCO2Index"
                         android:text="ppm" />
 
-                    <com.aslib.AsTextView
+                    <com.example.dashboard.view.AsTextView
                         android:id="@+id/listCardCO2Grade"
                         style="@style/BottomCardGrade"
                         android:layout_below="@+id/listCardCO2Unit" />
@@ -555,7 +554,7 @@
                         android:layout_toEndOf="@+id/listCardCOIndex"
                         android:text="ppm" />
 
-                    <com.aslib.AsTextView
+                    <com.example.dashboard.view.AsTextView
                         android:id="@+id/listCardCOGrade"
                         style="@style/BottomCardGrade"
                         android:layout_below="@+id/listCardCOUnit" />
@@ -577,7 +576,7 @@
                         style="@style/BottomCardIndex"
                         android:layout_below="@+id/listCardVIRUSTitle" />
 
-                    <com.aslib.AsTextView
+                    <com.example.dashboard.view.AsTextView
                         android:id="@+id/listCardVIRUSOCGrade"
                         style="@style/BottomCardGrade"
                         android:layout_below="@+id/listCardVIRUSIndex" />

@@ -1,4 +1,5 @@
-package com.example.asdashboard.utils;
+package com.example.dashboard.utils;
+import android.util.Log;
 /**
  * AQI 값 범위 별 구간
  * <p>
@@ -226,6 +227,8 @@ public class VirusFormulaClass {
         double z = GetZ(tvoc, pmAQI);
         double wFactor = GetWFactor(temp, humid);
         float k = (float) ((pmAQI + y + z) * wFactor / 1750 * 100);
+        Log.i("virusggg", String.valueOf(k));
+        Log.i("virusggg", "x : " + pmAQI + " y : " + y + " z : " + z);
         return Math.round(k / 10 + 1);
     }
 
