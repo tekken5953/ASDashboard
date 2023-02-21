@@ -1,14 +1,14 @@
-package com.example.dashboard.bluetooth;
+package com.example.asdashboard.bluetooth;
 
 import android.content.Context;
 import android.util.Log;
 
 import org.eclipse.paho.client.mqttv3.DisconnectedBufferOptions;
-import org.eclipse.paho.client.mqttv3.IMqttActionListener;
 import org.eclipse.paho.client.mqttv3.IMqttAsyncClient;
 import org.eclipse.paho.client.mqttv3.IMqttDeliveryToken;
 import org.eclipse.paho.client.mqttv3.IMqttToken;
 import org.eclipse.paho.client.mqttv3.MqttCallback;
+import org.eclipse.paho.client.mqttv3.MqttCallbackExtended;
 import org.eclipse.paho.client.mqttv3.MqttConnectOptions;
 import org.eclipse.paho.client.mqttv3.MqttException;
 import org.eclipse.paho.client.mqttv3.MqttMessage;
@@ -20,8 +20,8 @@ import info.mqtt.android.service.MqttAndroidClient;
 
 public class Mqtt {
     private final String MQTT_ADDRESS = "ascloud.kr"; // ascloud.kr
-    private final String MQTT_ADDRESS_SUB = "192.168.0.54";
-//    private final String MQTT_ADDRESS_ADMIN = "192.168.0.69";
+    private final String MQTT_ADDRESS_SUB = "192.168.0.177";
+    private final String MQTT_ADDRESS_ADMIN = "192.168.0.69";
     private final String MQTT_PORT = ":1883";
 
     private final String MQTT_TOPIC_BASE = "/nodes/envi/";
@@ -51,12 +51,12 @@ public class Mqtt {
     }
 
     public void connect() {
-        clientConnect(MQTT_ADDRESS);
+        clientConnect(MQTT_ADDRESS_SUB);
         topic_base = MQTT_TOPIC_BASE + device_id + "/";
     }
 
     public void disconnect() {
-        publish_state(getJsonConnectState(0));
+//        publish_state(getJsonConnectState(0));
         try {
             mqttClient.disconnect();
         } catch (MqttException e) {
@@ -65,40 +65,10 @@ public class Mqtt {
     }
 
     private void clientConnect(String server_address) {
-        thread = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                mqttClient = new MqttAndroidClient(context, "tcp://" + server_address + MQTT_PORT, device_id, Ack.AUTO_ACK);
-
-                try {
-                    token = mqttClient.connect(getMqttConnectionOption());
-
-                    token.setActionCallback(new IMqttActionListener() {
-                        @Override
-                        public void onSuccess(IMqttToken asyncActionToken) {
-                            mqttClient.setBufferOpts(getDisconnectedBufferOptions());
-
-                            subscribe();
-                            System.out.println("MQTT Connect Success! :)");
-
-                            publish_state(getJsonConnectState(1));
-                        }
-
-                        @Override
-                        public void onFailure(IMqttToken asyncActionToken, Throwable exception) {
-                            System.out.println("MQTT Connect Failure! :(");
-
-                            if (server_address.equals(MQTT_ADDRESS)) {
-                                clientConnect(MQTT_ADDRESS_SUB);
-                            }
-                        }
-                    });
-                } catch (MqttException e) {
-                    System.out.println("MQTT Connect Error!");
-                    e.printStackTrace();
-                }
-                mqttClient.setCallback(getMqttCallBack());
-            }
+        thread = new Thread(() -> {
+            mqttClient = new MqttAndroidClient(context, "tcp://" + server_address + MQTT_PORT, device_id, Ack.AUTO_ACK);
+            Log.d("Mqtt","connect to " + "tcp://" + server_address + MQTT_PORT);
+            mqttClient.setCallback(getMqttCallBack());
         });
         thread.start();
     }
@@ -122,7 +92,7 @@ public class Mqtt {
     public void subscribe() throws NullPointerException {
         Log.e("MQTT", "Subscribe Topic is " + topic_base);
         try {
-            mqttClient.subscribe(topic_base + MQTT_TOPIC_MEASURE, 0);
+//            mqttClient.subscribe(topic_base + MQTT_TOPIC_MEASURE, 0);
             mqttClient.subscribe(topic_base + MQTT_TOPIC_MAINT_REQ, 0);
         } catch (MqttException e) {
             Log.e("MqttLog", "Subscribe Error : " + e);
@@ -162,6 +132,9 @@ public class Mqtt {
         } catch (MqttException e) {
             Log.e("MqttLog", "MQTT publish_measured Error : " + e);
             return false;
+        } catch (NullPointerException e) {
+            Log.e("MqttLog", "MQTT is Null" + e);
+            return false;
         }
     }
 
@@ -199,10 +172,18 @@ public class Mqtt {
     }
 
     private MqttCallback getMqttCallBack() {
-        return new MqttCallback() {
+        return new MqttCallbackExtended() {
+            @Override
+            public void connectComplete(boolean reconnect, String serverURI) {
+                mqttClient.setBufferOpts(getDisconnectedBufferOptions());
+                subscribe();
+                Log.d("MqttLog","MQTT Connect Success! :)");
+
+                publish_state(getJsonConnectState(1));
+            }
+
             @Override
             public void connectionLost(Throwable cause) {
-//        Toast.makeText(context, "MQTT 연결 실패", Toast.LENGTH_SHORT).show();
                 System.out.println("MQTT Connection Lost :(");
             }
 
@@ -231,7 +212,6 @@ public class Mqtt {
 
             @Override
             public void deliveryComplete(IMqttDeliveryToken token) {
-
             }
         };
     }
