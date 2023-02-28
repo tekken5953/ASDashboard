@@ -91,10 +91,6 @@ public class Mqtt {
                         @Override
                         public void onFailure(IMqttToken asyncActionToken, Throwable exception) {
                             Log.d("MqttLog","MQTT Connect Failure! :(");
-
-                            if (server_address.equals(MQTT_ADDRESS)) {
-                                clientConnect(MQTT_ADDRESS_SUB);
-                            }
                         }
                     });
                 } catch (MqttException e) {
