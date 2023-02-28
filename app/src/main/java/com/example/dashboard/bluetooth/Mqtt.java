@@ -21,7 +21,7 @@ import info.mqtt.android.service.MqttAndroidClient;
 public class Mqtt {
 
     private final String MQTT_ADDRESS = "ascloud.kr"; // ascloud.kr
-    private final String MQTT_ADDRESS_SUB = "192.168.0.173";
+    private final String MQTT_ADDRESS_SUB = "192.168.0.177";
     //    private final String MQTT_ADDRESS_ADMIN = "192.168.0.69";
     private final String MQTT_PORT = ":1883";
 

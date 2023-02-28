@@ -99,7 +99,7 @@ public class DashBoardActivity extends AppCompatActivity {
     final String FAN_CONTROL_COMPLETE = "com.example.dashboard";
     private final byte REQUEST_CONTROL = (byte) 0x02;
     private final byte REQUEST_INDIVIDUAL_STATE = (byte) 0x01;
-    final int VIEW_REQUEST_INTERVAL = 7, DRAW_CHART_INTERVAL = 60 * 10;
+    final int VIEW_REQUEST_INTERVAL = 10, DRAW_CHART_INTERVAL = 60 * 10;
     int count = 0;
     int mqttCount = 0;
 
@@ -347,8 +347,10 @@ public class DashBoardActivity extends AppCompatActivity {
                     HideLoading();
                     if (!isConnected && binding.dashWifiSwitch.isChecked()) {
                         try {
-                            mqtt.connect();
-                            snackBarUtils.makeSnack(binding.idMain, context, getString(R.string.mqtt_wifi_reconnect_s));
+                            if (mqtt != null && !mqtt.isConnected()) {
+                                mqtt.connect();
+                                snackBarUtils.makeSnack(binding.idMain, context, getString(R.string.mqtt_wifi_reconnect_s));
+                            }
                         } catch (NullPointerException e) {
                             e.printStackTrace();
                             snackBarUtils.makeSnack(binding.idMain, context, getString(R.string.mqtt_wifi_reconnect_f));
@@ -530,7 +532,7 @@ public class DashBoardActivity extends AppCompatActivity {
 
         //PM 유효정보
         if (body.containsKey("01")) {
-            jsonMeasure.put("ValildPM", body.getByte(("01")));
+            jsonMeasure.put("ValidPM", body.getByte(("01")));
         }
 
         //H2 유효정보
@@ -636,7 +638,7 @@ public class DashBoardActivity extends AppCompatActivity {
 
         //NH3 유효정보
         if (body.containsKey("26")) {
-            jsonMeasure.put("ValideNH3", body.getByte("26"));
+            jsonMeasure.put("ValidNH3", body.getByte("26"));
         }
         //NH3 값
         if (body.containsKey("27")) {
@@ -1528,9 +1530,11 @@ public class DashBoardActivity extends AppCompatActivity {
         binding.dashWifiSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
             outerClass.CallVibrate(context, 10);
             if (isChecked) {
-                if (mqtt != null && bluetoothThread != null && bluetoothThread.isConnected()) {
-                    if (!mqtt.isConnected())
+                if (bluetoothThread != null && bluetoothThread.isConnected()) {
+                    if (mqtt == null || !mqtt.isConnected()) {
+                        mqtt = new Mqtt(this, userCode);
                         mqtt.connect();
+                    }
                 }
                 Log.d(TAG_MQTT, "Accept Request Data");
                 SharedPreferenceManager.setString(context, "usingWifi", "true");

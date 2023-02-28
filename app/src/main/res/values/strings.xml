@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">AS-Dashboard</string>
+    <string name="app_name">BS-Dashboard</string>
     <string name="good">좋음</string>
     <string name="normal">보통</string>
     <string name="bad">나쁨</string>
